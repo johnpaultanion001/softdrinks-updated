@@ -10,9 +10,11 @@ use App\Models\OrderSales;
 use App\Models\SalesReturn;
 use Illuminate\Http\Request;
 use App\Models\Customer;
-use App\Models\Inventory;
+use App\Models\SalesInventory;
 use App\Models\OrderNumber;
 use App\Models\PriceType;
+use App\Models\StatusReturn;
+
 
 use Validator;
 use DB;
@@ -27,19 +29,20 @@ class SalesInvoiceController extends Controller
         abort_if(Gate::denies('salesinvoice_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         date_default_timezone_set('Asia/Manila');
 
-        $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
+        $ordernumber = OrderNumber::orderby('id', 'desc')->first();
         $salesinvoice_id = $ordernumber->salesinvoice_id;
 
-        $customers = Customer::where('isRemove', '0')->latest()->get();
+        $status = StatusReturn::where('isRemove', 0)->latest()->get();
+        $customers = Customer::where('isRemove', 0)->orderBy('id', 'asc')->get();
         $orders = Order::where('status', '0')->latest()->get();
         $pricetypes = PriceType::where('isRemove', '0')->latest()->get();
-        $product_codes = Inventory::where('isSame' , 0)->where('isRemove' , 0)->latest()->get();
+        $product_codes = SalesInventory::where('isComplete' , true)->where('isRemove' , false)->latest()->get();
 
-        $returned = SalesReturn::where('isRemove', 0)->where('salesinvoice_id', $salesinvoice_id)->latest()->get();
+        $returned = SalesReturn::where('salesinvoice_id', $salesinvoice_id)->latest()->get();
         $date = date("F d,Y h:i A");
 
 
-        return view('admin.salesinvoice.salesinvoice', compact('customers' , 'orders' , 'pricetypes' , 'salesinvoice_id' , 'returned' , 'product_codes' ,'date'));
+        return view('admin.salesinvoice.salesinvoice', compact('customers' , 'orders' , 'pricetypes' , 'salesinvoice_id' , 'returned' , 'product_codes' ,'date','status'));
     }
 
     public function alltotal(){
@@ -48,10 +51,10 @@ class SalesInvoiceController extends Controller
 
 
         $orders = Order::where('status', '0')->latest()->get();
-        $returned = SalesReturn::where('isRemove', 0)->where('salesinvoice_id', $salesinvoice_id)->latest()->get();
+        $returned = SalesReturn::where('salesinvoice_id', $salesinvoice_id)->latest()->get();
 
         $total_order_amount = Order::sum('total');
-        $total_return_amount = SalesReturn::where('isRemove', 0)->where('salesinvoice_id', $salesinvoice_id)->sum('amount');
+        $total_return_amount = SalesReturn::where('salesinvoice_id', $salesinvoice_id)->sum('amount');
         $total_amount = $total_order_amount - $total_return_amount;
 
         return view('admin.salesinvoice.alltotal', compact('orders', 'returned','total_amount'));
@@ -69,20 +72,21 @@ class SalesInvoiceController extends Controller
         $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
         $salesinvoice_id = $ordernumber->salesinvoice_id;
 
-        $returned = SalesReturn::where('isRemove', 0)->where('salesinvoice_id', $salesinvoice_id)->latest()->get();
+        $returned = SalesReturn::where('salesinvoice_id', $salesinvoice_id)->latest()->get();
         return view('admin.salesinvoice.return', compact('returned'));
     }
 
     public function allreturn()
     {
-        $returned = SalesReturn::where('isRemove', 0)->latest()->get();
+        $returned = SalesReturn::latest()->get();
         return view('admin.salesinvoice.allrecordsreturn', compact('returned'));
     }
 
     public function productlist(){
         date_default_timezone_set('Asia/Manila');
-        $inventories = Inventory::where('isRemove', 0)->where('isSame' , 0)->where('stock' , '>' , 0)->where('location_id', 2)->whereDate('expiration' , '>' ,date('Y-m-d', strtotime('-1 day')))->orderBy('expiration', 'ASC')->get();
-        return view('admin.salesinvoice.productlist', compact('inventories'));
+        $inventories = SalesInventory::where('isComplete' , true)->where('isRemove', false)->where('stock' , '>' , 0)->where('location_id', 2)
+        ->get();
+        return view('admin.salesinvoice.product_sales_modal.productlist', compact('inventories'));
     }
 
     public function receipt()
@@ -90,9 +94,9 @@ class SalesInvoiceController extends Controller
         date_default_timezone_set('Asia/Manila');
         $receipts = Order::where('status', '0')->latest()->get();
 
-        $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
+        $ordernumber = OrderNumber::orderby('id', 'desc')->first();
         $salesinvoice_id = $ordernumber->salesinvoice_id;
-        $totalsalesreturn = SalesReturn::where('isRemove', 0)->where('salesinvoice_id',$salesinvoice_id)->sum('amount');
+        $totalsalesreturn = SalesReturn::where('salesinvoice_id',$salesinvoice_id)->sum('amount');
         $total = $receipts->sum('total') - $totalsalesreturn;
 
         return view('admin.salesinvoice.receiptmodal', compact('receipts', 'salesinvoice_id', 'totalsalesreturn','total'));
@@ -103,7 +107,6 @@ class SalesInvoiceController extends Controller
     {
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
-            'doc_no' => ['required', 'string', 'max:255'],
             'entry_date' => ['required' ,'date','after:yesterday'],
             'remarks' => ['nullable'],
             'customer_id' => ['required'],
@@ -120,9 +123,9 @@ class SalesInvoiceController extends Controller
         }
 
         $totalsales = Order::sum('total');
-        $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
+        $ordernumber = OrderNumber::orderby('id', 'desc')->first();
         $salesinvoice_id = $ordernumber->salesinvoice_id;
-        $totalsalesreturn = SalesReturn::where('isRemove', 0)->where('salesinvoice_id',$salesinvoice_id)->sum('amount');
+        $totalsalesreturn = SalesReturn::where('salesinvoice_id',$salesinvoice_id)->sum('amount');
     
         $payment = $totalsales - $totalsalesreturn;
 
@@ -141,19 +144,18 @@ class SalesInvoiceController extends Controller
             'customer_id' => $request->get('customer_id'),
         ]);
 
-
-        $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
+        $ordernumber = OrderNumber::orderby('id', 'desc')->first();
         $salesinvoice_id = $ordernumber->salesinvoice_id ;
 
         $total_inv_amt = Order::sum('total');
-        $totalsalesreturn = SalesReturn::where('isRemove', 0)->where('salesinvoice_id',$salesinvoice_id)->sum('amount');
+        $totalsalesreturn = SalesReturn::where('salesinvoice_id',$salesinvoice_id)->sum('amount');
 
 
         $total_amount = $total_inv_amt - $totalsalesreturn ;
 
         $subtotal = Order::sum('total_amount_receipt');
         $total_discounted = Order::sum('discounted');
-        $total_return = SalesReturn::where('isRemove', 0)->sum('amount');
+  
         $userid = auth()->user()->id;
 
         $change = $request->get('cash') - $total_amount;
@@ -194,8 +196,8 @@ class SalesInvoiceController extends Controller
             'total' => $total_amount,
         ]);
 
-        $ids = Order::pluck('inventory_id');
-        Inventory::whereIn('id' , $ids)->update([
+        $ids = Order::pluck('product_id');
+        SalesInventory::whereIn('id' , $ids)->update([
             'stock' => DB::raw ('stock - orders'),
             'sold' => DB::raw ('sold + orders'),
             'orders' => 0,
@@ -216,10 +218,6 @@ class SalesInvoiceController extends Controller
 
             return response()->json(['success' => 'Successfully Check Out.']);
         }
-
-       
-
-
     }
 
     public function change(Request $request)
@@ -231,7 +229,7 @@ class SalesInvoiceController extends Controller
             $ordernumber = OrderNumber::orderby('id', 'desc')->firstorfail();
             $salesinvoice_id = $ordernumber->salesinvoice_id;
 
-            $totalsalesreturn = SalesReturn::where('isRemove', 0)->where('salesinvoice_id',$salesinvoice_id)->sum('amount');
+            $totalsalesreturn = SalesReturn::where('salesinvoice_id',$salesinvoice_id)->sum('amount');
 
 
             $payment = $totalsales - $totalsalesreturn;
@@ -257,7 +255,7 @@ class SalesInvoiceController extends Controller
 
     public function sales_receipt($sales_reciept){
         date_default_timezone_set('Asia/Manila');
-        $receipts = Sales::where('isRemove', 0)->where('salesinvoice_id', $sales_reciept)->latest()->get();
+        $receipts = Sales::where('salesinvoice_id', $sales_reciept)->latest()->get();
         $ordernumber = SalesInvoice::where('salesinvoice_id', $sales_reciept)->first();
         return view('admin.salesinvoice.receiptmodalsales', compact('receipts', 'ordernumber'));
     }
@@ -265,7 +263,7 @@ class SalesInvoiceController extends Controller
     
     public function show(SalesInvoice $salesInvoice)
     {
-        $sales = Sales::where('isRemove' , 0)->where('salesinvoice_id', $salesInvoice->salesinvoice_id)->latest()->get();
+        $sales = Sales::where('salesinvoice_id', $salesInvoice->salesinvoice_id)->latest()->get();
         return view('admin.salesinvoice.viewsales', compact('sales'));
     }
 
@@ -295,5 +293,60 @@ class SalesInvoiceController extends Controller
             'isRemove' => '1',
         ]);
         return response()->json(['success' => 'Transaction Successfully Void.']);
+    }
+    
+    public function addtocart(Request $request, SalesInventory $sales_inventory)
+    {
+        date_default_timezone_set('Asia/Manila');
+        $errors =  Validator::make($request->all(), [
+            'purchase_qty' => ['required' ,'integer','min:1'],
+        ]);
+
+        if ($errors->fails()) {
+            return response()->json(['errors' => $errors->errors()]);
+        }
+        if($request->purchase_qty > $sales_inventory->stock){
+            return response()->json(['nostock' => 'Insufficient Stocks. Availalbe Stock:'.$sales_inventory->stock]);
+        }
+        if($sales_inventory->orders > $sales_inventory->stock){
+            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$sales_inventory->orders.' has reach maximum stock of this product']);
+        }
+        if($sales_inventory->orders == $sales_inventory->stock){
+            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$sales_inventory->orders.' has reach maximum stock of this product']);
+        }
+        if( $sales_inventory->orders + $request->purchase_qty > $sales_inventory->stock){
+            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$sales_inventory->orders.' has reach maximum stock of this product']);
+        }
+
+        $discount = PriceType::where('id', $request->select_pricetype)->first();
+        
+        $ordernumber = OrderNumber::orderby('id', 'desc')->first();
+        $id = $ordernumber->order_number;
+    
+        $profit                 = $sales_inventory->regular_discount + $sales_inventory->hauling_discount;
+        $discounted             = $discount->discount;
+        $profit_minus_discount  = $profit - $discounted;
+        $overall_profit         = $request->purchase_qty * $profit_minus_discount;
+        $overall_discounted     = $request->purchase_qty * $discounted;
+        $subtotal               = $request->purchase_qty * $sales_inventory->price;
+        $total                  = $subtotal - $overall_discounted;
+        $over_all_cost          = $request->purchase_qty * $sales_inventory->unit_cost; 
+
+        Order::create([
+            'salesinvoice_id'       =>  $request->input('salesinvoice_id'),
+            'order_number'          =>  $id,
+            'product_id'            =>  $sales_inventory->id,
+            'purchase_qty'          =>  $request->input('purchase_qty'),
+            'profit'                =>  $overall_profit,
+            'total'                 =>  $total,
+            'total_amount_receipt'  =>  $subtotal,
+            'pricetype_id'          =>  $request->input('select_pricetype'),
+            'discounted'            =>  $overall_discounted,
+            'total_cost'            =>  $over_all_cost,
+        ]);
+
+        SalesInventory::where('id', $sales_inventory->id)->increment('orders', $request->purchase_qty);
+        return response()->json(['success' => 'Order Successfully Inserted.']);
+
     }
 }

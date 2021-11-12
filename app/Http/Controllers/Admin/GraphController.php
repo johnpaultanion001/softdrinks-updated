@@ -20,7 +20,7 @@ class GraphController extends Controller
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\Sales',
             'conditions'            => [
-                ['name' => 'Profit', 'condition' => 'isRemove = 0', 'color' => 'orange' , 'fill' => true],
+                ['name' => 'Profit', 'condition' => 'status = 0', 'color' => 'orange' , 'fill' => true],
                
             ],
             'group_by_field'        => 'created_at',
@@ -45,7 +45,7 @@ class GraphController extends Controller
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\Sales',
             'conditions'            => [
-                ['name' => 'Profit', 'condition' => 'isRemove = 0', 'color' => 'orange' , 'fill' => true],
+                ['name' => 'Profit', 'condition' => 'status = 0', 'color' => 'orange' , 'fill' => true],
                
             ],
             'group_by_field'        => 'created_at',
@@ -70,7 +70,7 @@ class GraphController extends Controller
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\Sales',
             'conditions'            => [
-                ['name' => 'Profit', 'condition' => 'isRemove = 0', 'color' => 'orange' , 'fill' => true],
+                ['name' => 'Profit', 'condition' => 'status = 0', 'color' => 'orange' , 'fill' => true],
                
             ],
             'group_by_field'        => 'created_at',
@@ -95,7 +95,7 @@ class GraphController extends Controller
             'report_type'           => 'group_by_date',
             'model'                 => 'App\Models\Sales',
             'conditions'            => [
-                ['name' => 'Profit', 'condition' => 'isRemove = 0', 'color' => 'orange' , 'fill' => true],
+                ['name' => 'Profit', 'condition' => 'status = 0', 'color' => 'orange' , 'fill' => true],
                
             ],
             'group_by_field'        => 'created_at',

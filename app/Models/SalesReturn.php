@@ -13,12 +13,14 @@ class SalesReturn extends Model
 
     protected $fillable = [
         'salesinvoice_id',
-        'inventory_id',
+        'product_id',
         'return_qty',
         'pricetype_id',
+        'discounted',
         'unit_price',
         'amount',
-        'isRemove',
+        'status_id',
+        'remarks',
 
         
     ];
@@ -26,14 +28,18 @@ class SalesReturn extends Model
     {
        return $this->belongsTo(SalesInvoice::class, 'salesinvoice_id', 'salesinvoice_id');
     }
-    public function inventory()
+    public function product()
     {
-        return $this->belongsTo(Inventory::class, 'inventory_id');
+        return $this->belongsTo(SalesInventory::class, 'product_id');
     }
 
     public function pricetype()
     {
         return $this->belongsTo(PriceType::class, 'pricetype_id');
+    }
+    public function status()
+    {
+        return $this->belongsTo(StatusReturn::class, 'status_id');
     }
   
 }

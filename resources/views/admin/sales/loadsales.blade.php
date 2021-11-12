@@ -66,25 +66,25 @@
                         {{  $sale->order_number ?? '' }}
                     </td>
                     <td>
-                        {{  $sale->inventory->product_code ?? '' }}
+                        {{  $sale->product->product_code ?? '' }}
                     </td>
                     <td>
-                        {{  $sale->inventory->long_description ?? '' }}
+                        {{  $sale->product->description ?? '' }}
                     </td>
                     <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->inventory->price ?? '' , 2, ',', ',') }}
+                        <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->product->price ?? '' , 2, ',', ',') }}
                     </td>
                     <td>
-                        {{  $sale->inventory->size->title ?? '' }} {{  $sale->inventory->size->size ?? '' }}
+                        {{  $sale->product->size->title ?? '' }} {{  $sale->product->size->size ?? '' }}
                     </td>
                     <td>
-                        {{  $sale->inventory->category->name ?? '' }}
+                        {{  $sale->product->category->name ?? '' }}
                     </td>
                     <td>
                         {{  $sale->purchase_qty ?? '' }}
                     </td>
                     <td>
-                        {{  $sale->ordersales->customer->customer_name ?? '' }}
+                        {{  $sale->customer->customer_name ?? '' }}
                     </td>
                     <td>
                         <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->discounted ?? '' , 2, '.', ',') }}
@@ -156,10 +156,10 @@
                             @foreach($sales as $key => $sale)
                               <tr data-entry-id="{{ $sale->id ?? '' }}">
                                   <td>
-                                      {{  $sale->inventory->product_code ?? '' }}
+                                      {{  $sale->product->product_code ?? '' }}
                                   </td>
                                   <td>
-                                      {{  $sale->inventory->long_description ?? '' }}
+                                      {{  $sale->product->description ?? '' }}
                                   </td>
                                   <td>
                                       {{  $sale->purchase_qty ?? '' }}

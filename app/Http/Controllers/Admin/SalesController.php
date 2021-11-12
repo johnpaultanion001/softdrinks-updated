@@ -20,10 +20,10 @@ class SalesController extends Controller
         $userid = auth()->user()->roles()->getQuery()->pluck('id')->first();
         $title_filter  = 'All Sales';
         if($userid == '2'){
-            $sales = Sales::where('user_id', $userid)->where('isRemove', 0)->latest()->get();
+            $sales = Sales::where('user_id', $userid)->latest()->get();
             return view('admin.sales.loadsales', compact('sales', 'title_filter'));
         }
-        $sales = Sales::where('isRemove', 0)->latest()->get();
+        $sales = Sales::latest()->get();
         return view('admin.sales.loadsales', compact('sales', 'title_filter'));
     }
     public function daily(){
@@ -32,11 +32,11 @@ class SalesController extends Controller
         $title_filter  = 'From: ' . date('F d, Y') . ' To: ' . date('F d, Y');
 
         if($userid == '2'){
-            $sales = Sales::where('user_id', $userid)->where('isRemove', 0)->latest()->whereDay('created_at', '=', date('d'))
+            $sales = Sales::where('user_id', $userid)->latest()->whereDay('created_at', '=', date('d'))
             ->get();
             return view('admin.sales.loadsales', compact('sales' , 'title_filter'));
         }
-        $sales = Sales::where('isRemove', 0)->latest()->whereDay('created_at', '=', date('d'))->get();
+        $sales = Sales::latest()->whereDay('created_at', '=', date('d'))->get();
         return view('admin.sales.loadsales', compact('sales' , 'title_filter'));
     }
     public function monthly(){
@@ -45,11 +45,11 @@ class SalesController extends Controller
         $title_filter  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');
 
         if($userid == '2'){
-            $sales = Sales::where('user_id', $userid)->where('isRemove', 0)->latest()->whereMonth('created_at', '=', date('m'))
+            $sales = Sales::where('user_id', $userid)->latest()->whereMonth('created_at', '=', date('m'))
                         ->get();
             return view('admin.sales.loadsales', compact('sales', 'title_filter'));
         }
-        $sales = Sales::where('isRemove', 0)->latest()->whereMonth('created_at', '=', date('m'))
+        $sales = Sales::latest()->whereMonth('created_at', '=', date('m'))
                         ->get();
         return view('admin.sales.loadsales', compact('sales', 'title_filter'));
     }
@@ -58,11 +58,11 @@ class SalesController extends Controller
         $userid = auth()->user()->roles()->getQuery()->pluck('id')->first();
         $title_filter  = 'From: ' .'Jan 1'. date(', Y') . ' To: ' .'Dec 31'. date(', Y');
         if($userid == '2'){ 
-            $sales = Sales::where('user_id', $userid)->where('isRemove', 0)->latest()->whereYear('created_at', '=', date('Y'))
+            $sales = Sales::where('user_id', $userid)->latest()->whereYear('created_at', '=', date('Y'))
             ->get();
             return view('admin.sales.loadsales', compact('sales', 'title_filter'));
         }
-        $sales = Sales::where('isRemove', 0)->latest()->whereYear('created_at', '=', date('Y'))
+        $sales = Sales::latest()->whereYear('created_at', '=', date('Y'))
                         ->get();
         return view('admin.sales.loadsales', compact('sales', 'title_filter'));
     }
@@ -81,7 +81,7 @@ class SalesController extends Controller
             {
                 if($request->from_date != '' && $request->to_date != '')
                 {
-                    $sales = Sales::where('user_id', $userid)->where('isRemove', 0)->latest()->whereBetween('created_at', array($request->from_date, $request->to_date))->get();
+                    $sales = Sales::where('user_id', $userid)->latest()->whereBetween('created_at', array($request->from_date, $request->to_date))->get();
                 }
                 return view('admin.sales.loadsales', compact('sales', 'title_filter'));
             }
@@ -91,7 +91,7 @@ class SalesController extends Controller
             {
                 if($request->from_date != '' && $request->to_date != '')
                 {
-                    $sales = Sales::where('isRemove', 0)->latest()->whereBetween('created_at', array($request->from_date, $request->to_date))->get();
+                    $sales = Sales::latest()->whereBetween('created_at', array($request->from_date, $request->to_date))->get();
                 }
                 return view('admin.sales.loadsales', compact('sales', 'title_filter'));
             }
@@ -99,7 +99,7 @@ class SalesController extends Controller
     public function receipt(Sales $sale)
     {
        date_default_timezone_set('Asia/Manila');
-       $receipts = Sales::where('isRemove', 0)->where('order_number',$sale->order_number)->latest()->get();
+       $receipts = Sales::where('order_number',$sale->order_number)->latest()->get();
        $ordernumber = OrderSales::where('order_number_id',$sale->order_number)->first();
        return view('admin.sales.receiptmodal', compact('receipts', 'ordernumber'));
     }

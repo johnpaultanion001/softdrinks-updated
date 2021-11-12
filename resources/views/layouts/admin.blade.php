@@ -240,7 +240,7 @@
             $.fn.dataTable.ext.classes.sPageButton = '';
         });
     </script>
-
+  
         @yield('script')
     </body>
 </html>

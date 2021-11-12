@@ -12,10 +12,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Dashboard
     Route::get('dashboard', 'DashboardController@dashboard')->name('dashboard');
     Route::get('loaddashboard', 'DashboardController@loaddashboard')->name('loaddashboard');
-    // Invetories
-    Route::resource('inventories', 'InventoryController');
-    Route::get('loadinventories', 'InventoryController@loadinventories')->name('loadinventories');
-    Route::post('inventories/filter', 'InventoryController@filter')->name('filter');
 
     // Categories
     Route::resource('categories', 'CategoryController');
@@ -34,8 +30,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // check out cart
     Route::get('checkout','OrderingController@checkout')->name('checkout');
     Route::post('checkout-order', 'OrderingController@checkout_order')->name('ordering.checkout_order');
-    // add to cart
-    Route::post('addtocart/{inventory}',  'OrderingController@addtocart')->name('ordering.addtocart');
+   
 
 
     //sales
@@ -74,14 +69,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::put('user/{user}', 'UsersController@userupdate')->name('user.userupdate');
 
 
-    //order-purchase
-    route::get('purchase-order', 'PurchaseOrderController@index')->name('purchase-order.index');
-    route::get('loadpurchaseorder', 'PurchaseOrderController@load')->name('purchase-order.load');
-    route::get('purchase-order/{purchasenumber}', 'PurchaseOrderController@view')->name('purchase-order.view');
-    route::get('purchase-order/{purchasenumber}/edit', 'PurchaseOrderController@edit')->name('purchase-order.edit');
-    route::put('purchase-order/{purchasenumber}', 'PurchaseOrderController@update')->name('purchase-order.update');
-    route::get('loadeditpurchase/{purchasenumber}/load', 'PurchaseOrderController@loadedit')->name('purchase-order.editload');
-    Route::post('purchase-order/reuseproduct', 'PurchaseOrderController@reuseproduct')->name('purchase-order.reuseproduct');
+    
+   
 
     //return Products
     // Route::resource('returned', 'ReturnedController');
@@ -97,25 +86,19 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // route::put('returned/pendingreturnedproducts/update/{pendingreturnedproduct}', 'PendingReturnedProductController@updateedit')->name('pendingreturnedproducts.updateedit');
     // route::delete('returned/pendingreturnedproducts/update/{pendingreturnedproduct}', 'PendingReturnedProductController@destroyedit')->name('pendingreturnedproducts.destroyedit');
 
-    Route::get('loadreturningproduct', 'PendingReturnedProductController@loadreturningproduct')->name('loadreturningproduct');
-    Route::resource('returningproduct', 'PendingReturnedProductController');
+    // Route::get('loadreturningproduct', 'PendingReturnedProductController@loadreturningproduct')->name('loadreturningproduct');
+    // Route::resource('returningproduct', 'PendingReturnedProductController');
 
     //status returned
     Route::resource('status-return', 'StatusReturnController');
     route::get('loadstatus', 'StatusReturnController@load')->name('status-return.load');
 
-    //pendingproduct
-    route::get('totalpendingproduct', 'PurchaseOrderController@total')->name('purchaseorder.total');
-    route::post('purchase-order', 'PurchaseOrderController@store')->name('purchase-order.store');
-    route::put('purchase-order/{purchasenumber}', 'PurchaseOrderController@update')->name('purchase-order.update');
-     
 
-
-    Route::resource('purchase-order/pending-product', 'PendingProductController');
-    route::get('loadpendingproduct', 'PendingProductController@load')->name('pending-prooduct.load');
-    //autocomplte
-    Route::post('autocomplete/','PendingProductController@autocomplete')->name('pending-product.autocomplete');
-    Route::post('autocomplete/result','PendingProductController@autocompleteresult')->name('pending-product.autocompleteresult');
+    // Route::resource('purchase-order/pending-product', 'SalesInventory');
+    // route::get('loadpendingproduct', 'SalesInventory@load')->name('pending-prooduct.load');
+    // //autocomplte
+    // Route::post('autocomplete/','SalesInventory@autocomplete')->name('pending-product.autocomplete');
+    // Route::post('autocomplete/result','SalesInventory@autocompleteresult')->name('pending-product.autocompleteresult');
 
     //suppliers
     Route::resource('suppliers', 'SupplierController');
@@ -172,7 +155,25 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('salesInvoice-allrecords','SalesInvoiceController@allrecords')->name('salesInvoice.allrecords');
     Route::get('salesInvoice-sales_receipt/{sales_receipt}', 'SalesInvoiceController@sales_receipt')->name('salesInvoice.sales_receipt');
     Route::delete('salesInvoice-void/{salesInvoice}','SalesInvoiceController@void')->name('salesInvoice.void');
+    Route::post('addtocart/{sales_inventory}',  'SalesInvoiceController@addtocart')->name('salesInvoice.addtocart');
 
+    //Sales Inventory
+    Route::resource('sales_inventory', 'SalesInventoryController');
+    route::get('load_products', 'SalesInventoryController@load')->name('sales_inventory.load');
+    Route::post('autocomplete/','SalesInventoryController@autocomplete')->name('sales_inventory.autocomplete');
+    Route::post('autocomplete/result','SalesInventoryController@autocompleteresult')->name('sales_inventory.autocompleteresult');
+
+    //Empty Bottles Inventory
+    Route::get('empty_bottles_inventory', 'EmptyBottlesInventoryController@index')->name('empty_bottles_inventory.index');
+    
+    //Receiving Goods
+    route::resource('receiving_goods', 'ReceivingGoodController');
+    route::get('loadreceivinggoods', 'ReceivingGoodController@load')->name('receiving_goods.load');
+    route::get('pending_product', 'ReceivingGoodController@pending_product')->name('receiving_goods.product');
+    route::get('total_product', 'ReceivingGoodController@total')->name('receiving_goods.total');
+
+
+    
     
     
 });

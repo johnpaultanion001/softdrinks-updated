@@ -47,7 +47,7 @@
                     <div id="modalbody" class="modalbody row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label text-uppercase" >Customer Code: </label>
+                                <label class="control-label text-uppercase" >Customer Code: <span class="text-danger">*</span></label>
                                 <input type="text" name="customer_code" id="customer_code" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-customer_code"></strong>
@@ -57,7 +57,7 @@
 
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label text-uppercase" >Customer Name: </label>
+                                <label class="control-label text-uppercase" >Customer Name: <span class="text-danger">*</span></label>
                                 <input type="text" name="customer_name" id="customer_name" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-customer_name"></strong>

@@ -10,54 +10,43 @@
       <table class="table align-items-center table-flush datatable-location_to display" cellspacing="0" width="100%">
         <thead class="thead-light">
           <tr>
+
             <th scope="col">Product ID</th>
             <th scope="col">Product Code</th>
             <th scope="col">Description</th>
-            <th scope="col">QTY</th>
             <th scope="col">Stock</th>
             <th scope="col">Sold</th>
-
             <th scope="col">Category</th>
-            <th scope="col">Unit Sales</th>
-            <th scope="col">Total Sales</th>
+            <th scope="col">Unit Price</th>
 
           </tr>
         </thead>
         <tbody class="text-uppercase font-weight-bold">
-          @foreach($location_to as $key => $inventory)
+          @foreach($location_to as $key => $product)
                 <tr>
-                  <td>
-                      {{  $inventory->product_id ?? '' }}
-                  </td>
+                    <td>
+                        {{  $product->id ?? '' }}
+                    </td>
 
-                  <td>
-                      {{  $inventory->product_code ?? '' }}
-                  </td>
-                  <td>
-                      {{  $inventory->short_description ?? '' }}
-                  </td>
-                
-                  <td>
-                      {{  $inventory->qty ?? '' }}
-                  </td>
-                  <td>
-                      {{  $inventory->stock ?? '' }}
-                  </td>
-                  <td>
-                      {{  $inventory->sold ?? '' }}
-                  </td>
-                  
-                  <td>
-                      {{  $inventory->category->name ?? '' }}
-                  </td>
-                  <td>
-                      <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($inventory->price , 0, ',', ',') }}
-                  </td>
-              
-                  <td>
-                      <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($inventory->total_price , 0, ',', ',') }}
-
-                  </td>
+                    <td>
+                        {{  $product->product_code ?? '' }}
+                    </td>
+                    <td>
+                        {{  $product->description ?? '' }}
+                    </td>
+                    <td>
+                        {{  $product->stock ?? '' }}
+                    </td>
+                    <td>
+                        {{  $product->sold ?? '' }}
+                    </td>
+                    
+                    <td>
+                        {{  $product->category->name ?? '' }}
+                    </td>
+                    <td>
+                        <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($product->price , 2, '.', ',') }}
+                    </td>
                 
                 </tr>
             @endforeach

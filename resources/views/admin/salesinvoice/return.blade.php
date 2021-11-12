@@ -32,13 +32,13 @@
                         <button type="button" name="removereturn" removereturn="{{  $return->id ?? '' }}" class="text-uppercase removereturn btn btn-danger btn-sm">Remove</button> 
                     </td>
                     <td>
-                        {{  $return->inventory->product_code ?? '' }}
+                        {{  $return->product->product_code ?? '' }}
                     </td>
                     <td>
                         {{  $return->return_qty ?? '' }}
                     </td>
                     <td>
-                             {{$return->pricetype->id}} / ₱ {{ number_format($return->pricetype->discount ?? '' , 2, '.', ',') }}
+                        {{$return->pricetype->price_type}} / ₱ {{ number_format($return->pricetype->discount ?? '' , 2, '.', ',') }}
                     </td>
                     <td>
                             ₱ {{ number_format($return->unit_price ?? '' , 2, '.', ',') }}

@@ -16,53 +16,40 @@
             <th scope="col">Product ID</th>
             <th scope="col">Product Code</th>
             <th scope="col">Description</th>
-            <th scope="col">QTY</th>
             <th scope="col">Stock</th>
             <th scope="col">Sold</th>
-
             <th scope="col">Category</th>
-            <th scope="col">Unit Sales</th>
-            <th scope="col">Total Sales</th>
-
+            <th scope="col">Unit Price</th>
+        
           </tr>
         </thead>
         <tbody class="text-uppercase font-weight-bold">
-          @foreach($location_from as $key => $inventory)
-                <tr data-entry-id="{{ $inventory->id ?? '' }}">
-                
-
+          @foreach($location_from as $key => $product)
+                <tr data-entry-id="{{ $product->id ?? '' }}">
                   <td>
-                      {{  $inventory->product_id ?? '' }}
+                      {{  $product->id ?? '' }}
                   </td>
 
                   <td>
-                      {{  $inventory->product_code ?? '' }}
+                      {{  $product->product_code ?? '' }}
                   </td>
                   <td>
-                      {{  $inventory->short_description ?? '' }}
-                  </td>
-                
-                  <td>
-                      {{  $inventory->qty ?? '' }}
+                      {{  $product->description ?? '' }}
                   </td>
                   <td>
-                      {{  $inventory->stock ?? '' }}
+                      {{  $product->stock ?? '' }}
                   </td>
                   <td>
-                      {{  $inventory->sold ?? '' }}
+                      {{  $product->sold ?? '' }}
                   </td>
                   
                   <td>
-                      {{  $inventory->category->name ?? '' }}
+                      {{  $product->category->name ?? '' }}
                   </td>
                   <td>
-                      <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($inventory->price , 0, ',', ',') }}
+                      <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($product->price , 2, '.', ',') }}
                   </td>
               
-                  <td>
-                      <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($inventory->total_price , 0, ',', ',') }}
-
-                  </td>
                 
                 </tr>
             @endforeach

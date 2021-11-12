@@ -4,8 +4,8 @@
     <div class="card-body">
         <div class="row">
         <div class="col">
-            <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{$inventory->short_description}} - {{$inventory->product_code}}</h3>
-            <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($inventory->price , 2, '.', ',') }}</span> <small>/ {{$inventory->category->name}}</small>
+            <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{$sales_inventory->description}} - {{$sales_inventory->product_code}}</h3>
+            <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($sales_inventory->price , 2, '.', ',') }}</span> <small>/ {{$sales_inventory->category->name}}</small>
         </div>
         <div class="col-auto">
             <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
@@ -17,29 +17,27 @@
             <div class="row text-dark text-justify font-weight-light">
                 <div class="col-6">
                     <span class=" text-uppercase">Size: 
-                        <span class="text-success font-weight-bold">{{$inventory->size->title}} {{$inventory->size->size}}</span>
+                        <span class="text-success font-weight-bold">{{$sales_inventory->size->title}} {{$sales_inventory->size->size}}</span>
                     </span> 
                 </div>
                 <div class="col-6">
-                        <span class= "text-uppercase">Stock/{{$inventory->category->name}}:
-                        @if($inventory->stock < 1)
+                        <span class= "text-uppercase">Stock/{{$sales_inventory->category->name}}:
+                        @if($sales_inventory->stock < 1)
                             <span class="text-warning text-uppercase">0</span>
                             @else
-                            <span class="text-success font-weight-bold">{{$inventory->stock}}</span> 
+                            <span class="text-success font-weight-bold">{{$sales_inventory->stock}}</span> 
                         @endif
                     </span>
                 </div>
+               
                 <div class="col-6">
-                    <span class="text-uppercase">Expiration: <span class="text-success font-weight-bold"> {{$inventory->expiration}}</span> </span>
+                    <span class="text-uppercase">Sold: <span class="text-success font-weight-bold"> {{$sales_inventory->sold}}</span></span>
                 </div>
                 <div class="col-6">
-                    <span class="text-uppercase">Sold: <span class="text-success font-weight-bold"> {{$inventory->sold}}</span></span>
+                    <span class="text-uppercase">Supplier: <span class="text-success font-weight-bold"> {{$sales_inventory->receiving_good->supplier->name}}</span></span>
                 </div>
                 <div class="col-6">
-                    <span class="text-uppercase">Supplier: <span class="text-success font-weight-bold"> {{$inventory->purchase_order->supplier->name}}</span></span>
-                </div>
-                <div class="col-6">
-                    <span class="text-uppercase">Orders: <span class="text-success font-weight-bold"> {{$inventory->orders}}</span></span>
+                    <span class="text-uppercase">Orders: <span class="text-success font-weight-bold"> {{$sales_inventory->orders}}</span></span>
                 </div>
             </div>
         </p>
@@ -54,13 +52,13 @@
             <label class="control-label text-success" >Select Price Type: </label>
             <select name="select_pricetype" id="select_pricetype" class="form-control select2" required>
                 @foreach ($pricetypes as $pricetype)
-                <option value="{{$pricetype->id}}"> {{$pricetype->price_type}} / Discount: {{$pricetype->discount}}</option>
+                <option value="{{$pricetype->id}}"> {{$pricetype->price_type}} / DISCOUNT: {{$pricetype->discount}}</option>
                 @endforeach
             </select>
         </div>
 
         <div class="form-group">
-            <label class="control-label text-success" >QTY: </label>
+            <label class="control-label text-success" >QTY:<span class="text-danger">*</span></label>
             <input type="number" name="purchase_qty" id="purchase_qty" class="purchase_qty form-control"  autofocus/>
             <span class="invalid-feedback" role="alert">
                 <strong id="error-purchase_qty"></strong>

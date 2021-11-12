@@ -19,10 +19,10 @@
                     {{ $sale->id  ?? '' }}
                 </td>
                 <td>
-                    {{ $sale->inventory->product_code  ?? '' }}
+                    {{ $sale->product->product_code  ?? '' }}
                 </td>
                 <td>
-                    {{ $sale->inventory->short_description ?? '' }}
+                    {{ $sale->product->description ?? '' }}
                 </td>
                 <td>
                     {{ $sale->purchase_qty  ?? '' }}
@@ -31,7 +31,7 @@
                     {{ $sale->pricetype->price_type  ?? '' }} / <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($sale->pricetype->discount , 2, '.', ',') }}
                 </td>
                 <td>
-                    <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($sale->inventory->price , 2, '.', ',') }}
+                    <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($sale->product->price , 2, '.', ',') }}
                 </td>
                 <td>
                     <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($sale->total , 2, '.', ',') }}
@@ -41,8 +41,6 @@
             </tr>
         @endforeach
     </tbody>
-   unj
-
     </table>
 </div>
 

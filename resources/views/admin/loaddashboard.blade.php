@@ -177,7 +177,7 @@
                 @forelse($newproduct as $key => $product)
                 <tr data-entry-id="{{ $order->id ?? '' }}">
                     <td>
-                        {{  $product->short_description ?? '' }}
+                        {{  $product->description ?? '' }}
                     </td>
                     <td>
                        {{  $product->stock ?? '' }}
@@ -232,10 +232,10 @@
                 @forelse($salestoday as $key => $sales)
                 <tr data-entry-id="{{ $sales->id ?? '' }}">
                     <td>
-                        {{  $sales->inventory->short_description ?? '' }}
+                        {{  $sales->product->description ?? '' }}
                     </td>
                     <td>
-                      
+                      {{  $sales->customer->customer_name ?? '' }}
                     </td>
                     <td>
                        {{  $sales->purchase_qty ?? '' }}

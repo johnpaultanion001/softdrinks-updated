@@ -274,7 +274,7 @@
 
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="control-label" >Product Code: </label>
+                                <label class="control-label" >Product Code<span class="text-danger">*</span> </label>
                                 <input type="text" name="product_code"  id="product_code" class="form-control" autocomplete="off" style="text-transform: uppercase;"/>
                                 <div id="productCodeList"></div>
                                 <span class="invalid-feedback" role="alert">
@@ -285,7 +285,7 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="control-label" >Long Description: </label>
+                                <label class="control-label" >Long Description<span class="text-danger">*</span> </label>
                                <input type="text" name="long_description" id="long_description" class="form-control"/>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-long_description"></strong>
@@ -294,7 +294,7 @@
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="control-label" >Short Description: </label>
+                                <label class="control-label" >Short Description<span class="text-danger">*</span> </label>
                                 <input type="text" name="short_description" id="short_description" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-short_description"></strong>
@@ -306,7 +306,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <div class="row">
-                                    <div class="col"><label class="control-label text-uppercase" >Category: </label></div>
+                                    <div class="col"><label class="control-label text-uppercase" >Category<span class="text-danger">*</span> </label></div>
                                     <div class="col text-right">
                                         <a class="btn btn-sm btn-white text-uppercase" href="/admin/categories">New Category?</a>
                                     </div>
@@ -325,7 +325,7 @@
                        <div class="col-sm-6">
                             <div class="form-group">
                                <div class="row">
-                                    <div class="col"><label class="control-label text-uppercase" >Size: </label></div>
+                                    <div class="col"><label class="control-label text-uppercase" >Size<span class="text-danger">*</span> </label></div>
                                     <div class="col text-right">
                                         <a class="btn btn-sm btn-white text-uppercase" href="/admin/sizes">New Size?</a>
                                     </div>
@@ -343,7 +343,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label" >Expiration: </label>
+                                <label class="control-label" >Expiration </label>
                                 <input type="date" name="expiration" id="expiration" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-expiration"></strong>
@@ -352,34 +352,43 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="control-label" >QTY: </label>
-                                <input type="number" name="stock" id="stock" class="form-control" />
+                                <label class="control-label" >QTY<span class="text-danger">*</span> </label>
+                                <input type="number" name="qty" id="qty" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
-                                    <strong id="error-stock"></strong>
+                                    <strong id="error-qty"></strong>
                                 </span>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="control-label" >Unit Cost:</label>
-                                <input type="number" name="purchase_amount" id="purchase_amount" class="form-control" step="any" />
+                                <label class="control-label" >Unit Cost<span class="text-danger">*</span></label>
+                                <input type="number" name="unit_cost" id="unit_cost" class="form-control" step="any" />
                                 <span class="invalid-feedback" role="alert">
-                                    <strong id="error-purchase_amount"></strong>
+                                    <strong id="error-unit_cost"></strong>
                                 </span>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="control-label" >Unit Profit:</label>
-                                <input type="number" name="profit" id="profit" class="form-control" step="any"/>
+                                <label class="control-label" >Regular Discount<span class="text-danger">*</span></label>
+                                <input type="number" name="regular_discount" id="regular_discount" class="form-control" step="any"/>
                                 <span class="invalid-feedback" role="alert">
-                                    <strong id="error-profit"></strong>
+                                    <strong id="error-regular_discount"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" >Hauling Discount<span class="text-danger">*</span></label>
+                                <input type="number" name="hauling_discount" id="hauling_discount" class="form-control" step="any"/>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-hauling_discount"></strong>
                                 </span>
                             </div>
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="control-label" >Product Remarks: </label>
+                                <label class="control-label" >Product Remarks </label>
                                 <textarea name="product_remarks" id="product_remarks" class="form-control"></textarea>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-product_remarks"></strong>

@@ -19,26 +19,26 @@ class UCSController extends Controller
     }
     public function load()
     {
-        $totalucs = UCS::where('isRemove', 0)->where('isPurchase', 1)->where('isHide', 0)->latest()->get();
+        $totalucs = UCS::where('isRemove', false)->where('isComplete', true)->where('isHide', false)->latest()->get();
         return view('admin.UCS.load', compact('totalucs'));
     }
 
     public function backtozero()
     {
-        $data = UCS::where('isHide', 0)->count();
+        $data = UCS::where('isHide', false)->count();
         if($data < 1){
             return response()->json(['nodata' => 'No Available Data.']);
         }
 
-        UCS::where('isHide', 0)->update([
-            'isHide' => 1,
+        UCS::where('isHide', false)->update([
+            'isHide' => true,
         ]);
         return response()->json(['success' => 'Successfully Updated.']);
     }
 
     public function allucs()
     {
-        $allucs = UCS::where('isRemove', 0)->where('isPurchase', 1)->latest()->get();
+        $allucs = UCS::where('isRemove', false)->where('isComplete', 1)->latest()->get();
         return view('admin.UCS.allucs', compact('allucs'));
     }
 

@@ -39,9 +39,9 @@
                                     @forelse($receipts as $key => $receipt)
                                         <tr>
                                             <td>{{$receipt->purchase_qty}}</td>
-                                            <td>{{$receipt->inventory->category->name}}</td>
-                                            <td>{{$receipt->inventory->short_description}}</td>
-                                            <td>₱ {{ number_format($receipt->inventory->price ?? '' , 2, '.', ',') }}</td>
+                                            <td>{{$receipt->product->category->name}}</td>
+                                            <td>{{$receipt->product->description}}</td>
+                                            <td>₱ {{ number_format($receipt->product->price ?? '' , 2, '.', ',') }}</td>
                                             <td>₱  {{ number_format($receipt->total_amount_receipt ?? '' , 2, '.', ',') }}</td>
                                         </tr>
                                     @empty

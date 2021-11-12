@@ -16,12 +16,15 @@ class CreateSalesReturnsTable extends Migration
         Schema::create('sales_returns', function (Blueprint $table) {
             $table->id();
             $table->string('salesinvoice_id');
-            $table->string('inventory_id');
+            $table->string('product_id');
             $table->integer('return_qty');
             $table->string('pricetype_id');
             $table->float('unit_price');
             $table->float('amount');
-            $table->integer('isRemove')->default(0);
+            $table->float('discounted');
+            $table->string('status_id');
+            $table->string('remarks')->nullable();
+           
 
 
             $table->timestamps();

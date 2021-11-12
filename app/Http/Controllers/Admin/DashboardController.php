@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Inventory;
+use App\Models\SalesInventory;
 use App\Models\Category;
 use Validator;
 use App\Models\Order;
@@ -24,27 +24,27 @@ class DashboardController extends Controller
       date_default_timezone_set('Asia/Manila');
       $userid = auth()->user()->roles()->getQuery()->pluck('id')->first();
       if($userid == '2'){
-        $allproducts = Inventory::latest()->where('isRemove', 0)->where('isSame', 0)->get();
-        $productsmonthly = Inventory::whereMonth('created_at', '=', date('m'))->where('isRemove', 0)->where('isSame', 0)->get();
+        $allproducts = SalesInventory::latest()->where('isRemove', 0)->where('isComplete', 1)->get();
+        $productsmonthly = SalesInventory::whereMonth('created_at', '=', date('m'))->where('isRemove', 0)->where('isComplete', 1)->get();
 
-        $outofstock = Inventory::where('stock', '0')->where('isRemove', 0)->where('isSame', 0)->get();
-        $outofstockmonthly = Inventory::where('stock', '0')->where('isRemove', 0)->where('isSame', 0)
+        $outofstock = SalesInventory::where('stock', '0')->where('isRemove', 0)->where('isComplete', 1)->get();
+        $outofstockmonthly = SalesInventory::where('stock', '0')->where('isRemove', 0)->where('isComplete', 1)
                                       ->whereMonth('created_at', '=', date('m'))->get();
         $salesmonthly = Sales::where('user_id', $userid)->whereMonth('created_at', '=', date('m'))->get();
 
         $allprofit = Sales::where('user_id', $userid)->get();
         $profitmonthly = Sales::where('user_id', $userid)->whereMonth('created_at', '=', date('m'))->get(); 
         
-        $newproduct = Inventory::latest()->where('isRemove', 0)->where('isSame', 0)->paginate(5);
+        $newproduct = SalesInventory::latest()->where('isRemove', 0)->where('isComplete', 1)->paginate(5);
         $salestoday = Sales::where('user_id', $userid)->whereDay('created_at', '=', date('d'))->get();
         return view('admin.dashboardcashier', compact('allproducts', 'productsmonthly' , 'outofstock', 'outofstockmonthly', 'salesmonthly', 'allprofit','profitmonthly', 'newproduct','salestoday'));
       }
 
-      $allproducts = Inventory::latest()->where('isRemove', 0)->where('isSame', 0)->get();
-      $productsmonthly = Inventory::whereMonth('created_at', '=', date('m'))->where('isRemove', 0)->where('isSame', 0)->get();
+      $allproducts = SalesInventory::latest()->where('isRemove', 0)->where('isComplete', 1)->get();
+      $productsmonthly = SalesInventory::whereMonth('created_at', '=', date('m'))->where('isRemove', 0)->where('isComplete', 1)->get();
 
-      $outofstock = Inventory::where('stock', '0')->where('isRemove', 0)->where('isSame', 0)->get();
-      $outofstockmonthly = Inventory::where('stock', '0')->where('isRemove', 0)->where('isSame', 0)
+      $outofstock = SalesInventory::where('stock', '0')->where('isRemove', 0)->where('isComplete', 1)->get();
+      $outofstockmonthly = SalesInventory::where('stock', '0')->where('isRemove', 0)->where('isComplete', 1)
                                      ->whereMonth('created_at', '=', date('m'))->get();
 
       $salesmonthly = Sales::whereMonth('created_at', '=', date('m'))->get();
@@ -52,7 +52,7 @@ class DashboardController extends Controller
       $allprofit = Sales::all();
       $profitmonthly = Sales::whereMonth('created_at', '=', date('m'))->get(); 
       
-      $newproduct = Inventory::latest()->where('isRemove', 0)->where('isSame', 0)->paginate(5);
+      $newproduct = SalesInventory::latest()->where('isRemove', 0)->where('isComplete', 1)->paginate(5);
       $salestoday = Sales::whereDay('created_at', '=', date('d'))->get();
       return view('admin.loaddashboard', compact('allproducts', 'productsmonthly' , 'outofstock', 'outofstockmonthly', 'salesmonthly', 'allprofit','profitmonthly', 'newproduct','salestoday'));
     }

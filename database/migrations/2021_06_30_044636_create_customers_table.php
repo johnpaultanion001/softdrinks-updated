@@ -15,11 +15,11 @@ class CreateCustomersTable extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->string('customer_code')->unique();
+            $table->string('customer_code');
             $table->string('customer_name');
-            $table->longText('area');
-            $table->string('contact_number');
-            $table->float('current_balance', 8, 2);
+            $table->longText('area')->nullable();
+            $table->string('contact_number')->nullable();
+            $table->float('current_balance')->default(0);
             $table->integer('isRemove')->default(0);
             $table->timestamps();
         });

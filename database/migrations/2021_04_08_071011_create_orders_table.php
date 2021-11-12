@@ -17,13 +17,15 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->string('salesinvoice_id');
             $table->string('order_number');
-            $table->string('inventory_id');
-            $table->string('user_id');
+            $table->string('product_id');
+            
             $table->integer('purchase_qty');
+
             $table->float('profit');
             $table->float('total');
             $table->integer('status')->default(0);
             $table->string('customer_id')->default(0);
+
             $table->string('pricetype_id');
             $table->float('discounted');
             $table->float('total_cost');

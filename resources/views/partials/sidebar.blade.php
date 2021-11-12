@@ -19,13 +19,13 @@
               <li class="nav-item">
                 <a class="nav-link {{ request()->is('admin/dashboard') || request()->is('admin/dashboard/*') ? 'active' : '' }}" href="{{ route("admin.dashboard") }}">
                   <i class="ni ni-tv-2 "></i>
-                  <span class="nav-link-text text-uppercase">Dashboard</span>
+                  <span class="nav-link-text text-uppercase">Dashboard []</span>
                 </a>
               </li>
             @endcan
             @can('purchase_order_access')
               <li class="nav-item">
-                <a class="nav-link {{ request()->is('admin/purchase-order') || request()->is('admin/purchase-order/*') ? 'active' : '' }}" href="{{ route("admin.purchase-order.index") }}">
+                <a class="nav-link {{ request()->is('admin/receiving_goods') || request()->is('admin/receiving_goods/*') ? 'active' : '' }}" href="{{ route("admin.receiving_goods.index") }}">
                   <i class="fas fa-truck"></i>
                   <span class="nav-link-text text-uppercase">Receiving goods</span>
                 </a>
@@ -33,9 +33,17 @@
             @endcan
             @can('inventories_access')
               <li class="nav-item">
-                <a class="nav-link {{ request()->is('admin/inventories') || request()->is('admin/inventories/*') ? 'active' : '' }}" href="{{ route("admin.inventories.index") }}">
+                <a class="nav-link {{ request()->is('admin/sales_inventory') || request()->is('admin/sales_inventory/*') ? 'active' : '' }}" href="{{ route("admin.sales_inventory.index") }}">
                   <i class="ni ni-bullet-list-67"></i>
-                  <span class="nav-link-text text-uppercase">Inventories</span>
+                  <span class="nav-link-text text-uppercase">Sales Inventories</span>
+                </a>
+              </li>
+            @endcan
+            @can('empty_bottles_inventory')
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('admin/empty_bottles_inventory') || request()->is('admin/empty_bottles_inventory/*') ? 'active' : '' }}" href="{{ route("admin.empty_bottles_inventory.index") }}">
+                  <i class="ni ni-bullet-list-67"></i>
+                  <span class="nav-link-text text-uppercase">Empty Bottles Inventories</span>
                 </a>
               </li>
             @endcan
@@ -47,14 +55,7 @@
                 </a>
               </li>
             @endcan
-            <!-- @can('ordering_access')
-              <li class="nav-item">
-                <a class="nav-link {{ request()->is('admin/ordering') || request()->is('admin/ordering/*') ? 'active' : '' }}" href="{{ route("admin.getproducts") }}">
-                  <i class="ni ni-cart"></i>
-                  <span class="nav-link-text text-uppercase">Sales Invoice</span>
-                </a>
-              </li>
-            @endcan -->
+        
             @can('salesinvoice_access')
             <li class="nav-item">
               <a class="nav-link {{ request()->is('admin/salesInvoice') || request()->is('admin/salesInvoice/*') ? 'active' : '' }}" href="{{ route("admin.salesInvoice.index") }}">

@@ -5,54 +5,40 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Inventory extends Model
+class ReceivingProduct extends Model
 {
     use HasFactory;
-
-    public $table = 'inventories';
-
+    
     protected $fillable = [
-        'category_id',
-        'purchase_order_number_id',
+        'receiving_good_id',
+        'product_id',
 
         'product_code',
-        'long_description',
-        'short_description',
-        
-        'stock',
+        'category_id',
+        'description',
+
         'qty',
-        'pqty',
-        'sold',
-        'orders',
-
         'size_id',
-
-        'purchase_amount',
-        'profit',
-        'price',
-        
-        'total_amount_purchase',
-        'total_profit',
-        'total_price',
-
         'expiration',
+
+        'unit_cost',
+        'regular_discount',
+        'hauling_discount',
+        'price',
+        'total_cost',
+        
+    
         'product_remarks',
         'location_id',
-        'product_id',
         'supplier_id',
-        'isRemove',
-        'isSame',
-        'add_qty',
-        'ucs_size'
-       
     ];
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
-    public function purchase_order()
+    public function receiving_good()
     {
-       return $this->belongsTo(PurchaseOrder::class, 'purchase_order_number_id', 'purchase_order_number');
+       return $this->belongsTo(ReceivingGood::class, 'receiving_good_id');
     }
     public function size()
     {
@@ -66,5 +52,4 @@ class Inventory extends Model
     {
         return $this->belongsTo(Supplier::class, 'supplier_id');
     }
-    
 }

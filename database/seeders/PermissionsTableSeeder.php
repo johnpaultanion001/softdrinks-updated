@@ -99,6 +99,11 @@ class PermissionsTableSeeder extends Seeder
                 'id'    => '22',
                 'title' => 'price_type_access',
             ],
+            [
+                'id'    => '23',
+                'title' => 'empty_bottles_inventory',
+            ],
+            
 
             
 

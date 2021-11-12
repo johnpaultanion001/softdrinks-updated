@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\LocationTransfer;
 use App\Models\Location;
-use App\Models\Inventory;
+use App\Models\SalesInventory;
 use Illuminate\Http\Request;
 use Validator;
 use Gate;
@@ -27,14 +27,14 @@ class LocationTransferController extends Controller
     
     public function locationfrom(Request $request, $location)
     {
-        $location_from = Inventory::where('isRemove', 0)->where('isSame', 0)->where('location_id', $location)->where('stock' , '>' , 0)->whereDate('expiration' , '>' ,date('Y-m-d', strtotime('-1 day')))->latest()->get();
+        $location_from = SalesInventory::where('isRemove', 0)->where('isComplete', true)->where('location_id', $location)->where('stock' , '>' , 0)->latest()->get();
         $location = Location::where('isRemove', 0)->where('id', $location)->firstorfail();
         $location_title = $location->location_name;
         return view('admin.locationtransfer.loadlocationfrom', compact('location_from' , 'location_title'));
     }
     public function locationto(Request $request, $location)
     {
-        $location_to = Inventory::where('isRemove', 0)->where('isSame', 0)->where('location_id', $location)->where('stock' , '>' , 0)->whereDate('expiration' , '>' ,date('Y-m-d', strtotime('-1 day')))->latest()->get();
+        $location_to = SalesInventory::where('isRemove', 0)->where('isComplete', true)->where('location_id', $location)->where('stock' , '>' , 0)->latest()->get();
         $location = Location::where('isRemove', 0)->where('id', $location)->firstorfail();
         $location_title = $location->location_name;
         return view('admin.locationtransfer.loadlocationto', compact('location_to', 'location_title'));
@@ -61,7 +61,7 @@ class LocationTransferController extends Controller
             return response()->json(['errors' => $validated->errors()]);
         }
 
-        $transferCount = Inventory::where('location_id', $request->input('location_from'))->where('isRemove', 0)->where('isSame', 0)->where('stock' , '>' , 0)->whereDate('expiration' , '>' ,date('Y-m-d', strtotime('-1 day')))->latest()->count();
+        $transferCount = SalesInventory::where('location_id', $request->input('location_from'))->where('isRemove', 0)->where('isComplete', true)->where('stock' , '>' , 0)->latest()->count();
         
         if($transferCount < 1){
             return response()->json(['nodata' => 'No Available Data']);
@@ -78,7 +78,7 @@ class LocationTransferController extends Controller
             'transfer_count' => $transferCount,
         ]);
 
-        Inventory::where('location_id', $request->input('location_from'))->where('isRemove', 0)->where('isSame', 0)->where('stock' , '>' , 0)->whereDate('expiration' , '>' ,date('Y-m-d', strtotime('-1 day')))
+        SalesInventory::where('location_id', $request->input('location_from'))->where('isRemove', 0)->where('isComplete', true)->where('stock' , '>' , 0)
             ->update([
                 'location_id' => $request->input('location_to'),
                 ]);

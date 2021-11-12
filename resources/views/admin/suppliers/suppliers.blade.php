@@ -47,7 +47,7 @@
                             <div id="modalbody" class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Name Of Supplier: </label>
+                                        <label class="control-label text-uppercase" >Name Of Supplier:<span class="text-danger">*</span> </label>
                                         <input type="text" name="name" id="name" class="form-control" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-name"></strong>
@@ -57,7 +57,7 @@
                                 
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Contact Number: </label>
+                                        <label class="control-label text-uppercase" >Contact Number:<span class="text-danger">*</span> </label>
                                         <input type="number" name="contact_number" id="contact_number" class="form-control" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-contact_number"></strong>
@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Address: </label>
+                                        <label class="control-label text-uppercase" >Address:<span class="text-danger">*</span> </label>
                                         <input type="text" name="address" id="address" class="form-control" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-address"></strong>

@@ -29,25 +29,33 @@ class SalesReturnController extends Controller
     {
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
-            'inventory_id' => ['required'],
+            'product_id' => ['required'],
             'pricetype_id' => ['required'],
-            'unit_price' => ['required' ,'numeric','min:1'],
+            'unit_price' => ['required' ,'numeric','min:0'],
             'return_qty' => ['required' ,'integer','min:1'],
+            'status_id' => ['required'],
         ]);
 
         if ($validated->fails()) {
             return response()->json(['errors' => $validated->errors()]);
         }
-        $discounted = PriceType::where('id', $request->pricetype_id)->firstorfail();
-        $amount =  $request->input('return_qty') * $request->input('unit_price') - $discounted->discount;
+        $discount = PriceType::where('id', $request->pricetype_id)->first();
+
+        $discounted = $request->input('return_qty') * $discount->discount;
+        $amount =  $request->input('return_qty') * $request->input('unit_price');
+
+        $over_all_amount = $amount - $discounted;
+
         SalesReturn::create([
-            'inventory_id' => $request->input('inventory_id'),
+            'product_id' => $request->input('product_id'),
             'pricetype_id' => $request->input('pricetype_id'),
             'unit_price' => $request->input('unit_price'),
             'return_qty' => $request->input('return_qty'),
             'salesinvoice_id' => $request->input('salesinvoice_id_return'),
-            'amount' => $amount,
-            
+            'amount' => $over_all_amount,
+            'discounted' => $discounted,
+            'status_id'     => $request->input('status_id'),
+            'remarks'     => $request->input('remarks'),
         ]);
 
         return response()->json(['success' => 'Returned Successfully.']);
@@ -73,20 +81,21 @@ class SalesReturnController extends Controller
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
             'pricetype_id' => ['required'],
-            'unit_price' => ['required' ,'numeric','min:1'],
+            'unit_price' => ['required' ,'numeric','min:0'],
             'return_qty' => ['required' ,'integer','min:1'],
-            'inventory_id' => ['required'],
+            'product_id' => ['required'],
+            'status_id' => ['required'],
         ]);
 
         if ($validated->fails()) {
             return response()->json(['errors' => $validated->errors()]);
         }
 
-        $discounted = PriceType::where('id', $request->pricetype_id)->firstorfail();
+        $discounted = PriceType::where('id', $request->pricetype_id)->first();
         $amount =  $request->input('return_qty') * $request->input('unit_price') - $discounted->discount;
 
         SalesReturn::find($salesReturn->id)->update([
-            'inventory_id' => $request->input('inventory_id'),
+            'product_id' => $request->input('product_id'),
             'pricetype_id' => $request->input('pricetype_id'),
             'unit_price' => $request->input('unit_price'),
             'return_qty' => $request->input('return_qty'),

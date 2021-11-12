@@ -21,7 +21,7 @@
                   
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <small class="text-white">Entry Date</small>
+                            <small class="text-white">Entry Date<span class="text-white">*</span></small>
                             <input type="date" name="entry_date" id="entry_date" class="form-control" />
                             <span class="invalid-feedback text-dark" role="alert">
                                 <strong id="error-entry_date"></strong>
@@ -174,7 +174,7 @@
                   </div>
                     <div class="table-responsive">
                     <!-- Projects table -->
-                        <table class="table align-items-center table-flush datatable-location_transfer display" cellspacing="0" width="100%">
+                    <table class="table align-items-center table-flush datatable-all-record-location display" cellspacing="0" width="100%">
                         <thead class="thead-light">
                         <tr>
                             <th scope="col">Actions</th>
@@ -261,15 +261,18 @@ $(function () {
     $("#location_to").select2("trigger", "select", {
         data: { id: 2 }
     });
+
     let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 
- 
+    $.extend(true, $.fn.dataTable.defaults, {
+    pageLength: 100,
+        'columnDefs': [{ 'orderable': false, 'targets': 0 }],
+    });
 
-
-    $('.datatable-location_transfer:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+    $('.datatable-all-record-location:not(.ajaxTable)').DataTable({ buttons: dtButtons });
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-    $($.fn.dataTable.tables(true)).DataTable()
-    .columns.adjust();
+        $($.fn.dataTable.tables(true)).DataTable()
+            .columns.adjust();
     });
 });
 

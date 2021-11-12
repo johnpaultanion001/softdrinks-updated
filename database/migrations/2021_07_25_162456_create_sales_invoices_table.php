@@ -17,7 +17,7 @@ class CreateSalesInvoicesTable extends Migration
             $table->id();
             $table->string('salesinvoice_id');
             $table->string('user_id');
-            $table->string('doc_no');
+            $table->string('doc_no')->nullable();
             $table->date('entry_date');
             $table->longText('remarks')->nullable();
             $table->string('customer_id');
@@ -25,15 +25,13 @@ class CreateSalesInvoicesTable extends Migration
             $table->float('total_discount');
             $table->float('total_amount');
             $table->float('total_return')->nullable();;
-            $table->float('prev_bal');
+            $table->float('prev_bal')->default(0);
             $table->float('total_inv_amt');
             $table->float('cash');
             $table->float('change');
             $table->float('new_bal');
             $table->integer('isVoid')->default(0);
-            
-
-
+    
             $table->timestamps();
         });
     }

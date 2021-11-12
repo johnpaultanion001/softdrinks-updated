@@ -13,8 +13,8 @@ class Order extends Model
     protected $fillable = [
         'salesinvoice_id',
         'order_number',
-        'inventory_id',
-        'user_id',
+        'product_id',
+       
         'purchase_qty',
         'profit',
         'total',
@@ -29,9 +29,9 @@ class Order extends Model
     {
        return $this->belongsTo(SalesInvoice::class, 'salesinvoice_id', 'salesinvoice_id');
     }
-    public function inventory()
+    public function product()
     {
-        return $this->belongsTo(Inventory::class, 'inventory_id');
+        return $this->belongsTo(SalesInventory::class, 'product_id');
     }
     public function user()
     {

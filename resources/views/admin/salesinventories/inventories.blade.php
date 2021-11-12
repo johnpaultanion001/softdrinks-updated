@@ -17,9 +17,9 @@
                 <div class="form-group">
                 <small class="text-white">Filer By Category</small>
                     <select name="filter_category" id="filter_category" class="form-control select2">
-                        <option value="" disabled selected>Filter By Category</option>
+                        <option value="">Filter Category</option>
                         @foreach ($categories as $category)
-                            <option value="{{$category->id}}"> {{$category->name}}</option>
+                            <option value="{{$category->name}}"> {{$category->name}}</option>
                         @endforeach
                     </select>
                 
@@ -29,9 +29,9 @@
                 <div class="form-group">
                 <small class="text-white">Filer By Supplier</small>
                     <select name="filter_supplier" id="filter_supplier" class="form-control select2">
-                        <option value="" disabled selected>Filter By Supplier</option>
+                        <option value="">Filter By Supplier</option>
                         @foreach ($suppliers as $supplier)
-                            <option value="{{$supplier->id}}"> {{$supplier->name}}</option>
+                            <option value="{{$supplier->name}}"> {{$supplier->name}}</option>
                         @endforeach
                     </select>
                     
@@ -41,9 +41,9 @@
                 <div class="form-group">
                 <small class="text-white">Filer By Size</small>
                     <select name="filter_size" id="filter_size" class="form-control select2">
-                        <option value="" disabled selected>Filter By Size</option>
+                        <option value="">Filter Size</option>
                         @foreach ($sizes as $size)
-                            <option value="{{$size->id}}"> {{$size->title}} {{$size->size}} </option>
+                            <option value="{{$size->title}} {{$size->size}}"> {{$size->title}} {{$size->size}} </option>
                         @endforeach
                     </select>
                 
@@ -55,7 +55,7 @@
                     <select name="filter_location" id="filter_location" class="form-control select2">
                         <option value="" disabled selected>Filter By Location</option>
                         @foreach ($locations as $location)
-                            <option value="{{$location->id}}"> {{$location->location_name}}</option>
+                            <option value="{{$location->location_name}}"> {{$location->location_name}}</option>
                         @endforeach
                     </select>
                     
@@ -228,9 +228,6 @@
 <script>
 
 $(function () {
-    $('#puchase-order-number-edit').show();
-    $('#puchase-order-number-view').hide();
-    $('#success-alert').hide();
     return loadInventories();
 });
 
@@ -238,7 +235,7 @@ $(function () {
 
 function loadInventories(){
     $.ajax({
-        url: "loadinventories", 
+        url: "load_products", 
         type: "get",
         dataType: "HTMl",
         beforeSend: function() {
@@ -250,114 +247,6 @@ function loadInventories(){
         }	
     })
 }
-
-$(document).on('click', '.remove', function(){
-  var id = $(this).attr('remove');
-  $.confirm({
-      title: 'Confirmation',
-      content: 'You really want to remove this product?',
-     
-      type: 'red',
-      buttons: {
-          confirm: {
-              text: 'confirm',
-              btnClass: 'btn-blue',
-              keys: ['enter', 'shift'],
-              action: function(){
-                  return $.ajax({
-                      url:"/admin/inventories/"+id,
-                      method:'DELETE',
-                      data: {
-                          _token: '{!! csrf_token() !!}',
-                      },
-                      dataType:"json",
-                      beforeSend:function(){
-                        $('#titletable').text('Loading...');
-                      },
-                      success:function(data){
-                          if(data.success){
-                            $('#success-alert').addClass('bg-primary')
-                            $('#success-alert').html('<strong>' + data.success + '</strong> ');
-                            $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
-                                $("#success-alert").slideUp(500);
-                            });
-                            return loadInventories();
-                            $('#titletable').text('Inventories');
-                          }
-                      }
-                  })
-              }
-          },
-          cancel:  {
-              text: 'cancel',
-              btnClass: 'btn-red',
-              keys: ['enter', 'shift'],
-          }
-      }
-  });
-
-});
-
-$(document).on('click', '.edit', function(){
-    $('#formModal').modal('show');
-    $('.modal-title').text('Edit Product');
-    $('#myForm')[0].reset();
-    $('.form-control').removeClass('is-invalid')
-    $('#form_result').html('');
-    $('#purhase-number').hide();
-    $('#puchase-order-number-edit').show();
-    $('#puchase-order-number-view').hide();
-    $('.form_disable').attr('readonly' , false)
-    $('.select2').prop("disabled", false);
-    $('#product_button').show();
-    var id = $(this).attr('edit');
-
-    $.ajax({
-        url :"/admin/inventories/"+id+"/edit",
-        dataType:"json",
-        beforeSend:function(){
-            $("#product_button").attr("disabled", true);
-            $("#product_button").attr("value", "Loading...");
-            $('#loading-productmodal').show();
-            $('#modal-body-product').hide();
-        },
-        success:function(data){
-            $('#loading-productmodal').hide();
-            $('#modal-body-product').show();
-            if($('#product_action').val() == 'Edit'){
-                $("#product_button").attr("disabled", false);
-                $("#product_button").attr("value", "Update");
-            }else{
-                $("#product_button").attr("disabled", false);
-                $("#product_button").attr("value", "Submit");
-            }
-            $.each(data.result, function(key,value){
-                if(key == $('#'+key).attr('id')){
-                    $('#'+key).val(value)
-                    if(key == 'category_id'){
-                        $("#category_id").select2("trigger", "select", {
-                            data: { id: value }
-                        });
-                    }
-                    if(key == 'purchase_order_number_id'){
-                        $("#purchase_order_number_id").select2("trigger", "select", {
-                            data: { id: value }
-                        });
-                    }
-                    if(key == 'size_id'){
-                        $("#size_id").select2("trigger", "select", {
-                            data: { id: value }
-                        });
-                    }
-                }
-            })
-            $('#product_hidden_id').val(id);
-            $('#product_button').val('Update');
-            $('#product_action').val('Edit');
-        }
-    })
-});
-
 
 $(document).on('click', '.view', function(){
     $('#formModal').modal('show');
@@ -406,199 +295,6 @@ $(document).on('click', '.view', function(){
     })
 });
 
-$(document).on('click', '#create_record', function(){
-    $('#formModal').modal('show');
-    $('#myForm')[0].reset();
-    $('.form-control').removeClass('is-invalid')
-    $('.modal-title').text('Add New Product');
-    $('#category_id').select2({
-        placeholder: 'Select Category'
-    })
-    $('#purchase_order_number_id').select2({
-        placeholder: 'Select Purchase Order Number'
-    })
-    $('#size_id').select2({
-        placeholder: 'Select Size'
-    })
-    $('#product_button').val('Submit');
-    $('#product_action').val('Add');
-    $('#form_result').html('');
-    $('#loading-productmodal').hide();
-    $('#puchase-order-number-view').hide();
-    $('#puchase-order-number-edit').show();
-    $('#product_button').show();
-    $('#purhase-number').show();
-    $('.form_disable').attr('readonly' , false)
-    $('.select2').prop("disabled", false);
-    
-});
-
-$('#myForm').on('submit', function(event){
-    event.preventDefault();
-    $('.form-control').removeClass('is-invalid')
-    var action_url = "{{ route('admin.inventories.store') }}";
-    var type = "POST";
-
-    if($('#product_action').val() == 'Edit'){
-        var id = $('#product_hidden_id').val();
-        action_url = "inventories/" + id;
-        type = "PUT";
-    }
-
-    $.ajax({
-        url: action_url,
-        method:type,
-        data:$(this).serialize(),
-        dataType:"json",
-        beforeSend:function(){
-            $("#product_button").attr("disabled", true);
-            $("#product_button").attr("value", "Loading..");
-            $('#loading-productmodal').show();
-            $('#modal-body-product').hide();
-        },
-        success:function(data){
-            var html = '';
-            $('#loading-productmodal').hide();
-            $('#modal-body-product').show();
-            if(data.errors){
-                $.each(data.errors, function(key,value){
-                    if($('#product_action').val() == 'Edit'){
-                        $("#product_button").attr("disabled", false);
-                        $("#product_button").attr("value", "Update");
-                    }else{
-                        $("#product_button").attr("disabled", false);
-                        $("#product_button").attr("value", "Submit");
-                    }
-                  
-                    if(key == $('#'+key).attr('id')){
-                        $('#'+key).addClass('is-invalid')
-                        $('#error-'+key).text(value)
-                    }
-                })
-            }
-            if(data.success){
-                if($('#product_action').val() == 'Edit'){
-                    $("#product_button").attr("disabled", false);
-                    $("#product_button").attr("value", "Update");
-                }else{
-                    $("#product_button").attr("disabled", false);
-                    $("#product_button").attr("value", "Submit");
-                }
-               
-                $('#success-alert').addClass('bg-primary');
-                $('#success-alert').html('<strong>' + data.success + '</strong>');
-                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
-                    $("#success-alert").slideUp(500);
-                });
-
-                $('.form-control').removeClass('is-invalid')
-                $('#myForm')[0].reset();
-                $('#category_id').select2({
-                    placeholder: 'Select Category'
-                });
-                $('#size_id').select2({
-                    placeholder: 'Select Size'
-                });
-                $('#formModal').modal('hide');
-                return loadInventories();
-                
-            }
-           
-        }
-    });
-});
-
-$('select[name="filter_category"]').on("change", function(event){
-  var category = $('#filter_category').val();
-  if(category != '')
-        {
-         var _token = $('input[name="_token"]').val();
-         $.ajax({
-          url:"inventories/filter",
-          method:"POST",
-          dataType: "HTMl",
-          data:{category:category, _token:_token},
-          beforeSend: function() {
-            $("#loadinventories").hide();
-            $('#loading-container').show();
-          },
-          success:function(data){
-            $('#loading-container').hide();
-            $("#loadinventories").show();
-            $("#loadinventories").html(data);
-          }
-         });
-        }
-});
-
-$('select[name="filter_location"]').on("change", function(event){
-  var location = $('#filter_location').val();
-  if(location != '')
-        {
-         var _token = $('input[name="_token"]').val();
-         $.ajax({
-          url:"inventories/filter",
-          method:"POST",
-          dataType: "HTMl",
-          data:{location:location, _token:_token},
-          beforeSend: function() {
-            $("#loadinventories").hide();
-            $('#loading-container').show();
-          },
-          success:function(data){
-            $('#loading-container').hide();
-            $("#loadinventories").show();
-            $("#loadinventories").html(data);
-          }
-         });
-        }
-});
-
-$('select[name="filter_supplier"]').on("change", function(event){
-  var supplier = $('#filter_supplier').val();
-  if(supplier != '')
-        {
-         var _token = $('input[name="_token"]').val();
-         $.ajax({
-          url:"inventories/filter",
-          method:"POST",
-          dataType: "HTMl",
-          data:{supplier:supplier, _token:_token},
-          beforeSend: function() {
-            $("#loadinventories").hide();
-            $('#loading-container').show();
-          },
-          success:function(data){
-            $('#loading-container').hide();
-            $("#loadinventories").show();
-            $("#loadinventories").html(data);
-          }
-         });
-        }
-});
-
-$('select[name="filter_size"]').on("change", function(event){
-  var size = $('#filter_size').val();
-  if(size != '')
-        {
-         var _token = $('input[name="_token"]').val();
-         $.ajax({
-          url:"inventories/filter",
-          method:"POST",
-          dataType: "HTMl",
-          data:{size:size, _token:_token},
-          beforeSend: function() {
-            $("#loadinventories").hide();
-            $('#loading-container').show();
-          },
-          success:function(data){
-            $('#loading-container').hide();
-            $("#loadinventories").show();
-            $("#loadinventories").html(data);
-          }
-         });
-        }
-});
 
 
 

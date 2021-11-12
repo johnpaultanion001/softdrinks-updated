@@ -31,16 +31,16 @@
                         <button type="button" name="removeorder" removeorder="{{  $order->id ?? '' }}" class="text-uppercase remove-order btn btn-danger btn-sm">Remove</button> 
                     </td>
                     <td>
-                        {{  $order->inventory->product_code ?? '' }}
+                        {{  $order->product->product_code ?? '' }}
                     </td>
                     <td>
                         {{  $order->purchase_qty ?? '' }}
                     </td>
                     <td>
-                             {{$order->pricetype->id}} / ₱ {{ number_format($order->pricetype->discount ?? '' , 2, '.', ',') }}
+                             {{$order->pricetype->price_type}} / ₱ {{ number_format($order->pricetype->discount ?? '' , 2, '.', ',') }}
                     </td>
                     <td>
-                            ₱ {{ number_format($order->inventory->price ?? '' , 2, '.', ',') }}
+                            ₱ {{ number_format($order->product->price ?? '' , 2, '.', ',') }}
                     </td>
                     <td>
                             ₱ {{ number_format($order->total ?? '' , 2, '.', ',') }}

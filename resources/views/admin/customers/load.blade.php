@@ -157,7 +157,7 @@ $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
  
   $.extend(true, $.fn.dataTable.defaults, {
-    pageLength: 100,
+    pageLength: 50,
     'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });
 

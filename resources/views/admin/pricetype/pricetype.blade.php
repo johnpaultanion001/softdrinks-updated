@@ -47,7 +47,7 @@
                     <div id="modalbody" class="modalbody row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="control-label text-uppercase" >Price Type: </label>
+                                <label class="control-label text-uppercase" >Price Type:<span class="text-danger">*</span> </label>
                                 <input type="text" name="price_type" id="price_type" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-price_type"></strong>
@@ -57,7 +57,7 @@
 
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="control-label text-uppercase" >Discount: </label>
+                                <label class="control-label text-uppercase" >Discount:<span class="text-danger">*</span> </label>
                                 <input type="text" name="discount" id="discount" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-discount"></strong>

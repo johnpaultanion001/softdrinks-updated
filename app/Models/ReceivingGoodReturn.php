@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PendingReturnedProduct extends Model
+class ReceivingGoodReturn extends Model
 {
     use HasFactory;
-    public $table = 'pending_returned_products';
 
     protected $fillable = [
-        'purchase_order_number_id',
+        'receiving_good_id',
         'product_id',
         'qty',
         'unit_price',
@@ -24,13 +23,13 @@ class PendingReturnedProduct extends Model
     {
         return $this->belongsTo(StatusReturn::class, 'status_id');
     }
-    public function purchase_order()
+    public function receiving_good()
     {
-        return $this->belongsTo(PurchaseOrder::class, 'purchase_order_number_id', 'purchase_order_number');
+       return $this->belongsTo(ReceivingGood::class, 'receiving_good_id');
     }
-    public function inventory()
+    public function product_return()
     {
-        return $this->belongsTo(Inventory::class, 'product_id', 'product_id');
+        return $this->belongsTo(SalesInventory::class, 'product_id');
     }
    
 }

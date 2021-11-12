@@ -9,25 +9,25 @@ class UCS extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'purchase_order_number_id',
+        'receiving_good_id',
         'product_id',
         'ucs',
         'qty',
         'isRemove',
-        'isPurchase',
+        'isComplete',
         'ucs_size',
         'isHide',
 
 
     ];
 
-    public function purchase_order()
+    public function receiving_good()
     {
-        return $this->belongsTo(PurchaseOrder::class, 'purchase_order_number_id', 'purchase_order_number');
+       return $this->belongsTo(ReceivingGood::class, 'receiving_good_id');
     }
-    public function inventory()
+    public function products()
     {
-        return $this->belongsTo(Inventory::class,'product_id' , 'product_id');
+        return $this->belongsTo(SalesInventory::class,'product_id' , 'id');
     }
 
 }

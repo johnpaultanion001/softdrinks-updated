@@ -5,19 +5,16 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\PendingReturnedProduct;
 use App\Models\PurchaseOrder;
-use App\Models\Returned;
 use Illuminate\Http\Request;
 use Validator;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
 
-class PendingReturnedProductController extends Controller
+class ReceivingGoodReturnController extends Controller
 {
    
     public function loadreturningproduct(){
-        $purchaseorderid = PurchaseOrder::orderby('id', 'desc')->firstorfail();
-        $id = $purchaseorderid->purchase_order_number + 1;
-
+      
         $returnedproducts = PendingReturnedProduct::where('isRemove', 0)->where('purchase_order_number_id', $id)->latest()->get();
         return view('admin.purchaseorders.returningproducts', compact('returnedproducts'));
         

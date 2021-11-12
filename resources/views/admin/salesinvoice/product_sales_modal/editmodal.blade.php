@@ -5,8 +5,8 @@
         <div class="row">
         <div class="col">
            
-            <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{$order->inventory->long_description}}</h3>
-            <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($order->inventory->price , 2, '.', ',') }}</span> <small>/ {{$order->inventory->category->name}}</small>
+            <h3 class="text-uppercase font-weight-bold text-primary mb-0">{{$order->product->description}} - {{$order->product->product_code}}</h3>
+            <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($order->product->price , 2, '.', ',') }}</span> <small>/ {{$order->product->category->name}}</small>
 
 
         </div>
@@ -21,26 +21,26 @@
             <div class="row text-dark text-justify font-weight-light">
                 <div class="col-6">
                     <span class=" text-uppercase">Size: 
-                        <span class="text-success font-weight-bold">{{$order->inventory->size->title}} {{$order->inventory->size->size}}</span>
+                        <span class="text-success font-weight-bold">{{$order->product->size->title}} {{$order->product->size->size}}</span>
                     </span> 
                 </div>
                 <div class="col-6">
-                        <span class= "text-uppercase">Stock/{{$order->inventory->category->name}}:
-                        @if($order->inventory->stock < 1)
+                        <span class= "text-uppercase">Stock/{{$order->product->category->name}}:
+                        @if($order->product->stock < 1)
                             <span class="text-warning text-uppercase">0</span>
                             @else
-                            <span class="text-success font-weight-bold">{{$order->inventory->stock}}</span> 
+                            <span class="text-success font-weight-bold">{{$order->product->stock}}</span> 
                         @endif
                     </span>
                 </div>
                 <div class="col-6">
-                    <span class="text-uppercase">Expiration: <span class="text-success font-weight-bold"> {{$order->inventory->expiration}}</span> </span>
+                    <span class="text-uppercase">Expiration: <span class="text-success font-weight-bold"> {{$order->product->expiration}}</span> </span>
                 </div>
                 <div class="col-6">
-                    <span class="text-uppercase">Sold: <span class="text-success font-weight-bold"> {{$order->inventory->sold}}</span></span>
+                    <span class="text-uppercase">Sold: <span class="text-success font-weight-bold"> {{$order->product->sold}}</span></span>
                 </div>
                 <div class="col-12">
-                    <span class="text-uppercase">Supplier: <span class="text-success font-weight-bold"> {{$order->inventory->purchase_order->supplier->name}}</span></span>
+                    <span class="text-uppercase">Supplier: <span class="text-success font-weight-bold"> {{$order->product->receiving_good->supplier->name}}</span></span>
                 </div>
                 <br>
                 <div class="col-6">
@@ -67,7 +67,7 @@
 
         </div>
         <div class="form-group">
-            <label class="control-label text-success" >QTY: </label> 
+            <label class="control-label text-success" >QTY:<span class="text-danger">*</span></label> 
             <input type="number" name="purchase_qty_edit" id="purchase_qty_edit" value="{{$order->purchase_qty}}" class="form-control"/>
             <span class="invalid-feedback" role="alert">
                 <strong id="error-purchase_qty_edit"></strong>

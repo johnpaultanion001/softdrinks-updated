@@ -21,7 +21,7 @@ class CustomerController extends Controller
 
     public function load()
     {
-        $customers = Customer::where('isRemove', 0)->latest()->get();
+        $customers = Customer::where('isRemove', 0)->orderBy('id', 'asc')->get();
         return view('admin.customers.load', compact('customers'));
     }
 
@@ -32,10 +32,6 @@ class CustomerController extends Controller
         $validated =  Validator::make($request->all(), [
             'customer_code' => ['required', 'string', 'max:255' , 'unique:customers'],
             'customer_name' => ['required', 'string', 'max:255'],
-            'area' => ['required'],
-            'contact_number' => ['numeric' , 'required'],
-            'current_balance' => ['required' ,'integer','min:0'],
-
         ]);
 
         if ($validated->fails()) {

@@ -50,7 +50,7 @@
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <small class="text-dark">Entry Date</small>
+                                <small class="text-dark">Entry Date<span class="text-danger">*</span></small>
                                 <input type="date" name="entry_date" id="entry_date" class="form-control" />
                                 <span class="invalid-feedback " role="alert">
                                     <strong id="error-entry_date"></strong>
@@ -72,11 +72,11 @@
 
                         <div class="col-sm-4">
                             <div class="form-group">
-                            <small class="text-dark">Customer:</small>
+                            <small class="text-dark">Customer:<span class="text-danger">*</span></small>
                                 <select name="customer_id" id="customer_id" class="form-control select2">
                                     <option value="" disabled selected>Select Customer</option>
                                     @foreach ($customers as $customer)
-                                        <option value="{{$customer->id}}">{{$customer->customer_code}} / {{$customer->customer_name}}</option>
+                                        <option value="{{$customer->id}}">{{$customer->customer_code}}</option>
                                     @endforeach
                                 </select>
                                 <span class="invalid-feedback " role="alert">
@@ -289,22 +289,22 @@
                     <div id="modalbody" class="modalbody row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                            <label class="control-label text-uppercase" >Select Product:</label>
-                                <select name="inventory_id" id="inventory_id" class="form-control select2">
+                            <label class="control-label text-uppercase" >Select Product:<span class="text-danger">*</span></label>
+                                <select name="product_id" id="product_id" class="form-control select2">
                                     <option value="" disabled selected>Select Product</option>
                                     @foreach ($product_codes as $product_code)
-                                        <option value="{{$product_code->id}}">{{$product_code->product_code}} / {{$product_code->short_description}} / {{  $product_code->size->title ?? '' }}  {{  $product_code->size->size ?? '' }}</option>
+                                        <option value="{{$product_code->id}}">{{$product_code->product_code}} / {{$product_code->description}} / {{  $product_code->size->title ?? '' }}  {{  $product_code->size->size ?? '' }}</option>
                                     @endforeach
                                 </select>
                                 <span class="invalid-feedback" role="alert">
-                                    <strong id="error-inventory_id"></strong>
+                                    <strong id="error-product_id"></strong>
                                 </span>
                                 
                             </div>
                         </div>
 
                         <div class="col-sm-6">
-                             <label class="control-label text-uppercase" >Select Price Type: </label>
+                             <label class="control-label text-uppercase" >Select Price Type:<span class="text-danger">*</span> </label>
                             <select name="pricetype_id" id="pricetype_id" class="form-control select2" required>
                                 @foreach ($pricetypes as $pricetype)
                                 <option value="{{$pricetype->id}}"> {{$pricetype->price_type}} / Discount: {{$pricetype->discount}}</option>
@@ -315,24 +315,49 @@
                             </span>
                         </div>
                         
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="control-label text-uppercase" >Return QTY: </label>
+                                <label class="control-label text-uppercase" >Status:<span class="text-danger">*</span> </label> 
+                                <select name="status_id" id="status_id" class="form-control select2">
+                                    <option value="" disabled selected>Select Status</option>
+                                    @foreach ($status as $sp)
+                                        <option value="{{$sp->id}}" class="text-uppercase"> {{$sp->code}} - {{$sp->title}}  </option>
+                                    @endforeach
+                                </select>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-status_id"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label text-uppercase" >Return QTY:<span class="text-danger">*</span> </label>
                                 <input type="number" name="return_qty" id="return_qty" class="return_qty form-control"/>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-return_qty"></strong>
                                 </span>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="control-label text-uppercase" >Unit Price: </label>
+                                <label class="control-label text-uppercase" >Unit Price:<span class="text-danger">*</span> </label>
                                 <input type="number" name="unit_price" id="unit_price" step="any" class="unit_price form-control"/>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-unit_price"></strong>
                                 </span>
                             </div>
                         </div>
+                        
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label" >Remarks: </label>
+                                <textarea name="remarks" id="remarks" class="form-control"></textarea>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-remarks"></strong>
+                                </span>
+                            </div>
+                        </div>
+
                     
                     </div>
             </div>
@@ -593,12 +618,7 @@ $(document).on('click', '#create_return', function(){
     $('#frm_return_cu')[0].reset();
     $('.form-control').removeClass('is-invalid')
 
-    $('#pricetype_id').select2({
-       placeholder: 'Select Price Type'
-    })
-    $('#inventory_id').select2({
-       placeholder: 'Select Product'
-    })
+   
     $('#btn_submit_return').val('Submit');
     $('#return_action').val('Add');
     $('#loading-containermodal').hide();
@@ -646,8 +666,8 @@ $('#frm_return_cu').on('submit', function(event){
                         $('#'+key).addClass('is-invalid')
                         $('#error-'+key).text(value)
                     }
-                    if(key == 'inventory_id'){
-                        $('#error-inventory_id').text('Invalid Product')
+                    if(key == 'product_id'){
+                        $('#error-product_id').text('Invalid Product')
                     }
                 })
             }
@@ -866,8 +886,8 @@ $(document).on('click', '.editreturn', function(){
                             data: { id: value }
                         });
                     }
-                    if(key == 'inventory_id'){
-                        $("#inventory_id").select2("trigger", "select", {
+                    if(key == 'product_id'){
+                        $("#product_id").select2("trigger", "select", {
                             data: { id: value }
                         });
                     }
@@ -939,7 +959,7 @@ $(document).on('click', '#order', function(){
     $('.form-control').removeClass('is-invalid');
     var id = $(this).attr('order');
     $.ajax({
-        url: "/admin/inventories/"+id, 
+        url: "/admin/sales_inventory/"+id, 
         type: "get",
         dataType: "HTMl",
         beforeSend: function() {

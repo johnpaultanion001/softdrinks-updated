@@ -14,76 +14,66 @@
 
             <th scope="col">QTY</th>
             <th scope="col">Unit Cost</th>
-            <th scope="col">Unit Profit</th>
-            <th scope="col">Unit Sales</th>
+            <th scope="col">Regular Discount</th>
+            <th scope="col">Hauling Discount</th>
             <th scope="col">Total Cost</th>
-            <th scope="col">Total Profit</th>
-            <th scope="col">Total Sales</th>
             <th scope="col">Remarks</th>
             <th scope="col">Date</th>
         </tr>
         </thead>
         <tbody class="text-uppercase font-weight-bold display" cellspacing="0" width="100%">
-        @foreach($pendingproducts as $key => $product)
-                <tr data-entry-id="{{ $product->id ?? '' }}">
-                    <td>
-                        <button type="button" name="edit" edit="{{  $product->id ?? '' }}"  class="edit text-uppercase btn btn-info btn-sm">Edit</button>
-                        <button type="button" name="remove" remove="{{  $product->id ?? '' }}" id="{{  $product->id ?? '' }}" class="remove text-uppercase btn btn-danger btn-sm">Remove</button>
-                    </td>
-                    <td>
-                        {{  $product->product_id ?? '' }}
-                    </td>
-                    <td>
-                        {{  $product->product_code ?? '' }}
-                    </td>
-                    <td>
-                        {{  $product->long_description ?? '' }}
-                    </td>
-                    <td>
-                        {{  $product->short_description ?? '' }}
-                    </td>
-                    <td>
-                        {{  $product->size->title ?? '' }} {{  $product->size->size ?? '' }}
-                    </td>
-                    <td>
-                        {{  $product->category->name ?? '' }}
-                    </td>
-                    <td>
-                        {{  $product->expiration ?? '' }}
-                    </td>                    
-                    <td>
-                        {{  $product->qty ?? '' }}
-                    </td>
-                    <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->purchase_amount , 2, '.', ',') }}
-           
-                    </td>
-                    <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->profit , 2, '.', ',') }}
-                    </td>
-                    <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($product->price , 2, '.', ',') }}
-                    </td>
-                    <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($product->total_amount_purchase , 2, '.', ',') }}
-                    </td>
-                    <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->total_profit , 2, '.', ',') }}
-                    </td>
-                    <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->total_price , 2, '.', ',') }}
+            @foreach($pendingproducts as $key => $product)
+                    <tr data-entry-id="{{ $product->id ?? '' }}">
+                        <td>
+                            <button type="button" name="edit" edit="{{  $product->id ?? '' }}"  class="edit text-uppercase btn btn-info btn-sm">Edit</button>
+                            <button type="button" name="remove" remove="{{  $product->id ?? '' }}" id="{{  $product->id ?? '' }}" class="remove text-uppercase btn btn-danger btn-sm">Remove</button>
+                        </td>
+                        <td>
+                            {{  $product->product_id ?? '' }}
+                        </td>
+                        <td>
+                            {{  $product->product_code ?? '' }}
+                        </td>
+                        <td>
+                            {{  $product->long_description ?? '' }}
+                        </td>
+                        <td>
+                            {{  $product->short_description ?? '' }}
+                        </td>
+                        <td>
+                            {{  $product->size->title ?? '' }} {{  $product->size->size ?? '' }}
+                        </td>
+                        <td>
+                            {{  $product->category->name ?? '' }}
+                        </td>
+                        <td>
+                            {{  $product->expiration ?? '' }}
+                        </td>                    
+                        <td>
+                            {{  $product->qty ?? '' }}
+                        </td>
+                        <td>
+                            <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->unit_cost , 2, '.', ',') }}
+                        </td>
+                        <td>
+                            <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->regular_discount , 2, '.', ',') }}
+                        </td>
+                        <td>
+                            <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->hauling_discount , 2, '.', ',') }}
+                        </td>
+                        <td>
+                            <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($product->total_cost , 2, '.', ',') }}
+                        </td>
+                        <td>
+                            {{  $product->product_remarks ?? '' }}
+                        </td>
+                        <td>
+                            {{ $product->created_at->format('l, j \\/ F / Y h:i:s A') }}
+                        </td>
 
-                    </td>
-                    <td>
-                        {{  $product->remarks ?? '' }}
-                    </td>
-                    <td>
-                        {{ $product->created_at->format('l, j \\/ F / Y h:i:s A') }}
-                    </td>
-
-                    
-                </tr>
-        @endforeach
+                        
+                    </tr>
+            @endforeach
         </tbody>
      
     </table>

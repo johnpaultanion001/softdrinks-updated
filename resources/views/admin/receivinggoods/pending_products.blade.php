@@ -3,6 +3,7 @@
         <thead class="thead-white">
         <tr>
             <th scope="col">Actions</th>
+            <th scope="col">ID</th>
             <th scope="col">Product ID</th>
             <th scope="col">Product Code</th>
             <th scope="col">Description</th>
@@ -28,7 +29,10 @@
                             <button type="button" name="remove" remove="{{  $product->id ?? '' }}" id="{{  $product->id ?? '' }}" class="remove text-uppercase btn btn-danger btn-sm">Remove</button>
                         </td>
                         <td>
-                            {{  $product->id ?? '' }}
+                            {{ $product->id }}
+                        </td>
+                        <td>
+                            {{  $product->product->id ?? $product->id }}
                         </td>
                         <td>
                             {{  $product->product_code ?? '' }}
@@ -85,11 +89,24 @@ $(function () {
     pageLength: 100,
   });
 
-  $('.datatable-products:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+    $('.datatable-products:not(.ajaxTable)').DataTable({ buttons: dtButtons })
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
         $($.fn.dataTable.tables(true)).DataTable()
             .columns.adjust();
     });
+
+    if($('#purchase_hidden_id').val() == ""){
+        $('.edit').attr("disabled", false);
+        $('#create_product').attr("disabled", false);
+        $('#create_product').show();
+        $('.edit').show();
+
+    }else{
+        $('.edit').hide();
+        $('#create_product').attr("disabled", true);
+        $('#create_product').hide();
+        $('.edit').attr("disabled", true);
+    }
 
     
 });

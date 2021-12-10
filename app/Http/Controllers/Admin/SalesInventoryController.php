@@ -16,6 +16,7 @@ use App\Models\Category;
 use App\Models\Supplier;
 use App\Models\Location;
 use App\Models\PriceType;
+use App\Models\ReceivingProduct;
 
 
 
@@ -138,22 +139,8 @@ class SalesInventoryController extends Controller
             ]
         );
 
-        $ucs = Size::where('id', $request->input('size_id'))->first();
-        $ucs_percase = $ucs->ucs * $request->input('qty');
-
-        UCS::updateOrCreate(
-            [
-                'receiving_good_id' => $receiving_good_id,
-                'product_id' => $product->id,
-            ],
-            [
-                'receiving_good_id' => $receiving_good_id,
-                'product_id' => $product->id,
-                'ucs' => $ucs_percase,
-                'qty' => $product->qty,
-                'ucs_size' => $ucs->ucs,
-            ]
-        );
+        
+      
         return response()->json(['success' => 'Product Added Successfully.']);
 
     }
@@ -169,9 +156,14 @@ class SalesInventoryController extends Controller
     public function edit(SalesInventory $sales_inventory)
     {
         if (request()->ajax()) {
-            return response()->json(['result' => $sales_inventory]);
+            return response()->json(
+                [
+                    'result' => $sales_inventory , 
+                ]
+            );
         }
     }
+
 
     
     public function update(Request $request, SalesInventory $sales_inventory)
@@ -219,23 +211,95 @@ class SalesInventoryController extends Controller
                 'product_remarks' => $request->input('product_remarks'),
             ]
         );
-
-        $ucs = Size::where('id', $request->input('size_id'))->first();
-        $ucs_percase = $ucs->ucs * $request->input('qty');
-
-        UCS::where('product_id', $sales_inventory->id)->update([
-                'ucs' => $ucs_percase,
-                'qty' => $request->input('qty'),
-                'ucs_size' => $ucs->ucs,
-            ]
-        );
+        
         return response()->json(['success' => 'Product Updated Successfully.']);
     }
 
     
-    public function destroy(SalesInventory $sales_inventory)
+    public function destroy(Request $request,$sales_inventory)
     {
-        UCS::where('product_id', $sales_inventory->id)->delete();
-        return response()->json(['success' => 'Product Removed Successfully.' , $sales_inventory->delete()]);
+        $rg_id = $request->get('rg_id');
+        if($rg_id == ""){
+            SalesInventory::find($sales_inventory)->delete();
+        }else{
+            $rp = ReceivingProduct::find($sales_inventory)->first();
+            SalesInventory::where('id', $rp->product_id)
+                                ->decrement('stock', $rp->qty);
+            UCS::where('product_id', $rp->id)->where('receiving_good_id', $rp->receiving_good_id)->delete();
+            $rp->delete();
+        }
+
+        return response()->json(['success' => 'Product Removed Successfully.']);
+    }
+
+    public function size_status(Request $request) {
+        $status = $request->get('status');
+        if($status == "clear"){
+            $get_status = Size::where('isRemove', 0)->latest()->get();
+        }else{
+            $get_status = Size::where('status', $status)->where('isRemove', 0)->latest()->get();
+        }
+        
+        return response()->json(['result' => $get_status]);
+    }
+
+    public function edit_view(SalesInventory $sales_inventory){
+      
+        if (request()->ajax()) {
+            return response()->json(
+                [
+                    'result'         => $sales_inventory,
+                    'size'           => $sales_inventory->size->size,
+                    'category'       => $sales_inventory->category->name,
+                    'supplier'       => $sales_inventory->supplier->name,
+                    'location'       => $sales_inventory->location->location_name,
+                    'created_by'     => $sales_inventory->receiving_good->user->name,
+                    'created_date'   => $sales_inventory->created_at->format('F d,Y h:i A'),
+                    'unit_price'     => '₱ ' . number_format($sales_inventory->price , 2, '.', ','),
+                ]
+            );
+        }
+    }
+    public function stock_history(SalesInventory $sales_inventory){
+        $stock_history = $sales_inventory->stock_histories()->latest()->get();
+        return view('admin.salesinventories.histories.stock',compact('stock_history'));
+    }
+    public function sales_history(SalesInventory $sales_inventory){
+        $sales_history = $sales_inventory->sales_histories()->latest()->get();
+        return view('admin.salesinventories.histories.sales',compact('sales_history'));
+    }
+
+    public function update_ev(Request $request, SalesInventory $sales_inventory)
+    {
+        date_default_timezone_set('Asia/Manila');
+        $validated =  Validator::make($request->all(), [
+            'expiration' => ['nullable','date','after:today'],
+            'unit_cost' => ['required' ,'numeric','min:0'],
+            'regular_discount' => ['required' ,'numeric','min:0'],
+            'hauling_discount' => ['required' ,'numeric','min:0'],
+            'product_remarks' => ['nullable'],  
+        ]);
+
+        if ($validated->fails()) {
+            return response()->json(['errors' => $validated->errors()]);
+        }
+
+        $price =  $request->input('unit_cost') + $request->input('regular_discount') + $request->input('hauling_discount');
+        
+        SalesInventory::find($sales_inventory->id)->update(
+            [
+                'expiration' => $request->input('expiration'),
+                'unit_cost' => $request->input('unit_cost'),
+                'price' => $price,
+                'regular_discount' => $request->input('regular_discount'),
+                'hauling_discount' => $request->input('hauling_discount'),
+                'product_remarks' => $request->input('product_remarks'),
+            ]
+        );
+        
+        return response()->json([
+                'success'        => 'Product Updated Successfully.',
+                'unit_price'     => '₱ ' . number_format($price , 2, '.', ','),
+            ]);
     }
 }

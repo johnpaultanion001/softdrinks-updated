@@ -4,6 +4,7 @@
                     <table class="table table-bordered table-sm">
                             <thead>
                                 <tr>
+                                    <th scope="col"></th>
                                     <th scope="col">Qty</th>
                                     <th scope="col">Unit</th>
                                     <th scope="col">Articles</th>
@@ -12,8 +13,16 @@
                                 </tr>
                             </thead>
                                 <tbody>
+                                    <tr>
+                                        <td>
+                                            <span>
+                                                Products
+                                            </span>
+                                        </td>
+                                    </tr>
                                     @forelse($receipts as $key => $receipt)
                                         <tr>
+                                            <td></td>
                                             <td>{{$receipt->purchase_qty}}</td>
                                             <td>{{$receipt->product->category->name}}</td>
                                             <td>{{$receipt->product->description}}</td>
@@ -24,28 +33,19 @@
                                     <tr>
                                             <td></td>
                                             <td></td>
+                                            <td></td>
                                             <td>No Data Availalbe</td>
                                             <td></td>
                                             <td></td>
                                     </tr>
                                     @endforelse
                                     <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
                                         <td>
-                                            Sub Total:
-                                            <br>
-                                            Return:
+                                            Total Product Amt:
                                             <br>
                                             Discounted:
                                             
@@ -53,12 +53,57 @@
                                         <td> 
                                             ₱ {{ number_format($receipts->sum->total_amount_receipt ?? '' , 2, '.', ',') }}
                                             <br>
-                                            ₱ ( {{ number_format($totalsalesreturn ?? '' , 2, '.', ',') }} )
-                                            <br>
                                             ₱ ( {{ number_format($receipts->sum->discounted ?? '' , 2, '.', ',') }} )
                                         </td>
                                     </tr>
                                     <tr>
+                                            <td>Return(Basyo)</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                    </tr>
+                                    @forelse($returns as $return)
+                                        <tr>
+                                            <td></td>
+                                            <td>{{$return->return_qty}}</td>
+                                            <td></td>
+                                            <td>{{$return->product->description}}</td>
+                                            <td>₱ {{ number_format($return->unit_price ?? '' , 2, '.', ',') }}</td>
+                                            <td>₱ {{ number_format($return->amount ?? '' , 2, '.', ',') }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>No Data Availalbe</td>
+                                                <td></td>
+                                                <td></td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            Total Return Amt:
+                                            <br>
+                                            Discounted:
+                                            
+                                        </td>
+                                        <td> 
+                                            ₱ ( {{ number_format($totalsalesreturn ?? '' , 2, '.', ',') }} )
+                                            <br>
+                                            ₱ ( {{ number_format($returns->sum->discounted ?? '' , 2, '.', ',') }} )
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>

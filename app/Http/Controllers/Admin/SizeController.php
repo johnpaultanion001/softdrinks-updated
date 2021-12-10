@@ -32,14 +32,20 @@ class SizeController extends Controller
     public function store(Request $request)
     {
         date_default_timezone_set('Asia/Manila');
-        $validated =  Validator::make($request->all(), [
-            'title' => ['nullable', 'string', 'max:255'],
-            'size' => ['required', 'string', 'max:255'],
-            'ucs' =>  ['required','numeric'],
-            'note' => ['nullable'],
-            'category_id' => ['required'],
-           
-        ]);
+       
+        if($request->input('status') == 'NO-UCS'){
+            $validated =  Validator::make($request->all(), [
+                'size' => ['required', 'string', 'max:255'],
+                'ucs' =>  ['nullable','numeric'],
+                'status' => ['required'],
+            ]);
+        }else{
+            $validated =  Validator::make($request->all(), [
+                'size' => ['required', 'string', 'max:255'],
+                'ucs' =>  ['required','numeric'],
+                'status' => ['required'],
+            ]);
+        }
 
         if ($validated->fails()) {
             return response()->json(['errors' => $validated->errors()]);
@@ -48,6 +54,7 @@ class SizeController extends Controller
         Size::create([
             'title' => $request->input('title'),
             'size' => $request->input('size'),
+            'status' => $request->input('status'),
             'ucs' => $request->input('ucs'),
             'note' => $request->input('note'),
             'category_id' => $request->input('category_id'),
@@ -70,13 +77,19 @@ class SizeController extends Controller
     public function update(Request $request, Size $size)
     {
         date_default_timezone_set('Asia/Manila');
-        $validated =  Validator::make($request->all(), [
-            'title' => ['nullable', 'string', 'max:255'],
-            'size' => ['required', 'string', 'max:255'],
-            'ucs' =>  ['required','numeric'],
-            'note' => ['nullable'],
-            'category_id' => ['required'],
-        ]);
+        if($request->input('status') == 'NO-UCS'){
+            $validated =  Validator::make($request->all(), [
+                'size' => ['required', 'string', 'max:255'],
+                'ucs' =>  ['nullable','numeric'],
+                'status' => ['required'],
+            ]);
+        }else{
+            $validated =  Validator::make($request->all(), [
+                'size' => ['required', 'string', 'max:255'],
+                'ucs' =>  ['required','numeric'],
+                'status' => ['required'],
+            ]);
+        }
 
         if ($validated->fails()) {
             return response()->json(['errors' => $validated->errors()]);
@@ -85,6 +98,7 @@ class SizeController extends Controller
         Size::find($size->id)->update([
             'title' => $request->input('title'),
             'size' => $request->input('size'),
+            'status' => $request->input('status'),
             'ucs' => $request->input('ucs'),
             'note' => $request->input('note'),
             'category_id' => $request->input('category_id'),

@@ -22,6 +22,7 @@ class CreateUCSTable extends Migration
             $table->float('qty', 8, 2);
             $table->boolean('isRemove')->default(false);
             $table->boolean('isComplete')->default(false);
+            $table->string('status_size');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
             $table->boolean('isHide')->default(false);

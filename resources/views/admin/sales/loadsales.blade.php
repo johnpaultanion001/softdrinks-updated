@@ -42,26 +42,29 @@
         <table class="table align-items-center table-flush datatable-sales display" cellspacing="0" width="100%">
         <thead class="thead-white">
             <tr>
-          
-            <th scope="col">Order Number</th>
-            <th scope="col">Product Code</th>
-            <th scope="col">Description</th>
-            <th scope="col">Product Price</th>
-            <th scope="col">Product Size</th>
-            <th scope="col">Category</th>
-            <th scope="col">Quantity Sold</th>
-            <th scope="col">Sold To</th>
-            <th scope="col">Discounted</th>
-            <th scope="col">Total Sales</th>
-            <th scope="col">Total Cost</th>
-            <th scope="col">Profit</th>
-            <th scope="col">Created By</th>
-            <th scope="col">Date</th>
+                <th scope="col">ID</th>
+                <th scope="col">Order Number</th>
+                <th scope="col">Product Code</th>
+                <th scope="col">Description</th>
+                <th scope="col">Product Price</th>
+                <th scope="col">Product Size</th>
+                <th scope="col">Category</th>
+                <th scope="col">Quantity Sold</th>
+                <th scope="col">Sold To</th>
+                <th scope="col">Discounted</th>
+                <th scope="col">Total Sales</th>
+                <th scope="col">Total Cost</th>
+                <th scope="col">Profit</th>
+                <th scope="col">Created By</th>
+                <th scope="col">Date</th>
             </tr>
         </thead>
         <tbody class="text-uppercase font-weight-bold">
             @foreach($sales as $key => $sale)
                 <tr data-entry-id="{{ $sale->id ?? '' }}">
+                    <td>
+                        {{  $sale->id ?? '' }}
+                    </td>
                     <td>
                         {{  $sale->order_number ?? '' }}
                     </td>
@@ -72,7 +75,7 @@
                         {{  $sale->product->description ?? '' }}
                     </td>
                     <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->product->price ?? '' , 2, ',', ',') }}
+                        <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->product_price ?? '' , 2, ',', ',') }}
                     </td>
                     <td>
                         {{  $sale->product->size->title ?? '' }} {{  $sale->product->size->size ?? '' }}
@@ -100,7 +103,7 @@
                         <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->profit ?? '' , 2, '.', ',') }}
                     </td>
                     <td>
-                        {{  $sale->user->name ?? '' }}
+                        {{  $sale->salesinvoice->user->name ?? '' }}
                     </td>
                     <td>
                         {{ $sale->created_at->format('F d,Y h:i A') }}

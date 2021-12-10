@@ -33,10 +33,11 @@ class DatabaseSeeder extends Seeder
             PriceTypeSeeder::class,
             // OrderSalesSeeder::class,
             // SalesInvoiceSeeder::class,
-            // UCSSeeder::class,
+            UCSSeeder::class,
             ReceivingGoodSeeder::class,
             SalesInventorySeeder::class,
             EmptyBottlesInventorySeeder::class,
+            ReceivingProductSeeder::class,
            
         ]);
     }

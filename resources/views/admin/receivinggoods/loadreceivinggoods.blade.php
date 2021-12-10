@@ -27,23 +27,13 @@
               <tr>
                 <th scope="col">Actions</th>
                 <th scope="col">Receiving Goods ID</th>
-                <th scope="col">Doc No.</th>
-                <th scope="col">Po No.</th>
-                <th scope="col">Po Date</th>
-                <th scope="col">Entry Date</th>
-                <th scope="col">Location Code/Name</th>
                 <th scope="col">Supplier Code/Name</th>
-                <th scope="col">Name of a Driver</th>
-                <th scope="col">Plate Number</th>
-
-                <th scope="col">Trade Discount</th>
-                <th scope="col">Terms Discount</th>
-                <th scope="col">Reference</th>
-
+                <th scope="col">Driver/Plate #</th>
                 <th scope="col">Product Count</th>
-                <th scope="col">Total Overall Cost</th>
-                <th scope="col">Vat Amount</th>
-
+                <th scope="col">Return Count</th>
+                <th scope="col">Overall Product Cost</th>
+                <th scope="col">Overall Return Amount</th>
+                <th scope="col">Payment</th>
                 <th scope="col">Created By</th>
                 <th scope="col">Remarks</th>
                 <th scope="col">Last Update</th>
@@ -51,55 +41,37 @@
             </thead>
             <tbody class="text-uppercase font-weight-bold">
               @foreach($orders as $key => $order)
+                <?php $payment =  $order->products->sum('total_cost') - $order->returns->sum('amount') ?>
                     <tr data-entry-id="{{ $order->id ?? '' }}">
                        <td>
-                            <button type="button"  view="{{  $order->id ?? '' }}" class="view text-uppercase btn btn-warning btn-sm">View</button>
-                            <button type="button"  edit_rg="{{  $order->id ?? '' }}" class="edit_rg text-uppercase btn btn-info btn-sm">Edit</button>
+                            <button type="button"  edit_rg="{{  $order->id ?? '' }}" class="edit_rg text-uppercase btn btn-info btn-sm">View/Edit</button>
                         </td>
                         <td>
                             {{  $order->id ?? '' }}
                         </td>
                         <td>
-                            {{  $order->doc_no ?? '' }}
-                        </td>
-                        <td>
-                            {{  $order->po_no ?? '' }}
-                        </td>
-                        <td>
-                            {{  $order->po_date ?? '' }}
-                        </td>
-                        <td>
-                            {{  $order->entry_date ?? '' }}
-                        </td>
-                        <td>
-                            {{  $order->location->id ?? '' }} / {{  $order->location->location_name ?? '' }}
-                        </td>
-                        <td>
                            {{  $order->supplier->id ?? '' }} / {{  $order->supplier->name ?? '' }}
                         </td>
                         <td>
-                            {{  $order->name_of_a_driver ?? '' }}
+                            {{  $order->name_of_a_driver ?? '' }} / {{  $order->plate_number ?? '' }}
                         </td>
                         <td>
-                            {{  $order->plate_number ?? '' }}
+                            {{  $order->products->count() ?? '' }}
                         </td>
                         <td>
-                            {{  $order->trade_discount ?? '' }}
+                            {{  $order->returns->count() ?? '' }}
                         </td>
                         <td>
-                            {{  $order->terms_discount ?? '' }}
+                            <large class="text-success font-weight-bold mr-1">₱</large> 
+                            {{ number_format($order->products->sum('total_cost') ?? '' , 2, '.', ',') }}
                         </td>
                         <td>
-                            {{  $order->reference ?? '' }}
+                            <large class="text-success font-weight-bold mr-1">₱</large> 
+                            ({{ number_format($order->returns->sum('amount') ?? '' , 2, '.', ',') }})
                         </td>
                         <td>
-                            {{  $order->total_orders ?? '' }}
-                        </td>
-                        <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($order->over_all_cost ?? '' , 2, '.', ',') }}
-                        </td>
-                        <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> 0
+                        <large class="text-success font-weight-bold mr-1">₱</large> 
+                          {{ number_format($payment ?? '' , 2, '.', ',') }}
                         </td>
                         <td>
                             {{  $order->user->name ?? '' }}

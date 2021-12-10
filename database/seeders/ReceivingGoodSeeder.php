@@ -53,9 +53,9 @@ class ReceivingGoodSeeder extends Seeder
                 'terms_discount' => '0',
 
                 'total_orders' => '16',
-                'over_all_cost' => '116422',
+                'over_all_cost' => '113422',
                 'isRemove' => false,
-                
+
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],

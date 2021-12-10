@@ -12,6 +12,7 @@ class UCS extends Model
         'receiving_good_id',
         'product_id',
         'ucs',
+        'status_size',
         'qty',
         'isRemove',
         'isComplete',
@@ -25,9 +26,9 @@ class UCS extends Model
     {
        return $this->belongsTo(ReceivingGood::class, 'receiving_good_id');
     }
-    public function products()
+    public function product()
     {
-        return $this->belongsTo(SalesInventory::class,'product_id' , 'id');
+        return $this->belongsTo(ReceivingProduct::class,'product_id');
     }
 
 }

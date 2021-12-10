@@ -35,18 +35,33 @@
           <table class="table align-items-center table-flush datatable-emptybottles display" cellspacing="0" width="100%">
             <thead class="thead-white">
               <tr>
-                <th>Actions</th>
+                <th>Remarks</th>
                 <th>Product</th>
                 <th>QTY</th>
                 <th>Created At</th>
-                <th>Updated At</th>
               </tr>
             </thead>
             <tbody class="text-uppercase font-weight-bold">
               @foreach($emptybottles as $bottle)
                     <tr data-entry-id="{{ $bottle->id ?? '' }}">
                         <td>
-                            <button type="button" details="{{  $bottle->id ?? '' }}" class="details text-uppercase btn btn-info btn-sm">Details</button>
+                              @foreach($bottle->sales_returns as $return)
+                                <div class="bg-info text-white" style="border-radius: 5px; padding: 5px;">
+                                  {{$return->salesinvoice->customer->customer_name ?? ''}} <br>
+                                  QTY: + {{$return->return_qty ?? ''}} <br>
+                                  Status: {{$return->status->title ?? ''}} <br> 
+                                  {{$return->remarks ?? ''}}
+                                </div> <br>
+                              @endforeach
+                              @foreach($bottle->recieve_returns as $return)
+                                <div class="bg-warning text-white" style="border-radius: 5px; padding: 5px;">
+                                  {{$return->receiving_good->supplier->name ?? ''}} <br>
+                                  QTY: - {{$return->return_qty ?? ''}} <br>
+                                  Status: {{$return->status->title ?? ''}} <br> 
+                                  {{$return->remarks ?? ''}}
+                                </div> <br>
+                              @endforeach
+                        </td>
                         <td>
                             @if($bottle->product_id == 0)
                                 No Brand
@@ -60,9 +75,6 @@
                         </td>
                         <td>
                             {{ $bottle->created_at->format('F d,Y h:i A') }}
-                        </td>
-                        <td>
-                            {{ $bottle->updated_at->format('F d,Y h:i A') }}
                         </td>
                      
                     </tr>
@@ -79,37 +91,6 @@
     @endsection
   </div>
 </div>
-
-<div class="modal" id="formModal" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog  modal-dialog-centered ">
-        <div class="modal-content">
-    
-            <!-- Modal Header -->
-            <div class="modal-header bg-primary">
-                <p class="modal-title text-white text-uppercase font-weight-bold">Modal Heading</p>
-                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-            </div>
-
-                
-            <!-- Modal body -->
-            <div class="modal-body">
-                <div id="loading-containermodal" class="loading-container">
-                    <div class="loading"></div>
-                    <div id="loading-text">loading</div>
-                </div> 
-                
-            </div>
-    
-            <!-- Modal footer -->
-            <div class="modal-footer bg-white">
-                <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
-                <input type="submit" name="action_button" id="action_button" class="text-uppercase btn btn-default" value="Save" />
-            </div>
-    
-        </div>
-    </div>
-</div>
-
 @endsection
 
 @section('script')

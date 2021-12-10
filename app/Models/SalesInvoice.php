@@ -37,6 +37,14 @@ class SalesInvoice extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function receipt_product()
+    {
+        return $this->hasMany(Sales::class, 'salesinvoice_id' , 'salesinvoice_id')->latest();
+    }
+    public function receipt_return()
+    {
+        return $this->hasMany(SalesReturn::class, 'salesinvoice_id' , 'salesinvoice_id')->latest();
+    }
 
     
 }

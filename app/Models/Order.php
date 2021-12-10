@@ -14,7 +14,7 @@ class Order extends Model
         'salesinvoice_id',
         'order_number',
         'product_id',
-       
+        'product_price',
         'purchase_qty',
         'profit',
         'total',

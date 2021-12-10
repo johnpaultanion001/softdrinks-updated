@@ -30,7 +30,7 @@
                           {{  $inv->product_code ?? '' }}
                       </td>
                       <td>
-                          {{  $inv->short_description ?? '' }}
+                          {{  $inv->description ?? '' }}
                       </td>
                       <td>
                           {{  $inv->size->title ?? '' }}  {{  $inv->size->size ?? '' }}

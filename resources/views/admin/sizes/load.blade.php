@@ -1,7 +1,7 @@
 
 <div class="header bg-primary pb-6">
     <div class="container-fluid">
-      
+   
     </div>
 </div>
 
@@ -14,7 +14,14 @@
           <div class="row align-items-center">
             <div class="col">
               <h3 class="mb-0 text-uppercase" id="titletable">Sizes</h3>
+              <select name="filter_status" id="filter_status" class="form-control select2">
+                  <option value="">Filter Status</option>
+                      <option value="SOFTDRINKS">SOFTDRINKS</option>
+                      <option value="WATER/JUICES">WATER/JUICES</option>
+                      <option value="UCS">N0-UCS</option>
+              </select>
             </div>
+         
             <div class="col text-right">
               <button type="button" name="create_record" id="create_record" class="text-uppercase create_record btn btn-sm btn-primary">New Size</button>
             </div>
@@ -26,12 +33,13 @@
             <thead class="thead-white">
               <tr>
                 <th>Actions</th>
+                <th>Status</th>
                 <th>Title</th>
                 <th>UCS PER CATEGORY</th>
                 <th>Size</th>
                 <th>UCS</th>
                 <th>Date</th>
-                <th>Note</th>
+                <th>Remarks</th>
                 
               </tr>
             </thead>
@@ -41,6 +49,13 @@
                         <td>
                             <button type="button" name="edit" edit="{{  $size->id ?? '' }}" class="text-uppercase edit btn btn-info btn-sm">Edit</button>
                             <button type="button" name="remove" remove="{{  $size->id ?? '' }}" id="{{  $size->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm">Remove</button>
+                        </td>
+                        <td>
+                          <h3>
+                            <span class="badge bg-success text-white">
+                              {{  $size->status ?? '' }}
+                            </span>
+                          </h3>
                         </td>
                         <td>
                             {{  $size->title ?? '' }}
@@ -85,10 +100,14 @@ $(function () {
     'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });
 
-  $('.datatable-sizes:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+    var table = $('.datatable-sizes:not(.ajaxTable)').DataTable({ buttons: dtButtons });
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
         $($.fn.dataTable.tables(true)).DataTable()
             .columns.adjust();
+    });
+
+    $('select[name="filter_status"]').on("change", function(event){
+      table.columns(1).search( this.value ).draw();
     });
     
 });

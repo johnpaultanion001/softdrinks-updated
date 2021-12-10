@@ -14,7 +14,7 @@ class Sales extends Model
         'salesinvoice_id',
         'order_number',
         'product_id',
-       
+        'product_price',
         'purchase_qty',
         'profit',
         'total',
@@ -32,10 +32,6 @@ class Sales extends Model
     public function product()
     {
         return $this->belongsTo(SalesInventory::class, 'product_id');
-    }
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function customer()

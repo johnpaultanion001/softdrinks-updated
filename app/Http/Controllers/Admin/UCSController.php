@@ -20,7 +20,11 @@ class UCSController extends Controller
     public function load()
     {
         $totalucs = UCS::where('isRemove', false)->where('isComplete', true)->where('isHide', false)->latest()->get();
-        return view('admin.UCS.load', compact('totalucs'));
+        $ucs_softdrinks = UCS::where('isRemove', false)->where('isComplete', true)
+                                ->where('isHide', false)->where('status_size', 'SOFTDRINKS')->sum('ucs');
+        $ucs_wj = UCS::where('isRemove', false)->where('isComplete', true)
+                                ->where('isHide', false)->where('status_size', 'WATER/JUICES')->sum('ucs');
+        return view('admin.UCS.load', compact('totalucs','ucs_softdrinks','ucs_wj'));
     }
 
     public function backtozero()
@@ -39,7 +43,13 @@ class UCSController extends Controller
     public function allucs()
     {
         $allucs = UCS::where('isRemove', false)->where('isComplete', 1)->latest()->get();
-        return view('admin.UCS.allucs', compact('allucs'));
+        $ucs_softdrinks = UCS::where('isRemove', false)->where('isComplete', true)
+                ->where('status_size', 'SOFTDRINKS')->sum('ucs');
+        $ucs_wj = UCS::where('isRemove', false)->where('isComplete', true)
+                ->where('status_size', 'WATER/JUICES')->sum('ucs');
+
+        return view('admin.UCS.allucs', compact('allucs','ucs_softdrinks','ucs_wj'));
+        
     }
 
   

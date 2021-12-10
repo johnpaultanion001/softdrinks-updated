@@ -162,6 +162,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('load_products', 'SalesInventoryController@load')->name('sales_inventory.load');
     Route::post('autocomplete/','SalesInventoryController@autocomplete')->name('sales_inventory.autocomplete');
     Route::post('autocomplete/result','SalesInventoryController@autocompleteresult')->name('sales_inventory.autocompleteresult');
+    route::get('size_status', 'SalesInventoryController@size_status')->name('sales_inventory.size_status');
+    route::get('sales_inventory/{sales_inventory}/edit_view', 'SalesInventoryController@edit_view')->name('sales_inventory.edit_view');
+    route::get('sales_inventory/{sales_inventory}/stock_history', 'SalesInventoryController@stock_history')->name('sales_inventory.stock_history');
+    route::get('sales_inventory/{sales_inventory}/sales_history', 'SalesInventoryController@sales_history')->name('sales_inventory.sales_history');
+    route::put('sales_inventory/{sales_inventory}/update_ev', 'SalesInventoryController@update_ev')->name('sales_inventory.update_ev');
 
     //Empty Bottles Inventory
     Route::get('empty_bottles_inventory', 'EmptyBottlesInventoryController@index')->name('empty_bottles_inventory.index');
@@ -171,7 +176,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('loadreceivinggoods', 'ReceivingGoodController@load')->name('receiving_goods.load');
     route::get('pending_product', 'ReceivingGoodController@pending_product')->name('receiving_goods.product');
     route::get('total_product', 'ReceivingGoodController@total')->name('receiving_goods.total');
+    route::get('reuse', 'ReceivingGoodController@reuse')->name('receiving_goods.reuse');
 
+    //Recieve Return
+    route::get('recieve_return', 'ReceivingGoodController@recieve_return')->name('receiving_goods.recieve_return');
+    Route::resource('recieve_return', 'RecieveReturnController');
 
     
     

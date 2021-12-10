@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\SalesReturn;
 use App\Models\Inventory;
 use App\Models\PriceType;
+use App\Models\EmptyBottlesInventory;
 use Validator;
 
 class SalesReturnController extends Controller
@@ -14,7 +15,7 @@ class SalesReturnController extends Controller
     
     public function index()
     {
-        $returned = SalesReturn::where('isRemove', 0)->latest()->get();
+        $returned = SalesReturn::latest()->get();
         return view('admin.ordering.salesreturn.salesreturn', compact('returned'));
     }
 
@@ -46,7 +47,12 @@ class SalesReturnController extends Controller
 
         $over_all_amount = $amount - $discounted;
 
-        SalesReturn::create([
+        SalesReturn::updateOrCreate(
+        [
+            'product_id' => $request->input('product_id'),
+            'salesinvoice_id' => $request->input('salesinvoice_id_return'),
+        ],
+        [
             'product_id' => $request->input('product_id'),
             'pricetype_id' => $request->input('pricetype_id'),
             'unit_price' => $request->input('unit_price'),
@@ -80,10 +86,10 @@ class SalesReturnController extends Controller
     {
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
+            'product_id' => ['required'],
             'pricetype_id' => ['required'],
             'unit_price' => ['required' ,'numeric','min:0'],
             'return_qty' => ['required' ,'integer','min:1'],
-            'product_id' => ['required'],
             'status_id' => ['required'],
         ]);
 
@@ -91,15 +97,24 @@ class SalesReturnController extends Controller
             return response()->json(['errors' => $validated->errors()]);
         }
 
-        $discounted = PriceType::where('id', $request->pricetype_id)->first();
-        $amount =  $request->input('return_qty') * $request->input('unit_price') - $discounted->discount;
+        $discount = PriceType::where('id', $request->pricetype_id)->first();
+
+        $discounted = $request->input('return_qty') * $discount->discount;
+        $amount =  $request->input('return_qty') * $request->input('unit_price');
+
+        $over_all_amount = $amount - $discounted;
+
+
 
         SalesReturn::find($salesReturn->id)->update([
             'product_id' => $request->input('product_id'),
             'pricetype_id' => $request->input('pricetype_id'),
             'unit_price' => $request->input('unit_price'),
             'return_qty' => $request->input('return_qty'),
-            'amount' => $amount,
+            'amount' => $over_all_amount,
+            'discounted' => $discounted,
+            'status_id'     => $request->input('status_id'),
+            'remarks'     => $request->input('remarks'),
         ]);
 
         return response()->json(['success' => 'Updated Successfully.']);
@@ -108,9 +123,7 @@ class SalesReturnController extends Controller
    
     public function destroy(SalesReturn $salesReturn)
     {
-        SalesReturn::find($salesReturn->id)->update([
-            'isRemove' => '1',
-        ]);
+        SalesReturn::find($salesReturn->id)->delete();
         return response()->json(['success' => 'Removed Successfully.']);
     }
 }

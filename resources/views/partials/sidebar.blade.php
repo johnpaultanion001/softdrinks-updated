@@ -19,7 +19,7 @@
               <li class="nav-item">
                 <a class="nav-link {{ request()->is('admin/dashboard') || request()->is('admin/dashboard/*') ? 'active' : '' }}" href="{{ route("admin.dashboard") }}">
                   <i class="ni ni-tv-2 "></i>
-                  <span class="nav-link-text text-uppercase">Dashboard []</span>
+                  <span class="nav-link-text text-uppercase">Dashboard</span>
                 </a>
               </li>
             @endcan

@@ -13,6 +13,7 @@ class Size extends Model
         'title',
         'size',
         'ucs',
+        'status',
         'category_id',
         'isRemove',
         'note',

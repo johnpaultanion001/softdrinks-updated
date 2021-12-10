@@ -292,6 +292,7 @@
                             <label class="control-label text-uppercase" >Select Product:<span class="text-danger">*</span></label>
                                 <select name="product_id" id="product_id" class="form-control select2">
                                     <option value="" disabled selected>Select Product</option>
+                                    <option value="0">No Brand</option>
                                     @foreach ($product_codes as $product_code)
                                         <option value="{{$product_code->id}}">{{$product_code->product_code}} / {{$product_code->description}} / {{  $product_code->size->title ?? '' }}  {{  $product_code->size->size ?? '' }}</option>
                                     @endforeach

@@ -33,7 +33,11 @@ class ReceivingGood extends Model
     ];
     public function products()
     {
-        return $this->hasMany(SalesInventory::class, 'receiving_good_id', 'id');
+        return $this->hasMany(ReceivingProduct::class, 'receiving_good_id', 'id');
+    }
+    public function returns()
+    {
+        return $this->hasMany(RecieveReturn::class, 'receiving_good_id', 'id');
     }
   
     public function user()

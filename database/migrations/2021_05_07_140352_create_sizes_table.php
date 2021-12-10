@@ -17,8 +17,9 @@ class CreateSizesTable extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->string('size');
-            $table->float('ucs', 8, 2);
-            $table->string('category_id');
+            $table->float('ucs', 8, 2)->nullable();
+            $table->string('category_id')->nullable();
+            $table->string('status');
             $table->text('note')->nullable();
             $table->integer('isRemove')->default(0);
             $table->timestamps();

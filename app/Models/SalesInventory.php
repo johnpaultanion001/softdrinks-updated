@@ -58,5 +58,13 @@ class SalesInventory extends Model
     {
         return $this->belongsTo(Supplier::class, 'supplier_id');
     }
+    public function stock_histories()
+    {
+        return $this->hasMany(ReceivingProduct::class, 'product_id', 'id');
+    }
+    public function sales_histories()
+    {
+        return $this->hasMany(Sales::class, 'product_id', 'id');
+    }
 
 }

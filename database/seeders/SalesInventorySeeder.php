@@ -778,6 +778,455 @@ class SalesInventorySeeder extends Seeder
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],
+
+            //water/juices
+
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Minute Maid Apple',
+                'category_id'       => '1',
+                'description'       => 'MA200',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '11',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '69',
+                'regular_discount'  => '3',
+                'hauling_discount'  => '0.9',
+                'price'             => '72.9',
+                'total_cost'        => '3255',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Minute Maid Orange',
+                'category_id'       => '1',
+                'description'       => 'MO200',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '11',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '69',
+                'regular_discount'  => '3',
+                'hauling_discount'  => '0.9',
+                'price'             => '72.9',
+                'total_cost'        => '3255',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Minute Maid Pineapple',
+                'category_id'       => '1',
+                'description'       => 'MP200',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '11',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '69',
+                'regular_discount'  => '3',
+                'hauling_discount'  => '0.9',
+                'price'             => '72.9',
+                'total_cost'        => '3255',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Minute Maid Mango',
+                'category_id'       => '1',
+                'description'       => 'MMA200',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '11',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '69',
+                'regular_discount'  => '3',
+                'hauling_discount'  => '0.9',
+                'price'             => '72.9',
+                'total_cost'        => '3255',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Minute Maid 250',
+                'category_id'       => '1',
+                'description'       => 'M250',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '12',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '110',
+                'regular_discount'  => '10',
+                'hauling_discount'  => '1.1',
+                'price'             => '121.1',
+                'total_cost'        => '4945',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Minute Maid 800',
+                'category_id'       => '1',
+                'description'       => 'M800',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '13',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '301',
+                'regular_discount'  => '16',
+                'hauling_discount'  => '7.4',
+                'price'             => '324.4',
+                'total_cost'        => '13880',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Nutri Boost Choco',
+                'category_id'       => '1',
+                'description'       => 'NC',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '14',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '102',
+                'regular_discount'  => '3',
+                'hauling_discount'  => '0.9',
+                'price'             => '105.9',
+                'total_cost'        => '4905',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Nutri Boost Orange',
+                'category_id'       => '1',
+                'description'       => 'NO',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '14',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '102',
+                'regular_discount'  => '3',
+                'hauling_discount'  => '0.9',
+                'price'             => '105.9',
+                'total_cost'        => '4905',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Nutri Boost Strawberry',
+                'category_id'       => '1',
+                'description'       => 'NS',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '14',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '102',
+                'regular_discount'  => '3',
+                'hauling_discount'  => '0.9',
+                'price'             => '105.9',
+                'total_cost'        => '4905',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Real Leaf 480',
+                'category_id'       => '1',
+                'description'       => 'RL480',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '15',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '414',
+                'regular_discount'  => '16',
+                'hauling_discount'  => '3.4',
+                'price'             => '433.4',
+                'total_cost'        => '19730',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Wilkins Pure 330 x 12',
+                'category_id'       => '1',
+                'description'       => 'WP330 X 12',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '16',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '77.5',
+                'regular_discount'  => '6.5',
+                'hauling_discount'  => '1.36',
+                'price'             => '85.36',
+                'total_cost'        => '3482',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Wilkins Pure 330',
+                'category_id'       => '1',
+                'description'       => 'WP330',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '16',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '194',
+                'regular_discount'  => '16',
+                'hauling_discount'  => '3.4',
+                'price'             => '213.4',
+                'total_cost'        => '8730',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Wilkins Pure 500',
+                'category_id'       => '1',
+                'description'       => 'WP500',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '17',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '200',
+                'regular_discount'  => '16',
+                'hauling_discount'  => '3.4',
+                'price'             => '219.4',
+                'total_cost'        => '9030',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Wilkins Pure 500',
+                'category_id'       => '1',
+                'description'       => 'WP500',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '17',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '200',
+                'regular_discount'  => '16',
+                'hauling_discount'  => '3.4',
+                'price'             => '219.4',
+                'total_cost'        => '9030',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Wilkins Pure 1000',
+                'category_id'       => '1',
+                'description'       => 'WP1L',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '18',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '169',
+                'regular_discount'  => '16',
+                'hauling_discount'  => '7.4',
+                'price'             => '192.4',
+                'total_cost'        => '7280',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Wilkins Distilled 1000',
+                'category_id'       => '1',
+                'description'       => 'W1L',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '18',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '264',
+                'regular_discount'  => '16',
+                'hauling_discount'  => '7.4',
+                'price'             => '287.4',
+                'total_cost'        => '12030',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            [
+                'receiving_good_id' => '2',
+
+                'product_code'      => 'Wilkins Distilled 7000',
+                'category_id'       => '1',
+                'description'       => 'W7L',
+
+                'stock'             => '50',
+                'qty'               => '50',
+                'size_id'           => '19',
+                'expiration'        => '2022-08-24',
+                
+                'unit_cost'         => '215',
+                'regular_discount'  => '16',
+                'hauling_discount'  => '7.4',
+                'price'             => '238.4',
+                'total_cost'        => '9580',
+                
+                'isRemove'          => false,
+                'isComplete'        => true,
+
+                'supplier_id'       => '2',
+
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
+            ],
+            
+
+
+
            
         ];
 

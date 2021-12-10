@@ -17,8 +17,8 @@
         <thead class="thead-white">
             <tr>
                 <th scope="col">Actions</th> 
-                <th scope="col">Product Code</th>
-                <th scope="col">Quantity</th>
+                <th scope="col">Product</th>
+                <th scope="col">Return QTY</th>
                 <th scope="col">Price Type / Discount</th>
                 <th scope="col">Unit Price</th>
                 <th scope="col">Amount</th>
@@ -32,7 +32,11 @@
                         <button type="button" name="removereturn" removereturn="{{  $return->id ?? '' }}" class="text-uppercase removereturn btn btn-danger btn-sm">Remove</button> 
                     </td>
                     <td>
-                        {{  $return->product->product_code ?? '' }}
+                        @if($return->product_id == 0)
+                                No Brand
+                        @else
+                            {{  $return->product->product_code ?? '' }}
+                        @endif
                     </td>
                     <td>
                         {{  $return->return_qty ?? '' }}

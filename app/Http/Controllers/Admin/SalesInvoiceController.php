@@ -14,6 +14,7 @@ use App\Models\SalesInventory;
 use App\Models\OrderNumber;
 use App\Models\PriceType;
 use App\Models\StatusReturn;
+use App\Models\EmptyBottlesInventory;
 
 
 use Validator;
@@ -97,9 +98,10 @@ class SalesInvoiceController extends Controller
         $ordernumber = OrderNumber::orderby('id', 'desc')->first();
         $salesinvoice_id = $ordernumber->salesinvoice_id;
         $totalsalesreturn = SalesReturn::where('salesinvoice_id',$salesinvoice_id)->sum('amount');
+        $returns = SalesReturn::where('salesinvoice_id',$salesinvoice_id)->latest()->get();
         $total = $receipts->sum('total') - $totalsalesreturn;
 
-        return view('admin.salesinvoice.receiptmodal', compact('receipts', 'salesinvoice_id', 'totalsalesreturn','total'));
+        return view('admin.salesinvoice.receiptmodal', compact('receipts', 'salesinvoice_id', 'totalsalesreturn','total','returns'));
     }
    
    
@@ -110,17 +112,14 @@ class SalesInvoiceController extends Controller
             'entry_date' => ['required' ,'date','after:yesterday'],
             'remarks' => ['nullable'],
             'customer_id' => ['required'],
-            'cash' => ['required' ,'numeric','min:1'],
+            'cash' => ['required' ,'numeric','min:0'],
         ]);
 
         if ($validated->fails()) {
             return response()->json(['errors' => $validated->errors()]);
         }
 
-        $orders = Order::all()->count();
-        if($orders < 1){
-            return response()->json(['nodata' => 'NO DATA AVAILABLE IN SALES TABLE']);
-        }
+        
 
         $totalsales = Order::sum('total');
         $ordernumber = OrderNumber::orderby('id', 'desc')->first();
@@ -203,6 +202,20 @@ class SalesInvoiceController extends Controller
             'orders' => 0,
         ]);
 
+        $product_ids = EmptyBottlesInventory::select(['product_id'])->get()->toArray();
+        $returnBottle = SalesReturn::where('salesinvoice_id', $salesinvoice_id)->get();
+        foreach($returnBottle as $return){
+            if (in_array(array('product_id' => $return->product_id), $product_ids)){
+                EmptyBottlesInventory::where('product_id', $return->product_id)
+                                ->increment('qty', $return->return_qty);
+            }else{
+                EmptyBottlesInventory::create([
+                    'product_id' => $return->product_id,
+                    'qty'        => $return->return_qty
+                ]);
+            }
+        }    
+
         $passdata = Order::query()
         ->each(function ($oldRecord) {
                 $newPost = $oldRecord->replicate();
@@ -255,9 +268,9 @@ class SalesInvoiceController extends Controller
 
     public function sales_receipt($sales_reciept){
         date_default_timezone_set('Asia/Manila');
-        $receipts = Sales::where('salesinvoice_id', $sales_reciept)->latest()->get();
-        $ordernumber = SalesInvoice::where('salesinvoice_id', $sales_reciept)->first();
-        return view('admin.salesinvoice.receiptmodalsales', compact('receipts', 'ordernumber'));
+        $salesInvoices = SalesInvoice::where('salesinvoice_id', $sales_reciept)->first();
+        
+        return view('admin.salesinvoice.receiptmodalsales', compact('salesInvoices'));
     }
 
     
@@ -336,6 +349,7 @@ class SalesInvoiceController extends Controller
             'salesinvoice_id'       =>  $request->input('salesinvoice_id'),
             'order_number'          =>  $id,
             'product_id'            =>  $sales_inventory->id,
+            'product_price'         =>  $sales_inventory->price,
             'purchase_qty'          =>  $request->input('purchase_qty'),
             'profit'                =>  $overall_profit,
             'total'                 =>  $total,

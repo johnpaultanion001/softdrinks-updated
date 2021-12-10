@@ -52,4 +52,8 @@ class ReceivingProduct extends Model
     {
         return $this->belongsTo(Supplier::class, 'supplier_id');
     }
+    public function product()
+    {
+        return $this->belongsTo(ReceivingProduct::class,'product_id');
+    }
 }

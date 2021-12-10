@@ -17,16 +17,32 @@
             </div>
             <div class="col-12 mt-2">
                 <div class="row">
-                    <div class="col-md-8">
-                      <div class="col-sm-5">
-                        <h4 class="text-dark">Total Overall UCS:</h4>
+                    <div class="col-md-4">
+                      <div class="col-sm-12">
+                        <h4 class="text-dark">Total Softdrinks UCS:</h4>
                           <div class="input-group ">
                           <div class="input-group-prepend ">
                               <div class="input-group-text text-primary">UCS</div>
                           </div>
-                             <input type="text" class="form-control" name="ucstotal" id="ucstotal" value="{{ number_format($totalucs->sum('ucs') ?? '' , 2, '.', ',') }}" readonly>
+                             <input type="text" class="form-control" value="{{ number_format($ucs_softdrinks ?? '' , 2, '.', ',') }}" readonly>
                           </div>
+                          
                       </div>
+                      
+                      
+                    </div>
+                    <div class="col-md-4">
+                      <div class="col-sm-12">
+                        <h4 class="text-dark">Total Water/Juice UCS:</h4>
+                          <div class="input-group ">
+                          <div class="input-group-prepend ">
+                              <div class="input-group-text text-primary">UCS</div>
+                          </div>
+                             <input type="text" class="form-control" value="{{ number_format($ucs_wj ?? '' , 2, '.', ',') }}" readonly>
+                          </div>
+                          
+                      </div>
+                      
                       
                     </div>
               
@@ -59,31 +75,29 @@
                 <th>QTY</th>
                 <th>UCS Total</th>
                 <th>Date</th>
-                
-                
               </tr>
             </thead>
             <tbody class="text-uppercase font-weight-bold">
-              @foreach($totalucs as $key => $ucs)
+              @foreach($totalucs as $ucs)
                     <tr data-entry-id="{{ $ucs->id ?? '' }}">
                         <td>
-                          {{  $ucs->purchase_order_number_id ?? '' }} - {{  $ucs->purchase_order->supplier->name ?? '' }}
+                          {{  $ucs->receiving_good_id ?? '' }} - {{  $ucs->receiving_good->supplier->name ?? '' }}
                         </td>
                         <td>
-                            {{  $ucs->inventory->product_id ?? '' }}
+                            {{  $ucs->product->product_id ?? '' }}
                         </td>
                         <td>
-                            {{  $ucs->inventory->product_code ?? '' }}
+                            {{  $ucs->product->product_code ?? '' }}
                         </td>
                         
                         <td>
-                            {{  $ucs->inventory->short_description ?? '' }}
+                            {{  $ucs->product->description ?? '' }}
                         </td>
                         <td>
-                            {{  $ucs->inventory->category->name ?? '' }}
+                            {{  $ucs->product->category->name ?? '' }}
                         </td>
                         <td>
-                            {{  $ucs->inventory->size->title ?? '' }}  {{  $ucs->inventory->size->size ?? '' }} / {{ number_format($ucs->inventory->size->ucs ?? '' , 2, '.', ',') }} 
+                            {{  $ucs->product->size->title ?? '' }}  {{  $ucs->product->size->size ?? '' }} / {{ number_format($ucs->product->size->ucs ?? '' , 2, '.', ',') }} 
                         </td>
                         <td>
                             {{  $ucs->qty ?? '' }}

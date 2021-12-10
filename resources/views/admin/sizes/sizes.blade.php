@@ -47,7 +47,7 @@
                             <div id="modalbody" class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Title/Optional: </label>
+                                        <label class="control-label text-uppercase" >Title: </label>
                                         <input type="text" name="title" id="title" class="form-control" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-title"></strong>
@@ -76,7 +76,7 @@
                                 
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Size: </label>
+                                        <label class="control-label text-uppercase" >Size: <span class="text-danger">*</span></label>
                                         <input type="text" name="size" id="size" class="form-control" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-size"></strong>
@@ -85,17 +85,30 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >UCS: </label>
+                                        <label class="control-label text-uppercase" >UCS: <span class="text-danger">*</span></label>
                                         <input type="number" name="ucs" id="ucs" step="any" class="form-control" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-ucs"></strong>
                                         </span>
                                     </div>
                                 </div>
-                               
-                                <div class="col-sm-12">
+                                <div class="col-sm-6">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Note/Optional:</label>
+                                        <label class="control-label text-uppercase" >Status: <span class="text-danger">*</span></label>
+                                        <select name="status" id="status" class="form-control select2">
+                                            <option value="SOFTDRINKS">SOFTDRINKS</option>
+                                            <option value="WATER/JUICES">WATER/JUICES</option>
+                                            <option value="NO-UCS">NO-UCS</option>
+                                        </select>
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong id="error-status"></strong>
+                                        </span>
+                                    </div>
+                                </div>
+                               
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label text-uppercase" >Remarks:</label>
                                         <textarea name="note" id="note" class="form-control "></textarea>
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-note"></strong>
@@ -230,6 +243,11 @@ $(document).on('click', '.edit', function(){
                             data: { id: value }
                         });
                     }
+                    if(key == 'status'){
+                        $("#status").select2("trigger", "select", {
+                            data: { id: value }
+                        });
+                    }
                 }
             })
             $('#hidden_id').val(id);
@@ -321,6 +339,16 @@ $('#myForm').on('submit', function(event){
            
         }
     });
+});
+
+$('select[name="status"]').on("change", function(event){
+    if($(this).val() == 'NO-UCS'){
+        $('#ucs').val(null);
+        $('#ucs').attr('disabled', true);
+    }else{
+        $('#ucs').attr('disabled', false);
+    }
+   
 });
 
 </script>

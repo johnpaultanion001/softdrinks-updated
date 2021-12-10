@@ -12,14 +12,12 @@
           </div>
         </div>
 
-        <!-- table -->
         <div class="table-responsive">
-          <!-- Projects table -->
           <table class="table align-items-center table-flush datatable-inventries display" cellspacing="0" width="100%">
             <thead class="thead-white">
               <tr>
                 <th scope="col">Actions</th>
-                <th scope="col">Receiving Goods ID</th>
+                <th scope="col">RG ID</th>
                 <th scope="col">Product ID</th>
 
                 <th scope="col">Product Code</th>
@@ -32,14 +30,10 @@
                 <th scope="col">Supplier</th>
                 <th scope="col">Location</th>
 
-                
-
                 <th scope="col">Unit Price</th>
                 <th scope="col">Remarks</th>
                 <th scope="col">Updated At</th>
                 <th scope="col">Created At</th>
-               
-
               </tr>
             </thead>
             <tbody class="text-uppercase font-weight-bold">
@@ -47,7 +41,7 @@
                     <tr data-entry-id="{{ $product->id ?? '' }}">
                     
                       <td>
-                          <button type="button" name="view" view="{{  $product->id ?? '' }}"  class="view text-uppercase btn btn-warning btn-sm">View</button>
+                          <button type="button" name="ev_product" ev_product="{{  $product->id ?? '' }}"  class="ev_product text-uppercase btn btn-info btn-sm">View/Edit</button>
                       </td>
 
                       <td>

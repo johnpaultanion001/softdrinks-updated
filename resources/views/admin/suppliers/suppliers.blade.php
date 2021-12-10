@@ -76,7 +76,7 @@
                                
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Remarks/Optional:</label>
+                                        <label class="control-label text-uppercase" >Remarks:</label>
                                         <textarea name="remarks" id="remarks" class="form-control "></textarea>
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-remarks"></strong>

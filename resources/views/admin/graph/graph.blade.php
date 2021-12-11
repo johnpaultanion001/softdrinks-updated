@@ -21,7 +21,7 @@
 <div class="container-fluid mt--6">
       <div class="row">
         
-        <div class="col-xl-12 ">
+        <div class="col-xl-12">
             <div class="bg-white p-4" style="border-radius: 10px;">
                  <h3 id="title-sales" class="text-uppercase font-weight-bold">Graph By Daily</h3>  
                  <button id="daily" name="daily" class="text-uppercase btn btn-sm btn-primary mt-2 ">Daily</button>
@@ -33,14 +33,15 @@
                     <div class="loading"></div>
                     <div id="loading-text">loading</div>
                 </div>
-
+              
                 <div id="loadgraph">
-                        
+
                 </div>
                 
             </div>
               
         </div>
+        
        
 
        

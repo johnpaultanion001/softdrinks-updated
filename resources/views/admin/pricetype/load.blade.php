@@ -28,7 +28,7 @@
                 <th>Actions</th>
                 <th>Price Type</th>
                 <th>Discount</th>
-                <th>Date</th>
+                <th>Created At</th>
               </tr>
             </thead>
             <tbody class="text-uppercase font-weight-bold">

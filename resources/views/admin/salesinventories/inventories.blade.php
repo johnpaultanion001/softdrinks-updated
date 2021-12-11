@@ -194,7 +194,7 @@
                                 </div>
                                 <div class="col-sm">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Date</label>
+                                        <label class="control-label text-uppercase" >Created At</label>
                                         <input type="text" name="created_date" id="created_date" class="form-control" readonly/>
                                     </div>
                                 </div>

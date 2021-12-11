@@ -72,7 +72,7 @@
                           {{  $product->category->name ?? '' }}
                       </td>
                       <td>
-                          {{  $product->supplier->name ?? '' }}
+                          {{  $product->receiving_good->supplier->name ?? '' }}
                       </td>
                       <td>
                           {{  $product->location->location_name ?? '' }}

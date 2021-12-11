@@ -46,7 +46,7 @@
                         <th>Product Size / UCS</th>
                         <th>QTY</th>
                         <th>UCS Total</th>
-                        <th>Date</th>
+                        <th>Created At</th>
                     </tr>
                 </thead>
                 <tbody class="text-uppercase font-weight-bold">

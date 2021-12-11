@@ -28,7 +28,7 @@
                 <th>Actions</th>
                 <th>Name</th>
                 <th>Note</th>
-                <th>Date</th>
+                <th>Created At</th>
                 
               </tr>
             </thead>

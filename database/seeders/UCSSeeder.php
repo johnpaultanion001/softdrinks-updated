@@ -24,7 +24,7 @@ class UCSSeeder extends Seeder
                 'qty'               => '50',
                 'isComplete'        => 1,
                 'status_size'       => 'SOFTDRINKS',
-                'created_at'        => date("Y-m-d H:i:s"),
+                'created_at'        => ("2021-11-05"),
                 'updated_at'        => date("Y-m-d H:i:s"),
             ],
             [
@@ -35,7 +35,7 @@ class UCSSeeder extends Seeder
                 'qty'               => '50',
                 'isComplete'        => 1,
                 'status_size'       => 'SOFTDRINKS',
-                'created_at'        => date("Y-m-d H:i:s"),
+                'created_at'        => ("2021-11-05"),
                 'updated_at'        => date("Y-m-d H:i:s"),
             ],
             [
@@ -67,7 +67,7 @@ class UCSSeeder extends Seeder
                 'ucs'               => '20.50',
                 'qty'               => '50',
                 'isComplete'        => 1,
-                'status_size'       => 'SOFTDRINKS',
+                'status_size'       => ("2020-11-05"),
                 'created_at'        => date("Y-m-d H:i:s"),
                 'updated_at'        => date("Y-m-d H:i:s"),
             ],
@@ -90,7 +90,7 @@ class UCSSeeder extends Seeder
                 'qty'               => '50',
                 'isComplete'        => 1,
                 'status_size'       => 'SOFTDRINKS',
-                'created_at'        => date("Y-m-d H:i:s"),
+                'created_at'        => ("2021-11-05"),
                 'updated_at'        => date("Y-m-d H:i:s"),
             ],
             [
@@ -123,7 +123,7 @@ class UCSSeeder extends Seeder
                 'qty'               => '50',
                 'isComplete'        => 1,
                 'status_size'       => 'SOFTDRINKS',
-                'created_at'        => date("Y-m-d H:i:s"),
+                'created_at'        => ("2021-11-05"),
                 'updated_at'        => date("Y-m-d H:i:s"),
             ],
             [
@@ -167,7 +167,7 @@ class UCSSeeder extends Seeder
                 'qty'               => '50',
                 'isComplete'        => 1,
                 'status_size'       => 'SOFTDRINKS',
-                'created_at'        => date("Y-m-d H:i:s"),
+                'created_at'        => ("2020-11-05"),
                 'updated_at'        => date("Y-m-d H:i:s"),
             ],
             [
@@ -222,7 +222,7 @@ class UCSSeeder extends Seeder
                 'qty'               => '50',
                 'isComplete'        => 1,
                 'status_size'       => 'SOFTDRINKS',
-                'created_at'        => date("Y-m-d H:i:s"),
+                'created_at'        => ("2021-11-06"),
                 'updated_at'        => date("Y-m-d H:i:s"),
             ],
             [
@@ -255,7 +255,7 @@ class UCSSeeder extends Seeder
                 'qty'               => '50',
                 'isComplete'        => 1,
                 'status_size'       => 'SOFTDRINKS',
-                'created_at'        => date("Y-m-d H:i:s"),
+                'created_at'        => ("2021-11-07"),
                 'updated_at'        => date("Y-m-d H:i:s"),
             ],
             [
@@ -266,7 +266,7 @@ class UCSSeeder extends Seeder
                 'qty'               => '50',
                 'isComplete'        => 1,
                 'status_size'       => 'SOFTDRINKS',
-                'created_at'        => date("Y-m-d H:i:s"),
+                'created_at'        => ("2020-11-07"),
                 'updated_at'        => date("Y-m-d H:i:s"),
             ],
             [
@@ -277,7 +277,7 @@ class UCSSeeder extends Seeder
                 'qty'               => '50',
                 'isComplete'        => 1,
                 'status_size'       => 'SOFTDRINKS',
-                'created_at'        => date("Y-m-d H:i:s"),
+                'created_at'        => ("2020-11-07"),
                 'updated_at'        => date("Y-m-d H:i:s"),
             ],
             [
@@ -288,7 +288,7 @@ class UCSSeeder extends Seeder
                 'qty'               => '50',
                 'isComplete'        => 1,
                 'status_size'       => 'SOFTDRINKS',
-                'created_at'        => date("Y-m-d H:i:s"),
+                'created_at'        => ("2020-11-07"),
                 'updated_at'        => date("Y-m-d H:i:s"),
             ],
             [
@@ -299,7 +299,7 @@ class UCSSeeder extends Seeder
                 'qty'               => '50',
                 'isComplete'        => 1,
                 'status_size'       => 'SOFTDRINKS',
-                'created_at'        => date("Y-m-d H:i:s"),
+                'created_at'        => ("2020-11-07"),
                 'updated_at'        => date("Y-m-d H:i:s"),
             ],
             [
@@ -321,7 +321,7 @@ class UCSSeeder extends Seeder
                 'qty'               => '50',
                 'isComplete'        => 1,
                 'status_size'       => 'SOFTDRINKS',
-                'created_at'        => date("Y-m-d H:i:s"),
+                'created_at'        => ("2020-11-07"),
                 'updated_at'        => date("Y-m-d H:i:s"),
             ],
             [

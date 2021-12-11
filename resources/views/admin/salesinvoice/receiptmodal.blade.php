@@ -16,7 +16,7 @@
                                     <tr>
                                         <td>
                                             <span>
-                                                Products
+                                                Sales
                                             </span>
                                         </td>
                                     </tr>
@@ -45,7 +45,7 @@
                                         <td></td>
                                         <td></td>
                                         <td>
-                                            Total Product Amt:
+                                            Total Sales Amt:
                                             <br>
                                             Discounted:
                                             
@@ -57,7 +57,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                            <td>Return(Basyo)</td>
+                                            <td>Return</td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -92,14 +92,10 @@
                                         <td></td>
                                         <td>
                                             Total Return Amt:
-                                            <br>
-                                            Discounted:
-                                            
                                         </td>
                                         <td> 
                                             ₱ ( {{ number_format($totalsalesreturn ?? '' , 2, '.', ',') }} )
-                                            <br>
-                                            ₱ ( {{ number_format($returns->sum->discounted ?? '' , 2, '.', ',') }} )
+                                           
                                         </td>
                                     </tr>
                                     <tr>

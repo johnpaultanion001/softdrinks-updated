@@ -5,7 +5,7 @@
                 <h3 class="mb-0 text-uppercase loadingReturn" id="loadingReturn">Return</h3>
             </div>
             <div class="col text-right">
-              <button type="button" name="all_record_return" id="all_record_return" class="text-uppercase all_record_return btn btn-sm btn-primary">All Records</button>
+              <!-- <button type="button" name="all_record_return" id="all_record_return" class="text-uppercase all_record_return btn btn-sm btn-primary">All Records</button> -->
               <button type="button" name="create_return" id="create_return" class="text-uppercase create_return btn btn-sm btn-primary">Insert</button>
             </div>
         </div>

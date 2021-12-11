@@ -257,13 +257,11 @@ class SalesInvoiceController extends Controller
     }
     public function allrecords(){
         date_default_timezone_set('Asia/Manila');
-        $userid = auth()->user()->roles()->getQuery()->pluck('id')->first();
-        if($userid == '2'){
-            $allrecords = SalesInvoice::where('isVoid' , 0)->where('user_id', $userid)->latest()->get();
-            return view('admin.salesinvoice.allrecords', compact('allrecords'));
-        }
+        return view('admin.salesinvoice.allrecords.record_sales_invoice');
+    }
+    public function records(){
         $allrecords = SalesInvoice::where('isVoid' , 0)->latest()->get();
-        return view('admin.salesinvoice.allrecords', compact('allrecords'));
+        return view('admin.salesinvoice.allrecords.allrecords', compact('allrecords'));
     }
 
     public function sales_receipt($sales_reciept){
@@ -283,7 +281,25 @@ class SalesInvoiceController extends Controller
     
     public function edit(SalesInvoice $salesInvoice)
     {
-        
+        if (request()->ajax()) {
+            return response()->json(
+                [
+                    'result'                  => $salesInvoice,
+                    'customer_name'           => $salesInvoice->customer->customer_name,
+                    'customer_area'           => $salesInvoice->customer->area,
+                    'payment'                 => '₱ ' . number_format($salesInvoice->total_amount , 2, '.', ','),
+                    'tsa'                     => '₱ ' . number_format($salesInvoice->subtotal , 2, '.', ','),
+                    'sold_qty'                => $salesInvoice->sales->sum->purchase_qty,
+                    'discounted'              => '₱ ( ' . number_format($salesInvoice->sales->sum->discounted, 2, '.', ',') . ' )',
+                    'tra'                     => '₱ ( ' . number_format($salesInvoice->returns->sum->amount, 2, '.', ',') . ' )',
+                    'return_qty'              => $salesInvoice->returns->sum->return_qty,
+                    'cash1'                   => '₱ ' . number_format($salesInvoice->cash , 2, '.', ','),
+                    'change1'                 => '₱ ' . number_format($salesInvoice->change , 2, '.', ','),
+                    'created_by'              => $salesInvoice->user->name,
+                    
+                ]
+            );
+        }
     }
 
     

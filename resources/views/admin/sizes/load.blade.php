@@ -38,7 +38,7 @@
                 <th>UCS PER CATEGORY</th>
                 <th>Size</th>
                 <th>UCS</th>
-                <th>Date</th>
+                <th>Created At</th>
                 <th>Remarks</th>
                 
               </tr>

@@ -45,6 +45,14 @@ class SalesInvoice extends Model
     {
         return $this->hasMany(SalesReturn::class, 'salesinvoice_id' , 'salesinvoice_id')->latest();
     }
+    public function sales()
+    {
+        return $this->hasMany(Sales::class, 'salesinvoice_id' , 'salesinvoice_id')->latest();
+    }
+    public function returns()
+    {
+        return $this->hasMany(SalesReturn::class, 'salesinvoice_id' , 'salesinvoice_id')->latest();
+    }
 
     
 }

@@ -32,7 +32,7 @@
                 <th>Area</th>
                 <th>Contact Number</th>
                 <th>Current Balance</th>
-                <th>Date</th>
+                <th>Created At</th>
               </tr>
             </thead>
             <tbody class="text-uppercase font-weight-bold">

@@ -173,14 +173,7 @@
                 <span class="docs-normal text-uppercase">User Management</span>
               </h6>
                 <ul class="navbar-nav mb-md-3">
-                @can('permission_access')
-                  <li class="nav-item">
-                    <a class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}" href="{{ route("admin.permissions") }}">
-                    <i class="text-success ni ni-ui-04"></i>
-                      <span class="nav-link-text text-uppercase">Permission</span>
-                    </a>
-                  </li>
-                @endcan
+                
                 @can('role_access')
                   <li class="nav-item">
                     <a class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}" href="{{ route("admin.roles.index") }}">

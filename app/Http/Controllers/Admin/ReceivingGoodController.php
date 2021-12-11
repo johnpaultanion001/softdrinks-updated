@@ -42,7 +42,8 @@ class ReceivingGoodController extends Controller
     {
         abort_if(Gate::denies('purchase_order_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $orders = ReceivingGood::where('isRemove', false)->latest()->get();
-        return view('admin.receivinggoods.loadreceivinggoods', compact('orders'));
+        $title_filter  = 'All Receiving Goods';
+        return view('admin.receivinggoods.loadreceivinggoods', compact('orders','title_filter'));
     }
     public function edit(ReceivingGood $receiving_good)
     {
@@ -235,10 +236,60 @@ class ReceivingGoodController extends Controller
 
     }
 
+    public function update(Request $request, ReceivingGood $receiving_good)
+    {
+        date_default_timezone_set('Asia/Manila');
+        $validated =  Validator::make($request->all(), [
+            'supplier_id' => ['required'],
+            'name_of_a_driver' => ['required'],
+            'plate_number' => ['required'],
+            'remarks' => ['nullable'],
+
+            'doc_no' => ['nullable'],
+            'entry_date' => ['required' , 'date', 'after:yesterday'],
+            'po_no' => ['nullable'],
+            'po_date' => ['nullable', 'date' ,'after:yesterday'],
+            'location_id' => ['required'],
+            'reference' => ['nullable'],
+
+            'trade_discount' => ['nullable' ,'numeric','min:0'],
+            'terms_discount' => ['nullable' ,'numeric','min:0'],
+        ]);
+
+        
+        if ($validated->fails()) {
+            return response()->json(['errors' => $validated->errors()]);
+        }
+        
+        ReceivingGood::find($receiving_good->id)->update([
+            'supplier_id' => $request->input('supplier_id'),
+            'location_id' => $request->input('location_id'),
+
+            'doc_no' => $request->input('doc_no'),
+            'entry_date' => $request->input('entry_date'),
+            'po_no' => $request->input('po_no'),
+            'po_date' => $request->input('po_date'),
+
+            'plate_number' => $request->input('plate_number'),
+            'name_of_a_driver' => $request->input('name_of_a_driver'),
+            'trade_discount' => $request->input('trade_discount'),
+            'terms_discount' => $request->input('terms_discount'),
+            'remarks' => $request->input('remarks'),
+            'reference' => $request->input('reference'),
+            
+        ]);
+
+        return response()->json(['success' => 'Updated Receiving Good Successfully.']);
+
+    }
+
     public function reuse(Request $request)
     {
         $supplier_id = $request->get('supplier');
         $rg = ReceivingGood::where('supplier_id', $supplier_id)->orderBy('id', 'desc')->first();
+        if($rg == null){
+            return response()->json(['nodata' => 'No available data in this supplier']);
+        }
 
         $goods_id = ReceivingGood::orderby('id', 'desc')->first();
         if($goods_id == null){
@@ -286,6 +337,38 @@ class ReceivingGoodController extends Controller
                     'result' => $rg,
                     'success' => 'The data of this supplier successfully inserted.'
                 ]);
+    }
+
+    public function filter(Request $request){
+        date_default_timezone_set('Asia/Manila');
+        $filter = $request->get('filter');
+        if($filter == 'daily'){
+            $title_filter  = 'From: ' . date('F d, Y') . ' To: ' . date('F d, Y');
+            $orders = ReceivingGood::where('isRemove', false)->latest()->whereDay('created_at', '=', date('d'))->get();
+        }
+        if($filter == 'monthly'){
+            $title_filter  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');
+            $orders = ReceivingGood::where('isRemove', false)->latest()->whereMonth('created_at', '=', date('m'))->get();
+        }
+        if($filter == 'yearly'){
+            $title_filter  = 'From: ' .'Jan 1'. date(', Y') . ' To: ' .'Dec 31'. date(', Y');
+            $orders = ReceivingGood::where('isRemove', false)->latest()->whereYear('created_at', '=', date('Y'))->get();
+        }
+        if($filter == 'all'){
+            $title_filter  = 'All Receiving Goods';
+            $orders = ReceivingGood::where('isRemove', false)->latest()->get();
+        }
+        if($filter == 'fbd'){
+            $from = $request->get('from');
+            $to = $request->get('to');
+            $title_filter =  'From: '.date('F d, Y', strtotime($from)). ' To: ' .date('F d, Y', strtotime($to));
+
+            
+            $orders = ReceivingGood::where('isRemove', false)->latest()->whereBetween('created_at', [$from, $to])->get();
+               
+
+        }
+        return view('admin.receivinggoods.loadreceivinggoods', compact('orders','title_filter'));
     }
 
 }

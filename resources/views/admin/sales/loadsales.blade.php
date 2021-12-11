@@ -56,7 +56,7 @@
                 <th scope="col">Total Cost</th>
                 <th scope="col">Profit</th>
                 <th scope="col">Created By</th>
-                <th scope="col">Date</th>
+                <th scope="col">Created At</th>
             </tr>
         </thead>
         <tbody class="text-uppercase font-weight-bold">

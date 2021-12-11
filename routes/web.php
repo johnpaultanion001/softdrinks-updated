@@ -152,10 +152,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('salesInvoice-receipt','SalesInvoiceController@receipt')->name('salesInvoice.receipt');
     Route::get('salesInvoice-alltotal','SalesInvoiceController@alltotal')->name('salesInvoice.alltotal');
     Route::get('salesInvoice-change','SalesInvoiceController@change')->name('salesInvoice.change');
-    Route::get('salesInvoice-allrecords','SalesInvoiceController@allrecords')->name('salesInvoice.allrecords');
     Route::get('salesInvoice-sales_receipt/{sales_receipt}', 'SalesInvoiceController@sales_receipt')->name('salesInvoice.sales_receipt');
     Route::delete('salesInvoice-void/{salesInvoice}','SalesInvoiceController@void')->name('salesInvoice.void');
     Route::post('addtocart/{sales_inventory}',  'SalesInvoiceController@addtocart')->name('salesInvoice.addtocart');
+    // Sales invoice all records
+    Route::get('salesInvoice/salesInvoice/allrecords','SalesInvoiceController@allrecords')->name('salesInvoice.allrecords');
+    Route::get('salesInvoice/salesInvoice/records','SalesInvoiceController@records')->name('salesInvoice.records');
 
     //Sales Inventory
     Route::resource('sales_inventory', 'SalesInventoryController');
@@ -177,6 +179,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('pending_product', 'ReceivingGoodController@pending_product')->name('receiving_goods.product');
     route::get('total_product', 'ReceivingGoodController@total')->name('receiving_goods.total');
     route::get('reuse', 'ReceivingGoodController@reuse')->name('receiving_goods.reuse');
+    route::get('receiving_goods_filter', 'ReceivingGoodController@filter')->name('receiving_goods.filter');
 
     //Recieve Return
     route::get('recieve_return', 'ReceivingGoodController@recieve_return')->name('receiving_goods.recieve_return');

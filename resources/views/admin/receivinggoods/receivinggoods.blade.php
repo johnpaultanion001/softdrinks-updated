@@ -528,6 +528,40 @@
     </div>
 </form>
 
+<div class="modal fade" id="modalfilter" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content modal ">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-white" id="exampleModalLabel">Filter Date</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-12">
+               <div class="form-group">
+                    <label class="control-label" >From: </label>
+                    <input type="date" name="fbd_from_date" id="fbd_from_date"  class="form-control" />
+                    <span class="invalid-feedback" role="alert">
+                        <strong id="error-purchase_qty"></strong>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" >To: </label>
+                    <input type="date"  name="fbd_to_date" id="fbd_to_date"  class="form-control" />
+                    <span class="invalid-feedback" role="alert">
+                        <strong id="error-purchase_qty"></strong>
+                    </span>
+                </div>
+        </div>
+        <div class="col text-right">
+          <button id="filter_by_date" name="filter_by_date" filter="fbd"  type="button" class="btn btn-default filter">Submit</button>
+        </div>
+            
+      </div>
+    </div>
+  </div>
+</div>
 
 @endsection
 
@@ -602,7 +636,6 @@ function loadPendingProduct(){
 //Return Products
 function loadReturnProduct(){
     var rg_id = $('#purchase_hidden_id').val();
-
     $.ajax({
         url: "recieve_return", 
         type: "get",
@@ -1304,6 +1337,9 @@ $(document).on('click', '#btn_reuse', function(){
                     }
                 }
             })
+            if(data.nodata){
+                alert(data.nodata);
+            }
             if(data.success){
                 $('#success-alert').addClass('bg-primary');
                 $('#success-alert').html('<strong>' + data.success + '</strong>');
@@ -1317,6 +1353,27 @@ $(document).on('click', '#btn_reuse', function(){
             }
         }
     });
+});
+
+//Filter
+$(document).on('click', '.filter', function(){
+  var filter = $(this).attr('filter');
+  var from = $('#fbd_from_date').val();
+  var to = $('#fbd_to_date').val();
+
+    $.ajax({
+        url: "receiving_goods_filter", 
+        type: "get",
+        data: {filter:filter,from:from,to:to, _token: '{!! csrf_token() !!}'},
+        dataType: "HTMl",
+        beforeSend: function() {
+            $('#filter_loading').show();
+        },
+        success: function(response){
+            $('#filter_loading').hide();
+            $("#loadpurchaseorder").html(response);
+        }	
+    })
 });
 
 </script>

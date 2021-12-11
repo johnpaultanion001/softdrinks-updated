@@ -29,7 +29,7 @@
                 <th>Location Code</th>
                 <th>Location Name</th>
                 <th>Remarks</th>
-                <th>Date</th>
+                <th>Created At</th>
               </tr>
             </thead>
             <tbody class="text-uppercase font-weight-bold">

@@ -33,7 +33,7 @@ class CreateReceivingGoodsTable extends Migration
             $table->longText('remarks')->nullable();
             $table->string('reference')->nullable();
             
-            $table->integer('total_orders');
+            $table->float('total_orders');
             $table->float('over_all_cost');
 
             

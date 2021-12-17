@@ -7,6 +7,7 @@
         <thead class="thead-white">
             <tr>
                 <th scope="col">Actions</th> 
+                <th scope="col">Product ID</th>
                 <th scope="col">Product Code</th>
                 <th scope="col">Description</th>
                 <th scope="col">Size</th>
@@ -26,7 +27,10 @@
                         <button type="button" id="order" name="order" order="{{  $inv->id ?? '' }}" class="text-uppercase order btn btn-info btn-sm">Order</button>
                         
                     </td>
-                    <td>
+                      <td>
+                          {{  $inv->id ?? '' }}
+                      </td>
+                      <td>
                           {{  $inv->product_code ?? '' }}
                       </td>
                       <td>

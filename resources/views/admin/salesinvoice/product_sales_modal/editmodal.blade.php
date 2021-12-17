@@ -68,7 +68,7 @@
         </div>
         <div class="form-group">
             <label class="control-label text-success" >QTY:<span class="text-danger">*</span></label> 
-            <input type="number" name="purchase_qty_edit" id="purchase_qty_edit" value="{{$order->purchase_qty}}" class="form-control"/>
+            <input type="number" name="purchase_qty_edit" step="any" id="purchase_qty_edit" value="{{$order->purchase_qty}}" class="form-control"/>
             <span class="invalid-feedback" role="alert">
                 <strong id="error-purchase_qty_edit"></strong>
             </span>

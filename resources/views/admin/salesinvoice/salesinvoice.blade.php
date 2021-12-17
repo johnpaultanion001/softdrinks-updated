@@ -1,5 +1,5 @@
 @extends('../layouts.admin')
-@section('sub-title','Sales Invoice')
+@section('sub-title','SALES INVOICE')
 @section('navbar')
     @include('../partials.navbar')
 @endsection
@@ -149,7 +149,7 @@
                                                 Fernando L. Arada - Prop. <br>
                                                 Tel. No. 986-2433 Cel No. 0923-6738-296 </h5>
                                                 <br>
-                                                <div class="col text-right"><h6 class="card-title text-uppercase text-muted mb-0">Date:  {{ $date }} </h6></div>
+                                                <div class="col text-right"><h6 class="card-title text-uppercase text-muted mb-0">Date:  {{ $date ?? '' }} </h6></div>
 
                                                 <div class="form-group row">
                                                     <div class="col-sm-12">
@@ -159,7 +159,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-12">
-                                                        <small class="text-muted mt-3 ml-1 address">Address:</small>
+                                                        <small class="text-muted mt-3 ml-1 address">Area:</small>
                                                         <div class="col-sm-8">
                                                             <small id="area_receipt"></small>
                                                         </div>
@@ -333,7 +333,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="control-label text-uppercase" >Return QTY:<span class="text-danger">*</span> </label>
-                                <input type="number" name="return_qty" id="return_qty" class="return_qty form-control"/>
+                                <input type="number" name="return_qty" id="return_qty" class="return_qty form-control" step="any"/>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-return_qty"></strong>
                                 </span>

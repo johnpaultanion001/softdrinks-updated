@@ -31,7 +31,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '94',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '0.9',
-                'price'  => '100.9',
+                'price'  => '94',
                 'total_cost'    =>  '4355',
                 
                 'isRemove'      => false,
@@ -57,7 +57,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '94',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '0.9',
-                'price'  => '100.9',
+                'price'  => '94',
                 'total_cost'    =>  '4355',
                 
                 'isRemove'      => false,
@@ -83,7 +83,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '94',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '0.9',
-                'price'  => '100.9',
+                'price'  => '94',
                 'total_cost'    =>  '4355',
                 
                 'isRemove'      => false,
@@ -109,7 +109,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '94',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '0.9',
-                'price'  => '100.9',
+                'price'  => '94',
                 'total_cost'    =>  '4355',
                 
                 'isRemove'      => false,
@@ -136,7 +136,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '94',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '0.9',
-                'price'  => '100.9',
+                'price'  => '94',
                 'total_cost'    =>  '4355',
                 
                 'isRemove'      => false,
@@ -163,7 +163,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '127',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '1.1',
-                'price'  => '134.1',
+                'price'   => '127',
                 'total_cost'    =>  '5995',
                 
                 'isRemove'      => false,
@@ -189,7 +189,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '127',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '1.1',
-                'price'  => '134.1',
+                'price'   => '127',
                 'total_cost'    =>  '5995',
                 
                 'isRemove'      => false,
@@ -215,7 +215,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '127',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '1.1',
-                'price'  => '134.1',
+                'price'   => '127',
                 'total_cost'    =>  '5995',
                 
                 'isRemove'      => false,
@@ -241,7 +241,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '127',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '1.1',
-                'price'  => '134.1',
+                'price'   => '127',
                 'total_cost'    =>  '5995',
                 
                 'isRemove'      => false,
@@ -268,7 +268,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '218',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '4.9',
-                'price'  => '238.9',
+                'price'  => '218',
                 'total_cost'    =>  '9855',
                 
                 'isRemove'      => false,
@@ -294,7 +294,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '218',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '4.9',
-                'price'  => '238.9',
+                'price'  => '218',
                 'total_cost'    =>  '9855',
                 
                 'isRemove'      => false,
@@ -320,7 +320,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '218',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '4.9',
-                'price'  => '238.9',
+                'price'  => '218',
                 'total_cost'    =>  '9855',
                 
                 'isRemove'      => false,
@@ -346,7 +346,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '218',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '4.9',
-                'price'  => '238.9',
+                'price'  => '218',
                 'total_cost'    =>  '9855',
                 
                 'isRemove'      => false,
@@ -373,7 +373,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '324',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '347.4',
+                'price'  => '324',
                 'total_cost'    =>  '15030',
                 
                 'isRemove'      => false,
@@ -399,7 +399,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '324',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '347.4',
+                'price'  => '324',
                 'total_cost'    =>  '15030',
                 
                 'isRemove'      => false,
@@ -425,7 +425,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '324',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '347.4',
+                'price'  => '324',
                 'total_cost'    =>  '15030',
                 
                 'isRemove'      => false,
@@ -452,7 +452,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '337',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '360.4',
+                'price'  => '337',
                 'total_cost'    =>  '15680',
                 
                 'isRemove'      => false,
@@ -478,7 +478,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '337',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '360.4',
+                'price'  => '337',
                 'total_cost'    =>  '15680',
                 
                 'isRemove'      => false,
@@ -504,7 +504,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '337',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '360.4',
+                'price'  => '337',
                 'total_cost'    =>  '15680',
                 
                 'isRemove'      => false,
@@ -531,7 +531,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '632',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '655.4',
+                'price'  => '632',
                 'total_cost'    =>  '30430',
                 
                 'isRemove'      => false,
@@ -557,7 +557,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '632',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '655.4',
+                'price'  => '632',
                 'total_cost'    =>  '30430',
                 
                 'isRemove'      => false,
@@ -583,7 +583,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '632',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '655.4',
+                'price'  => '632',
                 'total_cost'    =>  '30430',
                 
                 'isRemove'      => false,
@@ -609,7 +609,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '632',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '655.4',
+                'price'  => '632',
                 'total_cost'    =>  '30430',
                 
                 'isRemove'      => false,
@@ -636,7 +636,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '582',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '2.2',
-                'price'  => '600.2',
+                'price'  => '582',
                 'total_cost'    =>  '28190',
                 
                 'isRemove'      => false,
@@ -662,7 +662,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '582',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '2.2',
-                'price'  => '600.2',
+                'price'  => '582',
                 'total_cost'    =>  '28190',
                 
                 'isRemove'      => false,
@@ -688,7 +688,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '582',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '2.2',
-                'price'  => '600.2',
+                'price'  => '582',
                 'total_cost'    =>  '28190',
                 
                 'isRemove'      => false,
@@ -714,7 +714,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '582',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '2.2',
-                'price'  => '600.2',
+                'price'  => '582',
                 'total_cost'    =>  '28190',
                 
                 'isRemove'      => false,
@@ -740,7 +740,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '582',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '2.2',
-                'price'  => '600.2',
+                'price'  => '582',
                 'total_cost'    =>  '28190',
                 
                 'isRemove'      => false,
@@ -767,7 +767,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'  => '419',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '442.4',
+                'price'  => '419',
                 'total_cost'    =>  '19780',
                 
                 'isRemove'      => false,
@@ -796,7 +796,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '69',
                 'regular_discount'  => '3',
                 'hauling_discount'  => '0.9',
-                'price'             => '72.9',
+                'price'             => '69',
                 'total_cost'        => '3255',
                 
                 'isRemove'          => false,
@@ -822,7 +822,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '69',
                 'regular_discount'  => '3',
                 'hauling_discount'  => '0.9',
-                'price'             => '72.9',
+                'price'             => '69',
                 'total_cost'        => '3255',
                 
                 'isRemove'          => false,
@@ -848,7 +848,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '69',
                 'regular_discount'  => '3',
                 'hauling_discount'  => '0.9',
-                'price'             => '72.9',
+                'price'             => '69',
                 'total_cost'        => '3255',
                 
                 'isRemove'          => false,
@@ -874,7 +874,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '69',
                 'regular_discount'  => '3',
                 'hauling_discount'  => '0.9',
-                'price'             => '72.9',
+                'price'             => '69',
                 'total_cost'        => '3255',
                 
                 'isRemove'          => false,
@@ -900,7 +900,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '110',
                 'regular_discount'  => '10',
                 'hauling_discount'  => '1.1',
-                'price'             => '121.1',
+                'price'             => '110',
                 'total_cost'        => '4945',
                 
                 'isRemove'          => false,
@@ -926,7 +926,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '301',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'             => '324.4',
+                'price'             => '301',
                 'total_cost'        => '13880',
                 
                 'isRemove'          => false,
@@ -952,7 +952,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '102',
                 'regular_discount'  => '3',
                 'hauling_discount'  => '0.9',
-                'price'             => '105.9',
+                'price'             => '102',
                 'total_cost'        => '4905',
                 
                 'isRemove'          => false,
@@ -978,7 +978,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '102',
                 'regular_discount'  => '3',
                 'hauling_discount'  => '0.9',
-                'price'             => '105.9',
+                'price'             => '102',
                 'total_cost'        => '4905',
                 
                 'isRemove'          => false,
@@ -1004,7 +1004,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '102',
                 'regular_discount'  => '3',
                 'hauling_discount'  => '0.9',
-                'price'             => '105.9',
+                'price'             => '102',
                 'total_cost'        => '4905',
                 
                 'isRemove'          => false,
@@ -1030,7 +1030,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '414',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '3.4',
-                'price'             => '433.4',
+                'price'             => '414',
                 'total_cost'        => '19730',
                 
                 'isRemove'          => false,
@@ -1056,7 +1056,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '77.5',
                 'regular_discount'  => '6.5',
                 'hauling_discount'  => '1.36',
-                'price'             => '85.36',
+                'price'             => '77.5',
                 'total_cost'        => '3482',
                 
                 'isRemove'          => false,
@@ -1082,7 +1082,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '194',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '3.4',
-                'price'             => '213.4',
+                'price'             => '194',
                 'total_cost'        => '8730',
                 
                 'isRemove'          => false,
@@ -1108,7 +1108,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '200',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '3.4',
-                'price'             => '219.4',
+                'price'             => '200',
                 'total_cost'        => '9030',
                 
                 'isRemove'          => false,
@@ -1134,7 +1134,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '200',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '3.4',
-                'price'             => '219.4',
+                'price'             => '200',
                 'total_cost'        => '9030',
                 
                 'isRemove'          => false,
@@ -1160,7 +1160,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '169',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'             => '192.4',
+                'price'             => '169',
                 'total_cost'        => '7280',
                 
                 'isRemove'          => false,
@@ -1186,7 +1186,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '264',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'             => '287.4',
+                'price'             => '264',
                 'total_cost'        => '12030',
                 
                 'isRemove'          => false,
@@ -1212,7 +1212,7 @@ class SalesInventorySeeder extends Seeder
                 'unit_cost'         => '215',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'             => '238.4',
+                'price'             => '215',
                 'total_cost'        => '9580',
                 
                 'isRemove'          => false,
@@ -1223,11 +1223,6 @@ class SalesInventorySeeder extends Seeder
                 'created_at'        => date("Y-m-d H:i:s"),
                 'updated_at'        => date("Y-m-d H:i:s"),
             ],
-            
-
-
-
-           
         ];
 
         SalesInventory::insert($invs);

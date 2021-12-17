@@ -16,7 +16,7 @@ class DashboardController extends Controller
 {
     public function dashboard(){
 
-      abort_if(Gate::denies('dashboard_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+      abort_if(Gate::denies('manager_dashboard_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
       return view('admin.dashboard');
 
     }

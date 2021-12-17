@@ -21,10 +21,10 @@ class CreateSalesInventoriesTable extends Migration
             $table->string('category_id');
             $table->longText('description');
 
-            $table->integer('stock');
-            $table->integer('qty');
-            $table->integer('sold')->default(0);
-            $table->integer('orders')->default(0);
+            $table->float('stock');
+            $table->float('qty');
+            $table->float('sold')->default(0);
+            $table->float('orders')->default(0);
             $table->string('size_id');
             $table->date('expiration')->nullable();
             

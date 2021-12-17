@@ -7,43 +7,40 @@
                 <li class="breadcrumb-item active text-uppercase" aria-current="page">
                  @if(request()->is('admin/dashboard'))
                     Default
-                @elseif(request()->is('admin/purchase-order') || request()->is('admin/purchase-order/*'))
+                @elseif(request()->is('admin/receiving_goods') || request()->is('admin/receiving_goods/*'))
                     Receiving Goods   
-                @elseif(request()->is('admin/inventories'))
-                    Inventories
-                @elseif(request()->is('admin/ordering'))
+                @elseif(request()->is('admin/sales_inventory'))
+                    Sales inventories
+                @elseif(request()->is('admin/empty_bottles_inventory'))
+                    EMPTY BOTTLES INVENTORIES
+                @elseif(request()->is('admin/salesInvoice') || request()->is('admin/salesInvoice/*'))
                     Sales Invoice
-                @elseif(request()->is('admin/sales'))
-                    Sales
+                @elseif(request()->is('admin/location_transfer') || request()->is('admin/location_transfer/*'))
+                  Location Transfer
+                @elseif(request()->is('admin/customers') || request()->is('admin/customers/*'))
+                  Customers
+                @elseif(request()->is('admin/suppliers') || request()->is('admin/suppliers/*'))
+                  Suppliers  
+                @elseif(request()->is('admin/price_type') || request()->is('admin/price_type/*'))
+                  Price Type
+                @elseif(request()->is('admin/sizes') || request()->is('admin/sizes/*'))
+                  Sizes
+                @elseif(request()->is('admin/categories') || request()->is('admin/categories/*'))
+                  CATEGORIES
+                @elseif(request()->is('admin/locations') || request()->is('admin/locations/*'))
+                  Locations
+                @elseif(request()->is('admin/status-return') || request()->is('admin/status-return/*'))
+                  Status of Return   
+                @elseif(request()->is('admin/transactions'))
+                    Transactions
+                @elseif(request()->is('admin/ucs') || request()->is('admin/ucs/*'))
+                    UCS
                 @elseif(request()->is('admin/graph'))
                     Graph
-                @elseif(request()->is('admin/permissions'))
-                    Permissions
                 @elseif(request()->is('admin/roles') || request()->is('admin/roles/*'))
                     Roles 
                 @elseif(request()->is('admin/users') || request()->is('admin/users/*'))
-                    Users   
-                @elseif(request()->is('admin/suppliers') || request()->is('admin/suppliers/*'))
-                    Suppliers                 
-                @elseif(request()->is('admin/returned') || request()->is('admin/returned/*'))
-                    Returned Products
-                @elseif(request()->is('admin/status-rerturn') || request()->is('admin/status-rerturn/*'))
-                    Status of Return   
-                @elseif(request()->is('admin/sizes') || request()->is('admin/sizes/*'))
-                    Sizes 
-                @elseif(request()->is('admin/ucs') || request()->is('admin/ucs/*'))
-                    UCS
-                @elseif(request()->is('admin/customers') || request()->is('admin/customers/*'))
-                  Customers
-                @elseif(request()->is('admin/locations') || request()->is('admin/locations/*'))
-                  Locations
-                @elseif(request()->is('admin/location_transfer') || request()->is('admin/location_transfer/*'))
-                  Location Transfer
-                @elseif(request()->is('admin/price_type') || request()->is('admin/price_type/*'))
-                  Price Type
-                @elseif(request()->is('admin/salesInvoice') || request()->is('admin/salesInvoice/*'))
-                  Sales Invoice
-                
+                    users
                 @endif
                 
                  

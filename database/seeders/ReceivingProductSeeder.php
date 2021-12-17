@@ -15,41 +15,41 @@ class ReceivingProductSeeder extends Seeder
             [
                 'receiving_good_id' => '1',
                 'product_id'        => '1',
-                'product_code' => 'Coke Swakto',
-                'category_id'    => '1',
-                'description' => 'C200',
-                'qty' => '50',
-                'size_id' => '1',
-                'expiration' => '2022-08-24',
+                'product_code'      => 'Coke Swakto',
+                'category_id'       => '1',
+                'description'       => 'C200',
+                'qty'               => '50',
+                'size_id'           => '1',
+                'expiration'        => '2022-08-24',
                 
-                'unit_cost'  => '94',
+                'unit_cost'         => '94',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '0.9',
-                'price'  => '100.9',
-                'total_cost'    =>  '4355',
-                'supplier_id' => '1',
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s"),
+                'price'             => '94',
+                'total_cost'        =>  '4355',
+                'supplier_id'       => '1',
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
             ],
             [
                 'receiving_good_id' => '1',
                 'product_id'        => '2',
-                'product_code' => 'Sprite Swakto',
-                'category_id'    => '1',
-                'description' => 'S200',
-                'qty' => '50',
-                'size_id' => '1',
-                'expiration' => '2022-08-24',
+                'product_code'      => 'Sprite Swakto',
+                'category_id'       => '1',
+                'description'       => 'S200',
+                'qty'               => '50',
+                'size_id'           => '1',
+                'expiration'        => '2022-08-24',
                 
-                'unit_cost'  => '94',
+                'unit_cost'         => '94',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '0.9',
-                'price'  => '100.9',
-                'total_cost'    =>  '4355',
-                'supplier_id' => '1',
+                'price'             => '94',
+                'total_cost'        =>  '4355',
+                'supplier_id'       => '1',
 
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s"),
+                'created_at'        => date("Y-m-d H:i:s"),
+                'updated_at'        => date("Y-m-d H:i:s"),
             ],
             [
                 'receiving_good_id' => '1',
@@ -64,7 +64,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '94',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '0.9',
-                'price'  => '100.9',
+                'price'  => '94',
                 'total_cost'    =>  '4355',
                 'supplier_id' => '1',
 
@@ -84,7 +84,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '94',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '0.9',
-                'price'  => '100.9',
+                'price'  => '94',
                 'total_cost'    =>  '4355',
                 'supplier_id' => '1',
 
@@ -105,7 +105,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '94',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '0.9',
-                'price'  => '100.9',
+                'price'  => '94',
                 'total_cost'    =>  '4355',
                 'supplier_id' => '1',
 
@@ -126,7 +126,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '127',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '1.1',
-                'price'  => '134.1',
+                'price'  => '127',
                 'total_cost'    =>  '5995',
                 'supplier_id' => '1',
 
@@ -146,7 +146,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '127',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '1.1',
-                'price'  => '134.1',
+                'price'  => '127',
                 'total_cost'    =>  '5995',
                 'supplier_id' => '1',
 
@@ -166,7 +166,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '127',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '1.1',
-                'price'  => '134.1',
+                'price'  => '127',
                 'total_cost'    =>  '5995',
                 'supplier_id' => '1',
 
@@ -186,7 +186,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '127',
                 'regular_discount'  => '6',
                 'hauling_discount'  => '1.1',
-                'price'  => '134.1',
+                'price'  => '127',
                 'total_cost'    =>  '5995',
                 'supplier_id' => '1',
 
@@ -207,7 +207,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '218',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '4.9',
-                'price'  => '238.9',
+                'price'  => '218',
                 'total_cost'    =>  '9855',
                 'supplier_id' => '1',
 
@@ -227,7 +227,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '218',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '4.9',
-                'price'  => '238.9',
+                'price'  => '218',
                 'total_cost'    =>  '9855',
                 'supplier_id' => '1',
 
@@ -247,7 +247,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '218',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '4.9',
-                'price'  => '238.9',
+                'price'  => '218',
                 'total_cost'    =>  '9855',
                 'supplier_id' => '1',
 
@@ -267,7 +267,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '218',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '4.9',
-                'price'  => '238.9',
+                'price'  => '218',
                 'total_cost'    =>  '9855',
                 'supplier_id' => '1',
 
@@ -288,7 +288,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '324',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '347.4',
+                'price'  => '324',
                 'total_cost'    =>  '15030',
                 'supplier_id' => '1',
 
@@ -308,7 +308,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '324',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '347.4',
+                'price'  => '324',
                 'total_cost'    =>  '15030',
                 'supplier_id' => '1',
 
@@ -328,7 +328,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '324',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '347.4',
+                'price'  => '324',
                 'total_cost'    =>  '15030',
                 'supplier_id' => '1',
 
@@ -349,7 +349,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '337',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '360.4',
+                'price'   => '337',
                 'total_cost'    =>  '15680',
                 'supplier_id' => '1',
 
@@ -369,7 +369,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '337',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '360.4',
+                'price'   => '337',
                 'total_cost'    =>  '15680',
                 'supplier_id' => '1',
 
@@ -389,7 +389,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '337',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '360.4',
+                'price'   => '337',
                 'total_cost'    =>  '15680',
                 'supplier_id' => '1',
 
@@ -410,7 +410,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '632',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '655.4',
+                'price'  => '632',
                 'total_cost'    =>  '30430',
                 'supplier_id' => '1',
 
@@ -430,7 +430,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '632',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '655.4',
+                'price'  => '632',
                 'total_cost'    =>  '30430',
                 'supplier_id' => '1',
 
@@ -450,7 +450,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '632',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '655.4',
+                'price'  => '632',
                 'total_cost'    =>  '30430',
                 'supplier_id' => '1',
 
@@ -470,7 +470,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '632',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '655.4',
+                'price'  => '632',
                 'total_cost'    =>  '30430',
                 'supplier_id' => '1',
 
@@ -491,7 +491,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '582',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '2.2',
-                'price'  => '600.2',
+                'price'  => '582',
                 'total_cost'    =>  '28190',
                 'supplier_id' => '1',
 
@@ -511,7 +511,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '582',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '2.2',
-                'price'  => '600.2',
+                'price'  => '582',
                 'total_cost'    =>  '28190',
                 'supplier_id' => '1',
 
@@ -531,7 +531,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '582',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '2.2',
-                'price'  => '600.2',
+                'price'  => '582',
                 'total_cost'    =>  '28190',
                 'supplier_id' => '1',
 
@@ -551,7 +551,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '582',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '2.2',
-                'price'  => '600.2',
+                'price'  => '582',
                 'total_cost'    =>  '28190',
                 'supplier_id' => '1',
 
@@ -571,7 +571,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '582',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '2.2',
-                'price'  => '600.2',
+                'price'  => '582',
                 'total_cost'    =>  '28190',
                 'supplier_id' => '1',
 
@@ -592,7 +592,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'  => '419',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'  => '442.4',
+                'price'  => '419',
                 'total_cost'    =>  '19780',
                 'supplier_id' => '1',
 
@@ -616,7 +616,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '69',
                 'regular_discount'  => '3',
                 'hauling_discount'  => '0.9',
-                'price'             => '72.9',
+                'price'             => '69',
                 'total_cost'        => '3255',
                 'supplier_id'       => '2',
 
@@ -636,7 +636,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '69',
                 'regular_discount'  => '3',
                 'hauling_discount'  => '0.9',
-                'price'             => '72.9',
+                'price'             => '69',
                 'total_cost'        => '3255',
                 'supplier_id'       => '2',
 
@@ -656,7 +656,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '69',
                 'regular_discount'  => '3',
                 'hauling_discount'  => '0.9',
-                'price'             => '72.9',
+                'price'             => '69',
                 'total_cost'        => '3255',
                 'supplier_id'       => '2',
 
@@ -676,7 +676,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '69',
                 'regular_discount'  => '3',
                 'hauling_discount'  => '0.9',
-                'price'             => '72.9',
+                'price'             => '69',
                 'total_cost'        => '3255',
                 'supplier_id'       => '2',
 
@@ -696,7 +696,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '110',
                 'regular_discount'  => '10',
                 'hauling_discount'  => '1.1',
-                'price'             => '121.1',
+                'price'             => '110',
                 'total_cost'        => '4945',
                 'supplier_id'       => '2',
 
@@ -716,7 +716,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '301',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'             => '324.4',
+                'price'             => '301',
                 'total_cost'        => '13880',
                 'supplier_id'       => '2',
 
@@ -736,7 +736,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '102',
                 'regular_discount'  => '3',
                 'hauling_discount'  => '0.9',
-                'price'             => '105.9',
+                'price'             => '102',
                 'total_cost'        => '4905',
                 'supplier_id'       => '2',
 
@@ -756,7 +756,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '102',
                 'regular_discount'  => '3',
                 'hauling_discount'  => '0.9',
-                'price'             => '105.9',
+                'price'             => '102',
                 'total_cost'        => '4905',
                 'supplier_id'       => '2',
 
@@ -776,7 +776,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '102',
                 'regular_discount'  => '3',
                 'hauling_discount'  => '0.9',
-                'price'             => '105.9',
+                'price'             => '102',
                 'total_cost'        => '4905',
                 'supplier_id'       => '2',
 
@@ -796,7 +796,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '414',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '3.4',
-                'price'             => '433.4',
+                'price'             => '414',
                 'total_cost'        => '19730',
                 'supplier_id'       => '2',
 
@@ -816,7 +816,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '77.5',
                 'regular_discount'  => '6.5',
                 'hauling_discount'  => '1.36',
-                'price'             => '85.36',
+                'price'             => '77.5',
                 'total_cost'        => '3482',
                 'supplier_id'       => '2',
 
@@ -836,7 +836,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '194',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '3.4',
-                'price'             => '213.4',
+                'price'             => '194',
                 'total_cost'        => '8730',
                 'supplier_id'       => '2',
 
@@ -856,7 +856,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '200',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '3.4',
-                'price'             => '219.4',
+                'price'             => '200',
                 'total_cost'        => '9030',
                 'supplier_id'       => '2',
 
@@ -876,7 +876,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '200',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '3.4',
-                'price'             => '219.4',
+                'price'             => '200',
                 'total_cost'        => '9030',
                 'supplier_id'       => '2',
 
@@ -896,7 +896,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '169',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'             => '192.4',
+                'price'             => '169',
                 'total_cost'        => '7280',
                 'supplier_id'       => '2',
 
@@ -916,7 +916,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '264',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'             => '287.4',
+                'price'             => '264',
                 'total_cost'        => '12030',
                 'supplier_id'       => '2',
 
@@ -936,7 +936,7 @@ class ReceivingProductSeeder extends Seeder
                 'unit_cost'         => '215',
                 'regular_discount'  => '16',
                 'hauling_discount'  => '7.4',
-                'price'             => '238.4',
+                'price'             => '215',
                 'total_cost'        => '9580',
                 'supplier_id'       => '2',
 

@@ -1,5 +1,5 @@
 @extends('../layouts.admin')
-@section('sub-title','Location Transfer')
+@section('sub-title','LOCATION TRANSFER')
 @section('navbar')
     @include('../partials.navbar')
 @endsection

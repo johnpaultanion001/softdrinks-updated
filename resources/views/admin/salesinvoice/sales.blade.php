@@ -18,7 +18,7 @@
                 <th scope="col">Actions</th> 
                 <th scope="col">Product Code</th>
                 <th scope="col">Quantity</th>
-                <th scope="col">Price Type / Discount</th>
+                <th scope="col">Price Type / Discounted</th>
                 <th scope="col">Unit Price</th>
                 <th scope="col">Amount</th>
             </tr>
@@ -37,7 +37,7 @@
                         {{  $order->purchase_qty ?? '' }}
                     </td>
                     <td>
-                             {{$order->pricetype->price_type}} / ₱ {{ number_format($order->pricetype->discount ?? '' , 2, '.', ',') }}
+                             {{$order->pricetype->price_type  ?? ''}} / ₱ ({{ number_format($order->discounted ?? '' , 2, '.', ',') }})
                     </td>
                     <td>
                             ₱ {{ number_format($order->product->price ?? '' , 2, '.', ',') }}

@@ -19,7 +19,7 @@
                 <th scope="col">Actions</th> 
                 <th scope="col">Product</th>
                 <th scope="col">Return QTY</th>
-                <th scope="col">Price Type / Discount</th>
+                <th scope="col">Price Type / Discounted</th>
                 <th scope="col">Unit Price</th>
                 <th scope="col">Amount</th>
             </tr>
@@ -42,7 +42,7 @@
                         {{  $return->return_qty ?? '' }}
                     </td>
                     <td>
-                        {{$return->pricetype->price_type}} / ₱ {{ number_format($return->pricetype->discount ?? '' , 2, '.', ',') }}
+                        {{$return->pricetype->price_type}} / ₱ ({{ number_format($return->discounted ?? '' , 2, '.', ',') }})
                     </td>
                     <td>
                             ₱ {{ number_format($return->unit_price ?? '' , 2, '.', ',') }}

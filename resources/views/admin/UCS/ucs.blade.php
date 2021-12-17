@@ -14,37 +14,47 @@
     <div class="loading"></div>
     <div id="loading-text">loading</div>
 </div>
+<input type="hidden" id="ucs" value="all">
 <div id="loaducs">
    
 </div>
 
-
-<div class="modal modal_all_ucs" id="modal_all_ucs" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-    
-            <!-- Modal Header -->
-            <div class="modal-header bg-primary">
-                <p class="modal-title-ucs-report text-white text-uppercase font-weight-bold">Modal Heading</p>
-                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-            </div>
-
-            <div class="modal-body">  
-                <div id="loading-allucs-container" class="loading-container">
-                    <div class="loading"></div>
-                    <div id="loading-text">loading</div>
+<!-- modal for Filter -->
+<div class="modal fade" id="modalfilter" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content modal ">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-white" id="exampleModalLabel">Filter Date</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-12">
+               <div class="form-group">
+                    <label class="control-label" >From: </label>
+                    <input type="date" name="fbd_from_date" id="fbd_from_date"  class="form-control" />
+                    <span class="invalid-feedback" role="alert">
+                        <strong id="error-purchase_qty"></strong>
+                    </span>
                 </div>
-               <div id="all_ucs"></div>
-            </div>
-    
-            <!-- Modal footer -->
-            <div class="modal-footer bg-white">
-                <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
-            </div>
-    
+                <div class="form-group">
+                    <label class="control-label" >To: </label>
+                    <input type="date"  name="fbd_to_date" id="fbd_to_date"  class="form-control" />
+                    <span class="invalid-feedback" role="alert">
+                        <strong id="error-purchase_qty"></strong>
+                    </span>
+                </div>
         </div>
+        <div class="col text-right">
+          <button id="filter_by_date" name="filter_by_date" filter="fbd"  type="button" class="btn btn-default filter">Submit</button>
+        </div>
+            
+      </div>
     </div>
+  </div>
 </div>
+
 
 @section('footer')
     @include('../partials.footer')
@@ -75,23 +85,6 @@ function loadUCS(){
             $('#loading-container').hide();
             $("#loaducs").show();
             $("#loaducs").html(response);
-        }	
-    })
-}
-
-function loadALLUCS(){
-    $.ajax({
-        url: "ucs/allucs", 
-        type: "get",
-        dataType: "HTMl",
-        beforeSend: function() {
-            $("#all_ucs").hide();
-            $('#loading-allucs-container').show();
-        },
-        success: function(response){
-            $('#loading-allucs-container').hide();
-            $("#all_ucs").show();
-            $("#all_ucs").html(response);
         }	
     })
 }
@@ -150,10 +143,53 @@ $(document).on('click', '#back_to_zero', function(){
 
 });
 
+function allucs(){
+    $.ajax({
+        url: "ucs/allucs", 
+        type: "get",
+        dataType: "HTMl",
+        beforeSend: function() {
+            $("#loaducs").hide();
+            $('#loading-container').show();
+        },
+        success: function(response){
+            $('#loading-container').hide();
+            $("#loaducs").show();
+            $("#loaducs").html(response);
+        }	
+    })
+}
 $(document).on('click', '#all_ucs_report', function(){
-    $('#modal_all_ucs').modal('show');
-    $('.modal-title-ucs-report').text('UCS Report');
-    return loadALLUCS();
+    var btn = $('#ucs').val();
+    if(btn == 'all'){
+        $('#ucs').val('ucs');
+        allucs();
+    }else{
+        $('#ucs').val('all');
+        loadUCS();
+    }
+});
+
+//Filter
+$(document).on('click', '.filter', function(){
+var filter = $(this).attr('filter');
+var from = $('#fbd_from_date').val();
+var to = $('#fbd_to_date').val();
+var status = $('#ucs').val();
+
+    $.ajax({
+        url: "/admin/ucs_filter", 
+        type: "get",
+        data: {filter:filter,from:from,to:to,status:status, _token: '{!! csrf_token() !!}'},
+        dataType: "HTMl",
+        beforeSend: function() {
+            $('#filter_loading').show();
+        },
+        success: function(response){
+            $('#filter_loading').hide();
+            $("#loaducs").html(response);
+        }	
+    })
 });
 
 </script>

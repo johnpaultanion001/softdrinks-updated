@@ -27,7 +27,7 @@ class SalesInvoiceController extends Controller
    
     public function index()
     {
-        abort_if(Gate::denies('salesinvoice_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('sales_invoice_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         date_default_timezone_set('Asia/Manila');
 
         $ordernumber = OrderNumber::orderby('id', 'desc')->first();
@@ -260,8 +260,9 @@ class SalesInvoiceController extends Controller
         return view('admin.salesinvoice.allrecords.record_sales_invoice');
     }
     public function records(){
+        $title_filter  = 'All SALES INVOICE';
         $allrecords = SalesInvoice::where('isVoid' , 0)->latest()->get();
-        return view('admin.salesinvoice.allrecords.allrecords', compact('allrecords'));
+        return view('admin.salesinvoice.allrecords.allrecords', compact('allrecords','title_filter'));
     }
 
     public function sales_receipt($sales_reciept){
@@ -296,6 +297,7 @@ class SalesInvoiceController extends Controller
                     'cash1'                   => '₱ ' . number_format($salesInvoice->cash , 2, '.', ','),
                     'change1'                 => '₱ ' . number_format($salesInvoice->change , 2, '.', ','),
                     'created_by'              => $salesInvoice->user->name,
+                    'created_date'            => $salesInvoice->created_at->format('F d,Y h:i A'),
                     
                 ]
             );
@@ -328,7 +330,7 @@ class SalesInvoiceController extends Controller
     {
         date_default_timezone_set('Asia/Manila');
         $errors =  Validator::make($request->all(), [
-            'purchase_qty' => ['required' ,'integer','min:1'],
+            'purchase_qty' =>  ['required' ,'numeric','min:0'],
         ]);
 
         if ($errors->fails()) {
@@ -359,7 +361,8 @@ class SalesInvoiceController extends Controller
         $overall_discounted     = $request->purchase_qty * $discounted;
         $subtotal               = $request->purchase_qty * $sales_inventory->price;
         $total                  = $subtotal - $overall_discounted;
-        $over_all_cost          = $request->purchase_qty * $sales_inventory->unit_cost; 
+        $cost                   = $sales_inventory->unit_cost - $profit;
+        $over_all_cost          = $request->purchase_qty * $cost; 
 
         Order::create([
             'salesinvoice_id'       =>  $request->input('salesinvoice_id'),
@@ -379,4 +382,42 @@ class SalesInvoiceController extends Controller
         return response()->json(['success' => 'Order Successfully Inserted.']);
 
     }
+
+    public function sales_records(SalesInvoice $sales_records){
+        $sales = $sales_records->sales()->get();
+        return view('admin.salesinvoice.allrecords.sales',compact('sales'));
+    }
+    public function return_records(SalesInvoice $return_records){
+        $returns = $return_records->returns()->get();
+        return view('admin.salesinvoice.allrecords.returns',compact('returns'));
+    }
+
+    public function filter(Request $request){
+        date_default_timezone_set('Asia/Manila');
+        $filter = $request->get('filter');
+        if($filter == 'daily'){
+            $title_filter  = 'From: ' . date('F d, Y') . ' To: ' . date('F d, Y');
+            $allrecords = SalesInvoice::where('isVoid' , 0)->latest()->whereDay('created_at', '=', date('d'))->get();
+        }
+        if($filter == 'monthly'){
+            $title_filter  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');
+            $allrecords = SalesInvoice::where('isVoid' , 0)->latest()->whereMonth('created_at', '=', date('m'))->get();
+        }
+        if($filter == 'yearly'){
+            $title_filter  = 'From: ' .'Jan 1'. date(', Y') . ' To: ' .'Dec 31'. date(', Y');
+            $allrecords = SalesInvoice::where('isVoid' , 0)->latest()->whereYear('created_at', '=', date('Y'))->get();
+        }
+        if($filter == 'all'){
+            $title_filter  = 'All SALES INVOICE';
+            $allrecords = SalesInvoice::where('isVoid' , 0)->latest()->get();
+        }
+        if($filter == 'fbd'){
+            $from = $request->get('from');
+            $to = $request->get('to');
+            $title_filter =  'From: '.date('F d, Y', strtotime($from)). ' To: ' .date('F d, Y', strtotime($to));
+            $allrecords = SalesInvoice::where('isVoid' , 0)->latest()->whereBetween('created_at', [$from, $to])->get();
+        }
+        return view('admin.salesinvoice.allrecords.allrecords', compact('allrecords','title_filter'));
+    }
+    
 }

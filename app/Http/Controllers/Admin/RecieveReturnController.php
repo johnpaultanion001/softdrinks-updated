@@ -36,8 +36,8 @@ class RecieveReturnController extends Controller
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
             'product_id' => ['required'],
-            'return_qty' => ['required','integer','min:1'],
-            'unit_price' => ['required' ,'numeric','min:1'],
+            'return_qty' => ['required' ,'numeric','min:0'],
+            'unit_price' => ['required' ,'numeric','min:0'],
             'status_id' => ['required' ],
             'remarks' => ['nullable'],
         ]);
@@ -90,8 +90,8 @@ class RecieveReturnController extends Controller
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
             'product_id' => ['required'],
-            'return_qty' => ['required','integer','min:1'],
-            'unit_price' => ['required' ,'numeric','min:1'],
+            'return_qty' => ['required' ,'numeric','min:0'],
+            'unit_price' => ['required' ,'numeric','min:0'],
             'status_id' => ['required' ],
             'remarks' => ['nullable'],
         ]);

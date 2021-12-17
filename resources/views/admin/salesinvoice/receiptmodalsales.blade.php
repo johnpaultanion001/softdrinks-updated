@@ -6,17 +6,17 @@
                     Fernando L. Arada - Prop. <br>
                     Tel. No. 986-2433 Cel No. 0923-6738-296 </h5>
                     <br>
-                    <div class="col text-right"><h6 class="card-title text-uppercase text-muted mb-0">Date:  {{ $salesInvoices->created_at->format('F d,Y h:i A') }} </h6></div>
+                    <div class="col text-right"><h6 class="card-title text-uppercase text-muted mb-0">Date:  {{ $salesInvoices->created_at->format('F d,Y h:i A') ?? '' }} </h6></div>
 
                     <div class="form-group row">
                         <div class="col-sm-12">
-                            <small class="text-muted mt-3 ml-1">Sold To: {{$salesInvoices->customer->customer_name}}</small>
+                            <small class="text-muted mt-3 ml-1">Sold To: {{$salesInvoices->customer->customer_name ?? ''}}</small>
                             <div class="col-sm-8">
                                 <small id="customer_name"></small>
                             </div>
                         </div>
                         <div class="col-sm-12">
-                            <small class="text-muted mt-3 ml-1">Address: {{$salesInvoices->customer->area}}</small>
+                            <small class="text-muted mt-3 ml-1">Area: {{$salesInvoices->customer->area ?? ''}}</small>
                             <div class="col-sm-8">
                                     <small id="area"></small>
                                     <small id="current_balance"></small>
@@ -47,9 +47,9 @@
                                     @forelse($salesInvoices->receipt_product as $key => $receipt)
                                         <tr>
                                             <td></td>
-                                            <td>{{$receipt->purchase_qty}}</td>
-                                            <td>{{$receipt->product->category->name}}</td>
-                                            <td>{{$receipt->product->description}}</td>
+                                            <td>{{$receipt->purchase_qty ?? ''}}</td>
+                                            <td>{{$receipt->product->category->name ?? ''}}</td>
+                                            <td>{{$receipt->product->description ?? ''}}</td>
                                             <td>₱ {{ number_format($receipt->product->price ?? '' , 2, '.', ',') }}</td>
                                             <td>₱  {{ number_format($receipt->total_amount_receipt ?? '' , 2, '.', ',') }}</td>
                                         </tr>
@@ -81,7 +81,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                            <td>Return</td>
+                                            <td>Returns</td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -91,9 +91,9 @@
                                     @forelse($salesInvoices->receipt_return as $return)
                                         <tr>
                                             <td></td>
-                                            <td>{{$return->return_qty}}</td>
+                                            <td>{{$return->return_qty ?? ''}}</td>
                                             <td></td>
-                                            <td>{{$return->product->description}}</td>
+                                            <td>{{$return->product->description ?? 'NO BRAND'}}</td>
                                             <td>₱ {{ number_format($return->unit_price ?? '' , 2, '.', ',') }}</td>
                                             <td>₱ {{ number_format($return->amount ?? '' , 2, '.', ',') }}</td>
                                         </tr>
@@ -153,7 +153,7 @@
                     <div class="row mt-2 p-2">
                         <div class="col-4">
                             <h3 class="text-center card-title text-uppercase text-danger mb-0">
-                               {{$salesInvoices->salesinvoice_id}}
+                               {{$salesInvoices->salesinvoice_id ?? ''}}
                             </h3>
                         </div>
                         <div class="col-8">

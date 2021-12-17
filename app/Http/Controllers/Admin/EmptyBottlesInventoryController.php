@@ -12,7 +12,7 @@ class EmptyBottlesInventoryController extends Controller
 {
     public function index()
     {
-        abort_if(Gate::denies('empty_bottles_inventory'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('empty_bottles_inventory_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $emptybottles = EmptyBottlesInventory::orderby('id','asc')->get();
         return view('admin.empty_bottles_inventory.empty_bottles_inventory', compact('emptybottles'));
     }

@@ -1,5 +1,5 @@
 @extends('../layouts.admin')
-@section('sub-title','Dashboard')
+@section('sub-title','DASHBOARD')
 @section('navbar')
     @include('../partials.navbar')
 @endsection

@@ -14,7 +14,7 @@ class StatusReturnController extends Controller
   
     public function index()
     {
-        abort_if(Gate::denies('status-return_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('status_return_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         return view('admin.statusreturned.statusreturned');
     }
     public function load()

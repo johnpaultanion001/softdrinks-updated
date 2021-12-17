@@ -1,5 +1,5 @@
 @extends('../layouts.admin')
-@section('sub-title','Roles')
+@section('sub-title','ROLES')
 @section('navbar')
     @include('../partials.navbar')
 @endsection

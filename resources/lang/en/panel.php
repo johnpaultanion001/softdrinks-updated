@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'site_title' => 'Inventories System',
+    'site_title' => 'JEWEL & NICKEL STORE',
 ];

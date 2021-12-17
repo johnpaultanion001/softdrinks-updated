@@ -13,7 +13,7 @@
         <div class="card-header border-0">
           <div class="row align-items-center">
               <div class="col-md-12">
-                <small class="mb-0 text-uppercase font-weight-bold modal-title" id="title-sales"> </small> <small>Filter By: {{$title_filter}} </small> 
+                <small class="text-uppercase">Filter By: {{$title_filter}} </small> 
                 <i id="filter_loading" class="fa fa-spinner fa-spin text-primary ml-2"></i>
               </div>
               <div class="col-xl-12">

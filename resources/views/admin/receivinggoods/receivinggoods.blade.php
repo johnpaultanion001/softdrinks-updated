@@ -1,5 +1,5 @@
 @extends('../layouts.admin')
-@section('sub-title','Purchase Orders')
+@section('sub-title','RECEIVING GOODS')
 @section('navbar')
     @include('../partials.navbar')
 @endsection
@@ -366,7 +366,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="control-label" >QTY<span class="text-danger">*</span> </label>
-                                <input type="number" name="qty" id="qty" class="form-control" />
+                                <input type="number" name="qty" id="qty" step="any" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-qty"></strong>
                                 </span>
@@ -486,7 +486,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="control-label" >QTY:<span class="text-danger">*</span> </label>
-                                <input type="number" name="return_qty" id="return_qty" class="form-control" />
+                                <input type="number" name="return_qty" id="return_qty" step="any" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-return_qty"></strong>
                                 </span>

@@ -1,5 +1,5 @@
 @extends('../layouts.admin')
-@section('sub-title','Empty Bottles Invenetories')
+@section('sub-title','EMPTY BOTTLES INVENTORIES')
 @section('navbar')
     @include('../partials.navbar')
 @endsection
@@ -25,7 +25,7 @@
         <div class="card-header border-0">
           <div class="row align-items-center">
             <div class="col">
-              <h3 class="mb-0 text-uppercase" id="titletable">Empty Bottles Invenetories</h3>
+              <h3 class="mb-0 text-uppercase" id="titletable">EMPTY BOTTLES INVENTORIES</h3>
             </div>
          
           </div>

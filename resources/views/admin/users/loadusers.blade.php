@@ -13,10 +13,10 @@
         <div class="card-header border-0">
           <div class="row align-items-center">
             <div class="col">
-              <h3 class="mb-0" id="titletable">Users</h3>
+              <h3 class="mb-0 text-uppercase" id="titletable">Users</h3>
             </div>
             <div class="col text-right">
-              <a href="{{ route("admin.users.create") }}"  class="btn btn-sm btn-primary">New User</a>
+              <a href="{{ route("admin.users.create") }}"  class="btn btn-sm btn-primary text-uppercase">New User</a>
             </div>
           </div>
         </div>
@@ -36,9 +36,9 @@
               @foreach($users as $key => $user)
                     <tr data-entry-id="{{ $user->id ?? '' }}">
                        <td>
-                            <button type="button" name="view" view="{{  $user->id ?? '' }}" class="view btn btn-success btn-sm">View</button>
-                            <a href="{{ route('admin.users.edit', $user->id) }}"  class="edit btn btn-info btn-sm">Edit</a>
-                            <button type="button" name="delete" delete="{{  $user->id ?? '' }}" id="{{  $user->id ?? '' }}" class="delete btn btn-danger btn-sm">Delete</button>
+                            <button type="button" name="view" view="{{  $user->id ?? '' }}" class="text-uppercase view btn btn-success btn-sm">View</button>
+                            <a href="{{ route('admin.users.edit', $user->id) }}"  class="text-uppercase edit btn btn-info btn-sm">Edit</a>
+                            <button type="button" name="delete" delete="{{  $user->id ?? '' }}" id="{{  $user->id ?? '' }}" class="text-uppercase delete btn btn-danger btn-sm">Delete</button>
                         </td>
                         <td>
                             {{  $user->id ?? '' }}

@@ -78,7 +78,7 @@ class OrderController extends Controller
     {
         date_default_timezone_set('Asia/Manila');
         $errors =  Validator::make($request->all(), [
-            'purchase_qty_edit' => ['required' ,'integer','min:1'],
+            'purchase_qty_edit' => ['required' ,'numeric','min:0'],
         ]);
 
         if ($errors->fails()) {
@@ -123,7 +123,8 @@ class OrderController extends Controller
          $overall_discounted     = $request->purchase_qty_edit * $discounted;
          $subtotal               = $request->purchase_qty_edit * $order->product->price;
          $total                  = $subtotal - $overall_discounted;
-         $over_all_cost          = $request->purchase_qty_edit * $order->product->unit_cost; 
+         $cost                   = $order->product->unit_cost  - $profit;
+         $over_all_cost          = $request->purchase_qty_edit * $cost; 
 
         Order::find($order->id)->update([
                 'purchase_qty'           => $request->input('purchase_qty_edit'),

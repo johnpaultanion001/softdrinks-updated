@@ -33,15 +33,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
    
 
 
-    //sales
-    Route::get('sales', 'SalesController@index')->name('sales.index');
-    Route::get('loadsales', 'SalesController@loadsales')->name('sales.loadsales');
-    Route::get('sales-daily', 'SalesController@daily')->name('sales.daily');
-    Route::get('sales-monthly', 'SalesController@monthly')->name('sales.monthly');
-    Route::get('sales-yearly', 'SalesController@yearly')->name('sales.yearly');
-    Route::post('salesfilter', 'SalesController@filter')->name('sales.filter');
-    Route::post('/daterange/fetch_data', 'SalesController@fetch_data')->name('daterange.fetch_data');
-    Route::get('sales/{sale}', 'SalesController@receipt')->name('sales.receipt');
+    //transactions
+    Route::get('transactions', 'TransactionController@index')->name('transactions.index');
+    Route::get('transactions_load', 'TransactionController@load')->name('transactions.loadsales');
+    route::get('transactions_filter', 'TransactionController@filter')->name('transactions.filter');
+
 
     //order
     Route::delete('orders/{order}', 'OrderController@destroy')->name('order.destroy');
@@ -69,36 +65,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::put('user/{user}', 'UsersController@userupdate')->name('user.userupdate');
 
 
-    
-   
-
-    //return Products
-    // Route::resource('returned', 'ReturnedController');
-    // route::get('loadreturningproduct', 'ReturnedController@loadreturningproduct')->name('loadreturningproduct');
-   
-    // route::get('returned/{returned}/loadreturnedproduct', 'ReturnedController@loadreturnedproduct')->name('purchase-order.loadreturnedproduct');
-    // route::get('loadreturned', 'ReturnedController@loadreturned')->name('purchase-order.loadreturned');
-    // route::get('returned/{returned}/viewreturn', 'ReturnedController@viewreturn')->name('returned.viewreturn');
-
-    
-    // Route::resource('returned/pendingreturnedproducts', 'PendingReturnedProductController');
-    // route::post('returned/pendingreturnedproducts/update', 'PendingReturnedProductController@storeedit')->name('pendingreturnedproducts.storeedit');
-    // route::put('returned/pendingreturnedproducts/update/{pendingreturnedproduct}', 'PendingReturnedProductController@updateedit')->name('pendingreturnedproducts.updateedit');
-    // route::delete('returned/pendingreturnedproducts/update/{pendingreturnedproduct}', 'PendingReturnedProductController@destroyedit')->name('pendingreturnedproducts.destroyedit');
-
-    // Route::get('loadreturningproduct', 'PendingReturnedProductController@loadreturningproduct')->name('loadreturningproduct');
-    // Route::resource('returningproduct', 'PendingReturnedProductController');
-
     //status returned
     Route::resource('status-return', 'StatusReturnController');
     route::get('loadstatus', 'StatusReturnController@load')->name('status-return.load');
-
-
-    // Route::resource('purchase-order/pending-product', 'SalesInventory');
-    // route::get('loadpendingproduct', 'SalesInventory@load')->name('pending-prooduct.load');
-    // //autocomplte
-    // Route::post('autocomplete/','SalesInventory@autocomplete')->name('pending-product.autocomplete');
-    // Route::post('autocomplete/result','SalesInventory@autocompleteresult')->name('pending-product.autocompleteresult');
 
     //suppliers
     Route::resource('suppliers', 'SupplierController');
@@ -114,6 +83,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
      route::get('loaducs', 'UCSController@load')->name('ucs.load');
      route::put('ucs/backtozero', 'UCSController@backtozero')->name('ucs.backtozero');
      route::get('ucs/allucs', 'UCSController@allucs')->name('ucs.allucs');
+     route::get('ucs_filter', 'UCSController@filter')->name('ucs.filter');
 
 
     //Categories
@@ -158,6 +128,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Sales invoice all records
     Route::get('salesInvoice/salesInvoice/allrecords','SalesInvoiceController@allrecords')->name('salesInvoice.allrecords');
     Route::get('salesInvoice/salesInvoice/records','SalesInvoiceController@records')->name('salesInvoice.records');
+    route::get('salesInvoice/{sales_records}/sales_records', 'SalesInvoiceController@sales_records')->name('salesInvoice.sales_records');
+    route::get('salesInvoice/{return_records}/return_records', 'SalesInvoiceController@return_records')->name('salesInvoice.return_records');
+    route::get('salesInvoice_filter', 'SalesInvoiceController@filter')->name('salesInvoice.filter');
 
     //Sales Inventory
     Route::resource('sales_inventory', 'SalesInventoryController');

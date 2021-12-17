@@ -59,7 +59,7 @@
 
         <div class="form-group">
             <label class="control-label text-success" >QTY:<span class="text-danger">*</span></label>
-            <input type="number" name="purchase_qty" id="purchase_qty" class="purchase_qty form-control"  autofocus/>
+            <input type="number" name="purchase_qty" id="purchase_qty" step="any" class="purchase_qty form-control"  autofocus/>
             <span class="invalid-feedback" role="alert">
                 <strong id="error-purchase_qty"></strong>
             </span>

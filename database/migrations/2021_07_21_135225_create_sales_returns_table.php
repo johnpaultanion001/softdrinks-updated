@@ -17,7 +17,7 @@ class CreateSalesReturnsTable extends Migration
             $table->id();
             $table->string('salesinvoice_id');
             $table->string('product_id');
-            $table->integer('return_qty');
+            $table->float('return_qty');
             $table->string('pricetype_id');
             $table->float('unit_price');
             $table->float('amount');

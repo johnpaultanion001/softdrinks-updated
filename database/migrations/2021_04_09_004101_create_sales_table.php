@@ -19,7 +19,7 @@ class CreateSalesTable extends Migration
             $table->string('order_number');
             $table->string('product_id');
             $table->float('product_price');
-            $table->integer('purchase_qty');
+            $table->float('purchase_qty');
 
             $table->float('profit');
             $table->float('total');

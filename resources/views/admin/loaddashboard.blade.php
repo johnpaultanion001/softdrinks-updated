@@ -158,7 +158,7 @@
                   <h3 class="mb-0 text-uppercase">Newly Products</h3>
                 </div>
                 <div class="col text-right">
-                  <a href="/admin/inventories" class="btn btn-sm btn-primary">See all</a>
+                  <a href="/admin/sales_inventory" class="btn btn-sm btn-primary text-uppercase">See all</a>
                 </div>
               </div>
             </div>
@@ -209,7 +209,7 @@
 
                 </div>
                 <div class="col text-right">
-                  <a href="/admin/sales" class="btn btn-sm btn-primary">See all</a>
+                  <a href="/admin/transactions" class="btn btn-sm btn-primary text-uppercase">See all</a>
                 </div>
               </div>
             </div>

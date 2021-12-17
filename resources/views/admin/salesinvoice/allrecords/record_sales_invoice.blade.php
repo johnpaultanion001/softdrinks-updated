@@ -1,5 +1,5 @@
 @extends('../layouts.admin')
-@section('sub-title','All Record Sales Invoice')
+@section('sub-title','ALL RECORDS SALES INVOICE')
 @section('navbar')
     @include('../partials.navbar')
 @endsection
@@ -129,6 +129,12 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
+                                    <label class="control-label text-uppercase" >Created At</label>
+                                    <input type="text" name="created_date" id="created_date" class="form-control" readonly/>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
                                     <label class="control-label text-uppercase" >Created By</label>
                                     <input type="text" name="created_by" id="created_by" class="form-control" readonly/>
                                 </div>
@@ -138,11 +144,12 @@
                     
                     
                 </div>
+
                 <div class="col-sm-12 row">
                     <div class="col-sm-6 mb-2">
-                        <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">Sales</h4>
+                        <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">Sales Records</h4>
                     </div>
-                    <div class="col-sm-12" id="stock_history">
+                    <div class="col-sm-12" id="sales">
 
                     </div>
 
@@ -150,14 +157,16 @@
 
                 <div class="col-sm-12 row">
                     <div class="col-sm-6 mb-2">
-                        <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">Return</h4>
+                        <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">Returns Records</h4>
                     </div>
-                    <div class="col-sm-12" id="sales_history">
+                    <div class="col-sm-12" id="returns">
 
                     </div>
 
                 </div>
 
+                
+                <input type="hidden" name="si_hidden_id" id="si_hidden_id" />
                 <div class="modal-footer bg-white">
                     <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button> 
                 </div>
@@ -166,7 +175,7 @@
     </div>
 </form>
 
-<!-- modal for Sales Receipt -->
+<!-- modal for Receipt -->
 <form method="post" id="frm_sales_receipt" class="form-horizontal ">
     @csrf
     <div class="modal" id="modal_sales_receipt" data-keyboard="false" data-backdrop="static">
@@ -201,6 +210,41 @@
     </div>
 </form>
 
+<!-- modal for Filter -->
+<div class="modal fade" id="modalfilter" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content modal ">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-white" id="exampleModalLabel">Filter Date</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="col-md-12">
+               <div class="form-group">
+                    <label class="control-label" >From: </label>
+                    <input type="date" name="fbd_from_date" id="fbd_from_date"  class="form-control" />
+                    <span class="invalid-feedback" role="alert">
+                        <strong id="error-purchase_qty"></strong>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" >To: </label>
+                    <input type="date"  name="fbd_to_date" id="fbd_to_date"  class="form-control" />
+                    <span class="invalid-feedback" role="alert">
+                        <strong id="error-purchase_qty"></strong>
+                    </span>
+                </div>
+        </div>
+        <div class="col text-right">
+          <button id="filter_by_date" name="filter_by_date" filter="fbd"  type="button" class="btn btn-default filter">Submit</button>
+        </div>
+            
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 
 @section('script')
@@ -312,62 +356,122 @@
     });
 
     // view
+    function sales(){
+        var id = $('#si_hidden_id').val();
+
+        $.ajax({
+            url: "/admin/salesInvoice/"+id+"/sales_records", 
+            type: "get",
+            dataType: "HTMl",
+            beforeSend: function() {
+            
+            },
+            success: function(response){
+                $("#sales").html(response);
+            }	
+        })
+    }
+    function returns(){
+        var id = $('#si_hidden_id').val();
+
+        $.ajax({
+            url: "/admin/salesInvoice/"+id+"/return_records", 
+            type: "get",
+            dataType: "HTMl",
+            beforeSend: function() {
+            
+            },
+            success: function(response){
+                $("#returns").html(response);
+            }	
+        })
+    }
     $(document).on('click', '.view', function(){
-    $('#siModal').modal('show');
-    $('.modal-title').text('VEIW SALES INVOICE');
-    $('#siForm')[0].reset();
+        $('#siModal').modal('show');
+        $('.modal-title').text('VEIW SALES INVOICE');
+        $('#siForm')[0].reset();
 
-    var id = $(this).attr('view');
-    $.ajax({
-        url :"/admin/salesInvoice/"+id+"/edit",
-        dataType:"json",
-        beforeSend:function(){
-            $('#loading-containermodal').show();
-            $('#si_content').hide();
-        },
-        success:function(data){
-            $('#loading-containermodal').hide();
-            $('#si_content').show();
-            $.each(data.result, function(key,value){
-                if(key == $('#'+key).attr('id')){
-                    $('#'+key).val(value)
+        var id = $(this).attr('view');
+        $('#si_hidden_id').val(id);
+        $.ajax({
+            url :"/admin/salesInvoice/"+id+"/edit",
+            dataType:"json",
+            beforeSend:function(){
+                $('#loading-containermodal').show();
+                $('#si_content').hide();
+            },
+            success:function(data){
+                $('#loading-containermodal').hide();
+                $('#si_content').show();
+                $.each(data.result, function(key,value){
+                    if(key == $('#'+key).attr('id')){
+                        $('#'+key).val(value)
+                    }
+                })
+                if(data.customer_name){
+                    $('#customer_name').val(data.customer_name);
                 }
-            })
-            if(data.customer_name){
-                $('#customer_name').val(data.customer_name);
+                if(data.payment){
+                    $('#payment').val(data.payment);
+                }
+                if(data.tsa){
+                    $('#tsa').val(data.tsa);
+                }
+                if(data.sold_qty){
+                    $('#sold_qty').val(data.sold_qty);
+                }
+                if(data.discounted){
+                    $('#discounted').val(data.discounted);
+                }
+                if(data.tra){
+                    $('#tra').val(data.tra);
+                }
+                if(data.return_qty){
+                    $('#return_qty').val(data.return_qty);
+                }
+                if(data.cash1){
+                    $('#cash1').val(data.cash1);
+                }
+                if(data.change1){
+                    $('#change1').val(data.change1);
+                }
+                if(data.created_by){
+                    $('#created_by').val(data.created_by);
+                }
+                if(data.created_date){
+                    $('#created_date').val(data.created_date);
+                }          
+                sales();
+                returns();
             }
-            if(data.payment){
-                $('#payment').val(data.payment);
-            }
-            if(data.tsa){
-                $('#tsa').val(data.tsa);
-            }
-            if(data.sold_qty){
-                $('#sold_qty').val(data.sold_qty);
-            }
-            if(data.discounted){
-                $('#discounted').val(data.discounted);
-            }
-            if(data.tra){
-                $('#tra').val(data.tra);
-            }
-            if(data.return_qty){
-                $('#return_qty').val(data.return_qty);
-            }
-            if(data.cash1){
-                $('#cash1').val(data.cash1);
-            }
-            if(data.change1){
-                $('#change1').val(data.change1);
-            }
-            if(data.created_by){
-                $('#created_by').val(data.created_by);
-            }
-          
+        })
+    });
 
-        }
-    })
-});
+    
+    //Filter
+    $(document).on('click', '.filter', function(){
+    var filter = $(this).attr('filter');
+    var from = $('#fbd_from_date').val();
+    var to = $('#fbd_to_date').val();
+
+        $.ajax({
+            url: "/admin/salesInvoice_filter", 
+            type: "get",
+            data: {filter:filter,from:from,to:to, _token: '{!! csrf_token() !!}'},
+            dataType: "HTMl",
+            beforeSend: function() {
+                $('#filter_loading').show();
+            },
+            success: function(response){
+                $('#filter_loading').hide();
+                $("#load_record").html(response);
+            }	
+        })
+    });
+
+    $(document).on('click', '#btn_sales_invoice', function(){
+        window.location.href = '/admin/salesInvoice';
+    });
 
 </script>
 @endsection

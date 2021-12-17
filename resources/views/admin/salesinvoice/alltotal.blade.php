@@ -17,11 +17,11 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text">₱</div>
                         </div>
-                        <input type="text" name="total_discount" id="total_discount" class="form-control" value="{{ number_format($orders->sum->discounted ?? '' , 2, '.', ',') }}" readonly/>
+                        <input type="text" name="total_discount" id="total_discount" class="form-control" value="({{ number_format($orders->sum->discounted ?? '' , 2, '.', ',') }})" readonly/>
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <small class="text-white">Total Inv Amt:</small>
+                        <small class="text-white">Total Sales Amt:</small>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">₱</div>
@@ -40,12 +40,12 @@
                     
                 </div>
                 <div class="col-sm-4">
-                        <small class="text-white">Total Return:</small>
+                        <small class="text-white">Total Returns Amt:</small>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">₱</div>
                             </div>
-                            <input type="text" name="total_return" id="total_return" class="form-control" value="{{ number_format($returned->sum->amount ?? '' , 2, '.', ',') }}" readonly/>
+                            <input type="text" name="total_return" id="total_return" class="form-control" value="({{ number_format($returned->sum->amount ?? '' , 2, '.', ',') }})" readonly/>
                         </div>
                 </div>
             </div>

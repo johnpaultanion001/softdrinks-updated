@@ -4,6 +4,7 @@
         <tr>
             <th scope="col">Actions</th>
             <th scope="col">ID</th>
+            <th scope="col">RG ID</th>
             <th scope="col">Product ID</th>
             <th scope="col">Product Code</th>
             <th scope="col">Description</th>
@@ -32,6 +33,9 @@
                             {{ $product->id }}
                         </td>
                         <td>
+                            {{  $product->receiving_good_id ?? '' }}
+                        </td>
+                        <td>
                             {{  $product->product->id ?? $product->id }}
                         </td>
                         <td>
@@ -56,10 +60,10 @@
                             <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->unit_cost , 2, '.', ',') }}
                         </td>
                         <td>
-                            <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->regular_discount , 2, '.', ',') }}
+                            <large class="text-success font-weight-bold mr-1">₱</large> ( {{  number_format($product->regular_discount , 2, '.', ',') }} )
                         </td>
                         <td>
-                            <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->hauling_discount , 2, '.', ',') }}
+                            <large class="text-success font-weight-bold mr-1">₱</large> ( {{  number_format($product->hauling_discount , 2, '.', ',') }} )
                         </td>
                         <td>
                             <large class="text-success font-weight-bold mr-1">₱</large>{{  number_format($product->total_cost , 2, '.', ',') }}

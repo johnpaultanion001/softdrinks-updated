@@ -59,6 +59,7 @@ class SalesInventoryController extends Controller
     
     public function index()
     {
+        abort_if(Gate::denies('sales_inventory_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $categories = Category::where('isRemove', 0)->latest()->get();
         $locations = Location::where('isRemove', 0)->latest()->get();
         $suppliers = Supplier::where('isRemove', 0)->latest()->get();
@@ -87,7 +88,7 @@ class SalesInventoryController extends Controller
             'category_id' => ['required'],
             'description' => ['required'],
             'product_code' => ['required', 'string', 'max:255'],
-            'qty' => ['required' ,'integer','min:1'],
+            'qty' => ['required' ,'numeric','min:0'],
             'size_id' => ['required'],
             'expiration' => ['nullable','date','after:today'],
             'unit_cost' => ['required' ,'numeric','min:0'],
@@ -100,7 +101,7 @@ class SalesInventoryController extends Controller
             return response()->json(['errors' => $validated->errors()]);
         }
 
-        $price =  $request->input('unit_cost') + $request->input('regular_discount') + $request->input('hauling_discount');
+        
         $cost =  $request->input('unit_cost') - $request->input('regular_discount') - $request->input('hauling_discount');
         $total_cost = $request->input('qty') * $cost;
 
@@ -130,7 +131,7 @@ class SalesInventoryController extends Controller
                 'expiration' => $request->input('expiration'),
 
                 'unit_cost' => $request->input('unit_cost'),
-                'price' => $price,
+                'price' => $request->input('unit_cost'),
                 'total_cost' => $total_cost ,
                 'regular_discount' => $request->input('regular_discount'),
                 'hauling_discount' => $request->input('hauling_discount'),
@@ -173,7 +174,7 @@ class SalesInventoryController extends Controller
             'category_id' => ['required'],
             'description' => ['required'],
             'product_code' => ['required', 'string', 'max:255'],
-            'qty' => ['required' ,'integer','min:1'],
+            'qty' => ['required' ,'numeric','min:0'],
             'size_id' => ['required'],
             'expiration' => ['nullable','date','after:today'],
             'unit_cost' => ['required' ,'numeric','min:0'],
@@ -186,7 +187,7 @@ class SalesInventoryController extends Controller
             return response()->json(['errors' => $validated->errors()]);
         }
 
-        $price =  $request->input('unit_cost') + $request->input('regular_discount') + $request->input('hauling_discount');
+        
         $cost =  $request->input('unit_cost') - $request->input('regular_discount') - $request->input('hauling_discount');
         $total_cost = $request->input('qty') * $cost;
 
@@ -203,7 +204,7 @@ class SalesInventoryController extends Controller
                 'expiration' => $request->input('expiration'),
 
                 'unit_cost' => $request->input('unit_cost'),
-                'price' => $price,
+                'price' =>  $request->input('unit_cost'),
                 'total_cost' => $total_cost ,
                 'regular_discount' => $request->input('regular_discount'),
                 'hauling_discount' => $request->input('hauling_discount'),
@@ -284,13 +285,13 @@ class SalesInventoryController extends Controller
             return response()->json(['errors' => $validated->errors()]);
         }
 
-        $price =  $request->input('unit_cost') + $request->input('regular_discount') + $request->input('hauling_discount');
+        
         
         SalesInventory::find($sales_inventory->id)->update(
             [
                 'expiration' => $request->input('expiration'),
                 'unit_cost' => $request->input('unit_cost'),
-                'price' => $price,
+                'price' => $request->input('unit_cost'),
                 'regular_discount' => $request->input('regular_discount'),
                 'hauling_discount' => $request->input('hauling_discount'),
                 'product_remarks' => $request->input('product_remarks'),
@@ -299,7 +300,7 @@ class SalesInventoryController extends Controller
         
         return response()->json([
                 'success'        => 'Product Updated Successfully.',
-                'unit_price'     => '₱ ' . number_format($price , 2, '.', ','),
+                'unit_price'     => '₱ ' . number_format( $request->input('unit_cost') , 2, '.', ','),
             ]);
     }
 }

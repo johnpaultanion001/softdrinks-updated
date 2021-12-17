@@ -20,7 +20,7 @@ class CreateOrderSalesTable extends Migration
             $table->float('total_sales');
             $table->float('total_cost');
             $table->string('customer_id');
-            $table->integer('total_qty');
+            $table->float('total_qty');
             $table->float('subtotal');
             $table->float('total');
             $table->timestamps();

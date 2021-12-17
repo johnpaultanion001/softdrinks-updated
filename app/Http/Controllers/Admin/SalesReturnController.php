@@ -33,7 +33,7 @@ class SalesReturnController extends Controller
             'product_id' => ['required'],
             'pricetype_id' => ['required'],
             'unit_price' => ['required' ,'numeric','min:0'],
-            'return_qty' => ['required' ,'integer','min:1'],
+            'return_qty' => ['required' ,'numeric','min:0'],
             'status_id' => ['required'],
         ]);
 
@@ -89,7 +89,7 @@ class SalesReturnController extends Controller
             'product_id' => ['required'],
             'pricetype_id' => ['required'],
             'unit_price' => ['required' ,'numeric','min:0'],
-            'return_qty' => ['required' ,'integer','min:1'],
+            'return_qty' => ['required' ,'numeric','min:0'],
             'status_id' => ['required'],
         ]);
 

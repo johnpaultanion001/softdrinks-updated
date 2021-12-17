@@ -17,7 +17,7 @@ class CreateRecieveReturnsTable extends Migration
             $table->id();
             $table->string('receiving_good_id');
             $table->string('product_id');
-            $table->integer('return_qty');
+            $table->float('return_qty');
             $table->float('unit_price');
             $table->float('amount');
             $table->string('status_id');

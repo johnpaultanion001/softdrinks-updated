@@ -23,7 +23,7 @@ class CreateReceivingProductsTable extends Migration
             $table->string('category_id');
             $table->longText('description');
             
-            $table->integer('qty');
+            $table->float('qty');
             $table->string('size_id');
             $table->date('expiration')->nullable();
             

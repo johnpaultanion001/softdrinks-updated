@@ -26,7 +26,7 @@ class ReceivingGoodController extends Controller
 {
     public function index()
     {
-        abort_if(Gate::denies('purchase_order_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('receiving_goods_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $suppliers = Supplier::where('isRemove', 0)->latest()->get();
         $locations = Location::where('isRemove', 0)->latest()->get();
         $products = SalesInventory::latest()->get();
@@ -40,7 +40,6 @@ class ReceivingGoodController extends Controller
  
     public function load()
     {
-        abort_if(Gate::denies('purchase_order_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $orders = ReceivingGood::where('isRemove', false)->latest()->get();
         $title_filter  = 'All Receiving Goods';
         return view('admin.receivinggoods.loadreceivinggoods', compact('orders','title_filter'));

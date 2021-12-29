@@ -4,7 +4,7 @@
         <thead class="thead-white">
             <tr>
                 <th scope="col">ID</th>
-                <th scope="col">OR</th>
+                <th scope="col">Order #</th>
                 <th scope="col">Sold To</th>
                 <th scope="col">Product</th>
                 <th scope="col">Sold QTY</th>
@@ -41,7 +41,6 @@ $(function () {
 
     $.extend(true, $.fn.dataTable.defaults, {
         pageLength: 10,
-        'columnDefs': [{ 'orderable': false, 'targets': 0 }],
     });
     $('.datatable-sales_history:not(.ajaxTable)').DataTable({ buttons: dtButtons });
 });

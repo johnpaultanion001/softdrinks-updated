@@ -107,15 +107,15 @@
                         </div>
                         <div class="col-xl-12">
                             <div class="row">
-                                <div class="col-xl-6">
-                                    <div id="loadsales"></div>
-
-                                   
-                                     
-                                    
+                                <div class="col-xl-12">
+                                    <div class="card">
+                                        <div id="loadsales"></div>
+                                    </div>
                                 </div>
-                                <div class="col-xl-6">
-                                   <div id="loadreturn"></div>
+                                <div class="col-xl-12">
+                                    <div class="card">
+                                        <div id="loadreturn"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -303,20 +303,8 @@
                                 
                             </div>
                         </div>
-
-                        <div class="col-sm-6">
-                             <label class="control-label text-uppercase" >Select Price Type:<span class="text-danger">*</span> </label>
-                            <select name="pricetype_id" id="pricetype_id" class="form-control select2" required>
-                                @foreach ($pricetypes as $pricetype)
-                                <option value="{{$pricetype->id}}"> {{$pricetype->price_type}} / Discount: {{$pricetype->discount}}</option>
-                                @endforeach
-                            </select>
-                            <span class="invalid-feedback" role="alert">
-                                <strong id="error-pricetype_id"></strong>
-                            </span>
-                        </div>
                         
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="control-label text-uppercase" >Status:<span class="text-danger">*</span> </label> 
                                 <select name="status_id" id="status_id" class="form-control select2">
@@ -330,7 +318,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="control-label text-uppercase" >Return QTY:<span class="text-danger">*</span> </label>
                                 <input type="number" name="return_qty" id="return_qty" class="return_qty form-control" step="any"/>
@@ -339,7 +327,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="control-label text-uppercase" >Unit Price:<span class="text-danger">*</span> </label>
                                 <input type="number" name="unit_price" id="unit_price" step="any" class="unit_price form-control"/>
@@ -502,7 +490,7 @@ $(document).on('click', '#all_records_btn', function(){
 //modal for return
 $(document).on('click', '#create_return', function(){
     $('#modal_return_cu').modal('show');
-    $('.modal_return_cu_title').text('Insert Return');
+    $('.modal_return_cu_title').text('INSERT RETURN');
     $('#frm_return_cu')[0].reset();
     $('.form-control').removeClass('is-invalid')
 
@@ -645,6 +633,13 @@ $('#myForm').on('submit', function(event){
                     type: 'red',
                 });
             }
+            if(data.maxstock){
+                $.alert({
+                    title: 'Error Message',
+                    content: data.maxstock,
+                    type: 'red',
+                })  
+            }
             if(data.print){
                 return printmodal();
             }
@@ -682,6 +677,7 @@ $(document).on('click', '#print_button', function(){
         success:function(data){
             $("#print_button").attr("disabled", false);
             $("#print_button").attr("value", "Print & Save");
+            
             if(data.success){
                 $('#receipt-body').removeClass('receipt-body');
                 var contents = $("#receiptreport").html();
@@ -737,7 +733,7 @@ $(document).on('click', '#print_button', function(){
 $(document).on('click', '.editreturn', function(){
     $('#allrecordsreturnModal').modal('hide');
     $('#modal_return_cu').modal('show');
-    $('.modal_return_cu_title').text('Edit Return');
+    $('.modal_return_cu_title').text('EDIT RETURN');
 
     
     $('#frm_return_cu')[0].reset();

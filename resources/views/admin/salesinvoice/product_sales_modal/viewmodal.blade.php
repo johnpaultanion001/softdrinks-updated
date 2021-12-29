@@ -21,11 +21,11 @@
                     </span> 
                 </div>
                 <div class="col-6">
-                        <span class= "text-uppercase">Stock/{{$sales_inventory->category->name}}:
+                        <span class= "text-uppercase">Selling Area Stock:
                         @if($sales_inventory->stock < 1)
                             <span class="text-warning text-uppercase">0</span>
                             @else
-                            <span class="text-success font-weight-bold">{{$sales_inventory->stock}}</span> 
+                            <span class="text-success font-weight-bold">{{$sales_inventory->location_products_stock()}}</span> 
                         @endif
                     </span>
                 </div>

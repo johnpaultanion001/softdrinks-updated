@@ -23,7 +23,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'C200',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '1',
                 'expiration' => '2022-08-24',
@@ -49,7 +48,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'S200',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '1',
                 'expiration' => '2022-08-24',
@@ -75,7 +73,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'R200',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '1',
                 'expiration' => '2022-08-24',
@@ -101,7 +98,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'CZ200',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '1',
                 'expiration' => '2022-08-24',
@@ -128,7 +124,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'SAR195',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '2',
                 'expiration' => '2022-08-24',
@@ -155,7 +150,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'CM',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '3',
                 'expiration' => '2022-08-24',
@@ -181,7 +175,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'SM',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '3',
                 'expiration' => '2022-08-24',
@@ -207,7 +200,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'RM',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '4',
                 'expiration' => '2022-08-24',
@@ -233,7 +225,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'RTL M',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '4',
                 'expiration' => '2022-08-24',
@@ -260,7 +251,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'C8',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '5',
                 'expiration' => '2022-08-24',
@@ -286,7 +276,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'S8',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '5',
                 'expiration' => '2022-08-24',
@@ -312,7 +301,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'R8',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '5',
                 'expiration' => '2022-08-24',
@@ -338,7 +326,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'RTL 8',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '5',
                 'expiration' => '2022-08-24',
@@ -365,7 +352,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'C12',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '6',
                 'expiration' => '2022-08-24',
@@ -391,7 +377,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'S12',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '6',
                 'expiration' => '2022-08-24',
@@ -417,7 +402,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'R12',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '6',
                 'expiration' => '2022-08-24',
@@ -444,7 +428,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'CK',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '7',
                 'expiration' => '2022-08-24',
@@ -470,7 +453,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'RK',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '7',
                 'expiration' => '2022-08-24',
@@ -496,7 +478,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'SK',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '7',
                 'expiration' => '2022-08-24',
@@ -523,7 +504,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'CXL',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '8',
                 'expiration' => '2022-08-24',
@@ -549,7 +529,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'SXL',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '8',
                 'expiration' => '2022-08-24',
@@ -575,7 +554,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'RXL',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '8',
                 'expiration' => '2022-08-24',
@@ -601,7 +579,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'CZXL',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '8',
                 'expiration' => '2022-08-24',
@@ -628,7 +605,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'CIN',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '9',
                 'expiration' => '2022-08-24',
@@ -654,7 +630,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'SIN',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '9',
                 'expiration' => '2022-08-24',
@@ -680,7 +655,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'RIN',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '9',
                 'expiration' => '2022-08-24',
@@ -706,7 +680,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'CZIN',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '9',
                 'expiration' => '2022-08-24',
@@ -732,7 +705,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'SARIN',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '9',
                 'expiration' => '2022-08-24',
@@ -759,7 +731,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'    => '1',
                 'description' => 'CT1L',
 
-                'stock' => '50',
                 'qty' => '50',
                 'size_id' => '10',
                 'expiration' => '2022-08-24',
@@ -788,7 +759,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'MA200',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '11',
                 'expiration'        => '2022-08-24',
@@ -814,7 +784,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'MO200',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '11',
                 'expiration'        => '2022-08-24',
@@ -840,7 +809,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'MP200',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '11',
                 'expiration'        => '2022-08-24',
@@ -866,7 +834,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'MMA200',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '11',
                 'expiration'        => '2022-08-24',
@@ -892,7 +859,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'M250',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '12',
                 'expiration'        => '2022-08-24',
@@ -918,7 +884,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'M800',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '13',
                 'expiration'        => '2022-08-24',
@@ -944,7 +909,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'NC',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '14',
                 'expiration'        => '2022-08-24',
@@ -970,7 +934,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'NO',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '14',
                 'expiration'        => '2022-08-24',
@@ -996,7 +959,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'NS',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '14',
                 'expiration'        => '2022-08-24',
@@ -1022,7 +984,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'RL480',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '15',
                 'expiration'        => '2022-08-24',
@@ -1048,7 +1009,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'WP330 X 12',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '16',
                 'expiration'        => '2022-08-24',
@@ -1074,7 +1034,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'WP330',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '16',
                 'expiration'        => '2022-08-24',
@@ -1100,7 +1059,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'WP500',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '17',
                 'expiration'        => '2022-08-24',
@@ -1126,7 +1084,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'WP500',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '17',
                 'expiration'        => '2022-08-24',
@@ -1152,7 +1109,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'WP1L',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '18',
                 'expiration'        => '2022-08-24',
@@ -1178,7 +1134,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'W1L',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '18',
                 'expiration'        => '2022-08-24',
@@ -1204,7 +1159,6 @@ class SalesInventorySeeder extends Seeder
                 'category_id'       => '1',
                 'description'       => 'W7L',
 
-                'stock'             => '50',
                 'qty'               => '50',
                 'size_id'           => '19',
                 'expiration'        => '2022-08-24',

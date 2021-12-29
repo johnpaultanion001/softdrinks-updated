@@ -25,11 +25,11 @@
                     </span> 
                 </div>
                 <div class="col-6">
-                        <span class= "text-uppercase">Stock/{{$order->product->category->name}}:
+                        <span class= "text-uppercase">SELLING AREA STOCK:
                         @if($order->product->stock < 1)
                             <span class="text-warning text-uppercase">0</span>
                             @else
-                            <span class="text-success font-weight-bold">{{$order->product->stock}}</span> 
+                            <span class="text-success font-weight-bold">{{$order->product->location_products_stock()}}</span> 
                         @endif
                     </span>
                 </div>
@@ -47,7 +47,7 @@
                     <span class="text-uppercase">Total Amount: <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($order->total , 2, '.', ',') }}</span></span>
                 </div>
                 <div class="col-6">
-                    <span class="text-uppercase">Discounted: <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">{{ number_format($order->discounted , 2, '.', ',') }}</span></span>
+                    <span class="text-uppercase">Discounted: <large class="text-success font-weight-bold mr-1">₱</large><span class="h2 font-weight-bold mb-0">({{ number_format($order->discounted , 2, '.', ',') }})</span></span>
                 </div>
             </div>
         </p>

@@ -37,13 +37,13 @@
                         {{  $order->purchase_qty ?? '' }}
                     </td>
                     <td>
-                             {{$order->pricetype->price_type  ?? ''}} / ₱ ({{ number_format($order->discounted ?? '' , 2, '.', ',') }})
+                             {{$order->pricetype->price_type  ?? ''}} / ({{ number_format($order->discounted ?? '' , 2, '.', ',') }})
                     </td>
                     <td>
-                            ₱ {{ number_format($order->product->price ?? '' , 2, '.', ',') }}
+                            {{ number_format($order->product->price ?? '' , 2, '.', ',') }}
                     </td>
                     <td>
-                            ₱ {{ number_format($order->total ?? '' , 2, '.', ',') }}
+                            {{ number_format($order->total ?? '' , 2, '.', ',') }}
                     </td>   
                 </tr>
             @endforeach

@@ -41,8 +41,10 @@
                             
                             @elseif($location->id == 2)
 
+                            @elseif($location->id == 3)
+
                             @else
-                            <button type="button" name="remove" remove="{{  $location->id ?? '' }}" id="{{  $location->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm">Remove</button>
+                              <button type="button" name="remove" remove="{{  $location->id ?? '' }}" id="{{  $location->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm">Remove</button>
                             @endif
                            
                         </td>

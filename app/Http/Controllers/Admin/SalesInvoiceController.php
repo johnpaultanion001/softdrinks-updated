@@ -15,6 +15,7 @@ use App\Models\OrderNumber;
 use App\Models\PriceType;
 use App\Models\StatusReturn;
 use App\Models\EmptyBottlesInventory;
+use App\Models\LocationProduct;
 
 
 use Validator;
@@ -33,10 +34,10 @@ class SalesInvoiceController extends Controller
         $ordernumber = OrderNumber::orderby('id', 'desc')->first();
         $salesinvoice_id = $ordernumber->salesinvoice_id;
 
-        $status = StatusReturn::where('isRemove', 0)->latest()->get();
+        $status = StatusReturn::where('isRemove', 0)->orderBy('id', 'asc')->get();
         $customers = Customer::where('isRemove', 0)->orderBy('id', 'asc')->get();
         $orders = Order::where('status', '0')->latest()->get();
-        $pricetypes = PriceType::where('isRemove', '0')->latest()->get();
+        $pricetypes = PriceType::where('isRemove', '0')->orderBy('id', 'asc')->get();
         $product_codes = SalesInventory::where('isComplete' , true)->where('isRemove' , false)->latest()->get();
 
         $returned = SalesReturn::where('salesinvoice_id', $salesinvoice_id)->latest()->get();
@@ -85,9 +86,11 @@ class SalesInvoiceController extends Controller
 
     public function productlist(){
         date_default_timezone_set('Asia/Manila');
-        $inventories = SalesInventory::where('isComplete' , true)->where('isRemove', false)->where('stock' , '>' , 0)->where('location_id', 2)
-        ->get();
-        return view('admin.salesinvoice.product_sales_modal.productlist', compact('inventories'));
+        // $inventories = SalesInventory::where('isComplete' , true)->where('isRemove', false)->where('stock' , '>' , 0)->where('location_id', 2)
+        // ->get();
+
+        $products = LocationProduct::where('location_id', 2)->where('stock' , '>' , 0)->orderBy('id','asc')->get();
+        return view('admin.salesinvoice.product_sales_modal.productlist', compact('products'));
     }
 
     public function receipt()
@@ -133,6 +136,18 @@ class SalesInvoiceController extends Controller
         {
             return response()->json(['invalidcash' => 'CASH FIELD MUST BE GREATER THAN TO THE TOTAL AMOUNT / PAYMENT FIELD <br> ( ₱ '.number_format($payment , 2, '.', ',').')']);
         }
+
+        $orders = Order::latest()->get();
+        foreach($orders as $order){
+            $stocks = LocationProduct::where('product_id', $order->product_id)->where('location_id', 2)->sum('stock');
+            if($stocks <  $order->purchase_qty){
+                return response()->json(['maxstock' =>
+                    'Insufficient Stocks. This Order '.$order->product->product_code.'( '.$order->purchase_qty.' )'.
+                    ' has reach maximum stock of this product'. ' Available Stock:'
+                    .$order->product->location_products_stock()]);
+            }
+        }
+       
 
         return response()->json(['print'  => 'PRINT']);
     }
@@ -195,12 +210,17 @@ class SalesInvoiceController extends Controller
             'total' => $total_amount,
         ]);
 
-        $ids = Order::pluck('product_id');
-        SalesInventory::whereIn('id' , $ids)->update([
-            'stock' => DB::raw ('stock - orders'),
-            'sold' => DB::raw ('sold + orders'),
-            'orders' => 0,
-        ]);
+        
+        
+        $orders = Order::latest()->get();
+        foreach($orders as $order){
+                LocationProduct::where('product_id', $order->product_id)->where('location_id', 2)
+                                        ->decrement('stock', $order->purchase_qty);
+                SalesInventory::where('id', $order->product_id)->increment('sold', $order->purchase_qty);
+                SalesInventory::where('id', $order->product_id)->decrement('orders', $order->purchase_qty);
+               
+                                        
+        }
 
         $product_ids = EmptyBottlesInventory::select(['product_id'])->get()->toArray();
         $returnBottle = SalesReturn::where('salesinvoice_id', $salesinvoice_id)->get();
@@ -282,18 +302,26 @@ class SalesInvoiceController extends Controller
     
     public function edit(SalesInvoice $salesInvoice)
     {
+        $payment    = $salesInvoice->sales()->sum('total') - $salesInvoice->returns()->sum('amount');
+        $tsa        = $salesInvoice->sales()->sum('total_amount_receipt');
+        $sold_qty   = $salesInvoice->sales()->sum('purchase_qty');
+        $tra        = $salesInvoice->returns()->sum('amount');
+        $return_qty = $salesInvoice->returns()->sum('return_qty');
+
+
         if (request()->ajax()) {
             return response()->json(
                 [
                     'result'                  => $salesInvoice,
                     'customer_name'           => $salesInvoice->customer->customer_name,
                     'customer_area'           => $salesInvoice->customer->area,
-                    'payment'                 => '₱ ' . number_format($salesInvoice->total_amount , 2, '.', ','),
-                    'tsa'                     => '₱ ' . number_format($salesInvoice->subtotal , 2, '.', ','),
-                    'sold_qty'                => $salesInvoice->sales->sum->purchase_qty,
+                    'payment'                 => '₱ ' . number_format($payment , 2, '.', ','),
+
+                    'tsa'                     => '₱ ' . number_format($tsa , 2, '.', ','),
+                    'sold_qty'                =>  number_format($sold_qty , 2, '.', ','),
                     'discounted'              => '₱ ( ' . number_format($salesInvoice->sales->sum->discounted, 2, '.', ',') . ' )',
-                    'tra'                     => '₱ ( ' . number_format($salesInvoice->returns->sum->amount, 2, '.', ',') . ' )',
-                    'return_qty'              => $salesInvoice->returns->sum->return_qty,
+                    'tra'                     => '₱ ( ' . number_format($tra, 2, '.', ',') . ' )',
+                    'return_qty'              =>  number_format($return_qty , 2, '.', ','),
                     'cash1'                   => '₱ ' . number_format($salesInvoice->cash , 2, '.', ','),
                     'change1'                 => '₱ ' . number_format($salesInvoice->change , 2, '.', ','),
                     'created_by'              => $salesInvoice->user->name,
@@ -336,17 +364,17 @@ class SalesInvoiceController extends Controller
         if ($errors->fails()) {
             return response()->json(['errors' => $errors->errors()]);
         }
-        if($request->purchase_qty > $sales_inventory->stock){
-            return response()->json(['nostock' => 'Insufficient Stocks. Availalbe Stock:'.$sales_inventory->stock]);
+        if($request->purchase_qty > $sales_inventory->location_products_stock()){ 
+            return response()->json(['nostock' => 'Insufficient Stocks. Available Stock:'.$sales_inventory->location_products_stock()]);
         }
-        if($sales_inventory->orders > $sales_inventory->stock){
-            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$sales_inventory->orders.' has reach maximum stock of this product']);
+        if($sales_inventory->orders > $sales_inventory->location_products_stock()){
+            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$sales_inventory->orders.' has reach maximum stock of this product'. ' Available Stock:'.$sales_inventory->location_products_stock()]);
         }
-        if($sales_inventory->orders == $sales_inventory->stock){
-            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$sales_inventory->orders.' has reach maximum stock of this product']);
+        if($sales_inventory->orders == $sales_inventory->location_products_stock()){
+            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$sales_inventory->orders.' has reach maximum stock of this product'. ' Available Stock:'.$sales_inventory->location_products_stock()]);
         }
-        if( $sales_inventory->orders + $request->purchase_qty > $sales_inventory->stock){
-            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$sales_inventory->orders.' has reach maximum stock of this product']);
+        if( $sales_inventory->orders + $request->purchase_qty > $sales_inventory->location_products_stock()){
+            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$sales_inventory->orders.' has reach maximum stock of this product'. ' Available Stock:'.$sales_inventory->location_products_stock()]);
         }
 
         $discount = PriceType::where('id', $request->select_pricetype)->first();
@@ -364,21 +392,33 @@ class SalesInvoiceController extends Controller
         $cost                   = $sales_inventory->unit_cost - $profit;
         $over_all_cost          = $request->purchase_qty * $cost; 
 
-        Order::create([
-            'salesinvoice_id'       =>  $request->input('salesinvoice_id'),
-            'order_number'          =>  $id,
-            'product_id'            =>  $sales_inventory->id,
-            'product_price'         =>  $sales_inventory->price,
-            'purchase_qty'          =>  $request->input('purchase_qty'),
-            'profit'                =>  $overall_profit,
-            'total'                 =>  $total,
-            'total_amount_receipt'  =>  $subtotal,
-            'pricetype_id'          =>  $request->input('select_pricetype'),
-            'discounted'            =>  $overall_discounted,
-            'total_cost'            =>  $over_all_cost,
-        ]);
+        Order::updateOrCreate(
+            [
+                'salesinvoice_id'       =>  $request->input('salesinvoice_id'),
+                'order_number'          =>  $id,
+                'product_id'            =>  $sales_inventory->id,
+            ],
+            [
+                'salesinvoice_id'       =>  $request->input('salesinvoice_id'),
+                'order_number'          =>  $id,
+                'product_id'            =>  $sales_inventory->id,
+                'product_price'         =>  $sales_inventory->price,
+                'purchase_qty'          =>  $request->input('purchase_qty'),
+                'profit'                =>  $overall_profit,
+                'total'                 =>  $total,
+                'total_amount_receipt'  =>  $subtotal,
+                'pricetype_id'          =>  $request->input('select_pricetype'),
+                'discounted'            =>  $overall_discounted,
+                'total_cost'            =>  $over_all_cost,
+            ]
+        );
 
-        SalesInventory::where('id', $sales_inventory->id)->increment('orders', $request->purchase_qty);
+
+        SalesInventory::where('id', $sales_inventory->id)->update(['orders' =>
+                                                Order::where('salesinvoice_id' , $request->input('salesinvoice_id'))
+                                                        ->where('product_id', $sales_inventory->id)
+                                                        ->sum('purchase_qty')]);
+
         return response()->json(['success' => 'Order Successfully Inserted.']);
 
     }

@@ -77,4 +77,11 @@ class TransactionController extends Controller
         }
          return view('admin.transactions.loadtransactions', compact('sales','returns', 'products','salesinvoices', 'title_filter'));
     }
+
+    public function destroy_sales(Sales $sales){
+        SalesInventory::where('id', $sales->product_id)->increment('stock', $sales->purchase_qty);
+        SalesInventory::where('id', $sales->product_id)->decrement('sold', $sales->purchase_qty);
+        $sales->delete();
+        return response()->json(['success' => 'Sales Removed Successfully.']);
+    }
 }

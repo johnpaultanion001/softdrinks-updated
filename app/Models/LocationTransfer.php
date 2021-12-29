@@ -15,8 +15,6 @@ class LocationTransfer extends Model
         'entry_date',
         'reference',
         'reference_date',
-        'location_from',
-        'location_to',
         'transfer_count',
         'prepared_by',
         'remarks',

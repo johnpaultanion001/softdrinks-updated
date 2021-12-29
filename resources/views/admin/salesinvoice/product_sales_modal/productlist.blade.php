@@ -11,52 +11,52 @@
                 <th scope="col">Product Code</th>
                 <th scope="col">Description</th>
                 <th scope="col">Size</th>
-                <th scope="col">Supplier Code / Name</th>
+                <th scope="col">Supplier</th>
                 <th scope="col">Category</th>
                 <th scope="col">Expiration</th>
-                <th scope="col">Stock</th>
+                <th scope="col">Selling Area Stock</th>
                 <th scope="col">Orders</th>
                 <th scope="col">Sold</th>
 
             </tr>
         </thead>
         <tbody class="text-uppercase font-weight-bold">
-            @foreach($inventories as $key => $inv)
-                <tr data-entry-id="{{ $inv->id ?? '' }}">
+            @foreach($products as $product)
+                <tr data-entry-id="{{ $product->product->id ?? '' }}">
                     <td>
-                        <button type="button" id="order" name="order" order="{{  $inv->id ?? '' }}" class="text-uppercase order btn btn-info btn-sm">Order</button>
+                        <button type="button" id="order" name="order" order="{{  $product->product->id ?? '' }}" class="text-uppercase order btn btn-info btn-sm">Order</button>
                         
                     </td>
                       <td>
-                          {{  $inv->id ?? '' }}
+                          {{  $product->product->id ?? '' }}
                       </td>
                       <td>
-                          {{  $inv->product_code ?? '' }}
+                          {{  $product->product->product_code ?? '' }}
                       </td>
                       <td>
-                          {{  $inv->description ?? '' }}
+                          {{  $product->product->description ?? '' }}
                       </td>
                       <td>
-                          {{  $inv->size->title ?? '' }}  {{  $inv->size->size ?? '' }}
+                          {{  $product->product->size->title ?? '' }}  {{  $product->product->size->size ?? '' }}
                       </td>
                       <td>
-                          {{  $inv->supplier->id ?? '' }}/{{  $inv->supplier->name ?? '' }}
+                          {{  $product->product->supplier->name ?? '' }}
                       </td>
                      
                       <td>
-                          {{  $inv->category->name ?? '' }}
+                          {{  $product->product->category->name ?? '' }}
                       </td>
                       <td>
-                          {{  $inv->expiration ?? '' }}
+                          {{  $product->product->expiration ?? '' }}
                       </td>
                       <td>
-                          {{  $inv->stock ?? '' }}
+                          {{  $product->stock ?? '' }}
                       </td>
                       <td>
-                          {{  $inv->orders ?? '' }}
+                          {{  $product->product->orders ?? '' }}
                       </td>
                       <td>
-                          {{  $inv->sold ?? '' }}
+                          {{  $product->product->sold ?? '' }}
                       </td>
                 </tr>
 

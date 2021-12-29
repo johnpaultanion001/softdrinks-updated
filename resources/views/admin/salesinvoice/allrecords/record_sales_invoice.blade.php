@@ -44,7 +44,7 @@
                     <div class="row">
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label class="control-label text-uppercase" >ID</label>
+                                    <label class="control-label text-uppercase" >ORDER #</label>
                                     <input type="text" name="id" id="id" class="form-control" readonly/>
                                 </div>
                             </div>
@@ -57,13 +57,13 @@
 
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label class="control-label text-uppercase" >Entry Date</label>
+                                    <label class="control-label text-uppercase" >Entry Date <span class="text-danger">*</span></label>
                                     <input type="date" name="entry_date" id="entry_date" class="form-control" readonly/>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
-                                    <label class="control-label text-uppercase" >Customer Name</label>
+                                    <label class="control-label text-uppercase" >Customer Name<span class="text-danger">*</span></label>
                                     <input type="text" name="customer_name" id="customer_name" class="form-control" readonly/>
                                 </div>
                             </div>
@@ -117,7 +117,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <label class="control-label text-uppercase" >Cash</label>
+                                    <label class="control-label text-uppercase" >Cash <span class="text-danger">*</span></label>
                                     <input type="text" name="cash1" id="cash1" class="form-control" readonly/>
                                 </div>
                             </div>
@@ -139,6 +139,8 @@
                                     <input type="text" name="created_by" id="created_by" class="form-control" readonly/>
                                 </div>
                             </div>
+                           
+                        
                     </div>
 
                     
@@ -168,7 +170,8 @@
                 
                 <input type="hidden" name="si_hidden_id" id="si_hidden_id" />
                 <div class="modal-footer bg-white">
-                    <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button> 
+                    <input type="submit" name="action_si" id="action_si" class="text-uppercase btn btn-primary" value="UPDATE" />
+                    <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">CLOSE</button>
                 </div>
             </div>
         </div>
@@ -450,28 +453,122 @@
     
     //Filter
     $(document).on('click', '.filter', function(){
-    var filter = $(this).attr('filter');
-    var from = $('#fbd_from_date').val();
-    var to = $('#fbd_to_date').val();
+        var filter = $(this).attr('filter');
+        var from = $('#fbd_from_date').val();
+        var to = $('#fbd_to_date').val();
 
-        $.ajax({
-            url: "/admin/salesInvoice_filter", 
-            type: "get",
-            data: {filter:filter,from:from,to:to, _token: '{!! csrf_token() !!}'},
-            dataType: "HTMl",
-            beforeSend: function() {
-                $('#filter_loading').show();
-            },
-            success: function(response){
-                $('#filter_loading').hide();
-                $("#load_record").html(response);
-            }	
-        })
+            $.ajax({
+                url: "/admin/salesInvoice_filter", 
+                type: "get",
+                data: {filter:filter,from:from,to:to, _token: '{!! csrf_token() !!}'},
+                dataType: "HTMl",
+                beforeSend: function() {
+                    $('#filter_loading').show();
+                },
+                success: function(response){
+                    $('#filter_loading').hide();
+                    $("#load_record").html(response);
+                }	
+            })
     });
 
     $(document).on('click', '#btn_sales_invoice', function(){
         window.location.href = '/admin/salesInvoice';
     });
+
+    //remove sales
+    $(document).on('click', '.remove_sales', function(){
+        var id = $(this).attr('remove_sales');
+        
+        $.confirm({
+            title: 'Confirmation',
+            content: 'You really want to remove this record?',
+            type: 'red',
+            buttons: {
+                confirm: {
+                    text: 'confirm',
+                    btnClass: 'btn-blue',
+                    keys: ['enter', 'shift'],
+                    action: function(){
+                        return $.ajax({
+                            url:"/admin/transactions/"+id,
+                            method:'DELETE',
+                            data: {_token: '{!! csrf_token() !!}'},
+                            dataType:"json",
+                            beforeSend:function(){
+                               
+                            },
+                            success:function(data){
+                                if(data.success){
+                                    $('#success-alert').addClass('bg-primary');
+                                    $('#success-alert').html('<strong>' + data.success + '</strong>');
+                                    $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                                        $("#success-alert").slideUp(500);
+                                    });
+                                    sales();
+                                    
+                                }
+                            }
+                        })
+                    }
+                },
+                cancel:  {
+                    text: 'cancel',
+                    btnClass: 'btn-red',
+                    keys: ['enter', 'shift'],
+                }
+            }
+        });
+    });
+
+    //remove return
+    $(document).on('click', '.remove_return', function(){
+        var id          = $(this).attr('remove_return');
+        var is_purchase = $(this).attr('is_purchase');
+        
+        $.confirm({
+            title: 'Confirmation',
+            content: 'You really want to remove this record?',
+            type: 'red',
+            buttons: {
+                confirm: {
+                    text: 'confirm',
+                    btnClass: 'btn-blue',
+                    keys: ['enter', 'shift'],
+                    action: function(){
+                        return $.ajax({
+                            url:"/admin/salesReturn/"+id,
+                            method:'DELETE',
+                            data: {
+                                is_purchase:is_purchase, _token: '{!! csrf_token() !!}',
+                            },
+                            dataType:"json",
+                            beforeSend:function(){
+                               
+                            },
+                            success:function(data){
+                                
+                                if(data.success){
+                                    $('#success-alert').addClass('bg-primary');
+                                    $('#success-alert').html('<strong>' + data.success + '</strong>');
+                                    $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                                        $("#success-alert").slideUp(500);
+                                    });
+                                    returns();
+                                }
+                            }
+                        })
+                    }
+                },
+                cancel:  {
+                    text: 'cancel',
+                    btnClass: 'btn-red',
+                    keys: ['enter', 'shift'],
+                }
+            }
+        });
+    });
+
 
 </script>
 @endsection

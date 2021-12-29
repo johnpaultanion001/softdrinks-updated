@@ -34,6 +34,8 @@ class DatabaseSeeder extends Seeder
             SalesInventorySeeder::class,
             EmptyBottlesInventorySeeder::class,
             ReceivingProductSeeder::class,
+            PayableReceivingGoodSeeder::class,
+            LocationProductSeeder::class,
            
         ]);
     }

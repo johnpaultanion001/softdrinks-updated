@@ -30,16 +30,16 @@
                         {{$product->qty ?? '' }}
                     </td>
                     <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->unit_cost , 2, '.', ',') }}
+                        {{  number_format($product->unit_cost , 2, '.', ',') }}
                     </td>
                     <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->regular_discount , 2, '.', ',') }}
+                        {{  number_format($product->regular_discount , 2, '.', ',') }}
                     </td>
                     <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->hauling_discount , 2, '.', ',') }}
+                        {{  number_format($product->hauling_discount , 2, '.', ',') }}
                     </td>
                     <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->price , 2, '.', ',') }}
+                        {{  number_format($product->price , 2, '.', ',') }}
                     </td>
                     <td>
                         {{ $product->product_remarks ?? '' }}
@@ -57,7 +57,7 @@ $(function () {
 
     $.extend(true, $.fn.dataTable.defaults, {
         pageLength: 10,
-        'columnDefs': [{ 'orderable': false, 'targets': 0 }],
+        'columnDefs': [{ 'orderable': true, 'targets': 0 }],
     });
     $('.datatable-stock_history:not(.ajaxTable)').DataTable({ buttons: dtButtons });
 });

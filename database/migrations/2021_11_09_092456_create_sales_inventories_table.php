@@ -21,7 +21,6 @@ class CreateSalesInventoriesTable extends Migration
             $table->string('category_id');
             $table->longText('description');
 
-            $table->float('stock');
             $table->float('qty');
             $table->float('sold')->default(0);
             $table->float('orders')->default(0);
@@ -36,8 +35,7 @@ class CreateSalesInventoriesTable extends Migration
             
             $table->longText('product_remarks')->nullable();
            
-            $table->string('location_id')->default(2);
-            $table->string('supplier_id')->default(1);
+            $table->string('supplier_id')->nullable();
             
             $table->boolean('isComplete')->default(false);
             $table->boolean('isRemove')->default(false);

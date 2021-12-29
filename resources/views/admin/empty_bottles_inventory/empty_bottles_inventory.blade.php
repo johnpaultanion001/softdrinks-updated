@@ -45,22 +45,26 @@
               @foreach($emptybottles as $bottle)
                     <tr data-entry-id="{{ $bottle->id ?? '' }}">
                         <td>
-                              @foreach($bottle->sales_returns as $return)
-                                <div class="bg-info text-white" style="border-radius: 5px; padding: 5px;">
-                                  {{$return->salesinvoice->customer->customer_name ?? ''}} <br>
-                                  QTY: + {{$return->return_qty ?? ''}} <br>
-                                  Status: {{$return->status->title ?? ''}} <br> 
-                                  {{$return->remarks ?? ''}}
-                                </div> <br>
-                              @endforeach
-                              @foreach($bottle->recieve_returns as $return)
-                                <div class="bg-warning text-white" style="border-radius: 5px; padding: 5px;">
-                                  {{$return->receiving_good->supplier->name ?? ''}} <br>
-                                  QTY: - {{$return->return_qty ?? ''}} <br>
-                                  Status: {{$return->status->title ?? ''}} <br> 
-                                  {{$return->remarks ?? ''}}
-                                </div> <br>
-                              @endforeach
+                              <div style="max-height: 250px; overflow: auto;">
+                                @foreach($bottle->sales_returns as $return)
+                                  <div class="bg-info text-white" style="border-radius: 5px; padding: 5px;">
+                                    {{$return->salesinvoice->customer->customer_name ?? ''}} <br>
+                                    QTY: + {{$return->return_qty ?? ''}} <br>
+                                    Status: {{$return->status->title ?? ''}} <br> 
+                                    {{$return->remarks ?? ''}}
+                                  </div> <br>
+                                @endforeach
+                                @foreach($bottle->recieve_returns as $return)
+                                  <div class="bg-warning text-white" style="border-radius: 5px; padding: 5px;">
+                                    {{$return->receiving_good->supplier->name ?? ''}} <br>
+                                    QTY: - {{$return->return_qty ?? ''}} <br>
+                                    Status: {{$return->status->title ?? ''}} <br> 
+                                    {{$return->remarks ?? ''}}
+                                  </div> <br>
+                                @endforeach
+                              </div>
+                              
+                              
                         </td>
                         <td>
                             @if($bottle->product_id == 0)

@@ -31,7 +31,6 @@ class SalesReturnController extends Controller
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
             'product_id' => ['required'],
-            'pricetype_id' => ['required'],
             'unit_price' => ['required' ,'numeric','min:0'],
             'return_qty' => ['required' ,'numeric','min:0'],
             'status_id' => ['required'],
@@ -40,28 +39,22 @@ class SalesReturnController extends Controller
         if ($validated->fails()) {
             return response()->json(['errors' => $validated->errors()]);
         }
-        $discount = PriceType::where('id', $request->pricetype_id)->first();
-
-        $discounted = $request->input('return_qty') * $discount->discount;
+        
         $amount =  $request->input('return_qty') * $request->input('unit_price');
-
-        $over_all_amount = $amount - $discounted;
 
         SalesReturn::updateOrCreate(
         [
-            'product_id' => $request->input('product_id'),
+            'product_id'      => $request->input('product_id'),
             'salesinvoice_id' => $request->input('salesinvoice_id_return'),
         ],
         [
-            'product_id' => $request->input('product_id'),
-            'pricetype_id' => $request->input('pricetype_id'),
-            'unit_price' => $request->input('unit_price'),
-            'return_qty' => $request->input('return_qty'),
-            'salesinvoice_id' => $request->input('salesinvoice_id_return'),
-            'amount' => $over_all_amount,
-            'discounted' => $discounted,
-            'status_id'     => $request->input('status_id'),
-            'remarks'     => $request->input('remarks'),
+            'product_id'        => $request->input('product_id'),
+            'unit_price'        => $request->input('unit_price'),
+            'return_qty'        => $request->input('return_qty'),
+            'salesinvoice_id'   => $request->input('salesinvoice_id_return'),
+            'amount'            => $amount,
+            'status_id'         => $request->input('status_id'),
+            'remarks'           => $request->input('remarks'),
         ]);
 
         return response()->json(['success' => 'Returned Successfully.']);
@@ -87,7 +80,6 @@ class SalesReturnController extends Controller
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
             'product_id' => ['required'],
-            'pricetype_id' => ['required'],
             'unit_price' => ['required' ,'numeric','min:0'],
             'return_qty' => ['required' ,'numeric','min:0'],
             'status_id' => ['required'],
@@ -97,33 +89,31 @@ class SalesReturnController extends Controller
             return response()->json(['errors' => $validated->errors()]);
         }
 
-        $discount = PriceType::where('id', $request->pricetype_id)->first();
-
-        $discounted = $request->input('return_qty') * $discount->discount;
         $amount =  $request->input('return_qty') * $request->input('unit_price');
 
-        $over_all_amount = $amount - $discounted;
-
-
-
         SalesReturn::find($salesReturn->id)->update([
-            'product_id' => $request->input('product_id'),
-            'pricetype_id' => $request->input('pricetype_id'),
-            'unit_price' => $request->input('unit_price'),
-            'return_qty' => $request->input('return_qty'),
-            'amount' => $over_all_amount,
-            'discounted' => $discounted,
-            'status_id'     => $request->input('status_id'),
-            'remarks'     => $request->input('remarks'),
+
+            'product_id'        => $request->input('product_id'),
+            'unit_price'        => $request->input('unit_price'),
+            'return_qty'        => $request->input('return_qty'),
+            'amount'            => $amount,
+            'status_id'         => $request->input('status_id'),
+            'remarks'           => $request->input('remarks'),
         ]);
 
         return response()->json(['success' => 'Updated Successfully.']);
     }
 
    
-    public function destroy(SalesReturn $salesReturn)
+    public function destroy(Request $request ,SalesReturn $salesReturn)
     {
-        SalesReturn::find($salesReturn->id)->delete();
+        $is_purchase = $request->get('is_purchase');
+        if($is_purchase == 'YES'){
+            EmptyBottlesInventory::where('product_id', $salesReturn->product_id)->decrement('qty', $salesReturn->return_qty);
+            $salesReturn->delete();
+        }else{
+            $salesReturn->delete();
+        }
         return response()->json(['success' => 'Removed Successfully.']);
     }
 }

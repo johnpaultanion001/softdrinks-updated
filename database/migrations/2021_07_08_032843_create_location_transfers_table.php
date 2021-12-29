@@ -18,9 +18,6 @@ class CreateLocationTransfersTable extends Migration
             $table->date('entry_date');
             $table->string('reference')->nullable();
             $table->date('reference_date')->nullable();
-            $table->string('location_from');
-            $table->string('location_to');
-            $table->string('transfer_count')->nullable();
             $table->string('prepared_by')->nullable();
             $table->longText('remarks')->nullable();
             $table->integer('isRemove')->default(0);

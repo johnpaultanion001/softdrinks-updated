@@ -16,7 +16,6 @@ class SalesInventory extends Model
         'category_id',
         'description',
 
-        'stock',
         'qty',
         'sold',
         'orders',
@@ -30,7 +29,6 @@ class SalesInventory extends Model
         'hauling_discount',
     
         'product_remarks',
-        'location_id',
         'supplier_id',
 
         'isComplete',
@@ -66,5 +64,14 @@ class SalesInventory extends Model
     {
         return $this->hasMany(Sales::class, 'product_id', 'id');
     }
+    public function location_products()
+    {
+        return $this->hasMany(LocationProduct::class, 'product_id', 'id');
+    }
+    public function location_products_stock()
+    {
+        return $this->hasMany(LocationProduct::class, 'product_id', 'id')->where('location_id', 2)->sum('stock');
+    }
+
 
 }

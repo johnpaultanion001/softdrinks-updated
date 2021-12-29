@@ -156,25 +156,17 @@
                                         </span>
                                     </div>
                                 </div>
+                                
                                 <div class="col-sm-3">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Location</label>
-                                        <input type="text" name="location" id="location" class="form-control" readonly/>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-location"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Stock</label>
+                                        <label class="control-label text-uppercase" >Overall Stock</label>
                                         <input type="text" name="stock" id="stock" class="form-control" readonly/>
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-stock"></strong>
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-sm">
+                                <div class="col-sm-3">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Sold</label>
                                         <input type="text" name="sold" id="sold" class="form-control" readonly/>
@@ -183,7 +175,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-sm">
+                                <div class="col-sm-3">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Unit Price</label>
                                         <input type="text" name="unit_price" id="unit_price" class="form-control" readonly/>
@@ -192,13 +184,13 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-sm">
+                                <div class="col-sm-3">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Created At</label>
                                         <input type="text" name="created_date" id="created_date" class="form-control" readonly/>
                                     </div>
                                 </div>
-                                <div class="col-sm">
+                                <div class="col-sm-3">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Created By</label>
                                         <input type="text" name="created_by" id="created_by" class="form-control" readonly/>
@@ -275,7 +267,15 @@
 
                         </div>
 
-                        
+                        <div class="col-sm-12 row">
+                            <div class="col-sm-6 mb-2">
+                                <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">Location Stock</h4>
+                            </div>
+                           <div class="col-sm-12" id="location_stocks">
+
+                           </div>
+
+                        </div>
                        
                     </div>
                     
@@ -354,9 +354,6 @@ $(document).on('click', '.ev_product', function(){
             if(data.supplier){
                 $('#supplier').val(data.supplier);
             }
-            if(data.location){
-                $('#location').val(data.location);
-            }
             if(data.created_by){
                 $('#created_by').val(data.created_by);
             }
@@ -366,9 +363,13 @@ $(document).on('click', '.ev_product', function(){
             if(data.unit_price){
                 $('#unit_price').val(data.unit_price);
             }
+            if(data.stock){
+                $('#stock').val(data.stock);
+            }
             
             stock_history();
             sales_history();
+            location_stocks();
 
         }
     })
@@ -401,6 +402,21 @@ function sales_history(){
         },
         success: function(response){
             $("#sales_history").html(response);
+        }	
+    })
+}
+function location_stocks(){
+    var id = $('#product_hidden_id').val();
+
+    $.ajax({
+        url: "/admin/sales_inventory/"+id+"/location_stocks", 
+        type: "get",
+        dataType: "HTMl",
+        beforeSend: function() {
+           
+        },
+        success: function(response){
+            $("#location_stocks").html(response);
         }	
     })
 }

@@ -17,6 +17,7 @@ use App\Models\Supplier;
 use App\Models\Location;
 use App\Models\PriceType;
 use App\Models\ReceivingProduct;
+use App\Models\LocationProduct;
 
 
 
@@ -124,7 +125,6 @@ class SalesInventoryController extends Controller
                 'category_id' => $request->input('category_id'),
                 'description' => $request->input('description'),
 
-                'stock' => $request->input('qty'),
                 'qty' => $request->input('qty'),
 
                 'size_id' => $request->input('size_id'),
@@ -149,7 +149,7 @@ class SalesInventoryController extends Controller
    
     public function show(SalesInventory $sales_inventory)
     {
-        $pricetypes = PriceType::where('isRemove', '0')->latest()->get();
+        $pricetypes = PriceType::where('isRemove', '0')->orderBy('id','asc')->get();
         return view('admin.salesinvoice.product_sales_modal.viewmodal', compact('sales_inventory','pricetypes'));
     }
 
@@ -196,8 +196,7 @@ class SalesInventoryController extends Controller
                 'product_code' => trim(strtoupper($request->input('product_code'))),
                 'category_id' => $request->input('category_id'),
                 'description' => $request->input('description'),
-    
-                'stock' => $request->input('qty'),
+
                 'qty' => $request->input('qty'),
 
                 'size_id' => $request->input('size_id'),
@@ -223,10 +222,14 @@ class SalesInventoryController extends Controller
         if($rg_id == ""){
             SalesInventory::find($sales_inventory)->delete();
         }else{
-            $rp = ReceivingProduct::find($sales_inventory)->first();
-            SalesInventory::where('id', $rp->product_id)
+            $rp = ReceivingProduct::find($sales_inventory);
+            
+            LocationProduct::where('product_id', $rp->product_id)
+                                ->where('location_id',$rp->location_id)
                                 ->decrement('stock', $rp->qty);
+
             UCS::where('product_id', $rp->id)->where('receiving_good_id', $rp->receiving_good_id)->delete();
+            
             $rp->delete();
         }
 
@@ -253,10 +256,10 @@ class SalesInventoryController extends Controller
                     'size'           => $sales_inventory->size->size,
                     'category'       => $sales_inventory->category->name,
                     'supplier'       => $sales_inventory->supplier->name,
-                    'location'       => $sales_inventory->location->location_name,
                     'created_by'     => $sales_inventory->receiving_good->user->name,
                     'created_date'   => $sales_inventory->created_at->format('F d,Y h:i A'),
                     'unit_price'     => '₱ ' . number_format($sales_inventory->price , 2, '.', ','),
+                    'stock'          => $sales_inventory->location_products->sum('stock'),
                 ]
             );
         }
@@ -268,6 +271,10 @@ class SalesInventoryController extends Controller
     public function sales_history(SalesInventory $sales_inventory){
         $sales_history = $sales_inventory->sales_histories()->latest()->get();
         return view('admin.salesinventories.histories.sales',compact('sales_history'));
+    }
+    public function location_stocks(SalesInventory $sales_inventory){
+        $location_stocks = $sales_inventory->location_products()->orderBy('id', 'asc')->get();
+        return view('admin.salesinventories.histories.location_stocks',compact('location_stocks'));
     }
 
     public function update_ev(Request $request, SalesInventory $sales_inventory)

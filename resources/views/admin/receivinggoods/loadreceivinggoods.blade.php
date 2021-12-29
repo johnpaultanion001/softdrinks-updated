@@ -73,15 +73,12 @@
                             {{  $order->returns->count() ?? '' }}
                         </td>
                         <td>
-                            <large class="text-success font-weight-bold mr-1">₱</large> 
                             {{ number_format($order->products->sum('total_cost') ?? '' , 2, '.', ',') }}
                         </td>
                         <td>
-                            <large class="text-success font-weight-bold mr-1">₱</large> 
                             ({{ number_format($order->returns->sum('amount') ?? '' , 2, '.', ',') }})
                         </td>
                         <td>
-                        <large class="text-success font-weight-bold mr-1">₱</large> 
                           {{ number_format($payment ?? '' , 2, '.', ',') }}
                         </td>
                         <td>
@@ -91,7 +88,7 @@
                             {{  $order->remarks ?? '' }}
                         </td>
                         <td>
-                          {{ $order->created_at->format('F d,Y h:i A') }}
+                          {{ $order->created_at->format('M j , Y h:i A') }}
                         </td>
                         
                     </tr>

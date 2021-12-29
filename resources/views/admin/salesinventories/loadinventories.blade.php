@@ -13,7 +13,7 @@
         </div>
 
         <div class="table-responsive">
-          <table class="table align-items-center table-flush datatable-inventries display" cellspacing="0" width="100%">
+          <table class="table align-items-center table-flush datatable-inventries display table-lg" cellspacing="0" width="100%">
             <thead class="thead-white">
               <tr>
                 <th scope="col">Actions</th>
@@ -22,13 +22,14 @@
 
                 <th scope="col">Product Code</th>
                 <th scope="col">Description</th>
-                <th scope="col">Stock</th>
+                <th scope="col">Overall Stock</th>
+                <th scope="col">Location Stock</th>
                 <th scope="col">Sold</th>
 
                 <th scope="col">Size</th>
                 <th scope="col">Category</th>
                 <th scope="col">Supplier</th>
-                <th scope="col">Location</th>
+                
 
                 <th scope="col">Unit Price</th>
                 <th scope="col">Remarks</th>
@@ -59,7 +60,14 @@
                           {{  $product->description ?? '' }}
                       </td>
                       <td>
-                          {{  $product->stock ?? '' }}
+                          {{  $product->location_products->sum('stock') ?? ''}}
+                      </td>
+                      <td>
+                        <div style="max-height: 100px; overflow: auto;">
+                            @foreach($product->location_products as $lp)
+                              {{$lp->location->location_name ?? ''}} ({{$lp->stock ?? ''}}) <br>
+                            @endforeach
+                        </div>
                       </td>
                       <td>
                           {{  $product->sold ?? '' }}
@@ -75,21 +83,17 @@
                           {{  $product->receiving_good->supplier->name ?? '' }}
                       </td>
                       <td>
-                          {{  $product->location->location_name ?? '' }}
-                      </td>
-
-                      <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($product->price , 2, '.', ',') }}
+                          {{  number_format($product->price , 2, '.', ',') }}
                       </td>
     
                       <td>
                           {{  $product->product_remarks ?? '' }}
                       </td>
                       <td>
-                          {{ $product->updated_at->format('F d,Y h:i A') }}
+                          {{ $product->updated_at->format('M j , Y h:i A') }}
                       </td>
                       <td>
-                          {{ $product->created_at->format('F d,Y h:i A') }}
+                          {{ $product->created_at->format('M j , Y h:i A') }}
                       </td>
                     </tr>
                 @endforeach
@@ -134,7 +138,7 @@ $(function () {
   });
 
   $('select[name="filter_location"]').on('change', function () {
-    table.columns(10).search( this.value ).draw();
+    table.columns(6).search( this.value ).draw();
   });
 
     

@@ -15,6 +15,7 @@ use App\Models\SalesInventory;
 use App\Models\PendingReturnedProduct;
 use App\Models\RecieveReturn;
 use App\Models\EmptyBottlesInventory;
+use App\Models\LocationProduct;
 use Validator;
 use Gate;
 
@@ -37,6 +38,20 @@ class ReceivingGoodController extends Controller
 
         return view('admin.receivinggoods.receivinggoods', compact('suppliers','products','categories','sizes','locations','status','product_code'));
     }
+    public function create()
+    {
+        abort_if(Gate::denies('receiving_goods_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $action = 'Add';
+        $suppliers = Supplier::where('isRemove', 0)->latest()->get();
+        $locations = Location::where('isRemove', 0)->latest()->get();
+        $products = SalesInventory::latest()->get();
+        $categories = Category::where('isRemove', 0)->latest()->get();
+        $sizes = Size::where('isRemove', 0)->latest()->get();
+        $status = StatusReturn::where('isRemove', 0)->latest()->get();
+        $product_code = EmptyBottlesInventory::orderBy('product_id', 'asc')->get();
+
+        return view('admin.receivinggoods.receiving_goods_form', compact('action','suppliers','products','categories','sizes','locations','status','product_code'));
+    }
  
     public function load()
     {
@@ -46,9 +61,18 @@ class ReceivingGoodController extends Controller
     }
     public function edit(ReceivingGood $receiving_good)
     {
-        if (request()->ajax()) {
-            return response()->json(['result' => $receiving_good]);
-        }
+        abort_if(Gate::denies('receiving_goods_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $action = 'Edit';
+        $suppliers = Supplier::where('isRemove', 0)->latest()->get();
+        $locations = Location::where('isRemove', 0)->latest()->get();
+        $products = SalesInventory::latest()->get();
+        $categories = Category::where('isRemove', 0)->latest()->get();
+        $sizes = Size::where('isRemove', 0)->latest()->get();
+        $status = StatusReturn::where('isRemove', 0)->latest()->get();
+        $product_code = EmptyBottlesInventory::orderBy('product_id', 'asc')->get();
+        
+
+        return view('admin.receivinggoods.receiving_goods_form', compact('receiving_good','action','suppliers','products','categories','sizes','locations','status','product_code'));
     }
 
     public function pending_product(Request $request)
@@ -61,8 +85,6 @@ class ReceivingGoodController extends Controller
         }
         return view('admin.receivinggoods.pending_products', compact('pendingproducts'));
     }
-
-    
 
     public function total(Request $request)
     {
@@ -157,9 +179,7 @@ class ReceivingGoodController extends Controller
         $existingproducts = SalesInventory::where('isComplete', true)->where('isRemove', false)->get();
 
         foreach ($pendingproducts as $product){
-                SalesInventory::where('product_code', $product->product_code)
-                    ->where('isComplete', true)
-                    ->increment('stock', $product->qty);
+               
                 $ep = SalesInventory::where('product_code', $product->product_code)
                                     ->where('isComplete', true)->first();
 
@@ -183,25 +203,41 @@ class ReceivingGoodController extends Controller
 
 
                     'product_remarks'   => $product->product_remarks,
-                    'location_id'       => $product->location_id,
-                    'supplier_id'       => $product->supplier_id,
-                ]) ;
+                    'location_id'       => $request->input('location_id'),
+                    'supplier_id'       => $request->input('supplier_id'),
+                ]);
 
                 $ucs = Size::where('id', $product->size_id)->first();
-                    if($ucs->ucs != ""){
-                        $ucs_percase = $ucs->ucs * $product->qty;
-                        UCS::create(
-                            [
-                                'receiving_good_id'     => $product->receiving_good_id,
-                                'product_id'            => $rp->id,
-                                'ucs'                   => $ucs_percase,
-                                'status_size'           => $ucs->status,
-                                'qty'                   => $product->qty,
-                                'ucs_size'              => $ucs->ucs,
-                                'isComplete'            => true,
-                            ]
-                        );
-                    }
+                if($ucs->ucs != ""){
+                    $ucs_percase = $ucs->ucs * $product->qty;
+                    UCS::create(
+                        [
+                            'receiving_good_id'     => $product->receiving_good_id,
+                            'product_id'            => $rp->id,
+                            'ucs'                   => $ucs_percase,
+                            'status_size'           => $ucs->status,
+                            'qty'                   => $product->qty,
+                            'ucs_size'              => $ucs->ucs,
+                            'isComplete'            => true,
+                        ]
+                    );
+                }
+
+                $location_product = LocationProduct::where('product_id', $ep->id ?? $product->id)
+                                                    ->where('location_id',$request->input('location_id'))
+                                                    ->first();
+                if($location_product === null){
+                    LocationProduct::create([
+                        'product_id'    => $ep->id ?? $product->id,
+                        'location_id'   => $request->input('location_id'),
+                        'stock'         => $product->qty,
+                    ]);
+                }else{
+                    LocationProduct::where('product_id', $ep->id ?? $product->id)
+                                    ->where('location_id',$request->input('location_id'))
+                                    ->increment('stock', $product->qty);
+                }
+                
         }
 
         foreach($existingproducts as $eproduct){
@@ -213,7 +249,6 @@ class ReceivingGoodController extends Controller
         SalesInventory::where('isComplete', false)->update(
             [
                 'supplier_id'   => $request->input('supplier_id'),
-                'location_id'   => $request->input('location_id'),
                 'isComplete'    => true,
             ]
         );
@@ -226,10 +261,6 @@ class ReceivingGoodController extends Controller
                                         ->decrement('qty', $return->return_qty);
             }
         } 
-
-
-
-        
 
         return response()->json(['success' => 'Added Receiving Good Successfully.']);
 
@@ -306,7 +337,6 @@ class ReceivingGoodController extends Controller
                 'product_code'       => $product->product_code,
                 'category_id'        => $product->category_id,
                 'description'        => $product->description,
-                'stock'              => $product->qty,
                 'qty'                => $product->qty,
                 'size_id'            => $product->size_id,
                 'expiration'         => $product->expiration,

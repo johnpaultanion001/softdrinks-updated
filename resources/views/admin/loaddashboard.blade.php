@@ -4,7 +4,7 @@
            
         <!-- Card stats -->
         <div class="row">
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-4 col-md-6">
             <div class="card card-dashboard card-stats">
             <!-- Card body -->
                 <div class="card-body">
@@ -39,41 +39,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card card-stats">
-            <!-- Card body -->
-            <div class="card-body">
-                <div class="row">
-                <div class="col">
-                    <h5 class="card-title text-uppercase text-muted mb-0">Out of stock</h5>
-                    <span class="h2 font-weight-bold mb-0">
-                      @if($outofstock->count() > 0 ) 
-                         {{ count($outofstock) ?? '' }}
-                      @else
-                           0
-                      @endif  
-                    </span>
-                </div>
-                <div class="col-auto">
-                    <div class="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
-                       <h2 class="text-white font-weight-bold mt-2">0</h2>
-                    </div>
-                </div>
-                </div>
-                <p class="mt-3 mb-0 text-sm">
-                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i>
-                     @if($outofstockmonthly->count() > 0 ) 
-                            {{ number_format(count($outofstockmonthly) ?? '' , 0, ',', '.') }}
-                     @else
-                            0
-                      @endif  
-                </span>
-                <span class="text-nowrap">Since this month</span>
-                </p>
-            </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-4 col-md-6">
             <div class="card card-stats">
             <!-- Card body -->
             <div class="card-body">
@@ -107,7 +73,7 @@
             </div>
             </div>
         </div>
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-4 col-md-6">
             <div class="card card-stats">
             <!-- Card body -->
             <div class="card-body">
@@ -168,7 +134,7 @@
                 <thead class="thead-light">
                   <tr>
                     <th scope="col">Description</th>
-                    <th scope="col">Product stock</th>
+                    <th scope="col">Selling Area Stock</th>
                     <th scope="col">Product price</th>
                     <th scope="col">Sold</th>
                   </tr>
@@ -180,7 +146,7 @@
                         {{  $product->description ?? '' }}
                     </td>
                     <td>
-                       {{  $product->stock ?? '' }}
+                       {{  $product->location_products_stock() ?? '' }}
                     </td>
                     <td>
                        <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($product->price ?? '' , 2, '.', ',') }}

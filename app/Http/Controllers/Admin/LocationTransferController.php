@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\LocationTransfer;
 use App\Models\Location;
+use App\Models\LocationProduct;
 use App\Models\SalesInventory;
+use App\Models\PendingTransfer;
 use Illuminate\Http\Request;
 use Validator;
 use Gate;
@@ -25,20 +27,20 @@ class LocationTransferController extends Controller
     }
 
     
-    public function locationfrom(Request $request, $location)
-    {
-        $location_from = SalesInventory::where('isRemove', 0)->where('isComplete', true)->where('location_id', $location)->where('stock' , '>' , 0)->latest()->get();
-        $location = Location::where('isRemove', 0)->where('id', $location)->firstorfail();
-        $location_title = $location->location_name;
-        return view('admin.locationtransfer.loadlocationfrom', compact('location_from' , 'location_title'));
-    }
-    public function locationto(Request $request, $location)
-    {
-        $location_to = SalesInventory::where('isRemove', 0)->where('isComplete', true)->where('location_id', $location)->where('stock' , '>' , 0)->latest()->get();
-        $location = Location::where('isRemove', 0)->where('id', $location)->firstorfail();
-        $location_title = $location->location_name;
-        return view('admin.locationtransfer.loadlocationto', compact('location_to', 'location_title'));
-    }
+    // public function locationfrom(Request $request, $location)
+    // {
+    //     $location_from = SalesInventory::where('isRemove', 0)->where('isComplete', true)->where('location_id', $location)->where('stock' , '>' , 0)->latest()->get();
+    //     $location = Location::where('isRemove', 0)->where('id', $location)->firstorfail();
+    //     $location_title = $location->location_name;
+    //     return view('admin.locationtransfer.loadlocationfrom', compact('location_from' , 'location_title'));
+    // }
+    // public function locationto(Request $request, $location)
+    // {
+    //     $location_to = SalesInventory::where('isRemove', 0)->where('isComplete', true)->where('location_id', $location)->where('stock' , '>' , 0)->latest()->get();
+    //     $location = Location::where('isRemove', 0)->where('id', $location)->firstorfail();
+    //     $location_title = $location->location_name;
+    //     return view('admin.locationtransfer.loadlocationto', compact('location_to', 'location_title'));
+    // }
 
 
 
@@ -108,9 +110,70 @@ class LocationTransferController extends Controller
    
     public function destroy(LocationTransfer $locationTransfer)
     {
-        LocationTransfer::find($locationTransfer->id)->update([
-            'isRemove' => '1',
-        ]);
-        return response()->json(['success' => 'Removed Successfully.']);
+        // LocationTransfer::find($locationTransfer->id)->update([
+        //     'isRemove' => '1',
+        // ]);
+        // return response()->json(['success' => 'Removed Successfully.']);
     }
+    public function products()
+    {
+        $products = SalesInventory::where('isComplete', true)->where('isRemove', false)->latest()->get();
+        return view('admin.locationtransfer.product_location',compact('products'));
+    }
+    public function pending_transfer(){
+        $transfers = PendingTransfer::where('isComplete', false)->latest()->get();
+        return view('admin.locationtransfer.pending_transfer',compact('transfers'));
+    }
+
+    public function product(Request $request){
+        $product_id = $request->get('product_id');
+        $product_location = LocationProduct::where('product_id', $product_id)->get();
+        return view('admin.locationtransfer.product_location_dd',compact('product_location'));
+    }
+
+    public function store_pending_transfer(Request $request){
+        date_default_timezone_set('Asia/Manila');
+        $validated =  Validator::make($request->all(), [
+            'location_from' => ['required'],
+            'location_to'   => ['required' , 'different:location_from'],
+            'qty'           => ['required'],
+        ]);
+       
+
+        if ($validated->fails()) {
+            return response()->json(['errors' => $validated->errors()]);
+        }
+        $stock_location = LocationProduct::where('product_id', $request->input('product_id'))
+                                        ->where('location_id', $request->input('location_from'))
+                                        ->first();
+        $total_stock = PendingTransfer::where('product_id', $request->input('product_id'))
+                                            ->where('location_from', $request->input('location_from'))
+                                            ->sum('qty');
+        $transfer_stock = $total_stock + $request->input('qty');
+
+        if($request->input('qty') > $stock_location->stock)
+        {
+            return response()->json(['less_stock' => 'Insufficient Stocks. Available Stock: '.$stock_location->stock]);
+        }
+        if($transfer_stock > $stock_location->stock)
+        {
+            return response()->json(['less_stock' => 'Insufficient Stocks. Available Stock: '.$stock_location->stock]);
+        }
+        $lt_id = LocationTransfer::orderby('id', 'desc')->first();
+        if($lt_id == null){
+            $locationTransfer_id = 1;
+        }else{
+            $locationTransfer_id = $lt_id->id + 1;
+        }
+        PendingTransfer::create([
+            'lt_id'          => $locationTransfer_id,
+            'product_id'     => $request->input('product_id'),
+            'location_from'  => $request->input('location_from'),
+            'location_to'    => $request->input('location_to'),
+            'qty'            => $request->input('qty'),
+        ]);
+
+        return response()->json(['success' => 'Added Successfully.']);
+    }
+
 }

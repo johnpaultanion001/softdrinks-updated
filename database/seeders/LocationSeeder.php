@@ -16,20 +16,17 @@ class LocationSeeder extends Seeder
     {
         $locations = [
             [
-                'id'    => '1',
-                'location_name' => 'Stock Room',
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s"),
-            ],
-            [
-                'id'    => '2',
                 'location_name' => 'Selling Area',
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],
             [
-                'id'    => '3',
-                'location_name' => 'Stock Room 2',
+                'location_name' => 'Stock Room',
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s"),
+            ],
+            [
+                'location_name' => 'Bad Order',
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],

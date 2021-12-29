@@ -52,7 +52,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        $pricetypes = PriceType::where('isRemove', '0')->latest()->get();
+        $pricetypes = PriceType::where('isRemove', '0')->orderBy('id', 'asc')->get();
         return view('admin.salesinvoice.product_sales_modal.editmodal', compact('order', 'pricetypes'));
     }
 
@@ -85,32 +85,26 @@ class OrderController extends Controller
             return response()->json(['errors' => $errors->errors()]);
         }
 
-        if($request->purchase_qty_edit > $order->product->stock){
-            return response()->json(['nostock' => 'Insufficient Stocks. Availalbe Stock:'.$order->product->stock]);
+        if($request->purchase_qty_edit > $order->product->location_products_stock()){
+            return response()->json(['nostock' => 'Insufficient Stocks. Available Stock:'.$order->product->location_products_stock()]);
         }
         
-        if($order->product->orders  >  $order->product->stock){
-            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$order->product->orders.' has reach maximum stock of the product' . ' Availalbe Stock:'.$order->product->stock]);
+        if($order->product->orders  >  $order->product->location_products_stock()){
+            return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$order->product->orders.' has reach maximum stock of the product' . ' Available Stock:'.$order->product->location_products_stock()]);
         }
         
 
         if($order->purchase_qty < $request->purchase_qty_edit){
             $changeqty = $request->purchase_qty_edit - $order->purchase_qty;
-            
-            if($changeqty  > $order->product->stock){
-                return response()->json(['nostock' => 'Insufficient Stocks. Availalbe Stock:'.$order->product->stock]);
+            if($changeqty  > $order->product->location_products_stock()){
+                return response()->json(['nostock' => 'Insufficient Stocks. Available Stock:'.$order->product->location_products_stock()]);
             }
-            if($order->product->orders + $changeqty  >  $order->product->stock){
-                return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$order->product->orders.' has reach maximum stock of the product' . ' Availalbe Stock:'.$order->product->stock]);
+            if($order->product->orders + $changeqty  >  $order->product->location_products_stock()){
+                return response()->json(['maxstock' => 'Insufficient Stocks. This Orders:'.$order->product->orders.' has reach maximum stock of the product' . ' Available Stock:'.$order->product->location_products_stock()]);
             }
-    
-            SalesInventory::where('id', $order->product->id)->increment('orders', $changeqty);
          }
          if($order->purchase_qty > $request->purchase_qty_edit){
             $changeqty = $order->purchase_qty - $request->purchase_qty_edit;
-    
-          
-            SalesInventory::where('id', $order->product->id)->decrement('orders', $changeqty);
          }
 
 
@@ -137,6 +131,10 @@ class OrderController extends Controller
                 'total_cost'            =>  $over_all_cost,
         ]);
 
+        SalesInventory::where('id', $order->product->id)->update(['orders' =>
+                                                Order::where('product_id', $order->product->id)
+                                                       ->sum('purchase_qty')]);
+
         return response()->json(['success' => 'Order Successfully Updated.']);
     }
 
@@ -148,10 +146,10 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //    SalesInventory::where('id', $order->product->id)->increment('stock', $order->purchase_qty);
-        //    SalesInventory::where('id', $order->product->id)->decrement('sold', $order->purchase_qty); 
-
-       SalesInventory::where('id', $order->product->id)->decrement('orders', $order->purchase_qty);
-       return response()->json(['success' => 'Order Removed Successfully.' , $order->delete()]);
+        $order->delete();
+        SalesInventory::where('id', $order->product->id)->update(['orders' =>
+                                                                Order::where('product_id', $order->product->id)
+                                                                        ->sum('purchase_qty')]);
+       return response()->json(['success' => 'Order Removed Successfully.']);
     }
 }

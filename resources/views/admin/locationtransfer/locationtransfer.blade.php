@@ -10,147 +10,114 @@
 
 
 @section('content')
+
 <div class="header bg-primary pb-6">
     <div class="container-fluid">
-        <div class="col text-right">
-            <button type="button" name="all_records" id="all_records" class="all_records btn btn-sm btn-default">All Records</button>
-        </div>
-        <form method="post" id="myForm" class="form-horizontal">
-            @csrf
-                <div class="row">
-                  
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <small class="text-white">Entry Date<span class="text-white">*</span></small>
-                            <input type="date" name="entry_date" id="entry_date" class="form-control" />
-                            <span class="invalid-feedback text-dark" role="alert">
-                                <strong id="error-entry_date"></strong>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                    </div>
-                    <div class="col-sm-2">
-                    </div>
+    </div>
+</div>
 
-                    <div class="col-sm-2">
-                        <div class="form-group">
-                            <small class="text-white">Reference</small>
-                            <input type="text" name="reference" id="reference" class="form-control" />
-                            <span class="invalid-feedback text-dark" role="alert">
-                                <strong id="error-reference"></strong>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="form-group">
-                            <small class="text-white">Reference Date</small>
-                            <input type="date" name="reference_date" id="reference_date" class="form-control" />
-                            <span class="invalid-feedback text-dark" role="alert">
-                                <strong id="error-reference_date"></strong>
-                            </span>
-                        </div>
-                    </div>
-              
-                  <div class="col-sm-5">
-                        <div class="form-group">
-                            <small class="text-white">Prepared By</small>
-                            <input type="text" name="prepared_by" id="prepared_by" class="form-control" />
-                            <span class="invalid-feedback text-dark" role="alert">
-                                <strong id="error-prepared_by"></strong>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
+<div class="container-fluid mt--6">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="mb-0 text-uppercase title-head" >LOCATION TRANSFER</h3> 
+                            </div>
+                            <div class="col text-right">
+                                <button type="button" name="all_records" id="all_records" class="all_records btn btn-sm btn-default">All Records</button>
+                            </div> 
                         
-                    </div>
-                    <div class="col-sm-5">
-                        <div class="form-group">
-                            <small class="text-white">Remarks</small>
-                            <input type="text" name="remarks" id="remarks" class="form-control"/>
-                            <span class="invalid-feedback text-dark" role="alert">
-                                <strong id="error-remarks"></strong>
-                            </span>
                         </div>
                     </div>
+                    <div id="loading-containermodal" class="loading-container">
+                        <div class="loading"></div>
+                        <div id="loading-text">loading</div>
+                    </div>
+                    <div class="card-body" id="rg_card_body">
+                        <form method="post" id="myForm" class="form-horizontal">
+                            @csrf
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-label text-uppercase" >Entry Date <span class="text-danger">*</span></label>
+                                        <input type="date" name="entry_date" id="entry_date" class="form-control" />
+                                        <span class="invalid-feedback text-dark" role="alert">
+                                            <strong id="error-entry_date"></strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-2"></div>
 
-                    <div class="col-sm-5">
-                        <div class="form-group">
-                        <small class="text-white">Location From</small>
-                            <select name="location_from" id="location_from" class="form-control select2">
-                                <option value="" disabled selected>Filter By Location</option>
-                                @foreach ($locations as $location)
-                                    <option value="{{$location->id}}"> {{$location->location_name}}</option>
-                                @endforeach
-                            </select>
-                            <span class="invalid-feedback text-dark" role="alert">
-                                <strong id="error-location_from"></strong>
-                            </span>
-                            
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                   
-                    </div>
-                    <div class="col-sm-5">
-                        <div class="form-group">
-                        <small class="text-white">Location To</small>
-                            <select name="location_to" id="location_to" class="form-control select2">
-                                <option value="" disabled selected>Filter By Location</option>
-                                @foreach ($locations as $location)
-                                    <option value="{{$location->id}}"> {{$location->location_name}}</option>
-                                @endforeach
-                            </select>
-                            <span class="invalid-feedback text-dark" role="alert">
-                                <strong id="error-location_to"></strong>
-                            </span>
-                            
-                        </div>
-                    </div>
-
-                    <div class="col-sm-3 mx-auto p-2">
-                        <input type="submit" name="action_button" id="action_button" class="text-white btn btn-default form-control" value="Submit"/>
-                       
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label class="control-label text-uppercase" >Reference</label>
+                                        <input type="text" name="reference" id="reference" class="form-control" />
+                                        <span class="invalid-feedback text-dark" role="alert">
+                                            <strong id="error-reference"></strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-label text-uppercase" >Reference Date</label>
+                                        <input type="date" name="reference_date" id="reference_date" class="form-control" />
+                                        <span class="invalid-feedback text-dark" role="alert">
+                                            <strong id="error-reference_date"></strong>
+                                        </span>
+                                    </div>
+                                </div>
+                        
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label class="control-label text-uppercase" >Prepared By</label>
+                                        <input type="text" name="prepared_by" id="prepared_by" class="form-control" />
+                                        <span class="invalid-feedback text-dark" role="alert">
+                                            <strong id="error-prepared_by"></strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-5">
+                                    <div class="form-group">
+                                        <label class="control-label text-uppercase" >Remarks</label>
+                                        <input type="text" name="remarks" id="remarks" class="form-control"/>
+                                        <span class="invalid-feedback text-dark" role="alert">
+                                            <strong id="error-remarks"></strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12">
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="card">
+                                                <div id="pending_transfer"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-12">
+                                            <div class="card">
+                                                <div id="products"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer text-right">
+                                <button type="button" class="btn btn-danger text-uppercase" >Cancel</button>
+                                <input type="submit" name="purchase_button" id="purchase_button" class="text-uppercase btn btn-primary" value="Submit" />
+                            </div>
+                        
+                        </form>
                     </div>
                     
 
                 </div>
+            </div>
 
-        </form>
-    </div>
-</div>
-<div class="container-fluid mt--6 table-load">
-  <div class="row">
-    <div class="col-xl-12">
-        <div class="card">
-            
-            <div id="loadlocationfrom"></div>
-
-            <div id="loading-locationfrom" class="loading-container" style="position: absolute; margin-left: 40%; z-index: 2;">
-                <div class="loading"></div>
-                <div id="loading-text">loading</div>
-            </div> 
-        <!-- table -->
-            
         </div>
     </div>
-
-    <div class="col-xl-12">
-        <div class="card">
-            
-            <div id="loadlocationto"></div>
-
-            <div id="loading-locationto" class="loading-container" style="position: absolute; margin-left: 40%; z-index: 2;">
-                <div class="loading"></div>
-                <div id="loading-text">loading</div>
-            </div> 
-        <!-- table -->
-            
-        </div>
-    </div>
-
-  </div>
-</div>
 
 
 <div class="modal all_records_modal" id="all_records_modal" data-keyboard="false" data-backdrop="static">
@@ -244,6 +211,69 @@
     </div>
 </div>
 
+<!-- Product -->
+<form method="post" id="productForm" class="form-horizontal">
+        @csrf
+        <div class="modal" id="productModal" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-default">
+                        <p class="modal-title-product font-weight-bold text-uppercase text-white ">Modal Heading</p>
+                        <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div id="loading-productmodal" class="loading-container">
+                        <div class="loading"></div>
+                        <div id="loading-text">loading</div>
+                    </div> 
+                    <div id="modal-body-product" class="modal-body">
+                        <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label text-uppercase" >Location From (STOCK)<span class="text-danger">*</span></label>
+                                        <div id="location_from_dd">
+
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label text-uppercase" >Location To<span class="text-danger">*</span></label>
+                                        <select name="location_to" id="location_to" class="form-control select2">
+                                            @foreach ($locations as $location)
+                                                <option value="{{$location->id}}"> {{$location->location_name}}</option>
+                                            @endforeach
+                                        </select>
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong id="error-location_to"></strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="control-label text-uppercase" >QTY<span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" name="qty" id="qty">
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong id="error-qty"></strong>
+                                        </span>
+                                    </div>
+                                </div>
+                        </div>
+                        <input type="hidden" name="action" id="action" value="Add" />
+                        <input type="hidden" name="hidden_id" id="hidden_id" />
+                        <input type="text" name="product_id" id="product_id" />
+                    </div>
+
+                    <div class="modal-footer bg-white">
+                        <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">CLOSE</button>
+                        <input type="submit" name="action_button" id="action_button" class="text-uppercase btn btn-default" value="Submit" />
+                    </div>
+            
+                </div>
+            </div>
+        </div>
+    </form>
+
    <!-- Footer -->
 @section('footer')
     @include('../partials.footer')
@@ -253,14 +283,10 @@
 @section('script')
 <script>
 $(function () {
-
-    $("#location_from").select2("trigger", "select", {
-        data: { id: 1 }
-    });
-
-    $("#location_to").select2("trigger", "select", {
-        data: { id: 2 }
-    });
+    loadProducts();
+    loadpending_transfer();
+    
+    $('#loading-containermodal').hide();
 
     let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 
@@ -276,112 +302,6 @@ $(function () {
     });
 });
 
-$('select[name="location_from"]').on("change", function(event){
-  var location_from = $('#location_from').val();
-  if(location_from != '')
-        {
-         var _token = $('input[name="_token"]').val();
-         $.ajax({
-          url:"location_transfer/" + location_from + "/from" ,
-          method:"GET",
-          dataType: "HTMl",
-         
-          beforeSend: function() {
-            
-            $('#loading-locationfrom').show();
-          },
-          success:function(data){
-            $('#loading-locationfrom').hide();
-            $("#loadlocationfrom").html(data);
-          }
-         });
-        }
-});
-
-$('select[name="location_to"]').on("change", function(event){
-  var location_to = $('#location_to').val();
-  if(location_to != '')
-        {
-         var _token = $('input[name="_token"]').val();
-         $.ajax({
-          url:"location_transfer/" + location_to + "/to" ,
-          method:"GET",
-          dataType: "HTMl",
-         
-          beforeSend: function() {
-            
-            $('#loading-locationto').show();
-          },
-          success:function(data){
-            $('#loading-locationto').hide();
-            $("#loadlocationto").html(data);
-          }
-         });
-        }
-});
-
-
-$('#myForm').on('submit', function(event){
-    event.preventDefault();
-    $('.form-control').removeClass('is-invalid')
-    var action_url = "{{ route('admin.location_transfer.store') }}";
-    var type = "POST";
-    var location_from = $('#location_from').val();
-    var location_to = $('#location_to').val();
-
-
-
-
-    $.ajax({
-        url: action_url,
-        method:type,
-        data:$(this).serialize(),
-        dataType:"json",
-        beforeSend:function(){
-            $("#action_button").attr("disabled", true);
-            $("#action_button").attr("value", "Loading..");
-        },
-        success:function(data){
-            var html = '';
-            $("#action_button").attr("disabled", false);
-            $("#action_button").attr("value", "Submit");
-            if(data.errors){
-                $.each(data.errors, function(key,value){
-                    if(key == $('#'+key).attr('id')){
-                        $('#'+key).addClass('is-invalid')
-                        $('#error-'+key).text(value)
-                    }
-                })
-            }
-            if(data.success){
-                $.alert({
-                    title: 'Message Success',
-                    content: data.success,
-                    type: 'green',
-                })
-                $('.form-control').removeClass('is-invalid')
-
-                $("#location_from").select2("trigger", "select", {
-                    data: { id: location_from }
-                });
-
-                $("#location_to").select2("trigger", "select", {
-                     data: { id: location_to }
-                });
-                $('#myForm')[0].reset();
-            }
-            if(data.nodata){
-                $.alert({
-                    title: 'Message Error',
-                    content: data.nodata,
-                    type: 'red',
-                })
-            }
-           
-        }
-    });
-    
-});
 
 $(document).on('click', '#all_records', function(){
     $('#all_records_modal').modal('show');
@@ -433,6 +353,135 @@ $(document).on('click', '.remove', function(){
   });
 
 });
+
+
+$(document).on('click', '.transfer', function(){
+    $('#productForm')[0].reset();
+    var product_id = $(this).attr('transfer');
+    $('.modal-title-product').text('TRANSFER PRODUCT');
+    $('#productModal').modal('show');
+    
+    $('.form-control').removeClass('is-invalid');
+    $('#action').val('Add');
+    $.ajax({
+        url: "/admin/location_transfer/location/product", 
+        type: "get",
+        dataType: "HTMl",
+        data:{product_id:product_id, _token: '{!! csrf_token() !!}',},
+        beforeSend: function() {
+            $('#modal-body-product').hide();
+            $('#loading-productmodal').show();
+        },
+        success: function(response){
+            $('#modal-body-product').show();
+            $('#loading-productmodal').hide();
+            $('#product_id').val(product_id);
+            $("#location_from_dd").html(response);
+        }	
+    })
+});
+
+$('#productForm').on('submit', function(event){
+    event.preventDefault();
+    $('.form-control').removeClass('is-invalid')
+    var action_url = "{{ route('admin.locationtransfer.store_pending_transfer') }}";
+    var type = "POST";
+
+    if($('#action').val() == 'Edit'){
+        var id = $('#hidden_id').val();
+        action_url = "/admin/location_transfer/location/pending_transfer/" + id;
+        type = "PUT";
+    }
+
+    $.ajax({
+        url: action_url,
+        method:type,
+        data:$(this).serialize(),
+        dataType:"json",
+        beforeSend:function(){
+            $("#action_button").attr("disabled", true);
+            $("#action_button").attr("value", "Loading..");
+            $('#modal-body-product').hide();
+            $('#loading-productmodal').show();
+        },
+        success:function(data){
+            $('#modal-body-product').show();
+            $('#loading-productmodal').hide();
+            if($('#action').val() == 'Edit'){
+                $("#action_button").attr("disabled", false);
+                $("#action_button").attr("value", "Update");
+            }else{
+                $("#action_button").attr("disabled", false);
+                $("#action_button").attr("value", "Submit");
+            }
+            if(data.errors){
+                $.each(data.errors, function(key,value){
+                    if(key == $('#'+key).attr('id')){
+                        $('#'+key).addClass('is-invalid')
+                        $('#error-'+key).text(value)
+                    }
+                })
+            }
+            if(data.less_stock){
+                $('#qty').addClass('is-invalid');
+                $('#error-qty').text(data.less_stock);
+            }
+            if(data.success){
+                $('#success-alert').addClass('bg-primary');
+                $('#success-alert').html('<strong>' + data.success + '</strong>');
+                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                    $("#success-alert").slideUp(500);
+                });
+                $('.form-control').removeClass('is-invalid')
+                $('#productForm')[0].reset();
+                $('#productModal').modal('hide');
+                loadProducts();
+                loadpending_transfer();
+                
+            }
+           
+        }
+    });
+});
+
+
+//products
+function loadProducts(){
+    $.ajax({
+        url: "/admin/location_transfer/location/products", 
+        type: "get",
+        dataType: "HTMl",
+        beforeSend: function() {
+            $('#loading-containermodal').show();
+            $('#rg_card_body').hide();
+
+        },
+        success: function(response){
+            $('#loading-containermodal').hide();
+            $('#rg_card_body').show();
+            $("#products").html(response);
+        }	
+    })
+}
+
+//pending_transfer
+function loadpending_transfer(){
+    $.ajax({
+        url: "/admin/location_transfer/location/pending_transfer", 
+        type: "get",
+        dataType: "HTMl",
+        beforeSend: function() {
+            $('#loading-containermodal').show();
+            $('#rg_card_body').hide();
+
+        },
+        success: function(response){
+            $('#loading-containermodal').hide();
+            $('#rg_card_body').show();
+            $("#pending_transfer").html(response);
+        }	
+    })
+}
 
 
 

@@ -25,6 +25,7 @@
                     </div>
                 </div>
                 <div class="receipt-body mt--3 p-2" id="receipt-body-sales">
+                    <?php $payment =  $salesInvoices->sales->sum('total') - $salesInvoices->returns->sum('amount') ?>
                     <table class="table table-bordered table-sm">
                             <thead>
                                 <tr>
@@ -58,7 +59,7 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td>No Data Availalbe</td>
+                                            <td>No Data Available</td>
                                             <td></td>
                                             <td></td>
                                     </tr>
@@ -75,7 +76,7 @@
                                             
                                         </td>
                                         <td> 
-                                                ₱ {{ number_format($salesInvoices->subtotal ?? '' , 2, '.', ',') }}
+                                                ₱ {{ number_format($salesInvoices->receipt_product->sum->total_amount_receipt ?? '' , 2, '.', ',') }}
                                             <br>
                                                 ₱ ( {{ number_format($salesInvoices->receipt_product->sum->discounted ?? '' , 2, '.', ',') }} )
                                         </td>
@@ -102,7 +103,7 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                                <td>No Data Availalbe</td>
+                                                <td>No Data Available</td>
                                                 <td></td>
                                                 <td></td>
                                         </tr>
@@ -134,7 +135,7 @@
                                                 Change:
                                         </td>
                                         <td>
-                                                ₱ {{ number_format($salesInvoices->total_amount ?? '' , 2, '.', ',') }}
+                                                ₱ {{ number_format($payment ?? '' , 2, '.', ',') }}
                                             <br>
                                                 ₱ {{ number_format($salesInvoices->cash ?? '' , 2, '.', ',') }}
                                             <br>

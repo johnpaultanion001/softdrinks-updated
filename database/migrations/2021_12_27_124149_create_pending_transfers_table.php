@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSalesReturnsTable extends Migration
+class CreatePendingTransfersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,14 @@ class CreateSalesReturnsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales_returns', function (Blueprint $table) {
+        Schema::create('pending_transfers', function (Blueprint $table) {
             $table->id();
-            $table->string('salesinvoice_id');
+            $table->string('location_from');
+            $table->string('location_to');
             $table->string('product_id');
-            $table->float('return_qty');
-            $table->float('unit_price');
-            $table->float('amount');
-            $table->string('status_id');
-            $table->string('remarks')->nullable();
-           
-
-
+            $table->float('qty');
+            $table->string('lt_id');
+            $table->boolean('isComplete')->default(false);
             $table->timestamps();
         });
     }
@@ -36,6 +32,6 @@ class CreateSalesReturnsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sales_returns');
+        Schema::dropIfExists('pending_transfers');
     }
 }

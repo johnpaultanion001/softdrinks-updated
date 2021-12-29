@@ -37,6 +37,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('transactions', 'TransactionController@index')->name('transactions.index');
     Route::get('transactions_load', 'TransactionController@load')->name('transactions.loadsales');
     route::get('transactions_filter', 'TransactionController@filter')->name('transactions.filter');
+    //sales remove
+    Route::delete('transactions/{sales}', 'TransactionController@destroy_sales')->name('transactions.destroy_sales');
 
 
     //order
@@ -106,8 +108,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     //Location Transfer
     Route::resource('location_transfer', 'LocationTransferController');
     route::get('loadllocation_transfer', 'LocationTransferController@load')->name('locationtransfer.load');
-    route::get('location_transfer/{location}/from', 'LocationTransferController@locationfrom')->name('locationtransfer.locationfrom');
-    route::get('location_transfer/{location}/to', 'LocationTransferController@locationto')->name('locationtransfer.locationto');
+    // route::get('location_transfer/{location}/from', 'LocationTransferController@locationfrom')->name('locationtransfer.locationfrom');
+    // route::get('location_transfer/{location}/to', 'LocationTransferController@locationto')->name('locationtransfer.locationto');
+    route::get('location_transfer/location/products', 'LocationTransferController@products')->name('locationtransfer.products');
+    route::get('location_transfer/location/pending_transfer', 'LocationTransferController@pending_transfer')->name('locationtransfer.pending_transfer');
+    route::get('location_transfer/location/product', 'LocationTransferController@product')->name('locationtransfer.product');
+    //PendingTransfer
+    route::post('location_transfer/location/pending_transfer', 'LocationTransferController@store_pending_transfer')->name('locationtransfer.store_pending_transfer');
+    route::put('location_transfer/location/pending_transfer/{pending_transfer}', 'LocationTransferController@update_pending_transfer')->name('locationtransfer.update_pending_transfer');
+    route::get('location_transfer/location/pending_transfer/{pending_transfer}/edit', 'LocationTransferController@edit_pending_transfer')->name('locationtransfer.edit_pending_transfer');
+    
 
     //Sales Return
     Route::resource('salesReturn', 'SalesReturnController');
@@ -141,6 +151,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('sales_inventory/{sales_inventory}/edit_view', 'SalesInventoryController@edit_view')->name('sales_inventory.edit_view');
     route::get('sales_inventory/{sales_inventory}/stock_history', 'SalesInventoryController@stock_history')->name('sales_inventory.stock_history');
     route::get('sales_inventory/{sales_inventory}/sales_history', 'SalesInventoryController@sales_history')->name('sales_inventory.sales_history');
+    route::get('sales_inventory/{sales_inventory}/location_stocks', 'SalesInventoryController@location_stocks')->name('sales_inventory.location_stocks');
+    
     route::put('sales_inventory/{sales_inventory}/update_ev', 'SalesInventoryController@update_ev')->name('sales_inventory.update_ev');
 
     //Empty Bottles Inventory
@@ -153,6 +165,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('total_product', 'ReceivingGoodController@total')->name('receiving_goods.total');
     route::get('reuse', 'ReceivingGoodController@reuse')->name('receiving_goods.reuse');
     route::get('receiving_goods_filter', 'ReceivingGoodController@filter')->name('receiving_goods.filter');
+
+    //Payables
+    route::get('supplier_payable', 'PayableReceivingGoodController@supplier_payable')->name('payable.supplier_payable');
+    route::get('validation_payable', 'PayableReceivingGoodController@validation_payable')->name('payable.validation_payable');
+
+    
 
     //Recieve Return
     route::get('recieve_return', 'ReceivingGoodController@recieve_return')->name('receiving_goods.recieve_return');

@@ -17,9 +17,8 @@
         <thead class="thead-white">
             <tr>
                 <th scope="col">Actions</th> 
-                <th scope="col">Product</th>
+                <th scope="col">Product Code</th>
                 <th scope="col">Return QTY</th>
-                <th scope="col">Price Type / Discounted</th>
                 <th scope="col">Unit Price</th>
                 <th scope="col">Amount</th>
             </tr>
@@ -32,23 +31,20 @@
                         <button type="button" name="removereturn" removereturn="{{  $return->id ?? '' }}" class="text-uppercase removereturn btn btn-danger btn-sm">Remove</button> 
                     </td>
                     <td>
-                        @if($return->product_id == 0)
-                                No Brand
-                        @else
-                            {{  $return->product->product_code ?? '' }}
-                        @endif
+                            @if($return->product_id == 0)
+                                    No Brand
+                            @else
+                                {{  $return->product->product_code ?? '' }}
+                            @endif
                     </td>
                     <td>
-                        {{  $return->return_qty ?? '' }}
+                            {{ $return->return_qty ?? '' }}
                     </td>
                     <td>
-                        {{$return->pricetype->price_type}} / ₱ ({{ number_format($return->discounted ?? '' , 2, '.', ',') }})
+                            {{ number_format($return->unit_price ?? '' , 2, '.', ',') }}
                     </td>
                     <td>
-                            ₱ {{ number_format($return->unit_price ?? '' , 2, '.', ',') }}
-                    </td>
-                    <td>
-                            ₱ {{ number_format($return->amount ?? '' , 2, '.', ',') }}
+                            {{ number_format($return->amount ?? '' , 2, '.', ',') }}
                     </td>   
                 </tr>
             @endforeach

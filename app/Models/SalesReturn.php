@@ -15,8 +15,6 @@ class SalesReturn extends Model
         'salesinvoice_id',
         'product_id',
         'return_qty',
-        'pricetype_id',
-        'discounted',
         'unit_price',
         'amount',
         'status_id',
@@ -31,11 +29,6 @@ class SalesReturn extends Model
     public function product()
     {
         return $this->belongsTo(SalesInventory::class, 'product_id');
-    }
-
-    public function pricetype()
-    {
-        return $this->belongsTo(PriceType::class, 'pricetype_id');
     }
     public function status()
     {

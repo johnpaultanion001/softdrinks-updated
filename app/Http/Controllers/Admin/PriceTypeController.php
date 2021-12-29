@@ -20,7 +20,7 @@ class PriceTypeController extends Controller
 
     public function load()
     {
-        $pricetypes = PriceType::where('isRemove', 0)->latest()->get();
+        $pricetypes = PriceType::where('isRemove', 0)->orderBy('id','asc')->get();
         return view('admin.pricetype.load', compact('pricetypes'));
     }
 

@@ -37,7 +37,6 @@
 
                         <th>Total Sales Amt</th>
                         <th>Sold QTY</th>
-                        <th>Discounted</th>
 
                         <th>Total Return Amt</th>
                         <th>Return QTY</th>
@@ -50,11 +49,12 @@
                     </tr>
                 </thead>
                 <tbody class="text-uppercase font-weight-bold">
-                    @foreach($allrecords as $key => $allrecord)
+                    @foreach($allrecords as $allrecord)
+                        <?php $payment =  $allrecord->sales->sum('total') - $allrecord->returns->sum('amount') ?>
                         <tr data-entry-id="{{ $allrecord->id ?? '' }}">
                             <td>
-                                <button type="button" name="sales_receipt"  sales_receipt="{{  $allrecord->salesinvoice_id ?? '' }}" class="text-uppercase sales_receipt btn btn-info btn-sm">RECEIPT</button>
-                                <button type="button" name="view"  view="{{  $allrecord->id ?? '' }}" class="text-uppercase view btn btn-success btn-sm">View</button>
+                                <button type="button" name="sales_receipt"  sales_receipt="{{  $allrecord->salesinvoice_id ?? '' }}" class="text-uppercase sales_receipt btn btn-success btn-sm">RECEIPT</button>
+                                <button type="button" name="view"  view="{{  $allrecord->id ?? '' }}" class="text-uppercase view btn btn-info btn-sm">View/Edit</button>
                             </td>
                             <td>
                                 {{ $allrecord->salesinvoice_id  ?? '' }}
@@ -63,23 +63,20 @@
                                 {{ $allrecord->customer->customer_name  ?? '' }} /  {{ $allrecord->customer->area  ?? '' }}
                             </td>
                             <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($allrecord->total_amount , 2, '.', ',') }}
+                                <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($payment , 2, '.', ',') }}
                             </td>
                             <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($allrecord->subtotal , 2, '.', ',') }}
+                                <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($allrecord->sales->sum('total') , 2, '.', ',') }}
                             </td>
                             <td>
-                                {{ $allrecord->sales->sum->purchase_qty  ?? '' }}
-                            </td>
-                            <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> ({{  number_format($allrecord->sales->sum->discounted , 2, '.', ',') }})
+                                {{  number_format($allrecord->sales->sum('purchase_qty') , 2, '.', ',') }}
                             </td>
 
                             <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> ({{  number_format($allrecord->returns->sum->amount , 2, '.', ',') }})
+                                <large class="text-success font-weight-bold mr-1">₱</large> ({{  number_format($allrecord->returns->sum('amount') , 2, '.', ',') }})
                             </td>
                             <td>
-                                {{ $allrecord->returns->sum->return_qty  ?? '' }}
+                                {{  number_format($allrecord->returns->sum('return_qty') , 2, '.', ',') }}
                             </td>
                            
                             <td>

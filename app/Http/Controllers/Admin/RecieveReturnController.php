@@ -56,31 +56,54 @@ class RecieveReturnController extends Controller
             $receiving_good_id = $goods_id->id + 1;
         }
         
-        RecieveReturn::create([
-            'receiving_good_id' => $receiving_good_id,
-            'product_id' => $request->input('product_id'),
-            'return_qty' => $request->input('return_qty'),
-            'unit_price' => $request->input('unit_price'),
-            'amount' => $amount,
-            'status_id' => $request->input('status_id'),
-            'remarks' => $request->input('remarks'),
-        ]);
+        RecieveReturn::updateOrCreate(
+            [
+                'receiving_good_id' => $receiving_good_id,
+                'product_id' => $request->input('product_id'),
+                'type_of_return'  => $request->input('type_of_return'),
+            ],
+            [
+                'product_id'        => $request->input('product_id'),
+                'unit_price'        => $request->input('unit_price'),
+                'return_qty'        => $request->input('return_qty'),
+                'type_of_return'    => $request->input('type_of_return'),
+                'receiving_good_id' => $receiving_good_id,
+                'amount'            => $amount,
+                'status_id'         => $request->input('status_id'),
+                'remarks'           => $request->input('remarks'),
+            ]);
+
+
+
         return response()->json(['success' => 'Return Product Added Successfully.']);
 
         
     }
 
-    
-    public function show($id)
-    {
-        //
-    }
 
     
     public function edit(RecieveReturn $recieve_return)
     {
+
+        if($recieve_return->type_of_return == 'BAD_ORDER'){
+            $product = $recieve_return->bad_order->product->product_code . '/' .  $recieve_return->bad_order->product->description .'('.$recieve_return->bad_order->stock.')';
+        }else{
+            if($recieve_return->product_id == 0){
+                $product = 'NO BRAND'. '/' .'('.$recieve_return->empty_inventory->qty.')';
+            }else{
+                $product = $recieve_return->empty_inventory->product->product_code . '/' .  $recieve_return->empty_inventory->product->description .'('.$recieve_return->empty_inventory->qty.')';
+            }
+        }
         if (request()->ajax()) {
-            return response()->json(['result' => $recieve_return]);
+            return response()->json(
+                [
+                    'type_of_return' => $recieve_return->type_of_return,
+                    'product'        => $product,
+                    'unit_price'     => $recieve_return->unit_price,
+                    'return_qty'     => $recieve_return->return_qty,
+                    'status'         => $recieve_return->status_id,
+                    'remarks'         => $recieve_return->remarks,
+                ]);
         }
     }
 
@@ -89,7 +112,6 @@ class RecieveReturnController extends Controller
     {
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
-            'product_id' => ['required'],
             'return_qty' => ['required' ,'numeric','min:0'],
             'unit_price' => ['required' ,'numeric','min:0'],
             'status_id' => ['required' ],
@@ -103,7 +125,6 @@ class RecieveReturnController extends Controller
         $amount = $request->input('return_qty') * $request->input('unit_price');
 
         RecieveReturn::find($recieve_return->id)->update([
-            'product_id' => $request->input('product_id'),
             'return_qty' => $request->input('return_qty'),
             'unit_price' => $request->input('unit_price'),
             'amount' => $amount,

@@ -383,9 +383,9 @@
     <form method="post" id="returnForm" class="form-horizontal">
         @csrf
         <div class="modal" id="returnModal" data-keyboard="false" data-backdrop="static">
-            <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header bg-default">
+                    <div class="modal-header bg-primary">
                         <p class="modal-title-return font-weight-bold text-uppercase text-white ">Modal Heading</p>
                         <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
                     </div>
@@ -395,18 +395,31 @@
                     </div> 
                     <div id="modal-body-return" class="modal-body">
                         <div class="row">
-
+                            <div class="col-sm-12">
+                                <label class="control-label text-uppercase" >Type Of Return<span class="text-danger">*</span></label>
+                                    <br>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input type_of_return" type="radio" id="empty" name="type_of_return" value="EMPTY" checked>
+                                        <label class="form-check-label" for="empty">EMPTY</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input type_of_return" type="radio" id="bad_order" name="type_of_return" value="BAD_ORDER">
+                                        <label class="form-check-label" for="bad_order">BAD ORDER</label>
+                                    </div>
+                                    <br>
+                                    <br>
+                            </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label class="control-label" >Product:<span class="text-danger">*</span> </label>
+                                    <label class="control-label text-uppercase" >PRODUCT CODE/DESC (STOCK):<span class="text-danger">*</span> </label>
                                     <select name="product_id" id="product_id" class="form-control select2">
-                                        <option value="" disabled selected>Select Product Code</option>
+                                        <option value="" disabled selected>Select Product</option>
                                         @foreach ($product_code as $return)
                                             <option value="{{$return->product_id}}" class="text-uppercase">
                                                 @if($return->product_id == 0)
-                                                    NO BRAND QTY:{{$return->qty}}
+                                                    NO BRAND ({{$return->qty}})
                                                 @else
-                                                    {{$return->product->description ?? ''}} QTY:{{$return->qty ?? ''}}
+                                                {{$return->product->product_code ?? ''}}/{{$return->product->description ?? ''}} ({{$return->qty ?? ''}})
                                                 @endif
                                             </option>
                                         @endforeach
@@ -417,7 +430,7 @@
                                 
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-6" id="status_container">
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col"><label class="control-label text-uppercase" >Status:<span class="text-danger">*</span> </label></div>
@@ -426,7 +439,6 @@
                                         </div>
                                     </div>
                                     <select name="status_id" id="status_id" class="form-control select2">
-                                        <option value="" disabled selected>Select Status</option>
                                         @foreach ($status as $sp)
                                             <option value="{{$sp->id}}" class="text-uppercase"> {{$sp->code}} - {{$sp->title}}  </option>
                                         @endforeach
@@ -435,31 +447,31 @@
                                         <strong id="error-status_id"></strong>
                                     </span>
                                 </div>
-                                
                             </div>
 
+                            
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <label class="control-label" >QTY:<span class="text-danger">*</span> </label>
-                                    <input type="number" name="return_qty" id="return_qty" step="any" class="form-control" />
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-return_qty"></strong>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label" >Unit Price:<span class="text-danger">*</span></label>
+                                    <label class="control-label text-uppercase" >Unit Price:<span class="text-danger">*</span></label>
                                     <input type="number" name="unit_price" id="unit_price" class="form-control" step="any" />
                                     <span class="invalid-feedback" role="alert">
                                         <strong id="error-unit_price"></strong>
                                     </span>
                                 </div>
                             </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Return QTY:<span class="text-danger">*</span> </label>
+                                    <input type="number" name="return_qty" id="return_qty" step="any" class="form-control" />
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-return_qty"></strong>
+                                    </span>
+                                </div>
+                            </div>
                         
                             <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="control-label" >Remarks: </label>
+                                    <label class="control-label text-uppercase" >Remarks: </label>
                                     <textarea name="remarks" id="remarks_return" class="form-control"></textarea>
                                     <span class="invalid-feedback" role="alert">
                                         <strong id="error-remarks"></strong>
@@ -482,6 +494,44 @@
             </div>
         </div>
     </form>
+
+    <!-- List Of Recieving good by supplier Id -->
+    <div class="modal" id="receivingGoodListModal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <p class="font-weight-bold text-uppercase text-white ">Select data you want to reuse</p>
+                    <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div id="modal-body-receivingGoodList" class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush display" cellspacing="0" width="100%">
+                            <thead class="thead-white">
+                                <tr>
+                                    <th scope="col">Actions</th>
+                                    <th scope="col">RG ID</th>
+                                    <th scope="col">Supplier</th>
+                                    <th scope="col">Products</th>
+                                    <th scope="col">Returns</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-uppercase font-weight-bold" id="receivingGoodList">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <input type="text" name="supplier_id_receiving_good" id="supplier_id_receiving_good"/>
+
+                <div class="modal-footer bg-white">
+                    <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">CLOSE</button>
+                </div>
+        
+            </div>
+        </div>
+    </div>
+   
 
     <!-- Footer -->
     @section('footer')
@@ -604,10 +654,12 @@ $(document).on('click', '#create_return', function(){
     $('#returnModal').modal('show');
     $('#returnForm')[0].reset();
     $('.form-control').removeClass('is-invalid')
-    $('.modal-title-return').text('Add Return');
+    $('.modal-title-return').text('Insert Return');
     $('#return_button').val('Submit');
     $('#return_action').val('Add');
     $('#loading-returnmodal').hide();
+    $('#product_id').attr('disabled', false);
+    empty_dd();
 });
 
 //edit product
@@ -794,9 +846,7 @@ $('#returnForm').on('submit', function(event){
                 $('#product_id').select2({
                     placeholder: 'Select Product Code'
                 });
-                $('#status_id').select2({
-                    placeholder: 'Select Status'
-                });
+               
                 $('#returnModal').modal('hide');
                 rgForm();
                 
@@ -811,7 +861,6 @@ $(document).on('click', '.editreturn', function(){
     $('.modal-title-return').text('Edit Return Product');
     $('#returnForm')[0].reset();
     $('.form-control').removeClass('is-invalid')
-
     var id = $(this).attr('editreturn');
 
     $.ajax({
@@ -833,32 +882,32 @@ $(document).on('click', '.editreturn', function(){
                 $("#return_button").attr("disabled", false);
                 $("#return_button").attr("value", "Submit");
             }
-            $.each(data.result, function(key,value){
-                if(key == $('#'+key).attr('id')){
-                    if(key == 'product_id'){
-                        $("#product_id").select2("trigger", "select", {
-                            data: { id: value }
-                        });
-                    }
-                    if(key == 'status_id'){
-                        $("#status_id").select2("trigger", "select", {
-                            data: { id: value }
-                        });
-                    }
-                    if(key == 'remarks'){
-                        $('#remarks_return').val(value);
-                    }
-                    if(key == 'return_qty'){
-                        $('#return_qty').val(value);
-                    }
-                    if(key == 'unit_price'){
-                        $('#unit_price').val(value);
-                    }
-                }
-            })
+           
+                   
+            if(data.type_of_return == 'BAD_ORDER'){
+                $('#status_container').hide();
+                
+            }else{
+                $('#status_container').show();
+            }
+            $("input[name=type_of_return]").val([data.type_of_return]);
+
+            var products = '<option value="" disabled selected>'+data.product+'</option>';
+            $('#product_id').empty().append(products);
+            $("#status_id").select2("trigger", "select", {
+                        data: { id: data.status }
+                    });
+            $('#unit_price').val(data.unit_price);
+            $('#return_qty').val(data.return_qty);
+            $('#remarks_return').val(data.remarks);
+
             $('#return_hidden_id').val(id);
             $('#return_button').val('Update');
             $('#return_action').val('Edit');
+            $('#product_id').attr('disabled', true);
+
+
+            
         }
     })
 });
@@ -1058,30 +1107,53 @@ function rg_status(){
 }
 
 $('select[name="supplier_id"]').on("change", function(event){
+    var supplier = $('#supplier_id').val();
     //Reuse
     if($('#purchase_action').val() == 'Add'){
-        $('#reuse-alert').addClass('bg-green show');
-        $("#reuse-alert").fadeTo(10000, 500).slideUp(500, function(){
-            $("#reuse-alert").slideUp(500);
+        $.ajax({
+            url:"/admin/receiving_goods/supplier/get_supplier_id",
+            method:"get",
+            dataType: "json",
+            data: {
+                supplier:supplier, _token: '{!! csrf_token() !!}'
+            },
+            beforeSend:function(){
+
+            },
+            success:function(data){
+                if(data.receiving_goods != null){
+                    $('#reuse-alert').addClass('bg-green show');
+                    $("#reuse-alert").fadeTo(10000, 500).slideUp(500, function(){
+                        $("#reuse-alert").slideUp(500);
+                    });
+                    $('#supplier_id_receiving_good').val(supplier)
+                    
+                }
+            }
         });
     }
+    
+      
+            //
+        
+        
     //Payable Prev Bal
-    var supplier = $('#supplier_id').val();
-    $.ajax({
-        url:"/admin/supplier_payable",
-        method:"get",
-        dataType: "json",
-        data: {
-            supplier:supplier, _token: '{!! csrf_token() !!}'
-        },
-        beforeSend:function(){
-        },
-        success:function(data){
-           if(data.prev_bal){
-               $('#prev_bal').val(data.prev_bal);
-           }
-        }
-    });
+    
+    // $.ajax({
+    //     url:"/admin/supplier_payable",
+    //     method:"get",
+    //     dataType: "json",
+    //     data: {
+    //         supplier:supplier, _token: '{!! csrf_token() !!}'
+    //     },
+    //     beforeSend:function(){
+    //     },
+    //     success:function(data){
+    //        if(data.prev_bal){
+    //            $('#prev_bal').val(data.prev_bal);
+    //        }
+    //     }
+    // });
 
 });
 
@@ -1107,47 +1179,43 @@ $(document).on('click', '#btn_cal', function(){
 })
 
 $(document).on('click', '#btn_reuse', function(){
-    var supplier = $('#supplier_id').val();
+    var supplier = $('#supplier_id_receiving_good').val();
+    $('#receivingGoodListModal').modal('show');
+
     $.ajax({
-        url:"/admin/reuse",
+        url:"/admin/receiving_goods/supplier/list_receiving_goods",
         method:"get",
         dataType: "json",
         data: {
             supplier:supplier, _token: '{!! csrf_token() !!}'
         },
         beforeSend:function(){
-            $('#btn_reuse').attr("disabled", true);
-            $('#btn_reuse').attr("value", "Loading..");
-            $("#reuse-alert").fadeTo(2000, 500).slideUp(500, function(){
-                $("#reuse-alert").slideUp(500);
-            });
+
         },
         success:function(data){
-            $('#btn_reuse').attr("disabled", false);
-            $('#btn_reuse').attr("value", "Yes");
-            $.each(data.result, function(key,value){
-                if(key == $('#'+key).attr('id')){
-                    $('#'+key).val(value)
-                    if(key == 'location_id'){
-                        $("#location_id").select2("trigger", "select", {
-                            data: { id: value }
-                        });
-                    }
-                }
-            })
-            if(data.nodata){
-                alert(data.nodata);
-            }
-            if(data.success){
-                $('#success-alert').addClass('bg-primary');
-                $('#success-alert').html('<strong>' + data.success + '</strong>');
-                $("#success-alert").fadeTo(10000, 500).slideUp(500, function(){
-                    $("#success-alert").slideUp(500);
-                });
-                rgForm();
-            }
+            var list = '';
+            $.each(data.list, function(key,value){
+                list += '<tr>';
+                    list += '<td>';
+                        list += '<button type="button" class="text-uppercase btn btn-warning btn-sm">Select</button>';
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.id;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.supplier;
+                    list += '</td>';
+                    list += '<td>';
+                                $.each(value.products, function(key,value){
+                                    list += value.product_code + '<br>';
+                                });
+                    list += '</td>';
+                list += '</tr>';
+            });
+            $('#receivingGoodList').empty().append(list);
         }
     });
+   
 });
 
 //store and update purchase order
@@ -1213,6 +1281,60 @@ $('#purchaseorderForm').on('submit', function(event){
     });
 });
 
+// Bad Order DD
+function bad_order_dd(){
+    $.ajax({
+      url: "/admin/receiving_goods/bad_order/bad_order_dd", 
+      type: "get",
+      dataType: "json",
+        beforeSend: function() {
+            
+        },
+        success: function(data){
+            var bad_orders = '';
+            bad_orders += '<option value="" disabled selected>Select Product</option>';
+            $.each(data.bad_orders, function(key,value){
+                bad_orders += '<option value="'+value.id+'">'+value.product_code+'/'+value.description+' ('+value.stock+')</option>';
+            });
+            $('#product_id').empty().append(bad_orders);
+        }	
+    });
+}
+
+// Empty
+function empty_dd(){
+    $.ajax({
+      url: "/admin/receiving_goods/empty/empty_dd", 
+      type: "get",
+      dataType: "json",
+        beforeSend: function() {
+            
+        },
+        success: function(data){
+            var empties = '';
+            empties += '<option value="" disabled selected>Select Product</option>';
+            $.each(data.empties, function(key,value){
+                empties += '<option value="'+value.id+'">'+value.product_code+'/'+value.description+' ('+value.stock+')</option>';
+            });
+            $('#product_id').empty().append(empties);
+        }	
+    });
+}
+
+
+//Type of return
+$('input[name="type_of_return"]').on("change", function(event){
+    var tor = $(this).val();
+    if(tor == 'BAD_ORDER'){
+        $('#status_container').hide();
+        $('#unit_price').val(null);
+        bad_order_dd();
+    }else{
+        $('#status_container').show();
+        $('#unit_price').val(null);
+        empty_dd();
+    }
+});
 
 
 </script>

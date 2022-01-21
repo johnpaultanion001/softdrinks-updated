@@ -163,7 +163,7 @@
         });
 
         var cash = $('#cash').val();
-        var change = $('#change').text();
+        var change = $('#change').val();
 
         $('#cashreceipt').text(formatNumber.format(cash));
         $('#changereceipt').text('₱ ' + change);

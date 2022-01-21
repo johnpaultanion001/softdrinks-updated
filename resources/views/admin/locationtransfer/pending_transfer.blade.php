@@ -22,8 +22,8 @@
                 @foreach($transfers as $location)
                         <tr data-entry-id="{{ $location->id ?? '' }}">
                             <td>
-                                <button type="button" name="edit" edit="{{  $location->id ?? '' }}"  class="edit text-uppercase btn btn-info btn-sm">Edit</button>
-                                <button type="button" name="remove" remove="{{  $location->id ?? '' }}"  class="remove text-uppercase btn btn-danger btn-sm">Remove</button>
+                                <button type="button" name="edit_product" product_id="{{  $location->product->id ?? '' }}"  pcode_desc="{{  $location->product->product_code ?? '' }} / {{  $location->product->description ?? '' }}" edit_product="{{  $location->id ?? '' }}"  class="edit_product text-uppercase btn btn-info btn-sm">Edit</button>
+                                <button type="button" name="remove_product" remove_product="{{  $location->id ?? '' }}"  class="remove_product text-uppercase btn btn-danger btn-sm">Remove</button>
                             </td>
                             <td>
                                 {{  $location->product->product_code ?? '' }} / {{  $location->product->description ?? '' }}

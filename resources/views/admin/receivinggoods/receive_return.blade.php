@@ -15,13 +15,11 @@
         <thead class="thead-white">
             <tr>
             <th scope="col">Actions</th>
-            <th scope="col">ID</th>
-            <th scope="col">RG ID</th>
-            <th scope="col">Product Code</th>
+            <th scope="col">Type Of Return</th>
+            <th scope="col">Product Code/DESC</th>
             <th scope="col">Returned Qty</th>
             <th scope="col">Unit Price</th>
             <th scope="col">Amount</th>
-            <th scope="col">Status</th>
             <th scope="col">Remarks</th>
             <th scope="col">Date</th>
             </tr>
@@ -34,16 +32,13 @@
                         <button type="button" name="removereturn" removereturn="{{  $product->id ?? '' }}" id="{{  $product->id ?? '' }}" class="removereturn text-uppercase btn btn-danger btn-sm">Remove</button>
                     </td>
                     <td>
-                        {{  $product->id ?? '' }}
-                    </td>
-                    <td>
-                        {{  $product->receiving_good_id ?? '' }}
+                        {{ $product->type_of_return ?? '' }}
                     </td>
                     <td>
                         @if($product->product_id == 0)
                             NO BRAND
                         @else
-                            {{  $product->product->description ?? '' }}
+                            {{  $product->product->product_code ?? '' }}/{{  $product->product->description ?? '' }}
                         @endif
                         
                     </td>
@@ -55,9 +50,6 @@
                     </td>
                     <td>
                        {{  number_format($product->amount , 2, '.', ',') }}
-                    </td>
-                    <td>
-                        {{  $product->status->code ?? '' }} - {{  $product->status->title ?? '' }}
                     </td>
                     <td>
                         {{  $product->remarks ?? '' }}

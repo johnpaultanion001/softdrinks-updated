@@ -18,8 +18,9 @@ class SupplierController extends Controller
     }
     public function load()
     {
-        $suppliers = Supplier::where('isRemove', 0)->latest()->get();
-        return view('admin.suppliers.load', compact('suppliers'));
+        $suppliers = Supplier::where('isRemove', 0)->orderBy('id', 'asc')->get();
+        $account_payables = Supplier::where('current_balance', '>' , 0)->orderBy('id', 'asc')->get();
+        return view('admin.suppliers.load', compact('suppliers','account_payables'));
     }
 
     public function create()

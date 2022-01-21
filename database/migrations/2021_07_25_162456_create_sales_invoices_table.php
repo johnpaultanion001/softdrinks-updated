@@ -21,6 +21,7 @@ class CreateSalesInvoicesTable extends Migration
             $table->date('entry_date');
             $table->longText('remarks')->nullable();
             $table->string('customer_id');
+            $table->string('deliver_id');
             $table->float('subtotal');
             $table->float('total_discount');
             $table->float('total_amount');

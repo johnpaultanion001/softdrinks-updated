@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-6">
                         <span class= "text-uppercase">SELLING AREA STOCK:
-                        @if($order->product->stock < 1)
+                        @if($order->product->location_products_stock() < 1)
                             <span class="text-warning text-uppercase">0</span>
                             @else
                             <span class="text-success font-weight-bold">{{$order->product->location_products_stock()}}</span> 
@@ -97,6 +97,6 @@
         $("#select_pricetype_edit").select2("trigger", "select", {
             data: { id: pricetype }
         });
-
+        $('#purchase_qty_edit').focus();
     });
 </script>

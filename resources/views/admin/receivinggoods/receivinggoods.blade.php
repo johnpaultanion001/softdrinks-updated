@@ -22,511 +22,6 @@
 @endsection
 
 
-<!-- view modal -->
-<div class="modal" id="viewModal" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content ">
-            <div class="modal-header bg-primary">
-                <p class="modal-title font-weight-bold text-uppercase text-white ">Modal Heading</p>
-                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
-            </div>
-            <div id="loading-container" class="loading-container">
-                <div class="loading"></div>
-                <div id="loading-text">loading</div>
-            </div>
-                <div class="modal-body" id="view-receiving_goods">
-                    
-                </div>
-            <div class="modal-footer bg-white">
-                <button type="button" class="btn btn-primary text-uppercase text-white" data-dismiss="modal">Close</button>
-            </div>
-        
-        </div>
-    </div>
-</div>
-
-<!-- Create Purchase Order Modal -->
-<form method="post" id="purchaseorderForm" class="form-horizontal ">
-    @csrf
-    <div class="modal" id="purchaseorderModal" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <p class="modal-title-purchase font-weight-bold text-uppercase text-white ">Modal Heading</p>
-                    <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                    <div class="col-sm-6">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col"><label class="control-label text-uppercase" >Supplier<span class="text-danger">*</span> </label></div>
-                                        <div class="col text-right">
-                                            <a class="btn btn-sm btn-white text-uppercase" href="/admin/suppliers">New Supplier?</a>
-                                        </div>
-                                    </div>
-                                    <select name="supplier_id" id="supplier_id" class="form-control select2">
-                                        <option value="" disabled selected>Select Supplier</option>
-                                        @foreach ($suppliers as $supplier)
-                                            <option value="{{$supplier->id}}">Supplier Code: {{$supplier->id}} - {{$supplier->name}}</option>
-                                            
-                                        @endforeach
-                                    </select>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-supplier_id"></strong>
-                                    </span>
-                                   
-                                </div>
-                               
-                            </div>
-                           
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col"><label class="control-label text-uppercase" >Location<span class="text-danger">*</span></label></div>
-                                        <div class="col text-right">
-                                            <a class="btn btn-sm btn-white text-uppercase" href="/admin/locations">New Location?</a>
-                                        </div>
-                                    </div>
-                                    <select name="location_id" id="location_id" class="form-control select2">
-                                        <option value="" disabled selected>Select Location</option>
-                                        @foreach ($locations as $location)
-                                            <option value="{{$location->id}}">Location Code: {{$location->id}} - {{$location->location_name}}</option>
-                                            
-                                        @endforeach
-                                    </select>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-location_id"></strong>
-                                    </span>
-                                   
-                                </div>
-                               
-                            </div>        
-
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >DOC NO.</label>
-                                    <input type="text" name="doc_no" id="doc_no" class="form-control"/>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-doc_no"></strong>
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Entry Date<span class="text-danger">*</span></label>
-                                    <input type="date" name="entry_date" id="entry_date" class="form-control"/>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-entry_date"></strong>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >PO NO.</label>
-                                    <input type="text" name="po_no" id="po_no" class="form-control"/>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-po_no"></strong>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >PO Date.</label>
-                                    <input type="date" name="po_date" id="po_date" class="form-control"/>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-po_date"></strong>
-                                    </span>
-                                </div>
-                            </div>
-                          
-
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Name of a Driver<span class="text-danger">*</span></label>
-                                    <input type="text" name="name_of_a_driver" id="name_of_a_driver" class="form-control"/>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-name_of_a_driver"></strong>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Plate Number<span class="text-danger">*</span> </label>
-                                    <input type="text" name="plate_number" id="plate_number" class="form-control"/>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-plate_number"></strong>
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Trade Discount:</label>
-                                    <input type="text" name="trade_discount" id="trade_discount" class="form-control"/>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-trade_discount"></strong>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Terms Discount: </label>
-                                    <input type="text" name="terms_discount" id="terms_discount" class="form-control"/>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-terms_discount"></strong>
-                                    </span>
-                                </div>
-                            </div>
-                            
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Remarks: </label>
-                                    <textarea name="remarks" id="remarks" autocomplete="on" class="form-control"></textarea>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-remarks"></strong>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Reference: </label>
-                                    <textarea name="reference" id="reference" autocomplete="on" class="form-control"></textarea>
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-reference"></strong>
-                                    </span>
-                                </div>
-                            </div>
-                            
-                    </div>
- 
-                    <div id="alltotal"> 
-
-                    </div>
-                   
-                   
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <h3 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;" id="titletable">Products</h3>
-                        </div>
-                        
-                        <div class="col text-right">
-                            <button type="button" name="create_product" id="create_product" class="text-uppercase create_product btn btn-sm btn-default">New Product</button>
-                        </div>
-                    </div>
-                    <div id="loading-containermodal" class="loading-container">
-                        <div class="loading"></div>
-                        <div id="loading-text">loading</div>
-                    </div>
-                    <div id="sales_inventory" class="sales_inventory col mt-4">
-                   
-                    </div>
-
-                    <br>
-
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <h3 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;" id="titletablereturn">Return</h3>
-                        </div>
-                        
-                        <div class="col text-right">
-                            <button type="button" name="create_return" id="create_return" class="text-uppercase btn btn-sm btn-default">New Return</button>
-                        </div>
-                    </div>
-                    <div id="return-product" class="return-product col mt-4">
-                   
-                    </div>
-
-                   
-
-                    <input type="hidden" name="purchase_action" id="purchase_action" value="Add" />
-                    <input type="hidden" name="purchase_hidden_id" id="purchase_hidden_id" />
-                    
-                </div>
-
-                <div class="modal-footer bg-white">
-                    <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
-                    <input type="submit" name="purchase_button" id="purchase_button" class="text-uppercase btn btn-primary" value="Submit" />
-                </div>
-        
-            </div>
-        </div>
-    </div>
-</form>
-
-<!-- Create Product Order Modal -->
-<form method="post" id="productForm" class="form-horizontal">
-    @csrf
-    <div class="modal" id="productModal" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-default">
-                    <p class="modal-title-product font-weight-bold text-uppercase text-white ">Modal Heading</p>
-                    <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
-                </div>
-                <div id="loading-productmodal" class="loading-container">
-                    <div class="loading"></div>
-                    <div id="loading-text">loading</div>
-                </div> 
-                <div id="modal-body-product" class="modal-body">
-                    <div class="row">
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label" >Product Code<span class="text-danger">*</span> </label>
-                                <input type="text" name="product_code"  id="product_code" class="form-control" autocomplete="off" style="text-transform: uppercase;"/>
-                                        <div id="productCodeList">
-
-                                        </div>
-                                 
-                                   
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-product_code"></strong>
-                                </span>
-                               
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label" >Description<span class="text-danger">*</span> </label>
-                               <input type="text" name="description" id="description" class="form-control"/>
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-description"></strong>
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col"><label class="control-label text-uppercase" >Category<span class="text-danger">*</span> </label></div>
-                                    <div class="col text-right">
-                                        <a class="btn btn-sm btn-white text-uppercase" href="/admin/categories">New Category?</a>
-                                    </div>
-                                   
-                                </div>
-                                <br>
-                                <select name="category_id" id="category_id" class="form-control select2">
-                                    <option value="" disabled selected>Select Category</option>
-                                    @foreach ($categories as $category)
-                                        <option value="{{$category->id}}"> {{$category->name}}</option>
-                                    @endforeach
-                                </select>
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-category_id"></strong>
-                                </span>
-                            </div>
-                        </div>
-                       <div class="col-sm-6">
-                            <div class="form-group">
-                               <div class="row">
-                                    <div class="col">
-                                        <label class="control-label text-uppercase" >Size<span class="text-danger">*</span></label>
-                                    </div>
-                                    <div class="col text-right">
-                                        <a class="btn btn-sm btn-white text-uppercase" href="/admin/sizes">New Size?</a>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input rb_status" type="radio" id="rb_softdrinks" name="rb_status" value="SOFTDRINKS">
-                                            <label class="form-check-label" for="rb_softdrinks">SOFTDRINKS</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input rb_status" type="radio" id="rb_water_juices" name="rb_status" value="WATER/JUICES">
-                                            <label class="form-check-label" for="rb_water_juices">WATER/JUICES</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input rb_status" type="radio" id="rb_no_ucs" name="rb_status" value="NO-UCS">
-                                            <label class="form-check-label" for="rb_no_ucs">NO UCS</label>
-                                        </div>
-                                    </div>
-                                   
-                                </div>
-                                <select name="size_id" id="size_id" class="form-control select2">
-                                    <option value="" disabled selected>Select Size</option>
-                                    @foreach ($sizes as $size)
-                                        <option value="{{$size->id}}"> {{$size->title}} {{$size->size}}  - UCS:{{$size->ucs}} </option>
-                                    @endforeach
-                                </select>
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-size_id"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label" >Expiration </label>
-                                <input type="date" name="expiration" id="expiration" class="form-control" />
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-expiration"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label" >QTY<span class="text-danger">*</span> </label>
-                                <input type="number" name="qty" id="qty" step="any" class="form-control" />
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-qty"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="control-label" >Unit Cost<span class="text-danger">*</span></label>
-                                <input type="number" name="unit_cost" id="unit_cost" class="form-control" step="any" />
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-unit_cost"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="control-label" >Regular Discount<span class="text-danger">*</span></label>
-                                <input type="number" name="regular_discount" id="regular_discount" class="form-control" step="any"/>
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-regular_discount"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label class="control-label" >Hauling Discount<span class="text-danger">*</span></label>
-                                <input type="number" name="hauling_discount" id="hauling_discount" class="form-control" step="any"/>
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-hauling_discount"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label class="control-label" >Product Remarks </label>
-                                <textarea name="product_remarks" id="product_remarks" class="form-control"></textarea>
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-product_remarks"></strong>
-                                </span>
-                            </div>
-                        </div>
-                              
-                    </div>
-                    <input type="hidden" name="product_action" id="product_action" value="Add" />
-                    <input type="hidden" name="product_hidden_id" id="product_hidden_id" />
-                </div>
-
-                <div class="modal-footer bg-white">
-                    <button type="button" class="btn btn-white text-uppercase"  id="back-button" >Back</button>
-                    <input type="submit" name="product_button" id="product_button" class="text-uppercase btn btn-default" value="Submit" />
-                </div>
-        
-            </div>
-        </div>
-    </div>
-</form>
-
-<!-- Create Return Product -->
-<form method="post" id="returnForm" class="form-horizontal">
-    @csrf
-    <div class="modal" id="returnModal" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-default">
-                    <p class="modal-title-return font-weight-bold text-uppercase text-white ">Modal Heading</p>
-                    <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
-                </div>
-                <div id="loading-returnmodal" class="loading-container">
-                    <div class="loading"></div>
-                    <div id="loading-text">loading</div>
-                </div> 
-                <div id="modal-body-return" class="modal-body">
-                    <div class="row">
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label" >Product:<span class="text-danger">*</span> </label>
-                                <select name="product_id" id="product_id" class="form-control select2">
-                                    <option value="" disabled selected>Select Product Code</option>
-                                    @foreach ($product_code as $return)
-                                        <option value="{{$return->product_id}}" class="text-uppercase">
-                                             @if($return->product_id == 0)
-                                                NO BRAND QTY:{{$return->qty}}
-                                             @else
-                                                {{$return->product->description ?? ''}} QTY:{{$return->qty ?? ''}}
-                                             @endif
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-product_id"></strong>
-                                </span>
-                               
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col"><label class="control-label text-uppercase" >Status:<span class="text-danger">*</span> </label></div>
-                                    <div class="col text-right">
-                                        <a class="btn btn-sm btn-white text-uppercase" href="/admin/status-return">New Status?</a>
-                                    </div>
-                                </div>
-                                <select name="status_id" id="status_id" class="form-control select2">
-                                    <option value="" disabled selected>Select Status</option>
-                                    @foreach ($status as $sp)
-                                        <option value="{{$sp->id}}" class="text-uppercase"> {{$sp->code}} - {{$sp->title}}  </option>
-                                    @endforeach
-                                </select>
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-status_id"></strong>
-                                </span>
-                            </div>
-                            
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label" >QTY:<span class="text-danger">*</span> </label>
-                                <input type="number" name="return_qty" id="return_qty" step="any" class="form-control" />
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-return_qty"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label" >Unit Price:<span class="text-danger">*</span></label>
-                                <input type="number" name="unit_price" id="unit_price" class="form-control" step="any" />
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-unit_price"></strong>
-                                </span>
-                            </div>
-                        </div>
-                       
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label class="control-label" >Remarks: </label>
-                                <textarea name="remarks" id="remarks_return" class="form-control"></textarea>
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-remarks"></strong>
-                                </span>
-                            </div>
-                        </div>
-                              
-                    </div>
-                    <input type="hidden" name="return_action" id="return_action" value="Add" />
-                    <input type="hidden" name="return_hidden_id" id="return_hidden_id" />
-                    <input type="hidden" name="existing_purchase" id="existing_purchase" value="no" />
-                </div>
-
-                <div class="modal-footer bg-white">
-                    <button type="button" class="btn btn-white text-uppercase"  id="back-button" >Back</button>
-                    <input type="submit" name="return_button" id="return_button" class="text-uppercase btn btn-default" value="Submit" />
-                </div>
-        
-            </div>
-        </div>
-    </div>
-</form>
 
 <div class="modal fade" id="modalfilter" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -562,6 +57,77 @@
     </div>
   </div>
 </div>
+
+
+<div class="modal payableModal" id="payableModal" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+    
+            <!-- Modal Header -->
+            <div class="modal-header bg-primary">
+                <p class="modal-title-acc text-white text-uppercase font-weight-bold">Modal Heading</p>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+
+                
+            <!-- Modal body -->
+            <div class="modal-body">
+              
+                <div id="modalbody" class="row print_report">
+                  <div class="col text-center">
+                     <h3 class="text-uppercase">Jewel & Nickel Store</h3>
+                     <p>Binangonan, <br> Rizal <br> 652-48-36</p>
+                     <h5 class="text-uppercase">Account Payables</h5>
+                     <br>
+                  </div>
+                  <div class="table-responsive">
+          
+                    <table class="table align-items-center table-bordered display" cellspacing="0" width="100%">
+                      <thead class="thead-white">
+                        <tr>
+                          <th>Supplier Code</th>
+                          <th>Supplier Name</th>
+                          <th>Address</th>
+                          <th>Current Balance</th>
+                        
+                        </tr>
+                      </thead>
+                      <tbody class="text-uppercase font-weight-bold">
+                        @foreach($account_payables as $key => $supplier)
+                              <tr>
+                                  <td>
+                                      {{  $supplier->id ?? '' }}
+                                  </td>
+                                  <td>
+                                      {{  $supplier->name ?? '' }}
+                                  </td>
+                                  <td>
+                                      {{ $supplier->address ?? '' }}
+                                  </td>
+                                
+                                  <td>
+                                    {{  number_format($supplier->current_balance , 2, ',', ',') }}
+                                  </td>
+                              </tr>
+                          @endforeach
+                      </tbody>
+                    </table>
+                 </div>
+                </div>
+                
+            </div>
+    
+            <!-- Modal footer -->
+            <div class="modal-footer bg-white">
+                <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
+                <button type="button"  id="print_acc" class="text-uppercase btn btn-default">Print Account Payables</button>
+
+            </div>
+    
+        </div>
+    </div>
+</div>
+
 
 @endsection
 
@@ -634,6 +200,41 @@ $(document).on('click', '.filter', function(){
         }	
     })
 });
+
+$(document).on('click', '#account_payable', function(){
+    $('#payableModal').modal('show');
+    $('.modal-title-acc').text('Account Payables');
+});
+
+$(document).on('click', '#print_acc', function(){
+    var contents = $(".print_report").html();
+    var frame1 = $('<iframe />');
+    frame1[0].name = "frame1";
+    frame1.css({ "position": "absolute", "top": "-1000000px" });
+    $("body").append(frame1);
+    var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+    frameDoc.document.open();
+    //Create a new HTML document.
+    frameDoc.document.write('<html><head><title>Title</title>');
+    frameDoc.document.write('</head><body>');
+    //Append the external CSS file.
+    frameDoc.document.write('<link href="/assets/css/argon.css" rel="stylesheet" type="text/css" />');
+    frameDoc.document.write('<style>size: A4 portrait;</style>');
+    var source = 'bootstrap.min.js';
+    var script = document.createElement('script');
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('src', source);
+    //Append the DIV contents.
+    frameDoc.document.write(contents);
+    frameDoc.document.write('</body></html>');
+    frameDoc.document.close();
+    setTimeout(function () {
+    window.frames["frame1"].focus();
+    window.frames["frame1"].print();
+    frame1.remove();
+    }, 500);
+});
+
 
 </script>
 @endsection

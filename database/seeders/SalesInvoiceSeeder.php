@@ -18,6 +18,7 @@ class SalesInvoiceSeeder extends Seeder
                 'entry_date'            => date("Y-m-d"),
                 'remarks'               => 'Test',
                 'customer_id'           => '1',
+                'deliver_id'            => '1',
 
                 'subtotal'              => '5980',
                 'total_discount'        => '0',
@@ -41,6 +42,7 @@ class SalesInvoiceSeeder extends Seeder
                 'entry_date'            => date("Y-m-d"),
                 'remarks'               => 'Test',
                 'customer_id'           => '1',
+                'deliver_id'            => '2',
 
                 'subtotal'              => '5980',
                 'total_discount'        => '0',
@@ -64,6 +66,7 @@ class SalesInvoiceSeeder extends Seeder
                 'entry_date'            => date("Y-m-d"),
                 'remarks'               => 'Test',
                 'customer_id'           => '1',
+                'deliver_id'            => '3',
 
                 'subtotal'              => '5980',
                 'total_discount'        => '0',

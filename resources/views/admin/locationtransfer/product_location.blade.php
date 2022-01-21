@@ -21,7 +21,7 @@
                 @foreach($products as $key => $product)
                         <tr data-entry-id="{{ $product->id ?? '' }}">
                             <td>
-                                <button type="button" name="transfer" transfer="{{  $product->id ?? '' }}"  class="transfer text-uppercase btn btn-info btn-sm">TRANSFER</button>
+                                <button type="button" name="transfer"  transfer="{{  $product->id ?? '' }}" pcode_desc="{{  $product->product_code ?? '' }} / {{  $product->description ?? '' }}"  class="transfer text-uppercase btn btn-primary btn-sm">TRANSFER</button>
                             </td>
                             <td>
                                 {{ $product->id }}

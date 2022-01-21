@@ -15,6 +15,7 @@ class Supplier extends Model
         'address',
         'contact_number',
         'remarks',
+        'current_balance',
         'isRemove',
     ];
 

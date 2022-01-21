@@ -22,7 +22,8 @@ class CustomerController extends Controller
     public function load()
     {
         $customers = Customer::where('isRemove', 0)->orderBy('id', 'asc')->get();
-        return view('admin.customers.load', compact('customers'));
+        $account_receivables = Customer::where('current_balance', '>' , 0)->orderBy('id', 'asc')->get();
+        return view('admin.customers.load', compact('customers','account_receivables'));
     }
 
     

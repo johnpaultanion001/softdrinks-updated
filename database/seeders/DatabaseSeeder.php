@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             ReceivingProductSeeder::class,
             PayableReceivingGoodSeeder::class,
             LocationProductSeeder::class,
+            AssignDeliverSeeder::class,
            
         ]);
     }

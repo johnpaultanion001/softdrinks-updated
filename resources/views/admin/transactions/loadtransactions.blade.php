@@ -117,7 +117,7 @@
                                 {{  $sale->product->description ?? '' }}
                             </td>
                             <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->product_price ?? '' , 2, ',', ',') }}
+                                {{ number_format($sale->product_price ?? '' , 2, ',', ',') }}
                             </td>
                             <td>
                                 {{  $sale->product->size->title ?? '' }} {{  $sale->product->size->size ?? '' }}
@@ -129,17 +129,17 @@
                                 {{  $sale->purchase_qty ?? '' }}
                             </td>
                             <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> ({{ number_format($sale->discounted ?? '' , 2, '.', ',') }})
+                                ({{ number_format($sale->discounted ?? '' , 2, '.', ',') }})
                             </td> 
 
                             <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->total ?? '' , 2, '.', ',') }}
+                                {{ number_format($sale->total ?? '' , 2, '.', ',') }}
                             </td>    
                             <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->total_cost ?? '' , 2, '.', ',') }}
+                                {{ number_format($sale->total_cost ?? '' , 2, '.', ',') }}
                             </td>
                             <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->profit ?? '' , 2, '.', ',') }}
+                                {{ number_format($sale->profit ?? '' , 2, '.', ',') }}
                             </td>
                             <td>
                                 {{  $sale->salesinvoice->user->name ?? '' }}
@@ -187,13 +187,13 @@
                                 {{  $return->return_qty ?? '' }} 
                             </td>
                             <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($return->unit_price ?? '' , 2, '.', ',') }}
+                                {{ number_format($return->unit_price ?? '' , 2, '.', ',') }}
                             </td>
                             <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> ({{ number_format($return->discounted ?? '' , 2, '.', ',') }})
+                                ({{ number_format($return->discounted ?? '' , 2, '.', ',') }})
                             </td>
                             <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($return->amount ?? '' , 2, '.', ',') }}
+                                {{ number_format($return->amount ?? '' , 2, '.', ',') }}
                             </td>
                             <td>
                                 {{ $return->salesinvoice->user->name ?? '' }}

@@ -21,6 +21,7 @@ class CreateRecieveReturnsTable extends Migration
             $table->float('unit_price');
             $table->float('amount');
             $table->string('status_id');
+            $table->string('type_of_return')->default('EMPTY');
             $table->string('remarks')->nullable();
             $table->timestamps();
         });

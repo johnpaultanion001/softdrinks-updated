@@ -55,10 +55,10 @@
                              {{ $customer->contact_number ?? '' }}
                         </td>
                         <td>
-                          <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($customer->current_balance , 2, '.', ',') }}
+                           {{  number_format($customer->current_balance , 2, '.', ',') }}
                         </td>
                         <td>
-                            {{ $customer->created_at->format('F d,Y h:i A') }}
+                            {{ $customer->created_at->format('M j , Y h:i A') }}
                         </td>
                      
                     </tr>
@@ -112,7 +112,7 @@
                         </tr>
                       </thead>
                       <tbody class="text-uppercase font-weight-bold">
-                        @foreach($customers as $key => $customer)
+                        @foreach($account_receivables as $key => $customer)
                               <tr data-entry-id="{{ $customer->id ?? '' }}">
                                   <td>
                                       {{  $customer->customer_code ?? '' }}
@@ -125,7 +125,7 @@
                                   </td>
                                 
                                   <td>
-                                    <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($customer->current_balance , 0, ',', ',') }}
+                                    {{  number_format($customer->current_balance , 2, ',', ',') }}
                                   </td>
                                 
                               

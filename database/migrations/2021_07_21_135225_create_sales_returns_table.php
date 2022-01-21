@@ -20,7 +20,8 @@ class CreateSalesReturnsTable extends Migration
             $table->float('return_qty');
             $table->float('unit_price');
             $table->float('amount');
-            $table->string('status_id');
+            $table->string('status_id')->nullable();
+            $table->string('type_of_return')->default('EMPTY');
             $table->string('remarks')->nullable();
            
 

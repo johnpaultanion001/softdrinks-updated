@@ -36,9 +36,9 @@
             <thead class="thead-white">
               <tr>
                 <th>Remarks</th>
-                <th>Product</th>
+                <th>Product Code/Desc</th>
                 <th>QTY</th>
-                <th>Created At</th>
+                <th>Updated At</th>
               </tr>
             </thead>
             <tbody class="text-uppercase font-weight-bold">
@@ -70,7 +70,7 @@
                             @if($bottle->product_id == 0)
                                 No Brand
                             @else
-                                {{  $bottle->product->product_code ?? '' }}
+                                {{  $bottle->product->product_code ?? '' }}/{{  $bottle->product->description ?? '' }}
                             @endif
                             
                         </td>
@@ -78,7 +78,8 @@
                             {{$bottle->qty ?? ''}}
                         </td>
                         <td>
-                            {{ $bottle->created_at->format('F d,Y h:i A') }}
+                            {{ $bottle->updated_at->format('M j , Y h:i A') }}
+                            
                         </td>
                      
                     </tr>

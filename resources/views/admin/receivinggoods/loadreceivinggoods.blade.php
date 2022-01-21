@@ -27,6 +27,7 @@
               <h3 class="mb-0 text-uppercase" id="titletable">Receiving Goods</h3>
             </div>
             <div class="col text-right">
+              <button type="button" id="account_payable" class="text-uppercase btn btn-sm btn-primary">Account Payables</button>
               <button type="button" name="create_record" id="create_record" class="text-uppercase create_record btn btn-sm btn-primary">Insert Receiving Goods</button>
             </div>
           </div>
@@ -106,6 +107,7 @@
     @endsection
   </div>
 </div>
+
 
 <script>
 $(function () {

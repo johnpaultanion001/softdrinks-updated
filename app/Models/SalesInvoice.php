@@ -16,6 +16,7 @@ class SalesInvoice extends Model
         'entry_date',
         'remarks',
         'customer_id',
+        'deliver_id',
         'subtotal',
         'total_discount',
         'total_amount',
@@ -32,6 +33,10 @@ class SalesInvoice extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'customer_id');
+    }
+    public function deliver()
+    {
+        return $this->belongsTo(AssignDeliver::class, 'deliver_id');
     }
     public function user()
     {

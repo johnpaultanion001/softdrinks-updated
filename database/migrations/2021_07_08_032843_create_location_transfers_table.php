@@ -20,9 +20,6 @@ class CreateLocationTransfersTable extends Migration
             $table->date('reference_date')->nullable();
             $table->string('prepared_by')->nullable();
             $table->longText('remarks')->nullable();
-            $table->integer('isRemove')->default(0);
-            
-
             $table->timestamps();
         });
     }

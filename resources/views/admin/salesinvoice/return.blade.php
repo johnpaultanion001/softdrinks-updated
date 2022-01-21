@@ -2,7 +2,7 @@
     <div class="card-header border-0">
         <div class="row align-items-center">
             <div class="col">
-                <h3 class="mb-0 text-uppercase loadingReturn" id="loadingReturn">Return</h3>
+                <h3 class="mb-0 text-uppercase loadingReturn" id="loadingReturn">Returns</h3>
             </div>
             <div class="col text-right">
               <!-- <button type="button" name="all_record_return" id="all_record_return" class="text-uppercase all_record_return btn btn-sm btn-primary">All Records</button> -->
@@ -17,7 +17,8 @@
         <thead class="thead-white">
             <tr>
                 <th scope="col">Actions</th> 
-                <th scope="col">Product Code</th>
+                <th scope="col">Type Of Return</th> 
+                <th scope="col">Product Code/Desc</th>
                 <th scope="col">Return QTY</th>
                 <th scope="col">Unit Price</th>
                 <th scope="col">Amount</th>
@@ -31,10 +32,13 @@
                         <button type="button" name="removereturn" removereturn="{{  $return->id ?? '' }}" class="text-uppercase removereturn btn btn-danger btn-sm">Remove</button> 
                     </td>
                     <td>
+                            {{ $return->type_of_return ?? '' }}
+                    </td>
+                    <td>
                             @if($return->product_id == 0)
                                     No Brand
                             @else
-                                {{  $return->product->product_code ?? '' }}
+                                {{  $return->product->product_code ?? '' }}/{{  $return->product->description ?? '' }} 
                             @endif
                     </td>
                     <td>

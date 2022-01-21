@@ -8,6 +8,7 @@ use App\Models\SalesReturn;
 use App\Models\Inventory;
 use App\Models\PriceType;
 use App\Models\EmptyBottlesInventory;
+use App\Models\SalesInventory;
 use Validator;
 
 class SalesReturnController extends Controller
@@ -35,6 +36,8 @@ class SalesReturnController extends Controller
             'return_qty' => ['required' ,'numeric','min:0'],
             'status_id' => ['required'],
         ]);
+      
+        
 
         if ($validated->fails()) {
             return response()->json(['errors' => $validated->errors()]);
@@ -46,11 +49,13 @@ class SalesReturnController extends Controller
         [
             'product_id'      => $request->input('product_id'),
             'salesinvoice_id' => $request->input('salesinvoice_id_return'),
+            'type_of_return'  => $request->input('type_of_return'),
         ],
         [
             'product_id'        => $request->input('product_id'),
             'unit_price'        => $request->input('unit_price'),
             'return_qty'        => $request->input('return_qty'),
+            'type_of_return'    => $request->input('type_of_return'),
             'salesinvoice_id'   => $request->input('salesinvoice_id_return'),
             'amount'            => $amount,
             'status_id'         => $request->input('status_id'),
@@ -99,6 +104,7 @@ class SalesReturnController extends Controller
             'amount'            => $amount,
             'status_id'         => $request->input('status_id'),
             'remarks'           => $request->input('remarks'),
+            'type_of_return'    => $request->input('type_of_return'),
         ]);
 
         return response()->json(['success' => 'Updated Successfully.']);
@@ -115,5 +121,26 @@ class SalesReturnController extends Controller
             $salesReturn->delete();
         }
         return response()->json(['success' => 'Removed Successfully.']);
+    }
+
+    public function return_amount(Request $request){
+        $product_id = $request->get('product_id');
+        $tor        = $request->get('tor');
+        if($tor == 'EMPTY'){
+            $sales_return = SalesReturn::where('product_id', $product_id)->where('type_of_return', 'EMPTY')->latest()->first();
+            if($sales_return == null){
+                return response()->json(['unit_price' => ' ']);
+            }else{
+                return response()->json(['unit_price' => $sales_return->unit_price]);
+            }
+        }else{
+            $full_product = SalesInventory::where('id', $product_id)->latest()->first();
+            if($full_product == null){
+                return response()->json(['unit_price' => ' ']);
+            }else{
+                return response()->json(['unit_price' => $full_product->price]);
+            }
+        }
+        
     }
 }

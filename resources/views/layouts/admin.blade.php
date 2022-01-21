@@ -62,9 +62,7 @@
     .form-control{
         border: 1px solid #111;
         color: #111;
-    }
-    .form-control[readonly] {
-    background-color: white;
+        font-weight: bold;
     }
     input:-webkit-autofill,
     input:-webkit-autofill:hover, 
@@ -81,6 +79,11 @@
     width:600px;
     margin:0 auto;
    }
+   .form-control[readonly] {
+        background-color: whitesmoke;
+        font-weight: bold;
+        cursor: not-allowed;
+    }
         
     
   

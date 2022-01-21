@@ -241,7 +241,6 @@ $(document).on('click', '#create_record', function(){
 $(document).on('click', '#account_receivables', function(){
     $('#accModal').modal('show');
     $('.modal-title-acc').text('Account Receivables');
-    
 });
 
 $(document).on('click', '#print_acc', function(){

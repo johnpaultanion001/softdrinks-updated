@@ -15,20 +15,17 @@ class LocationTransfer extends Model
         'entry_date',
         'reference',
         'reference_date',
-        'transfer_count',
         'prepared_by',
         'remarks',
-        'isRemove',
     ];
 
 
-    public function locationfrom()
+    public function user()
     {
-        return $this->belongsTo(Location::class, 'location_from');
+        return $this->belongsTo(User::class, 'prepared_by');
     }
-
-    public function locationto()
+    public function transfers()
     {
-        return $this->belongsTo(Location::class, 'location_to');
+        return $this->hasMany(PendingTransfer::class, 'lt_id' , 'id')->latest();
     }
 }

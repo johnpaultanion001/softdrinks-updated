@@ -41,7 +41,7 @@
 
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <small class="text-dark">Doc No:</small>
+                                <h5 class="text-uppercase">Doc No:</h5>
                                 <input type="text" name="doc_no" id="doc_no" class="form-control" />
                                 <span class="invalid-feedback " role="alert">
                                     <strong id="error-doc_no"></strong>
@@ -50,7 +50,7 @@
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <small class="text-dark">Entry Date<span class="text-danger">*</span></small>
+                                <h5 class="text-uppercase">Entry Date<span class="text-danger">*</span></h5>
                                 <input type="date" name="entry_date" id="entry_date" class="form-control" />
                                 <span class="invalid-feedback " role="alert">
                                     <strong id="error-entry_date"></strong>
@@ -59,7 +59,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <small class="text-dark">Remarks</small>
+                                <h5 class="text-uppercase">Remarks</h5>
                                 <textarea name="remarks" id="remarks" class="form-control"></textarea>
                                 <span class="invalid-feedback " role="alert">
                                     <strong id="error-remarks"></strong>
@@ -69,10 +69,23 @@
                         
                         
 
-
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <div class="form-group">
-                            <small class="text-dark">Customer:<span class="text-danger">*</span></small>
+                                <h5 class="text-uppercase">Assign Deliver:<span class="text-danger">*</span></h5>
+                                <select name="deliver_id" id="deliver_id" class="form-control select2">
+                                    <option value="" disabled selected>Select Deliver</option>
+                                    @foreach ($deliveries as $deliver)
+                                        <option value="{{$deliver->id}}">{{$deliver->title}}</option>
+                                    @endforeach
+                                </select>
+                                <span class="invalid-feedback " role="alert">
+                                    <strong id="error-deliver_id"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <h5 class="text-uppercase">Customer:<span class="text-danger">*</span></h5>
                                 <select name="customer_id" id="customer_id" class="form-control select2">
                                     <option value="" disabled selected>Select Customer</option>
                                     @foreach ($customers as $customer)
@@ -82,29 +95,14 @@
                                 <span class="invalid-feedback " role="alert">
                                     <strong id="error-customer_id"></strong>
                                 </span>
-                                
+                                <input type="hidden" name="customer_name" id="customer_name" readonly/>
+                                <input type="hidden" name="area" id="area" readonly/>
                             </div>
                         </div>
+                        
+                               
 
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <small class="text-dark">Customer Name:</small>
-                                <input type="text" name="customer_name" id="customer_name" class="form-control" readonly/>
-                                <span class="invalid-feedback " role="alert">
-                                    <strong id="error-customer_name"></strong>
-                                </span>
-                            </div>
-                        </div>
 
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <small class="text-dark">Area:</small>
-                                <input type="text" name="area" id="area" class="form-control" readonly/>
-                                <span class="invalid-feedback " role="alert">
-                                    <strong id="error-area"></strong>
-                                </span>
-                            </div>
-                        </div>
                         <div class="col-xl-12">
                             <div class="row">
                                 <div class="col-xl-12">
@@ -126,10 +124,8 @@
                                 </div>
                            
                         </div>
-                        
-                        
-            
                     </div>
+                    
                         <div class="modal" id="receiptModal" data-keyboard="false" data-backdrop="static">
                             <div class="modal-dialog modal-lg modal-dialog-centered ">
                                 <div class="modal-content">
@@ -183,7 +179,12 @@
                                 </div>
                             </div>
                         </div>
+                        <input type="hidden" name="action_salesinvoice" id="action_salesinvoice" value="compute"/>
 
+                        <div class="card-footer text-right">
+                            <button type="button" class="btn btn-danger text-uppercase" >Cancel</button>
+                            <input type="submit" name="action_button" id="action_button" class="btn btn-primary text-uppercase" value="Compute" />
+                        </div>
                     </form>
                 </div>
 
@@ -206,14 +207,9 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-12">
-                        <div id="productlist">
-                        
-                        </div>
-                    </div>
+                <div id="productlist">
+                
                 </div>
-                   
             </div>
 
             <div class="modal-footer bg-white">
@@ -287,14 +283,28 @@
                     </div> 
                     
                     <div id="modalbody" class="modalbody row">
+                        <div class="col-sm-12">
+                            <label class="control-label text-uppercase" >Type Of Return<span class="text-danger">*</span></label>
+                            <br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input type_of_return" type="radio" id="empty" name="type_of_return" value="EMPTY" checked>
+                                <label class="form-check-label" for="empty">EMPTY</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input type_of_return" type="radio" id="full" name="type_of_return" value="FULL">
+                                <label class="form-check-label" for="full">FULL</label>
+                            </div>
+                            <br>
+                            <br>
+                        </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                            <label class="control-label text-uppercase" >Select Product:<span class="text-danger">*</span></label>
+                            <label class="control-label text-uppercase" >Product Code/Desc:<span class="text-danger">*</span></label>
                                 <select name="product_id" id="product_id" class="form-control select2">
                                     <option value="" disabled selected>Select Product</option>
                                     <option value="0">No Brand</option>
                                     @foreach ($product_codes as $product_code)
-                                        <option value="{{$product_code->id}}">{{$product_code->product_code}} / {{$product_code->description}} / {{  $product_code->size->title ?? '' }}  {{  $product_code->size->size ?? '' }}</option>
+                                        <option value="{{$product_code->id}}">{{$product_code->product_code}} / {{$product_code->description}}</option>
                                     @endforeach
                                 </select>
                                 <span class="invalid-feedback" role="alert">
@@ -304,26 +314,16 @@
                             </div>
                         </div>
                         
-                        <div class="col-sm-6">
+                        <div class="col-sm-6" id="status_container">
                             <div class="form-group">
                                 <label class="control-label text-uppercase" >Status:<span class="text-danger">*</span> </label> 
                                 <select name="status_id" id="status_id" class="form-control select2">
-                                    <option value="" disabled selected>Select Status</option>
                                     @foreach ($status as $sp)
                                         <option value="{{$sp->id}}" class="text-uppercase"> {{$sp->code}} - {{$sp->title}}  </option>
                                     @endforeach
                                 </select>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-status_id"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label text-uppercase" >Return QTY:<span class="text-danger">*</span> </label>
-                                <input type="number" name="return_qty" id="return_qty" class="return_qty form-control" step="any"/>
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-return_qty"></strong>
                                 </span>
                             </div>
                         </div>
@@ -336,10 +336,19 @@
                                 </span>
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label text-uppercase" >Return QTY:<span class="text-danger">*</span> </label>
+                                <input type="number" name="return_qty" id="return_qty" class="return_qty form-control" step="any"/>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-return_qty"></strong>
+                                </span>
+                            </div>
+                        </div>
                         
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="control-label" >Remarks: </label>
+                                <label class="control-label text-uppercase" >Remarks: </label>
                                 <textarea name="remarks" id="remarks" class="form-control"></textarea>
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-remarks"></strong>
@@ -354,7 +363,7 @@
                 <input type="hidden" name="return_action" id="return_action" value="Add" />
                 <input type="hidden" name="return_hidden_id" id="return_hidden_id" />
                 <input type="hidden" name="salesinvoice_id_return" id="salesinvoice_id_return" value="{{$salesinvoice_id}}"/>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary text-uppercase" data-dismiss="modal">Close</button>
                 <input type="submit" name="btn_submit_return" id="btn_submit_return" class="text-uppercase btn btn-default" value="Submit" />
             </div>
             </div>
@@ -402,7 +411,6 @@
 <script>
 
 $(function () {
-    
     return loadSales() , loadReturn() , loadAllTotal();
     
 });
@@ -419,6 +427,9 @@ function loadSales(){
         },
         success: function(response){
             $(".loadingSales").text('Sales');
+            $('#action_salesinvoice').val('compute');
+            $("#action_button").attr("disabled", false);
+            $("#action_button").attr("value", "Compute");
             $("#loadsales").html(response);
         }	
     })
@@ -437,6 +448,9 @@ function loadReturn(){
         },
         success: function(response){
             $(".loadingReturn").text('Return');
+            $('#action_salesinvoice').val('compute');
+            $("#action_button").attr("disabled", false);
+            $("#action_button").attr("value", "Compute");
             $("#loadreturn").html(response);
         }	
     })
@@ -453,10 +467,35 @@ function loadAllTotal(){
         success: function(response){
             $(".title-head").text('SALES INVOICE');
             $("#alltotal").html(response);
+            customer();
         }	
     })
 }
 
+//accounte receivables
+function receivables(){
+    if($('input[name="receivables"]').is(':checked'))
+    {
+        var customer = $('#customer_id').val();
+            var new_bal = $('#new_bal').val();
+            $.ajax({
+                url: "salesInvoice-receivables", 
+                type: "get",
+                dataType: "json",
+                data: { customer:customer, new_bal:new_bal, _token: '{!! csrf_token() !!}'},
+                success: function(data){
+                    if(data.success){
+                        alert(data.success);
+                    }
+                    
+                }	
+            })
+    
+    }
+        
+    
+   
+}
 
 //show return modal
 
@@ -498,6 +537,7 @@ $(document).on('click', '#create_return', function(){
     $('#btn_submit_return').val('Submit');
     $('#return_action').val('Add');
     $('#loading-containermodal').hide();
+    $('#status_container').show();
 });
 
 //Store Return
@@ -594,8 +634,14 @@ function printmodal(){
 $('#myForm').on('submit', function(event){
     event.preventDefault();
     $('.form-control').removeClass('is-invalid')
-    var action_url = "{{ route('admin.salesInvoice.store') }}";
-    var type = "POST";
+
+    var action_url = "{{ route('admin.salesInvoice.compute') }}";
+    var type = "GET";
+
+    if($('#action_salesinvoice').val() == 'submit'){
+        var action_url = "{{ route('admin.salesInvoice.store') }}";
+        var type = "POST";
+    }
 
     $.ajax({
         url: action_url,
@@ -607,31 +653,26 @@ $('#myForm').on('submit', function(event){
             $("#action_button").attr("value", "Loading..");
         },
         success:function(data){
-            $("#action_button").attr("disabled", false);
-            $("#action_button").attr("value", "Submit");
-           
+            if($('#action_salesinvoice').val() == 'submit'){
+                $("#action_button").attr("disabled", false);
+                $("#action_button").attr("value", "Submit");
+            }else{
+                $("#action_button").attr("disabled", false);
+                $("#action_button").attr("value", "Compute");
+            }
+
             if(data.errors){
                 $.each(data.errors, function(key,value){
                     if(key == $('#'+key).attr('id')){
                         $('#'+key).addClass('is-invalid')
                         $('#error-'+key).text(value)
                     }
+                    if(key == 'receivables'){
+                        $('#new_bal').addClass('is-invalid')
+                        $('#error-new_bal').text(value)
+                    }
                  
                 })
-            }
-            if(data.nodata){
-                    $.alert({
-                        title: 'Message Error',
-                        content: data.nodata,
-                        type: 'red',
-                    });
-                }
-            if(data.invalidcash){
-                $.alert({
-                    title: 'Message Error',
-                    content: data.invalidcash,
-                    type: 'red',
-                });
             }
             if(data.maxstock){
                 $.alert({
@@ -639,6 +680,14 @@ $('#myForm').on('submit', function(event){
                     content: data.maxstock,
                     type: 'red',
                 })  
+            }
+            if(data.submit){
+                $('#action_salesinvoice').val(data.submit);
+                $("#action_button").attr("disabled", false);
+                $("#action_button").attr("value", "Submit");
+                $('#change').val(data.change);
+                $('#new_bal').val(data.new_bal);
+
             }
             if(data.print){
                 return printmodal();
@@ -651,14 +700,13 @@ $('#myForm').on('submit', function(event){
    
 });
 
-
-
 $(document).on('click', '#print_button', function(){
     $('.form-control').removeClass('is-invalid')
     var doc_no = $('#doc_no').val();
     var entry_date = $('#entry_date').val();
     var remarks = $('#remarks').val();
     var customer_id = $('#customer_id').val();
+    var deliver_id = $('#deliver_id').val();
     var prev_bal = $('#current_balance').val();
     var cash = $('#cash').val();
    
@@ -667,8 +715,8 @@ $(document).on('click', '#print_button', function(){
     $.ajax({
         url: action_url,
         method:type,
-        data:{doc_no:doc_no, entry_date:entry_date, remarks:remarks, customer_id:customer_id,
-                prev_bal:prev_bal, cash:cash, _token:_token},
+        data:{doc_no:doc_no, entry_date:entry_date, remarks:remarks, customer_id:customer_id, deliver_id:deliver_id,
+                prev_bal:prev_bal, cash:cash, _token:'{!! csrf_token() !!}'},
         dataType:"json",
         beforeSend:function(){
             $("#print_button").attr("disabled", true);
@@ -714,21 +762,14 @@ $(document).on('click', '#print_button', function(){
                     $("#success-checkout").slideUp(500);
                 });
                 $('#receiptModal').modal('hide');
-                $('#myForm')[0].reset();
                 $('.form-control').removeClass('is-invalid');
-                $('#customer_id').select2({
-                     placeholder: 'Select Customer'
-                })
-                
-
-                return loadSales() , loadReturn() , loadAllTotal();
+              
+                return loadSales() , loadReturn() , loadAllTotal() , receivables();;
             }
            
         }
     });
 });
-
-
 
 $(document).on('click', '.editreturn', function(){
     $('#allrecordsreturnModal').modal('hide');
@@ -765,25 +806,28 @@ $(document).on('click', '.editreturn', function(){
             $.each(data.result, function(key,value){
                 if(key == $('#'+key).attr('id')){
                     $('#'+key).val(value)
-                    if(key == 'pricetype_id'){
-                        $("#pricetype_id").select2("trigger", "select", {
-                            data: { id: value }
-                        });
-                    }
                     if(key == 'product_id'){
                         $("#product_id").select2("trigger", "select", {
                             data: { id: value }
                         });
                     }
                 }
+                if(key == 'type_of_return'){
+                    if(value == 'FULL'){
+                        $('#status_container').hide();
+                    }else{
+                        $('#status_container').show();
+                    }
+                    $("input[name=type_of_return]").val([value]);
+                }
             })
+            
             $('#return_hidden_id').val(id);
             $('#btn_submit_return').val('Update');
             $('#return_action').val('Edit');
         }
     })
 });
-
 
 $(document).on('click', '.removereturn', function(){
   var id = $(this).attr('removereturn');
@@ -833,6 +877,48 @@ $(document).on('click', '.removereturn', function(){
 
 });
 
+//return amt automatic
+$('select[name="product_id"]').on("change", function(event){
+    var product_id = $(this).val();
+    var tor = $('input[name="type_of_return"]:checked').val();
+    var _token = $('input[name="_token"]').val();
+    
+    if($('#return_action').val() == 'Add'){
+            $.ajax({
+                url: "/admin/salesReturn/product/return_amount", 
+                type: "get",
+                dataType:"json",
+                data: {
+                product_id:product_id,tor:tor,_token: '{!! csrf_token() !!}',
+                },
+                beforeSend: function() {
+                    $("#btn_submit_return").attr("disabled", true);
+                    $("#btn_submit_return").attr("value", "Loading..");
+                },
+                success: function(data){
+                    $("#btn_submit_return").attr("disabled", false);
+                    $("#btn_submit_return").attr("value", "Submit");
+                    if(data.unit_price){
+                        $('#unit_price').val(data.unit_price)
+                    }
+                }	
+            });
+    }
+   
+      
+});
+
+//Type of return
+$('input[name="type_of_return"]').on("change", function(event){
+    var tor = $(this).val();
+    if(tor == 'FULL'){
+        $('#status_container').hide();
+        $('#unit_price').val(null);
+    }else{
+        $('#status_container').show();
+        $('#unit_price').val(null);
+    }
+});
 
 //view order
 $(document).on('click', '#order', function(){
@@ -863,8 +949,9 @@ $(document).on('click', '#order', function(){
             $('.modal-title-order').text('View Order');
             $('#order_hidden_id').val(id)
             $('#order_action').val('Add');
-
+           
             $("#modalbody-view").html(response);
+            $('#purchase_qty').focus();
         }
     })
 });
@@ -908,32 +995,28 @@ $('#orderForm').on('submit', function(event){
                 })
             }
             if(data.nostock){
-                $.alert({
-                    title: 'Error Message',
-                    content: data.nostock,
-                    type: 'red',
-                })  
+                $('#purchase_qty').addClass('is-invalid')
+                $('#error-purchase_qty').text(data.nostock)
+                $('#purchase_qty_edit').addClass('is-invalid')
+                $('#error-purchase_qty_edit').text(data.nostock)
             }
             if(data.expiration){
-                $.alert({
-                    title: 'Error Message',
-                    content: data.expiration,
-                    type: 'red',
-                })  
+                $('#purchase_qty').addClass('is-invalid')
+                $('#error-purchase_qty').text(data.expiration)
+                $('#purchase_qty_edit').addClass('is-invalid')
+                $('#error-purchase_qty_edit').text(data.expiration)
             }
             if(data.expirationtoday){
-                $.alert({
-                    title: 'Error Message',
-                    content: data.expirationtoday,
-                    type: 'red',
-                })  
+                $('#purchase_qty').addClass('is-invalid')
+                $('#error-purchase_qty').text(data.expirationtoday)
+                $('#purchase_qty_edit').addClass('is-invalid')
+                $('#error-purchase_qty_edit').text(data.expirationtoday)
             }
             if(data.maxstock){
-                $.alert({
-                    title: 'Error Message',
-                    content: data.maxstock,
-                    type: 'red',
-                })  
+                $('#purchase_qty').addClass('is-invalid')
+                $('#error-purchase_qty').text(data.maxstock) 
+                $('#purchase_qty_edit').addClass('is-invalid')
+                $('#error-purchase_qty_edit').text(data.maxstock) 
             }
             
             if(data.success){
@@ -988,6 +1071,7 @@ $(document).on('click', '.editorder', function(){
             $('#order_hidden_id').val(id);
             $('#order_action').val('Edit');
             $("#modalbody-edit").html(response);
+           
         }
     })
 });
@@ -1041,18 +1125,15 @@ $(document).on('click', '.remove-order', function(){
     });
 });
 
+
 //select customer
-$('select[name="customer_id"]').on("change", function(event){
-  
-  var customer = $('#customer_id').val();
-  if(customer != '')
-        { 
-         var _token = $('input[name="_token"]').val();
-         $.ajax({
-          url:"ordering/" +customer+ "/customer",
-          method:"GET",
-          dataType:"json",
-          success:function(data){
+function customer(){
+    var customer = $('#customer_id').val();
+    $.ajax({
+    url:"ordering/" +customer+ "/customer",
+    method:"GET",
+    dataType:"json",
+        success:function(data){
             $.each(data.result, function(key,value){
                 if(key == $('#'+key).attr('id')){
                     $('#'+key).val(value)
@@ -1063,13 +1144,17 @@ $('select[name="customer_id"]').on("change", function(event){
                 if(key == 'area'){
                     $('#area_receipt').text(value)
                 }
-                
             }) 
-            
-                
-          }
-         });
         }
+    });
+}
+$('select[name="customer_id"]').on("change", function(event){
+ 
+    customer();
+    $('#action_salesinvoice').val('compute');
+    $("#action_button").attr("disabled", false);
+    $("#action_button").attr("value", "Compute");
+
 });
 
 
@@ -1089,7 +1174,6 @@ function loadAllRecordReturn(){
         }	
     })
 }
-
 
 /// All Records Return
 $(document).on('click', '#all_record_return', function(){
@@ -1116,6 +1200,7 @@ $(document).on('click', '.viewsales', function(){
         }	
     })
 });
+
 
 
 </script>

@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-6">
                         <span class= "text-uppercase">Selling Area Stock:
-                        @if($sales_inventory->stock < 1)
+                        @if($sales_inventory->location_products_stock() < 1)
                             <span class="text-warning text-uppercase">0</span>
                             @else
                             <span class="text-success font-weight-bold">{{$sales_inventory->location_products_stock()}}</span> 

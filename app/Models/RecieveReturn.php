@@ -17,6 +17,7 @@ class RecieveReturn extends Model
         'amount',
         'status_id',
         'remarks',
+        'type_of_return',
     ];
    
 
@@ -27,6 +28,10 @@ class RecieveReturn extends Model
     public function empty_inventory()
     {
         return $this->belongsTo(EmptyBottlesInventory::class, 'product_id', 'product_id');
+    }
+    public function bad_order()
+    {
+        return $this->belongsTo(LocationProduct::class, 'product_id', 'product_id')->where('location_id', 3);
     }
     public function product()
     {

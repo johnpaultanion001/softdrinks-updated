@@ -16,7 +16,7 @@
         <thead class="thead-white">
             <tr>
                 <th scope="col">Actions</th> 
-                <th scope="col">Product Code</th>
+                <th scope="col">Product Code/Desc</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Price Type / Discounted</th>
                 <th scope="col">Unit Price</th>
@@ -31,7 +31,7 @@
                         <button type="button" name="removeorder" removeorder="{{  $order->id ?? '' }}" class="text-uppercase remove-order btn btn-danger btn-sm">Remove</button> 
                     </td>
                     <td>
-                        {{  $order->product->product_code ?? '' }}
+                        {{  $order->product->product_code ?? '' }}/{{  $order->product->description ?? '' }}
                     </td>
                     <td>
                         {{  $order->purchase_qty ?? '' }}

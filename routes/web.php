@@ -106,21 +106,24 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('loadlocations', 'LocationController@load')->name('locations.load');
 
     //Location Transfer
-    Route::resource('location_transfer', 'LocationTransferController');
-    route::get('loadllocation_transfer', 'LocationTransferController@load')->name('locationtransfer.load');
-    // route::get('location_transfer/{location}/from', 'LocationTransferController@locationfrom')->name('locationtransfer.locationfrom');
-    // route::get('location_transfer/{location}/to', 'LocationTransferController@locationto')->name('locationtransfer.locationto');
+    route::get('location_transfer', 'LocationTransferController@index')->name('location_transfer.index');
+    route::post('location_transfer', 'LocationTransferController@store')->name('location_transfer.store');
+    route::get('location_transfer/records', 'LocationTransferController@records')->name('location_transfer.records');
+    
     route::get('location_transfer/location/products', 'LocationTransferController@products')->name('locationtransfer.products');
     route::get('location_transfer/location/pending_transfer', 'LocationTransferController@pending_transfer')->name('locationtransfer.pending_transfer');
     route::get('location_transfer/location/product', 'LocationTransferController@product')->name('locationtransfer.product');
     //PendingTransfer
     route::post('location_transfer/location/pending_transfer', 'LocationTransferController@store_pending_transfer')->name('locationtransfer.store_pending_transfer');
     route::put('location_transfer/location/pending_transfer/{pending_transfer}', 'LocationTransferController@update_pending_transfer')->name('locationtransfer.update_pending_transfer');
+    route::delete('location_transfer/location/pending_transfer/{pending_transfer}', 'LocationTransferController@destroy_pending_transfer')->name('locationtransfer.destroy_pending_transfer');
     route::get('location_transfer/location/pending_transfer/{pending_transfer}/edit', 'LocationTransferController@edit_pending_transfer')->name('locationtransfer.edit_pending_transfer');
     
 
     //Sales Return
     Route::resource('salesReturn', 'SalesReturnController');
+    route::get('salesReturn/product/return_amount', 'SalesReturnController@return_amount')->name('locationtransfer.return_amount');
+    
 
     //Sales Invoice
     Route::resource('salesInvoice', 'SalesInvoiceController');
@@ -131,10 +134,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('salesInvoice-productlist','SalesInvoiceController@productlist')->name('salesInvoice.productlist');
     Route::get('salesInvoice-receipt','SalesInvoiceController@receipt')->name('salesInvoice.receipt');
     Route::get('salesInvoice-alltotal','SalesInvoiceController@alltotal')->name('salesInvoice.alltotal');
-    Route::get('salesInvoice-change','SalesInvoiceController@change')->name('salesInvoice.change');
     Route::get('salesInvoice-sales_receipt/{sales_receipt}', 'SalesInvoiceController@sales_receipt')->name('salesInvoice.sales_receipt');
     Route::delete('salesInvoice-void/{salesInvoice}','SalesInvoiceController@void')->name('salesInvoice.void');
     Route::post('addtocart/{sales_inventory}',  'SalesInvoiceController@addtocart')->name('salesInvoice.addtocart');
+    route::get('salesInvoice-compute', 'SalesInvoiceController@compute')->name('salesInvoice.compute');
+    
+    route::get('salesInvoice-receivables', 'SalesInvoiceController@receivables')->name('salesInvoice.receivables');
+    
     // Sales invoice all records
     Route::get('salesInvoice/salesInvoice/allrecords','SalesInvoiceController@allrecords')->name('salesInvoice.allrecords');
     Route::get('salesInvoice/salesInvoice/records','SalesInvoiceController@records')->name('salesInvoice.records');
@@ -165,6 +171,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('total_product', 'ReceivingGoodController@total')->name('receiving_goods.total');
     route::get('reuse', 'ReceivingGoodController@reuse')->name('receiving_goods.reuse');
     route::get('receiving_goods_filter', 'ReceivingGoodController@filter')->name('receiving_goods.filter');
+    route::get('receiving_goods/bad_order/bad_order_dd', 'ReceivingGoodController@bad_order_dd')->name('receiving_goods.bad_order_dd');
+    route::get('receiving_goods/empty/empty_dd', 'ReceivingGoodController@empty_dd')->name('receiving_goods.empty_dd');
+    
+    // Reuse Data 
+    route::get('receiving_goods/supplier/get_supplier_id', 'ReceivingGoodController@get_supplier_id')->name('receiving_goods.get_supplier_id');
+    route::get('receiving_goods/supplier/list_receiving_goods', 'ReceivingGoodController@list_receiving_goods')->name('receiving_goods.list_receiving_goods');
 
     //Payables
     route::get('supplier_payable', 'PayableReceivingGoodController@supplier_payable')->name('payable.supplier_payable');

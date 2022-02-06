@@ -22,10 +22,10 @@ class CreateSalesReturnsTable extends Migration
             $table->float('amount');
             $table->string('status_id')->nullable();
             $table->string('type_of_return')->default('EMPTY');
+            $table->boolean('isComplete')->default(false);
             $table->string('remarks')->nullable();
+            
            
-
-
             $table->timestamps();
         });
     }

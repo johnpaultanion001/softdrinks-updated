@@ -25,7 +25,7 @@ class SupplierController extends Controller
 
     public function create()
     {
-        //
+        //s
     }
 
     public function store(Request $request)
@@ -36,6 +36,8 @@ class SupplierController extends Controller
             'address' => ['required'],
             'contact_number' => ['numeric' , 'required'],
             'remarks' => ['nullable'],
+            'current_balance' => ['required' ,'numeric','min:0'],
+            
            
         ]);
 
@@ -48,6 +50,7 @@ class SupplierController extends Controller
             'address' => $request->input('address'),
             'contact_number' => $request->input('contact_number'),
             'remarks' => $request->input('remarks'),
+            'current_balance' => $request->input('current_balance'),
         ]);
 
         return response()->json(['success' => 'Supplier Added Successfully.']);
@@ -76,6 +79,7 @@ class SupplierController extends Controller
             'address' => ['required'],
             'contact_number' => ['numeric' , 'required'],
             'remarks' => ['nullable'],
+            'current_balance' => ['required' ,'numeric','min:0'],
            
         ]);
 
@@ -88,6 +92,7 @@ class SupplierController extends Controller
             'address' => $request->input('address'),
             'contact_number' => $request->input('contact_number'),
             'remarks' => $request->input('remarks'),
+            'current_balance' => $request->input('current_balance'),
         ]);
         return response()->json(['success' => 'Supplier Updated Successfully.']);
     }

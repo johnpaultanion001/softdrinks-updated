@@ -24,7 +24,7 @@ class ReceiveReturnSeeder extends Seeder
                 'amount' => '44',
                 'status_id' => '1',
                 'type_of_return' => 'EMPTY',
-
+                'isComplete'      => true,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],
@@ -37,7 +37,7 @@ class ReceiveReturnSeeder extends Seeder
                 'amount' => '44',
                 'status_id' => '1',
                 'type_of_return' => 'EMPTY',
-
+                'isComplete'      => true,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],

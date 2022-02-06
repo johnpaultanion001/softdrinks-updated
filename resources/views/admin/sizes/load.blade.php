@@ -38,8 +38,8 @@
                 <th>UCS PER CATEGORY</th>
                 <th>Size</th>
                 <th>UCS</th>
-                <th>Created At</th>
                 <th>Remarks</th>
+                <th>Created At</th>
                 
               </tr>
             </thead>
@@ -47,8 +47,8 @@
               @foreach($sizes as $key => $size)
                     <tr data-entry-id="{{ $size->id ?? '' }}">
                         <td>
-                            <button type="button" name="edit" edit="{{  $size->id ?? '' }}" class="text-uppercase edit btn btn-info btn-sm">Edit</button>
-                            <button type="button" name="remove" remove="{{  $size->id ?? '' }}" id="{{  $size->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm">Remove</button>
+                            <button type="button" name="edit" edit="{{  $size->id ?? '' }}" class="text-uppercase edit btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                            <button type="button" name="remove" remove="{{  $size->id ?? '' }}" id="{{  $size->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                         </td>
                         <td>
                           <h3>
@@ -69,11 +69,12 @@
                         <td>
                             {{  $size->ucs ?? '' }}
                         </td>
-                        <td>
-                            {{ $size->created_at->format('F d,Y h:i A') }}
-                        </td>
+                        
                         <td>
                             {{  $size->note ?? '' }}
+                        </td>
+                        <td>
+                            {{ $size->created_at->format('M j , Y h:i A') }}
                         </td>
                     </tr>
                 @endforeach

@@ -6,7 +6,7 @@
                 <th scope="col">ID</th>
                 <th scope="col">Order #</th>
                 <th scope="col">Sold To</th>
-                <th scope="col">Product</th>
+                <th scope="col">Product Code/Desc</th>
                 <th scope="col">Sold QTY</th>
             </tr>
         </thead>
@@ -23,7 +23,7 @@
                         {{$sales->customer->customer_name ?? '' }}
                     </td>
                     <td>
-                        {{$sales->product->product_code ?? '' }}
+                        {{$sales->product->product_code ?? '' }}/{{$sales->product->description ?? '' }}
                     </td>
                     <td>
                         {{$sales->purchase_qty ?? '' }}

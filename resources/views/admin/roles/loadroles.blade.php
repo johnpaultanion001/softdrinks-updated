@@ -35,10 +35,8 @@
               @foreach($roles as $key => $role)
                     <tr data-entry-id="{{ $role->id ?? '' }}">
                        <td>
-                            <button type="button" name="view" view="{{  $role->id ?? '' }}" class="text-uppercase view btn btn-success btn-sm">View</button>
-                            <a href="{{ route('admin.roles.edit', $role->id) }}"  class="text-uppercase edit btn btn-info btn-sm">Edit</a>
-                            <button type="button" name="delete" delete="{{  $role->id ?? '' }}" id="{{  $role->id ?? '' }}" class="text-uppercase delete btn btn-danger btn-sm">Delete</button>
-                        </td>
+                            <a href="{{ route('admin.roles.edit', $role->id) }}"  class="text-uppercase edit btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+                            <button type="button" name="delete" delete="{{  $role->id ?? '' }}" id="{{  $role->id ?? '' }}" class="text-uppercase delete btn btn-danger btn-sm"><i class="fas fa-trash"></i>
                         <td>
                             {{  $role->id ?? '' }}
                         </td>

@@ -7,8 +7,7 @@
         <tr>
             <th scope="col">Actions</th> 
             <th scope="col">Product ID</th>
-            <th scope="col">Product Code</th>
-            <th scope="col">Description</th>
+            <th scope="col">Product Code/Desc</th>
             <th scope="col">Size</th>
             <th scope="col">Supplier</th>
             <th scope="col">Category</th>
@@ -30,10 +29,7 @@
                         {{  $product->product->id ?? '' }}
                     </td>
                     <td>
-                        {{  $product->product->product_code ?? '' }}
-                    </td>
-                    <td>
-                        {{  $product->product->description ?? '' }}
+                        {{  $product->product->product_code ?? '' }}/{{  $product->product->description ?? '' }}
                     </td>
                     <td>
                         {{  $product->product->size->title ?? '' }}  {{  $product->product->size->size ?? '' }}
@@ -73,7 +69,7 @@ $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
  
   $.extend(true, $.fn.dataTable.defaults, {
-    pageLength: 10,
+    pageLength: 100,
   });
 
   $('.datatable-productlist:not(.ajaxTable)').DataTable({ buttons: dtButtons })

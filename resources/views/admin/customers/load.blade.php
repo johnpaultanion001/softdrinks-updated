@@ -39,8 +39,8 @@
               @foreach($customers as $key => $customer)
                     <tr data-entry-id="{{ $customer->id ?? '' }}">
                         <td>
-                            <button type="button" name="edit" edit="{{  $customer->id ?? '' }}" class="text-uppercase edit btn btn-info btn-sm">Edit</button>
-                            <button type="button" name="remove" remove="{{  $customer->id ?? '' }}" id="{{  $customer->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm">Remove</button>
+                            <button type="button" name="edit" edit="{{  $customer->id ?? '' }}" class="text-uppercase edit btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                            <button type="button" name="remove" remove="{{  $customer->id ?? '' }}" id="{{  $customer->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                         </td>
                         <td>
                             {{  $customer->customer_code ?? '' }}

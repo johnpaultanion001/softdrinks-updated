@@ -28,18 +28,15 @@
             @foreach($returned as $key => $return)
                 <tr data-entry-id="{{ $return->id ?? '' }}">
                     <td>
-                        <button type="button" name="editreturn" editreturn="{{  $return->id ?? '' }}" class="text-uppercase editreturn btn btn-info btn-sm">Edit</button>
-                        <button type="button" name="removereturn" removereturn="{{  $return->id ?? '' }}" class="text-uppercase removereturn btn btn-danger btn-sm">Remove</button> 
+                        <button type="button" name="editreturn" editreturn="{{  $return->id ?? '' }}" class="text-uppercase editreturn btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                        <button type="button" name="removereturn" removereturn="{{  $return->id ?? '' }}" class="text-uppercase removereturn btn btn-danger btn-sm"><i class="fas fa-trash"></i></button> 
                     </td>
                     <td>
                             {{ $return->type_of_return ?? '' }}
                     </td>
                     <td>
-                            @if($return->product_id == 0)
-                                    No Brand
-                            @else
-                                {{  $return->product->product_code ?? '' }}/{{  $return->product->description ?? '' }} 
-                            @endif
+                        {{  $return->product->product_code ?? '' }}/{{  $return->product->description ?? '' }} 
+                            
                     </td>
                     <td>
                             {{ $return->return_qty ?? '' }}

@@ -5,8 +5,8 @@
                 <h3 class="mb-0 text-uppercase">PRODUCTS</h3>
             </div>
             <div class="col text-right">
-              <button type="button" id="remove_all_products" class="text-uppercase btn btn-danger">Remove All</button>
-              <button type="button" name="create_product" id="create_product" class="text-uppercase create_product btn btn-primary">Insert</button>
+              <button type="button" id="remove_all_products" class="text-uppercase btn btn-danger btn-sm">Remove All</button>
+              <button type="button" name="create_product" id="create_product" class="text-uppercase create_product btn btn-primary btn-sm">Insert</button>
             </div>
         </div>
     </div>
@@ -18,8 +18,7 @@
                     <th scope="col">ID</th>
                     <th scope="col">RG ID</th>
                     <th scope="col">Product ID</th>
-                    <th scope="col">Product Code</th>
-                    <th scope="col">Description</th>
+                    <th scope="col">Product Code/Desc</th>
 
                     <th scope="col">Size</th>
                     <th scope="col">Category</th>
@@ -38,8 +37,8 @@
                 @foreach($pendingproducts as $key => $product)
                         <tr data-entry-id="{{ $product->id ?? '' }}">
                             <td>
-                                <button type="button" name="edit" edit="{{  $product->id ?? '' }}"  class="edit text-uppercase btn btn-info btn-sm">Edit</button>
-                                <button type="button" name="remove" remove="{{  $product->id ?? '' }}" id="{{  $product->id ?? '' }}" class="remove text-uppercase btn btn-danger btn-sm">Remove</button>
+                                <button type="button" name="edit" edit="{{  $product->id ?? '' }}"  class="edit text-uppercase btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                                <button type="button" name="remove" remove="{{  $product->id ?? '' }}" id="{{  $product->id ?? '' }}" class="remove text-uppercase btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                             </td>
                             <td>
                                 {{ $product->id }}
@@ -51,10 +50,7 @@
                                 {{  $product->product->id ?? $product->id }}
                             </td>
                             <td>
-                                {{  $product->product_code ?? '' }}
-                            </td>
-                            <td>
-                                {{  $product->description ?? '' }}
+                                {{  $product->product_code ?? '' }}/{{  $product->description ?? '' }}
                             </td>
                             <td>
                                 {{  $product->size->title ?? '' }} {{  $product->size->size ?? '' }}

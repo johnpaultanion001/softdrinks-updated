@@ -1,85 +1,95 @@
 <?php
+namespace App\Http\Controllers\Admin;
 
-namespace App\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use App\Models\AssignDeliver;
 use Illuminate\Http\Request;
+use Gate;
+use Symfony\Component\HttpFoundation\Response;
+use Validator;
+
 
 class AssignDeliverController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
     {
-        //
+        abort_if(Gate::denies('assign_deliver_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        return view('admin.assign_deliver.assign_deliver');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
     {
-        //
+        date_default_timezone_set('Asia/Manila');
+        $validated =  Validator::make($request->all(), [
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable'],
+           
+        ]);
+
+        if ($validated->fails()) {
+            return response()->json(['errors' => $validated->errors()]);
+        }
+
+        AssignDeliver::create([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+        ]);
+
+        return response()->json(['success' => 'Record Added Successfully.']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\AssignDeliver  $assignDeliver
-     * @return \Illuminate\Http\Response
-     */
+    
     public function show(AssignDeliver $assignDeliver)
     {
-        //
+        $assign_delivers = AssignDeliver::where('isRemove', false)->latest()->get();
+        return view('admin.assign_deliver.load', compact('assign_delivers'));
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\AssignDeliver  $assignDeliver
-     * @return \Illuminate\Http\Response
-     */
     public function edit(AssignDeliver $assignDeliver)
     {
-        //
+        if (request()->ajax()) {
+            return response()->json(['result' => $assignDeliver]);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\AssignDeliver  $assignDeliver
-     * @return \Illuminate\Http\Response
-     */
+  
     public function update(Request $request, AssignDeliver $assignDeliver)
     {
-        //
+        date_default_timezone_set('Asia/Manila');
+        $validated =  Validator::make($request->all(), [
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable'],
+           
+        ]);
+
+        if ($validated->fails()) {
+            return response()->json(['errors' => $validated->errors()]);
+        }
+
+        AssignDeliver::find($assignDeliver->id)->update([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+        ]);
+
+        return response()->json(['success' => 'Record Updated Successfully.']);
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\AssignDeliver  $assignDeliver
-     * @return \Illuminate\Http\Response
-     */
+  
     public function destroy(AssignDeliver $assignDeliver)
     {
-        //
+        AssignDeliver::find($assignDeliver->id)->update([
+            'isRemove' => true,
+        ]);
+        return response()->json(['success' => 'Record Removed Successfully.']);
     }
 }

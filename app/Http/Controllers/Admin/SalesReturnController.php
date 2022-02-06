@@ -9,6 +9,7 @@ use App\Models\Inventory;
 use App\Models\PriceType;
 use App\Models\EmptyBottlesInventory;
 use App\Models\SalesInventory;
+use App\Models\LocationProduct;
 use Validator;
 
 class SalesReturnController extends Controller
@@ -59,7 +60,7 @@ class SalesReturnController extends Controller
             'salesinvoice_id'   => $request->input('salesinvoice_id_return'),
             'amount'            => $amount,
             'status_id'         => $request->input('status_id'),
-            'remarks'           => $request->input('remarks'),
+            'remarks'           => $request->input('remarks_return'),
         ]);
 
         return response()->json(['success' => 'Returned Successfully.']);
@@ -103,7 +104,7 @@ class SalesReturnController extends Controller
             'return_qty'        => $request->input('return_qty'),
             'amount'            => $amount,
             'status_id'         => $request->input('status_id'),
-            'remarks'           => $request->input('remarks'),
+            'remarks'           => $request->input('remarks_return'),
             'type_of_return'    => $request->input('type_of_return'),
         ]);
 
@@ -115,7 +116,14 @@ class SalesReturnController extends Controller
     {
         $is_purchase = $request->get('is_purchase');
         if($is_purchase == 'YES'){
-            EmptyBottlesInventory::where('product_id', $salesReturn->product_id)->decrement('qty', $salesReturn->return_qty);
+            if($salesReturn->type_of_return == 'EMPTY'){
+                EmptyBottlesInventory::where('product_id', $salesReturn->product_id)->decrement('qty', $salesReturn->return_qty);
+            }
+            if($salesReturn->type_of_return == 'PULL'){
+                LocationProduct::where('product_id', $salesReturn->product_id)
+                                ->where('location_id', 3)
+                                ->decrement('stock', $salesReturn->return_qty);
+            }
             $salesReturn->delete();
         }else{
             $salesReturn->delete();

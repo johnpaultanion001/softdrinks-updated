@@ -42,7 +42,7 @@
                 
                 <div class="modal-body">
                     <div class="row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-12">
                                 <div class="form-group">
                                     <label class="control-label text-uppercase" >ORDER #</label>
                                     <input type="text" name="id" id="id" class="form-control" readonly/>
@@ -51,94 +51,155 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="control-label text-uppercase" >DOC NO.</label>
-                                    <input type="text" name="doc_no" id="doc_no" class="form-control" readonly/>
+                                    <input type="text" name="doc_no" id="doc_no" class="form-control"/>
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="control-label text-uppercase" >Entry Date <span class="text-danger">*</span></label>
-                                    <input type="date" name="entry_date" id="entry_date" class="form-control" readonly/>
+                                    <input type="date" name="entry_date" id="entry_date" class="form-control"/>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Customer Name<span class="text-danger">*</span></label>
-                                    <input type="text" name="customer_name" id="customer_name" class="form-control" readonly/>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Customer Area</label>
-                                    <input type="text" name="customer_area" id="customer_area" class="form-control" readonly/>
-                                </div>
-                            </div>
+
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="control-label text-uppercase" >Remarks</label>
-                                    <textarea name="remarks" id="remarks" class="form-control" readonly></textarea>
+                                    <textarea name="remarks" id="remarks" class="form-control"></textarea>
                                 </div>
                             </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Payment</label>
-                                    <input type="text" name="payment" id="payment" class="form-control" readonly/>
+
+                            <div class="col-sm-6">
+                                <label class="control-label text-uppercase" >Assign Deliver</label>
+                                <select name="deliver_id" id="deliver_id" class="form-control select2">
+                                    <option value="" disabled selected>Select Customer</option>
+                                    @foreach ($deliveries as $deliver)
+                                        <option value="{{$deliver->id}}">{{$deliver->title}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label text-uppercase" >Customer</label>
+                                <select name="customer_id" id="customer_id" class="form-control select2">
+                                    <option value="" disabled selected>Select Customer</option>
+                                    @foreach ($customers as $customer)
+                                        <option value="{{$customer->id}}">{{$customer->customer_code}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-sm-12 mt-2 row">
+                                <div class="col-sm-6 mb-2">
+                                    <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">Sales Records</h4>
+                                </div>
+                                <div class="col-sm-12" id="sales">
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-12 mt-2 row">
+                                <div class="col-sm-6 mb-2">
+                                    <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">Returns Records</h4>
+                                </div>
+                                <div class="col-sm-12" id="returns">
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-12 mt-3 p-2 bg-default">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <h5 class="text-white text-uppercase">Sub Total:</h5>
+                                        <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">₱</div>
+                                        </div>
+                                            <input type="text" name="sub_total"  id="sub_total" class="form-control" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <h5 class="text-white text-uppercase">Total Discount:</h5>
+                                        <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">₱</div>
+                                        </div>
+                                            <input type="text" name="total_discount"  id="total_discount" class="form-control" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <h5 class="text-white text-uppercase">Total Sales AMT:</h5>
+                                        <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">₱</div>
+                                        </div>
+                                            <input type="text" name="total_sales_amount"  id="total_sales_amount" class="form-control" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <h5 class="text-white text-uppercase">Total Return AMT:</h5>
+                                        <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">₱</div>
+                                        </div>
+                                            <input type="text" name="total_return_amount"  id="total_return_amount" class="form-control" readonly/>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Total Sales Amt</label>
-                                    <input type="text" name="tsa" id="tsa" class="form-control" readonly/>
+
+                            <div class="col-sm-12 p-2 bg-primary">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <h5 class="text-white text-uppercase">Prev Bal:</h5>
+                                        <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">₱</div>
+                                        </div>
+                                            <input type="text" name="prev_bal"  id="prev_bal" class="form-control" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <h5 class="text-white text-uppercase">New Bal:</h5>
+                                        <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">₱</div>
+                                        </div>
+                                            <input type="text" name="new_bal"  id="new_bal" class="form-control" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <h5 class="text-white text-uppercase">Cash:</h5>
+                                        <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">₱</div>
+                                        </div>
+                                            <input type="text" name="cash"  id="cash" class="form-control"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <h5 class="text-white text-uppercase">Change:</h5>
+                                        <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">₱</div>
+                                        </div>
+                                            <input type="text" name="change"  id="change" class="form-control" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <h5 class="text-white text-uppercase">Payment:</h5>
+                                        <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">₱</div>
+                                        </div>
+                                            <input type="text" name="payment"  id="payment" class="form-control" readonly/>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Sold Qty</label>
-                                    <input type="text" name="sold_qty" id="sold_qty" class="form-control" readonly/>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Discounted</label>
-                                    <input type="text" name="discounted" id="discounted" class="form-control" readonly/>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Total Return Amt</label>
-                                    <input type="text" name="tra" id="tra" class="form-control" readonly/>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Return QTY</label>
-                                    <input type="text" name="return_qty" id="return_qty" class="form-control" readonly/>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Cash <span class="text-danger">*</span></label>
-                                    <input type="text" name="cash1" id="cash1" class="form-control" readonly/>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Change</label>
-                                    <input type="text" name="change1" id="change1" class="form-control" readonly/>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Created At</label>
-                                    <input type="text" name="created_date" id="created_date" class="form-control" readonly/>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Created By</label>
-                                    <input type="text" name="created_by" id="created_by" class="form-control" readonly/>
-                                </div>
-                            </div>
+                          
+                           
                            
                         
                     </div>
@@ -147,25 +208,7 @@
                     
                 </div>
 
-                <div class="col-sm-12 row">
-                    <div class="col-sm-6 mb-2">
-                        <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">Sales Records</h4>
-                    </div>
-                    <div class="col-sm-12" id="sales">
-
-                    </div>
-
-                </div>
-
-                <div class="col-sm-12 row">
-                    <div class="col-sm-6 mb-2">
-                        <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">Returns Records</h4>
-                    </div>
-                    <div class="col-sm-12" id="returns">
-
-                    </div>
-
-                </div>
+               
 
                 
                 <input type="hidden" name="si_hidden_id" id="si_hidden_id" />
@@ -389,9 +432,10 @@
             }	
         })
     }
+    
     $(document).on('click', '.view', function(){
         $('#siModal').modal('show');
-        $('.modal-title').text('VEIW SALES INVOICE');
+        $('.modal-title').text('VEIW/EDIT SALES INVOICE');
         $('#siForm')[0].reset();
 
         var id = $(this).attr('view');
@@ -404,48 +448,32 @@
                 $('#si_content').hide();
             },
             success:function(data){
-                $('#loading-containermodal').hide();
-                $('#si_content').show();
-                $.each(data.result, function(key,value){
-                    if(key == $('#'+key).attr('id')){
-                        $('#'+key).val(value)
-                    }
-                })
-                if(data.customer_name){
-                    $('#customer_name').val(data.customer_name);
-                }
-                if(data.payment){
-                    $('#payment').val(data.payment);
-                }
-                if(data.tsa){
-                    $('#tsa').val(data.tsa);
-                }
-                if(data.sold_qty){
-                    $('#sold_qty').val(data.sold_qty);
-                }
-                if(data.discounted){
-                    $('#discounted').val(data.discounted);
-                }
-                if(data.tra){
-                    $('#tra').val(data.tra);
-                }
-                if(data.return_qty){
-                    $('#return_qty').val(data.return_qty);
-                }
-                if(data.cash1){
-                    $('#cash1').val(data.cash1);
-                }
-                if(data.change1){
-                    $('#change1').val(data.change1);
-                }
-                if(data.created_by){
-                    $('#created_by').val(data.created_by);
-                }
-                if(data.created_date){
-                    $('#created_date').val(data.created_date);
-                }          
+                
+                $('#id').val(data.order_number);
+                $('#doc_no').val(data.doc_no);
+                $('#entry_date').val(data.entry_date);
+                $('#remarks').val(data.remarks);
+                $("#deliver_id").select2("trigger", "select", {
+                    data: { id: data.deliver_id }
+                });
+                $("#customer_id").select2("trigger", "select", {
+                    data: { id: data.customer_id }
+                });
+                $('#sub_total').val(data.sub_total);
+                $('#total_discount').val(data.total_discount);
+                $('#total_sales_amount').val(data.total_sales_amount);
+                $('#total_return_amount').val(data.total_return_amount);
+
+                $('#prev_bal').val(data.balance);
+                $('#new_bal').val(data.balance);
+                $('#cash').val(data.cash);
+                $('#change').val(data.change);
+                $('#payment').val(data.payment);
+
                 sales();
                 returns();
+                $('#loading-containermodal').hide();
+                $('#si_content').show();
             }
         })
     });
@@ -555,6 +583,54 @@
                                         $("#success-alert").slideUp(500);
                                     });
                                     returns();
+                                }
+                            }
+                        })
+                    }
+                },
+                cancel:  {
+                    text: 'cancel',
+                    btnClass: 'btn-red',
+                    keys: ['enter', 'shift'],
+                }
+            }
+        });
+    });
+
+    //void
+    $(document).on('click', '.void', function(){
+        var id          = $(this).attr('void');
+        $.confirm({
+            title: 'Confirmation',
+            content: 'You really want to void this transaction?',
+            type: 'red',
+            buttons: {
+                confirm: {
+                    text: 'confirm',
+                    btnClass: 'btn-blue',
+                    keys: ['enter', 'shift'],
+                    action: function(){
+                        return $.ajax({
+                            url:"/admin/salesInvoice/"+id+"/void",
+                            method:'DELETE',
+                            data: {
+                               _token: '{!! csrf_token() !!}',
+                            },
+                            dataType:"json",
+                            beforeSend:function(){
+                                $('.void').text('Loading..');
+                                $('.void').attr('disabled', true);
+                            },
+                            success:function(data){
+                                if(data.success){
+                                    $('.void').text('VOID');
+                                    $('.void').attr('disabled', false);
+                                    loadRecords();
+                                    $('#success-alert').addClass('bg-primary');
+                                    $('#success-alert').html('<strong>' + data.success + '</strong>');
+                                    $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                                        $("#success-alert").slideUp(500);
+                                    });
                                 }
                             }
                         })

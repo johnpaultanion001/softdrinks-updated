@@ -20,8 +20,7 @@
                 <th scope="col">RG ID</th>
                 <th scope="col">Product ID</th>
 
-                <th scope="col">Product Code</th>
-                <th scope="col">Description</th>
+                <th scope="col">Product Code/Desc</th>
                 <th scope="col">Overall Stock</th>
                 <th scope="col">Location Stock</th>
                 <th scope="col">Sold</th>
@@ -53,11 +52,7 @@
                       </td>
 
                       <td>
-                          {{  $product->product_code ?? '' }}
-                      </td>
-                      
-                      <td>
-                          {{  $product->description ?? '' }}
+                          {{  $product->product_code ?? '' }}/{{  $product->description ?? '' }}
                       </td>
                       <td>
                           {{  $product->location_products->sum('stock') ?? ''}}
@@ -138,7 +133,7 @@ $(function () {
   });
 
   $('select[name="filter_location"]').on('change', function () {
-    table.columns(6).search( this.value ).draw();
+    table.columns(5).search( this.value ).draw();
   });
 
     

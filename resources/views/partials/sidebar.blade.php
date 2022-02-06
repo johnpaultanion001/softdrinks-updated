@@ -127,6 +127,15 @@
                         </a>
                       </li>
                     @endcan
+                    @can('assign_deliver_access')
+                      <li class="nav-item">
+                        <a class="nav-link {{ request()->is('admin/assign_deliver') || request()->is('admin/assign_deliver/*') ? 'active' : '' }}" href="{{ route("admin.assign_deliver.index") }}">
+                        <i class="text-pink fas fa-tags"></i>
+                          <span class="nav-link-text text-uppercase">Assign Deliver</span>
+                        </a>
+                      </li>
+                    @endcan
+                    
                 </ul>
             @endcan
 

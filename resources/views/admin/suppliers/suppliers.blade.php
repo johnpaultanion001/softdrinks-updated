@@ -8,7 +8,6 @@
 @endsection
 
 
-
 @section('content')
 <div id="loading-container" class="loading-container">
     <div class="loading"></div>
@@ -39,12 +38,7 @@
                          
                         <!-- Modal body -->
                         <div class="modal-body">
-                            <div id="loading-containermodal" class="loading-container">
-                                <div class="loading"></div>
-                                <div id="loading-text">loading</div>
-                            </div> 
-                           
-                            <div id="modalbody" class="row">
+                            <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Name Of Supplier:<span class="text-danger">*</span> </label>
@@ -64,7 +58,16 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-sm-12">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label text-uppercase" >Current Balance: <span class="text-danger">*</span></label>
+                                        <input type="number" name="current_balance" id="current_balance" class="form-control" />
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong id="error-current_balance"></strong>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
                                     <div class="form-group">
                                         <label class="control-label text-uppercase" >Address:<span class="text-danger">*</span> </label>
                                         <input type="text" name="address" id="address" class="form-control" />
@@ -247,23 +250,17 @@ $('#myForm').on('submit', function(event){
         beforeSend:function(){
             $("#action_button").attr("disabled", true);
             $("#action_button").attr("value", "Loading..");
-            $('#loading-containermodal').show();
-            $('#modalbody').hide();
         },
         success:function(data){
-            var html = '';
-            $('#loading-containermodal').hide();
-            $('#modalbody').show();
+            if($('#action').val() == 'Edit'){
+                $("#action_button").attr("disabled", false);
+                $("#action_button").attr("value", "Update");
+            }else{
+                $("#action_button").attr("disabled", false);
+                $("#action_button").attr("value", "Submit");
+            }
             if(data.errors){
                 $.each(data.errors, function(key,value){
-                    if($('#action').val() == 'Edit'){
-                        $("#action_button").attr("disabled", false);
-                        $("#action_button").attr("value", "Update");
-                    }else{
-                        $("#action_button").attr("disabled", false);
-                        $("#action_button").attr("value", "Submit");
-                    }
-                  
                     if(key == $('#'+key).attr('id')){
                         $('#'+key).addClass('is-invalid')
                         $('#error-'+key).text(value)
@@ -271,13 +268,6 @@ $('#myForm').on('submit', function(event){
                 })
             }
             if(data.success){
-                if($('#action').val() == 'Edit'){
-                    $("#action_button").attr("disabled", false);
-                    $("#action_button").attr("value", "Update");
-                }else{
-                    $("#action_button").attr("disabled", false);
-                    $("#action_button").attr("value", "Submit");
-                }
                 $('#success-alert').addClass('bg-primary');
                 $('#success-alert').html('<strong>' + data.success + '</strong>');
                 $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){

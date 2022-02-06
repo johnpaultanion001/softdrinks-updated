@@ -17,7 +17,7 @@ use App\Models\StatusReturn;
 use App\Models\EmptyBottlesInventory;
 use App\Models\LocationProduct;
 use App\Models\AssignDeliver;
-
+use Carbon\Carbon;
 use Validator;
 use DB;
 use Gate;
@@ -126,8 +126,8 @@ class SalesInvoiceController extends Controller
 
         $orders = Order::latest()->get();
         foreach($orders as $order){
-            $stocks = LocationProduct::where('product_id', $order->product_id)->where('location_id', 2)->sum('stock');
-            if($stocks <  $order->purchase_qty){
+            $stocks = LocationProduct::where('product_id', $order->product_id)->where('location_id', 1)->sum('stock');
+            if($order->purchase_qty > $stocks){
                 return response()->json(['maxstock' =>
                     'Insufficient Stocks. This Order '.$order->product->product_code.'( '.$order->purchase_qty.' )'.
                     ' has reach maximum stock of this product'. ' Available Stock:'
@@ -153,6 +153,16 @@ class SalesInvoiceController extends Controller
             }
             
         }
+        if($cash < $payment){
+            // return response()->json(['insufficient_cash'  => 'cash must be greater than the payment <br> check the Receivable Checkbox to proceed this transaction']);
+            $validated =  Validator::make($request->all(), [
+                'receivables' =>'accepted'
+            ]);
+            if ($validated->fails()) {
+                return response()->json(['errors' => $validated->errors()]);
+            }
+        }
+        
         return response()->json(
             [
               'submit'  => 'submit',
@@ -271,7 +281,7 @@ class SalesInvoiceController extends Controller
             }
         }
         //FULL
-        $returnFullBottle = SalesReturn::where('salesinvoice_id', $salesinvoice_id)->where('type_of_return', 'FULL')->get();
+        $returnFullBottle = SalesReturn::where('salesinvoice_id', $salesinvoice_id)->where('type_of_return', 'PULL')->get();
         foreach($returnFullBottle as $return){
             $location = LocationProduct::where('product_id', $return->product_id)
                             ->where('location_id', 3)
@@ -288,7 +298,7 @@ class SalesInvoiceController extends Controller
                                     ->increment('stock', $return->return_qty);
             }
         }      
-
+        SalesReturn::where('salesinvoice_id', $salesinvoice_id)->update(['isComplete'    => true]);
         $passdata = Order::query()
         ->each(function ($oldRecord) {
                 $newPost = $oldRecord->replicate();
@@ -301,7 +311,6 @@ class SalesInvoiceController extends Controller
             Order::truncate();
             OrderNumber::where('id', 1)->increment('order_number', 1);
             OrderNumber::where('id', 1)->increment('salesinvoice_id', 1);
-
             return response()->json(['success' => 'Successfully Check Out.']);
         }
     }
@@ -317,7 +326,9 @@ class SalesInvoiceController extends Controller
 
     public function allrecords(){
         date_default_timezone_set('Asia/Manila');
-        return view('admin.salesinvoice.allrecords.record_sales_invoice');
+        $customers = Customer::where('isRemove', 0)->orderBy('id', 'asc')->get();
+        $deliveries = AssignDeliver::where('isRemove', 0)->orderBy('id', 'asc')->get();
+        return view('admin.salesinvoice.allrecords.record_sales_invoice', compact('customers', 'deliveries'));
     }
     public function records(){
         $title_filter  = 'All SALES INVOICE';
@@ -343,30 +354,28 @@ class SalesInvoiceController extends Controller
     public function edit(SalesInvoice $salesInvoice)
     {
         $payment    = $salesInvoice->sales()->sum('total') - $salesInvoice->returns()->sum('amount');
-        $tsa        = $salesInvoice->sales()->sum('total_amount_receipt');
-        $sold_qty   = $salesInvoice->sales()->sum('purchase_qty');
-        $tra        = $salesInvoice->returns()->sum('amount');
-        $return_qty = $salesInvoice->returns()->sum('return_qty');
-
+        $change       = $salesInvoice->cash - $payment;  
 
         if (request()->ajax()) {
             return response()->json(
                 [
-                    'result'                  => $salesInvoice,
-                    'customer_name'           => $salesInvoice->customer->customer_name,
-                    'customer_area'           => $salesInvoice->customer->area,
-                    'payment'                 => '₱ ' . number_format($payment , 2, '.', ','),
+                    'order_number'    => $salesInvoice->salesinvoice_id,
+                    'doc_no'          => $salesInvoice->doc_no,
+                    'entry_date'      => $salesInvoice->entry_date,
+                    'remarks'         => $salesInvoice->remarks,
+                    'deliver_id'      => $salesInvoice->deliver_id,
+                    'customer_id'     => $salesInvoice->customer_id,
 
-                    'tsa'                     => '₱ ' . number_format($tsa , 2, '.', ','),
-                    'sold_qty'                =>  number_format($sold_qty , 2, '.', ','),
-                    'discounted'              => '₱ ( ' . number_format($salesInvoice->sales->sum->discounted, 2, '.', ',') . ' )',
-                    'tra'                     => '₱ ( ' . number_format($tra, 2, '.', ',') . ' )',
-                    'return_qty'              =>  number_format($return_qty , 2, '.', ','),
-                    'cash1'                   => '₱ ' . number_format($salesInvoice->cash , 2, '.', ','),
-                    'change1'                 => '₱ ' . number_format($salesInvoice->change , 2, '.', ','),
-                    'created_by'              => $salesInvoice->user->name,
-                    'created_date'            => $salesInvoice->created_at->format('F d,Y h:i A'),
+                    'sub_total'              => number_format($salesInvoice->sales()->sum('total_amount_receipt'), 2, '.', ','),
+                    'total_discount'       => '('. number_format($salesInvoice->sales()->sum('discounted'), 2, '.', ',') .')', 
+                    'total_sales_amount'     => number_format($salesInvoice->sales()->sum('total'), 2, '.', ','),  
                     
+                    'total_return_amount'    => '('. number_format($salesInvoice->returns()->sum('amount'), 2, '.', ',') .')', 
+
+                    'balance'                => number_format($salesInvoice->customer->current_balance, 2, '.', ','),
+                    'cash'                => number_format($salesInvoice->cash, 2, '.', ','),
+                    'change'                => number_format($change, 2, '.', ','),
+                    'payment'                => number_format($payment, 2, '.', ','),
                 ]
             );
         }
@@ -384,13 +393,26 @@ class SalesInvoiceController extends Controller
     }
 
     public function void(SalesInvoice $salesInvoice)
-    {
-        SalesInvoice::find($salesInvoice->id)->update([
-            'isVoid' => '1',
-        ]);
-        Sales::where('salesinvoice_id' ,$salesInvoice->salesinvoice_id)->update([
-            'isRemove' => '1',
-        ]);
+    {   
+        foreach($salesInvoice->sales()->get() as $sales){
+            LocationProduct::where('product_id', $sales->product_id)
+                            ->where('location_id', 1)
+                            ->increment('stock', $sales->purchase_qty);
+            SalesInventory::where('id', $sales->product_id)->decrement('sold', $sales->purchase_qty);
+            $sales->delete();
+        }
+        foreach($salesInvoice->returns()->get() as $salesReturn){
+            if($salesReturn->type_of_return == 'EMPTY'){
+                EmptyBottlesInventory::where('product_id', $salesReturn->product_id)->decrement('qty', $salesReturn->return_qty);
+            }
+            if($salesReturn->type_of_return == 'PULL'){
+                LocationProduct::where('product_id', $salesReturn->product_id)
+                                ->where('location_id', 3)
+                                ->decrement('stock', $salesReturn->return_qty);
+            }
+            $salesReturn->delete();
+        }
+        $salesInvoice->delete();
         return response()->json(['success' => 'Transaction Successfully Void.']);
     }
     
@@ -477,7 +499,7 @@ class SalesInvoiceController extends Controller
         $filter = $request->get('filter');
         if($filter == 'daily'){
             $title_filter  = 'From: ' . date('F d, Y') . ' To: ' . date('F d, Y');
-            $allrecords = SalesInvoice::where('isVoid' , 0)->latest()->whereDay('created_at', '=', date('d'))->get();
+            $allrecords = SalesInvoice::where('isVoid' , 0)->whereDate('created_at', Carbon::today())->latest()->get();
         }
         if($filter == 'monthly'){
             $title_filter  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');

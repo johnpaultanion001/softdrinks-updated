@@ -80,6 +80,8 @@
                                             <strong id="error-location_id"></strong>
                                         </span>
                                         <input id="location_id_hidden" type="hidden" value="{{$receiving_good->location_id ?? ''}}">
+                                        <input id="cash_hidden" type="hidden" value="{{$receiving_good->cash1 ?? ''}}">
+                                    
                                     </div>
                                 </div>    
                                 <div class="col-sm-3">
@@ -416,11 +418,7 @@
                                         <option value="" disabled selected>Select Product</option>
                                         @foreach ($product_code as $return)
                                             <option value="{{$return->product_id}}" class="text-uppercase">
-                                                @if($return->product_id == 0)
-                                                    NO BRAND ({{$return->qty}})
-                                                @else
-                                                {{$return->product->product_code ?? ''}}/{{$return->product->description ?? ''}} ({{$return->qty ?? ''}})
-                                                @endif
+                                               {{$return->product->product_code ?? ''}}/{{$return->product->description ?? ''}} ({{$return->qty ?? ''}})
                                             </option>
                                         @endforeach
                                     </select>
@@ -547,6 +545,7 @@
 var status = null;
 var supplier = $('#supplier_id_hidden').val();
 var location1 = $('#location_id_hidden').val();
+var cash = $('#cash_hidden').val();
 
 $(function () {
     $('#loading-containermodal').hide();
@@ -556,7 +555,11 @@ $(function () {
     $("#location_id").select2("trigger", "select", {
             data: { id: location1 }
     });
+    
     rgForm();
+    $('#cash1').val(cash);
+    
+    
 });
 
 
@@ -1334,10 +1337,14 @@ $(document).on('click', '.select_reuse', function(){
         url :"/admin/receiving_goods/supplier/reuse/" + id,
         dataType:"json",
         beforeSend:function(){
-            
+            $('.select_reuse').text('Loading..');
+            $('.select_reuse').attr('disabled', true);
         },
         success:function(data){
           if(data.success){
+            $('.select_reuse').text('Select');
+            $('.select_reuse').attr('disabled', false);
+
             $('#success-alert').addClass('bg-primary');
             $('#success-alert').html('<strong>' + data.success + '</strong>');
             $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
@@ -1410,6 +1417,22 @@ $('#purchaseorderForm').on('submit', function(event){
                     if(key == 'payables'){
                         $('#new_bal').addClass('is-invalid')
                         $('#error-new_bal').text(value)
+
+                        $.confirm({
+                            title: 'Confirmation',
+                            content: value,
+                            type: 'red',
+                            buttons: {
+                                confirm: {
+                                    text: 'confirm',
+                                    btnClass: 'btn-blue',
+                                    keys: ['enter', 'shift'],
+                                    action: function(){
+                                        $('input[name="payables"]').prop('checked', true);
+                                    }
+                                },
+                            }
+                        });
                     }
                 })
             }
@@ -1546,8 +1569,12 @@ function payables(){
             data: { supplier:supplier, new_bal:new_bal, _token: '{!! csrf_token() !!}'},
             success: function(data){
                 if(data.success){
-                    alert(data.success);
-                }
+                        $.alert({
+                            title: 'Success Message',
+                            content: data.success,
+                            type: 'green',
+                        })
+                    }
                 
             }	
         })

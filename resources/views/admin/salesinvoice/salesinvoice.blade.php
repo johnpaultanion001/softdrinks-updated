@@ -206,11 +206,11 @@
             </div>
 
             <!-- Modal body -->
-            <div class="modal-body">
-                <div id="productlist">
-                
-                </div>
+        
+            <div id="productlist">
+            
             </div>
+            
 
             <div class="modal-footer bg-white">
                 
@@ -291,8 +291,8 @@
                                 <label class="form-check-label" for="empty">EMPTY</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input type_of_return" type="radio" id="full" name="type_of_return" value="FULL">
-                                <label class="form-check-label" for="full">FULL</label>
+                                <input class="form-check-input type_of_return" type="radio" id="pull" name="type_of_return" value="PULL">
+                                <label class="form-check-label" for="pull">PULL</label>
                             </div>
                             <br>
                             <br>
@@ -302,7 +302,6 @@
                             <label class="control-label text-uppercase" >Product Code/Desc:<span class="text-danger">*</span></label>
                                 <select name="product_id" id="product_id" class="form-control select2">
                                     <option value="" disabled selected>Select Product</option>
-                                    <option value="0">No Brand</option>
                                     @foreach ($product_codes as $product_code)
                                         <option value="{{$product_code->id}}">{{$product_code->product_code}} / {{$product_code->description}}</option>
                                     @endforeach
@@ -349,9 +348,9 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class="control-label text-uppercase" >Remarks: </label>
-                                <textarea name="remarks" id="remarks" class="form-control"></textarea>
+                                <textarea name="remarks_return" id="remarks_return" class="form-control"></textarea>
                                 <span class="invalid-feedback" role="alert">
-                                    <strong id="error-remarks"></strong>
+                                    <strong id="error-remarks_return"></strong>
                                 </span>
                             </div>
                         </div>
@@ -399,6 +398,10 @@
 
         </div>
     </div>
+</div>
+
+<div id="success-order" class="success-order col-4 alert text-white fade hide fixed-bottom" style="margin-left: 65%; z-index: 9999;" role="alert">
+    
 </div>
 
     <!-- Footer -->
@@ -485,7 +488,11 @@ function receivables(){
                 data: { customer:customer, new_bal:new_bal, _token: '{!! csrf_token() !!}'},
                 success: function(data){
                     if(data.success){
-                        alert(data.success);
+                        $.alert({
+                            title: 'Success Message',
+                            content: data.success,
+                            type: 'green',
+                        })
                     }
                     
                 }	
@@ -663,10 +670,27 @@ $('#myForm').on('submit', function(event){
                     if(key == $('#'+key).attr('id')){
                         $('#'+key).addClass('is-invalid')
                         $('#error-'+key).text(value)
+                        window.location.href = '#'+key;
                     }
                     if(key == 'receivables'){
                         $('#new_bal').addClass('is-invalid')
                         $('#error-new_bal').text(value)
+
+                        $.confirm({
+                            title: 'Confirmation',
+                            content: value,
+                            type: 'red',
+                            buttons: {
+                                confirm: {
+                                    text: 'confirm',
+                                    btnClass: 'btn-blue',
+                                    keys: ['enter', 'shift'],
+                                    action: function(){
+                                        $('input[name="receivables"]').prop('checked', true);
+                                    }
+                                },
+                            }
+                        });
                     }
                  
                 })
@@ -754,7 +778,7 @@ $(document).on('click', '#print_button', function(){
                 $('#receipt-body').addClass('receipt-body');
 
                 $('#success-checkout').addClass('bg-primary');
-                $('#success-checkout').html('Click <a href="/admin/sales" class="btn-white btn btn-sm">HERE</a> To view your reports' );
+                $('#success-checkout').html('Click <a href="/admin/transactions" class="btn-white btn btn-sm">HERE</a> To view your trasaction' );
                 $("#success-checkout").fadeTo(10000, 500).slideUp(500, function(){
                     $("#success-checkout").slideUp(500);
                 });
@@ -801,21 +825,33 @@ $(document).on('click', '.editreturn', function(){
             }
             
             $.each(data.result, function(key,value){
-                if(key == $('#'+key).attr('id')){
-                    $('#'+key).val(value)
-                    if(key == 'product_id'){
-                        $("#product_id").select2("trigger", "select", {
-                            data: { id: value }
-                        });
-                    }
+                if(key == 'return_qty'){
+                    $("#return_qty").val(value)
                 }
+                if(key == 'unit_price'){
+                    $("#unit_price").val(value)
+                }
+                if(key == 'product_id'){
+                    $("#product_id").select2("trigger", "select", {
+                        data: { id: value }
+                    });
+                }
+                if(key == 'status_id'){
+                    $("#status_id").select2("trigger", "select", {
+                        data: { id: value }
+                    });
+                }
+              
                 if(key == 'type_of_return'){
-                    if(value == 'FULL'){
+                    if(value == 'PULL'){
                         $('#status_container').hide();
                     }else{
                         $('#status_container').show();
                     }
                     $("input[name=type_of_return]").val([value]);
+                }
+                if(key == 'remarks'){
+                    $('#remarks_return').val(value)
                 }
             })
             
@@ -908,7 +944,7 @@ $('select[name="product_id"]').on("change", function(event){
 //Type of return
 $('input[name="type_of_return"]').on("change", function(event){
     var tor = $(this).val();
-    if(tor == 'FULL'){
+    if(tor == 'PULL'){
         $('#status_container').hide();
         $('#unit_price').val(null);
     }else{

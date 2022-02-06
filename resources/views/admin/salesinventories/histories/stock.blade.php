@@ -5,7 +5,7 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">RG ID/Supplier</th>
-                <th scope="col">Product</th>
+                <th scope="col">Product Code/Desc</th>
                 <th scope="col">Stock QTY</th>
                 <th scope="col">Unit Cost</th>
                 <th scope="col">Regular Discount</th>
@@ -24,7 +24,7 @@
                         {{$product->receiving_good_id ?? '' }}/{{$product->supplier->name ?? '' }}
                     </td>
                     <td>
-                        {{$product->product_code ?? '' }}
+                        {{$product->product_code ?? '' }}/{{$product->description ?? '' }}
                     </td>
                     <td>
                         {{$product->qty ?? '' }}

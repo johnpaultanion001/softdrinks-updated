@@ -78,6 +78,7 @@
 
 @section('script')
 <script>
+var filter_inventory = null;
 
 $(function () {
     
@@ -141,6 +142,66 @@ $(document).on('click', '#btn_print_profit_report', function(){
     }, 500);
 });
 
+$(document).on('click', '#btn_print_inventory_report', function(){
+    var contents = $(".print_inventory_report").html();
+    var frame1 = $('<iframe />');
+    frame1[0].name = "frame1";
+    frame1.css({ "position": "absolute", "top": "-1000000px" });
+    $("body").append(frame1);
+    var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+    frameDoc.document.open();
+    //Create a new HTML document.
+    frameDoc.document.write('<html><head><title>Title</title>');
+    frameDoc.document.write('</head><body>');
+    //Append the external CSS file.
+    frameDoc.document.write('<link href="/assets/css/argon.css" rel="stylesheet" type="text/css" />');
+    frameDoc.document.write('<style>size: A4 portrait;</style>');
+    var source = 'bootstrap.min.js';
+    var script = document.createElement('script');
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('src', source);
+    //Append the DIV contents.
+    frameDoc.document.write(contents);
+    frameDoc.document.write('</body></html>');
+    frameDoc.document.close();
+    setTimeout(function () {
+    window.frames["frame1"].focus();
+    window.frames["frame1"].print();
+    frame1.remove();
+    }, 500);
+});
+
+$(document).on('click', '#btn_print_assign_deliver', function(){
+    var contents = $(".print_assign_deliver").html();
+    var frame1 = $('<iframe />');
+    frame1[0].name = "frame1";
+    frame1.css({ "position": "absolute", "top": "-1000000px" });
+    $("body").append(frame1);
+    var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+    frameDoc.document.open();
+    //Create a new HTML document.
+    frameDoc.document.write('<html><head><title>Title</title>');
+    frameDoc.document.write('</head><body>');
+    //Append the external CSS file.
+    frameDoc.document.write('<link href="/assets/css/argon.css" rel="stylesheet" type="text/css" />');
+    frameDoc.document.write('<style>size: A4 portrait;</style>');
+    var source = 'bootstrap.min.js';
+    var script = document.createElement('script');
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('src', source);
+    //Append the DIV contents.
+    frameDoc.document.write(contents);
+    frameDoc.document.write('</body></html>');
+    frameDoc.document.close();
+    setTimeout(function () {
+    window.frames["frame1"].focus();
+    window.frames["frame1"].print();
+    frame1.remove();
+    }, 500);
+});
+
+
+
  //Filter
  $(document).on('click', '.filter', function(){
     var filter = $(this).attr('filter');
@@ -157,6 +218,7 @@ $(document).on('click', '#btn_print_profit_report', function(){
         },
         success: function(response){
             $('#filter_loading').hide();
+            filter_inventory = filter;
             $("#load_transactions").html(response);
         }	
     })
@@ -176,6 +238,67 @@ $(document).on('change', '.dd_filter', function(){
         success: function(response){
             $('#filter_loading').hide();
             $("#load_transactions").html(response);
+        }	
+    })
+});
+
+// $(document).on('change', '#filter_deliver', function(){
+//     var value = $(this).val();
+//     var filter = filter_inventory;
+//     var from = $('#fbd_from_date').val();
+//     var to = $('#fbd_to_date').val();
+
+//     $.ajax({
+//         url: "/admin/transactions/assign_deliver_report", 
+//         type: "get",
+//         dataType: "HTMl",
+//         data: {value:value,filter:filter,from:from,to:to, _token: '{!! csrf_token() !!}'},
+//         beforeSend: function() {
+//             $('#filter_loading').show();
+//         },
+//         success: function(response){
+//             $('#filter_loading').hide();
+//             $("#load_transactions").html(response);
+//         }	
+//     })
+// });
+
+
+$(document).on('click', '#btn_inventory_report', function(){
+    var filter = filter_inventory;
+    var from = $('#fbd_from_date').val();
+    var to = $('#fbd_to_date').val();
+
+    $.ajax({
+        url: "/admin/transactions/inventory_report", 
+        type: "get",
+        data: {filter:filter,from:from,to:to, _token: '{!! csrf_token() !!}'},
+        dataType: "json",
+        beforeSend: function() {
+            $('#btn_inventory_report').attr('disabled', true);
+        },
+        success: function(data){
+            $('#btn_inventory_report').attr('disabled', false);
+            var list = '';
+            $.each(data.data, function(key,value){
+                list += '<tr>';
+                    list += '<td>';
+                        list += value.product;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.category;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.beginning_inventory;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.ending_inventory;
+                    list += '</td>';
+                list += '</tr>';
+            });
+            $('#list_inventory_report').empty().append(list);
+            $('#modal_inventory').modal('show');
+
         }	
     })
 });

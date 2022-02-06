@@ -67,11 +67,7 @@
                               
                         </td>
                         <td>
-                            @if($bottle->product_id == 0)
-                                No Brand
-                            @else
-                                {{  $bottle->product->product_code ?? '' }}/{{  $bottle->product->description ?? '' }}
-                            @endif
+                          {{  $bottle->product->product_code ?? '' }}/{{  $bottle->product->description ?? '' }}
                             
                         </td>
                         <td>

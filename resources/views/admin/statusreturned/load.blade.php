@@ -28,7 +28,6 @@
                 <th>Actions</th>
                 <th>Code</th>
                 <th>Title</th>
-                <th>Created By</th>
                 <th>Created At</th>
                
                 
@@ -39,8 +38,8 @@
                     <tr data-entry-id="{{ $stat->id ?? '' }}">
                        
                         <td>
-                            <button type="button" name="edit" edit="{{  $stat->id ?? '' }}" class="text-uppercase edit btn btn-info btn-sm">Edit</button>
-                            <button type="button" name="remove" remove="{{  $stat->id ?? '' }}" id="{{  $stat->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm">Remove</button>
+                            <button type="button" name="edit" edit="{{  $stat->id ?? '' }}" class="text-uppercase edit btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                            <button type="button" name="remove" remove="{{  $stat->id ?? '' }}" id="{{  $stat->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                         </td>
                         <td>
                             {{  $stat->code ?? '' }}
@@ -49,10 +48,7 @@
                             {{  $stat->title ?? '' }}
                         </td>
                         <td>
-                             {{ $stat->user->name ?? '' }}
-                        </td>
-                        <td>
-                            {{ $stat->created_at->format('F d,Y h:i A') }}
+                            {{ $stat->created_at->format('M j , Y h:i A') }}
                         </td>
                         
                     </tr>

@@ -47,6 +47,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('transactions', 'TransactionController@index')->name('transactions.index');
     Route::get('transactions_load', 'TransactionController@load')->name('transactions.loadsales');
     route::get('transactions_filter', 'TransactionController@filter')->name('transactions.filter');
+    Route::get('transactions/inventory_report', 'TransactionController@inventory_report')->name('transactions.inventory_report');
+    Route::get('transactions/assign_deliver_report', 'TransactionController@assign_deliver_report')->name('transactions.assign_deliver_report');
+    
     //sales remove
     Route::delete('transactions/{sales}', 'TransactionController@destroy_sales')->name('transactions.destroy_sales');
 
@@ -145,11 +148,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('salesInvoice-receipt','SalesInvoiceController@receipt')->name('salesInvoice.receipt');
     Route::get('salesInvoice-alltotal','SalesInvoiceController@alltotal')->name('salesInvoice.alltotal');
     Route::get('salesInvoice-sales_receipt/{sales_receipt}', 'SalesInvoiceController@sales_receipt')->name('salesInvoice.sales_receipt');
-    Route::delete('salesInvoice-void/{salesInvoice}','SalesInvoiceController@void')->name('salesInvoice.void');
     Route::post('addtocart/{sales_inventory}',  'SalesInvoiceController@addtocart')->name('salesInvoice.addtocart');
     route::get('salesInvoice-compute', 'SalesInvoiceController@compute')->name('salesInvoice.compute');
     
     route::get('salesInvoice-receivables', 'SalesInvoiceController@receivables')->name('salesInvoice.receivables');
+
+    Route::delete('salesInvoice/{salesInvoice}/void','SalesInvoiceController@void')->name('salesInvoice.void');
+
     
     // Sales invoice all records
     Route::get('salesInvoice/salesInvoice/allrecords','SalesInvoiceController@allrecords')->name('salesInvoice.allrecords');
@@ -197,6 +202,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('recieve_return/remove/remove_all', 'RecieveReturnController@remove_all')->name('recieve_return.remove_all');
     route::get('recieve_return/product/return_amount', 'RecieveReturnController@return_amount')->name('recieve_return.return_amount');
     Route::resource('recieve_return', 'RecieveReturnController');
+
+     //Assing Deliver
+     route::resource('assign_deliver', 'AssignDeliverController');
 
     
     

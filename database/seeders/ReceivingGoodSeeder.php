@@ -32,7 +32,7 @@ class ReceivingGoodSeeder extends Seeder
 
                 'total_orders' => '29',
                 'over_all_cost' => '459755',
-                'cash' => '459755',
+                'cash1' => '459755',
                 'isRemove' => false,
 
                 'created_at' => date("Y-m-d H:i:s"),
@@ -55,7 +55,7 @@ class ReceivingGoodSeeder extends Seeder
 
                 'total_orders' => '16',
                 'over_all_cost' => '113422',
-                'cash' => '113422',
+                'cash1' => '113422',
                 'isRemove' => false,
 
                 'created_at' => date("Y-m-d H:i:s"),

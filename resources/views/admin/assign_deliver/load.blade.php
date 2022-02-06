@@ -13,41 +13,41 @@
         <div class="card-header border-0">
           <div class="row align-items-center">
             <div class="col">
-              <h3 class="mb-0 text-uppercase" id="titletable">Price Type</h3>
+              <h3 class="mb-0 text-uppercase" id="titletable">Assign Deliver</h3>
             </div>
             <div class="col text-right">
-              <button type="button" name="create_record" id="create_record" class="text-uppercase create_record btn btn-sm btn-primary">New Price Type</button>
+              <button type="button" name="create_record" id="create_record" class="text-uppercase create_record btn btn-sm btn-primary">New Record</button>
             </div>
           </div>
         </div>
         <div class="table-responsive">
           <!-- Projects table -->
-          <table class="table align-items-center table-flush datatable-pricetype display" cellspacing="0" width="100%">
+          <table class="table align-items-center table-flush assign_deliver_table display" cellspacing="0" width="100%">
             <thead class="thead-white">
               <tr>
                 <th>Actions</th>
-                <th>Price Type</th>
-                <th>Discount</th>
+                <th>Title</th>
+                <th>Description</th>
                 <th>Created At</th>
+                
               </tr>
             </thead>
             <tbody class="text-uppercase font-weight-bold">
-              @foreach($pricetypes as $key => $pricetype)
-                    <tr data-entry-id="{{ $pricetype->id ?? '' }}">
+              @foreach($assign_delivers as $assign_deliver)
+                    <tr data-entry-id="{{ $assign_deliver->id ?? '' }}">
                         <td>
-                            <button type="button" name="edit" edit="{{  $pricetype->id ?? '' }}" class="text-uppercase edit btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
-                            <button type="button" name="remove" remove="{{  $pricetype->id ?? '' }}" id="{{  $pricetype->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                            <button type="button" name="edit" edit="{{  $assign_deliver->id ?? '' }}" class="text-uppercase edit btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                            <button type="button" name="remove" remove="{{  $assign_deliver->id ?? '' }}" id="{{  $assign_deliver->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                         </td>
                         <td>
-                            {{  $pricetype->price_type ?? '' }}
+                            {{  $assign_deliver->title ?? '' }}
                         </td>
                         <td>
-                            <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($pricetype->discount , 0, ',', ',') }}
+                            {{  $assign_deliver->description ?? '' }}
                         </td>
                         <td>
-                            {{ $pricetype->created_at->format('M j , Y h:i A') }}
+                            {{ $assign_deliver->created_at->format('M j , Y h:i A') }}
                         </td>
-                     
                     </tr>
                 @endforeach
             </tbody>
@@ -63,7 +63,6 @@
   </div>
 </div>
 
-
 <script>
 $(function () {
  
@@ -74,7 +73,7 @@ $(function () {
     'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });
 
-  $('.datatable-pricetype:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+  $('.assign_deliver_table:not(.ajaxTable)').DataTable({ buttons: dtButtons })
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
         $($.fn.dataTable.tables(true)).DataTable()
             .columns.adjust();

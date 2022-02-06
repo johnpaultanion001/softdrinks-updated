@@ -53,7 +53,7 @@
                 <div class="form-group">
                 <small class="text-white">Filer By Location</small>
                     <select name="filter_location" id="filter_location" class="form-control select2">
-                        <option value="" disabled selected>Filter By Location</option>
+                        <option value="">Filter Location</option>
                         @foreach ($locations as $location)
                             <option value="{{$location->location_name}}"> {{$location->location_name}}</option>
                         @endforeach

@@ -53,6 +53,9 @@ class PermissionsTableSeeder extends Seeder
             [
                 'title' => 'status_return_access',
             ],
+            [
+                'title' => 'assign_deliver_access',
+            ],
             
             //REPORT
             [

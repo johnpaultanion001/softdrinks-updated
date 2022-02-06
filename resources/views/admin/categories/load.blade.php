@@ -27,7 +27,7 @@
               <tr>
                 <th>Actions</th>
                 <th>Name</th>
-                <th>Note</th>
+                <th>Remarks</th>
                 <th>Created At</th>
                 
               </tr>
@@ -36,8 +36,8 @@
               @foreach($categories as $key => $category)
                     <tr data-entry-id="{{ $category->id ?? '' }}">
                         <td>
-                            <button type="button" name="edit" edit="{{  $category->id ?? '' }}" class="text-uppercase edit btn btn-info btn-sm">Edit</button>
-                            <button type="button" name="remove" remove="{{  $category->id ?? '' }}" id="{{  $category->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm">Remove</button>
+                            <button type="button" name="edit" edit="{{  $category->id ?? '' }}" class="text-uppercase edit btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                            <button type="button" name="remove" remove="{{  $category->id ?? '' }}" id="{{  $category->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                         </td>
                         <td>
                             {{  $category->name ?? '' }}
@@ -46,7 +46,7 @@
                             {{  $category->note ?? '' }}
                         </td>
                         <td>
-                            {{ $category->created_at->format('F d,Y h:i A') }}
+                            {{ $category->created_at->format('M j , Y h:i A') }}
                         </td>
                     </tr>
                 @endforeach

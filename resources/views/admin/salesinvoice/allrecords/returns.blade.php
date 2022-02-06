@@ -5,9 +5,9 @@
             <tr>
                 <th scope="col">Action</th>
                 <th scope="col">ID</th>
-                <th scope="col">Product</th>
+                <th scope="col">Type Of Return</th>
+                <th scope="col">Product Code/Desc</th>
                 <th scope="col">Return Qty</th>
-                <th scope="col">Price Type/Discounted</th>
                 <th scope="col">Unit Price</th>
                 <th scope="col">Amount</th>
 
@@ -23,19 +23,19 @@
                         {{$return->id ?? '' }}
                     </td>
                     <td>
-                        {{$return->product->product_code ?? '' }}
+                        {{$return->type_of_return ?? '' }}
+                    </td>
+                    <td>
+                        {{$return->product->product_code ?? '' }}/{{$return->product->description ?? '' }}
                     </td>
                     <td>
                         {{$return->return_qty ?? '' }}
                     </td>
                     <td>
-                        {{$return->pricetype->price_type ?? ''}} / ₱ ( {{ number_format($return->discounted ?? '' , 2, '.', ',') }} )
+                        {{ number_format($return->unit_price ?? '' , 2, '.', ',') }}
                     </td>
                     <td>
-                        ₱ {{ number_format($return->unit_price ?? '' , 2, '.', ',') }}
-                    </td>
-                    <td>
-                        ₱ {{ number_format($return->amount ?? '' , 2, '.', ',') }}
+                        {{ number_format($return->amount ?? '' , 2, '.', ',') }}
                     </td>
                    
                 </tr>

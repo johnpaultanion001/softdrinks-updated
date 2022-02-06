@@ -21,12 +21,12 @@ class EmptyBottlesInventory extends Model
 
     public function sales_returns()
     {
-        return $this->hasMany(SalesReturn::class, 'product_id' , 'product_id')->where('type_of_return', 'EMPTY')->latest();
+        return $this->hasMany(SalesReturn::class, 'product_id' , 'product_id')->where('type_of_return', 'EMPTY')->where('isComplete', true)->latest();
     }
 
     public function recieve_returns()
     {
-        return $this->hasMany(RecieveReturn::class, 'product_id' , 'product_id')->latest();
+        return $this->hasMany(RecieveReturn::class, 'product_id' , 'product_id')->where('isComplete', true)->latest();
     }
 
     

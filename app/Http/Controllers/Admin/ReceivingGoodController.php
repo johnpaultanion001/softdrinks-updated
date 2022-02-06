@@ -21,6 +21,7 @@ use Gate;
 use Symfony\Component\HttpFoundation\Response;
 use DB;
 use App\Models\ReceivingProduct;
+use Carbon\Carbon;
 
 class ReceivingGoodController extends Controller
 {
@@ -145,9 +146,7 @@ class ReceivingGoodController extends Controller
         $products = SalesInventory::where('isComplete', false)->where('isRemove', false)->count();
         $returns = RecieveReturn::where('receiving_good_id', $receiving_good_id)->count();
         
-        if($products < 1 && $returns < 1){
-            return response()->json(['nodata' => 'NO AVAILABLE PRODUCT & RETURNS.']);
-        }
+       
         //BAD ORDER VALIDATION
         $bad_orders = RecieveReturn::where('receiving_good_id', $receiving_good_id)->where('type_of_return', 'BAD_ORDER')->get();
         foreach($bad_orders as $return){
@@ -203,14 +202,26 @@ class ReceivingGoodController extends Controller
     }
 
     public function store(Request $request)
-    {
-       
+    {  
+        date_default_timezone_set('Asia/Manila');
+
+        $cash     = floatval(str_replace(",", "", $request->get('cash1')));
+        $payment  = floatval(str_replace(",", "", $request->get('payment')));
 
         $goods_id = ReceivingGood::orderby('id', 'desc')->first();
         if($goods_id == null){
             $receiving_good_id = 1;
         }else{
             $receiving_good_id = $goods_id->id + 1;
+        }
+
+        if($cash < $payment){
+            $validated =  Validator::make($request->all(), [
+                'payables' =>'accepted'
+            ]);
+            if ($validated->fails()) {
+                return response()->json(['errors' => $validated->errors()]);
+            }
         }
 
         $products = SalesInventory::where('isComplete', false)->where('isRemove', false)->count();
@@ -235,6 +246,7 @@ class ReceivingGoodController extends Controller
             
             'total_orders' => $products,
             'over_all_cost' => SalesInventory::where('isComplete', false)->sum('total_cost'),
+            'cash1'          => $request->get('cash1'),
         ]);
 
 
@@ -338,7 +350,7 @@ class ReceivingGoodController extends Controller
                 
             
         }  
-
+        RecieveReturn::where('receiving_good_id', $receiving_good_id)->update(['isComplete'    => true]);
         return response()->json(['success' => 'Added Receiving Good Successfully.']);
 
     }
@@ -383,6 +395,7 @@ class ReceivingGoodController extends Controller
             'terms_discount' => $request->input('terms_discount'),
             'remarks' => $request->input('remarks'),
             'reference' => $request->input('reference'),
+            'cash1'          => $request->get('cash1'),
             
         ]);
 
@@ -396,7 +409,7 @@ class ReceivingGoodController extends Controller
         $filter = $request->get('filter');
         if($filter == 'daily'){
             $title_filter  = 'From: ' . date('F d, Y') . ' To: ' . date('F d, Y');
-            $orders = ReceivingGood::where('isRemove', false)->latest()->whereDay('created_at', '=', date('d'))->get();
+            $orders = ReceivingGood::where('isRemove', false)->whereDate('created_at', Carbon::today())->latest()->get();
         }
         if($filter == 'monthly'){
             $title_filter  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');

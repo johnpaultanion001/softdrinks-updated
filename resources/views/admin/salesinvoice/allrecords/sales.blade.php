@@ -5,7 +5,7 @@
             <tr>
                 <th scope="col">Action</th>
                 <th scope="col">ID</th>
-                <th scope="col">Product</th>
+                <th scope="col">Product Code/Desc</th>
                 <th scope="col">Sold Qty</th>
                 <th scope="col">Price Type/Discounted</th>
                 <th scope="col">Unit Price</th>
@@ -23,7 +23,7 @@
                         {{$sale->id ?? '' }}
                     </td>
                     <td>
-                        {{$sale->product->product_code ?? '' }}
+                        {{$sale->product->product_code ?? '' }}/{{$sale->product->description ?? '' }}
                     </td>
                     <td>
                         {{$sale->purchase_qty ?? '' }}
@@ -32,10 +32,10 @@
                         {{$sale->pricetype->price_type ?? ''}} / ₱ ( {{ number_format($sale->discounted ?? '' , 2, '.', ',') }} )
                     </td>
                     <td>
-                        ₱ {{ number_format($sale->product_price ?? '' , 2, '.', ',') }}
+                        {{ number_format($sale->product_price ?? '' , 2, '.', ',') }}
                     </td>
                     <td>
-                        ₱ {{ number_format($sale->total ?? '' , 2, '.', ',') }}
+                        {{ number_format($sale->total ?? '' , 2, '.', ',') }}
                     </td>
                    
                 </tr>

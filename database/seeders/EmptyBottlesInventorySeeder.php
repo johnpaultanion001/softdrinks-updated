@@ -17,14 +17,8 @@ class EmptyBottlesInventorySeeder extends Seeder
         date_default_timezone_set('Asia/Manila');
         $inv = [
             [
-                'product_id' => '0',
-                'qty'        => 100,
-                'created_at' => date("Y-m-d H:i:s"),
-                'updated_at' => date("Y-m-d H:i:s"),
-            ],
-            [
                 'product_id' => '1',
-                'qty'        => 100,
+                'qty'        => 21,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
             ],

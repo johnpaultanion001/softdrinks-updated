@@ -18359,7 +18359,7 @@ a.text-darker:focus
 .btn-sm,
 .btn-group-sm > .btn
 {
-    font-size: .75rem;
+    font-size: .85rem;
 }
 
 .btn-lg,
@@ -23735,8 +23735,8 @@ textarea[resize='horizontal']
 
 .table thead th
 {
-    font-size: .65rem;
-
+    font-size: 0.8em;
+    height: 15px;
     padding-top: .75rem;
     padding-bottom: .75rem;
 
@@ -23761,7 +23761,7 @@ textarea[resize='horizontal']
 .table td,
 .table th
 {
-    font-size: .8125rem;
+    font-size: .9rem;
 
     white-space: nowrap;
 }
@@ -23786,6 +23786,7 @@ textarea[resize='horizontal']
 {
     color: #8898aa; 
     background-color: #f6f9fc;
+    
 }
 .table .thead-light th a
 {

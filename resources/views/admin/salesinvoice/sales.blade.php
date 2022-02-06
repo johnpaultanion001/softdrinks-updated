@@ -27,8 +27,8 @@
             @foreach($orders as $key => $order)
                 <tr data-entry-id="{{ $order->id ?? '' }}">
                     <td>
-                        <button type="button" name="editorder" editorder="{{  $order->id ?? '' }}" class="text-uppercase editorder btn btn-info btn-sm">Edit</button>
-                        <button type="button" name="removeorder" removeorder="{{  $order->id ?? '' }}" class="text-uppercase remove-order btn btn-danger btn-sm">Remove</button> 
+                        <button type="button" name="editorder" editorder="{{  $order->id ?? '' }}" class="text-uppercase editorder btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                        <button type="button" name="removeorder" removeorder="{{  $order->id ?? '' }}" class="text-uppercase remove-order btn btn-danger btn-sm"><i class="fas fa-trash"></i></button> 
                     </td>
                     <td>
                         {{  $order->product->product_code ?? '' }}/{{  $order->product->description ?? '' }}

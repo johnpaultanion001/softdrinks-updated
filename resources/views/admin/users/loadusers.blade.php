@@ -36,9 +36,8 @@
               @foreach($users as $key => $user)
                     <tr data-entry-id="{{ $user->id ?? '' }}">
                        <td>
-                            <button type="button" name="view" view="{{  $user->id ?? '' }}" class="text-uppercase view btn btn-success btn-sm">View</button>
-                            <a href="{{ route('admin.users.edit', $user->id) }}"  class="text-uppercase edit btn btn-info btn-sm">Edit</a>
-                            <button type="button" name="delete" delete="{{  $user->id ?? '' }}" id="{{  $user->id ?? '' }}" class="text-uppercase delete btn btn-danger btn-sm">Delete</button>
+                            <a href="{{ route('admin.users.edit', $user->id) }}"  class="text-uppercase edit btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
+                            <button type="button" name="delete" delete="{{  $user->id ?? '' }}" id="{{  $user->id ?? '' }}" class="text-uppercase delete btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                         </td>
                         <td>
                             {{  $user->id ?? '' }}

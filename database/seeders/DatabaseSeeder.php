@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
             LocationProductSeeder::class,
             AssignDeliverSeeder::class,
             ReceiveReturnSeeder::class,
+            SalesReturnSeeder::class,
         ]);
     }
 }

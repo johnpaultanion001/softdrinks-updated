@@ -40,7 +40,10 @@
                 @elseif(request()->is('admin/roles') || request()->is('admin/roles/*'))
                     Roles 
                 @elseif(request()->is('admin/users') || request()->is('admin/users/*'))
-                    users
+                    Users
+                @elseif(request()->is('admin/assign_deliver') || request()->is('admin/assign_deliver/*'))
+                    Assign Deliver
+                    
                 @endif
                 
                  

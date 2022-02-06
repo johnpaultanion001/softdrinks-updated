@@ -35,7 +35,7 @@ class CreateReceivingGoodsTable extends Migration
             
             $table->float('total_orders');
             $table->float('over_all_cost');
-            $table->float('cash')->nullable();
+            $table->float('cash1')->nullable();
 
             
             $table->boolean('isRemove')->default(false);

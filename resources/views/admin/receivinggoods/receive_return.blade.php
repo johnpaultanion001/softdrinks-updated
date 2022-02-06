@@ -5,8 +5,8 @@
                 <h3 class="mb-0 text-uppercase">RETURNS</h3>
             </div>
             <div class="col text-right">
-                <button type="button" id="remove_all_returns" class="text-uppercase btn btn-danger">Remove All</button>
-                <button type="button" name="create_return" id="create_return" class="text-uppercase btn btn-primary">Insert</button>
+                <button type="button" id="remove_all_returns" class="text-uppercase btn btn-danger btn-sm">Remove All</button>
+                <button type="button" name="create_return" id="create_return" class="text-uppercase btn btn-primary btn-sm">Insert</button>
             </div>
         </div>
     </div>
@@ -29,19 +29,15 @@
             @foreach($returns as $key => $product)
                 <tr data-entry-id="{{ $product->id ?? '' }}">
                     <td>
-                        <button type="button" name="editreturn" editreturn="{{  $product->id ?? '' }}"  class="editreturn text-uppercase btn btn-info btn-sm">Edit</button>
-                        <button type="button" name="removereturn" removereturn="{{  $product->id ?? '' }}" id="{{  $product->id ?? '' }}" class="removereturn text-uppercase btn btn-danger btn-sm">Remove</button>
+                        <button type="button" name="editreturn" editreturn="{{  $product->id ?? '' }}"  class="editreturn text-uppercase btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                        <button type="button" name="removereturn" removereturn="{{  $product->id ?? '' }}" id="{{  $product->id ?? '' }}" class="removereturn text-uppercase btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                     </td>
                     <td>
                         {{ $product->type_of_return ?? '' }}
                     </td>
                     <td>
-                        @if($product->product_id == 0)
-                            NO BRAND
-                        @else
-                            {{  $product->product->product_code ?? '' }}/{{  $product->product->description ?? '' }}
-                        @endif
-                        
+                        {{  $product->product->product_code ?? '' }}/{{  $product->product->description ?? '' }}
+                       
                     </td>
                     <td>
                         {{  $product->return_qty ?? '' }}

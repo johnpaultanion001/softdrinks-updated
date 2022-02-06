@@ -47,7 +47,7 @@
                             <div id="modalbody" class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Name: </label>
+                                        <label class="control-label text-uppercase" >Name:<span class="text-danger">*</span></label>
                                         <input type="text" name="name" id="name" class="form-control" />
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-name"></strong>
@@ -57,7 +57,7 @@
                               
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="control-label text-uppercase" >Note/Optional:</label>
+                                        <label class="control-label text-uppercase" >Remarks:</label>
                                         <textarea name="note" id="note" class="form-control "></textarea>
                                         <span class="invalid-feedback" role="alert">
                                             <strong id="error-note"></strong>
@@ -116,7 +116,6 @@ $(document).on('click', '.remove', function(){
   $.confirm({
       title: 'Confirmation',
       content: 'You really want to remove this category?',
-      autoClose: 'cancel|10000',
       type: 'red',
       buttons: {
           confirm: {

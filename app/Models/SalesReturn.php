@@ -19,6 +19,7 @@ class SalesReturn extends Model
         'amount',
         'status_id',
         'remarks',
+        'isComplete',
         'type_of_return',
 
         

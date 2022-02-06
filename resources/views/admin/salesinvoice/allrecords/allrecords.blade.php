@@ -53,6 +53,7 @@
                         <?php $payment =  $allrecord->sales->sum('total') - $allrecord->returns->sum('amount') ?>
                         <tr data-entry-id="{{ $allrecord->id ?? '' }}">
                             <td>
+                                <button type="button" name="void"  void="{{  $allrecord->id ?? '' }}" class="text-uppercase void btn btn-danger btn-sm">Void</button>
                                 <button type="button" name="sales_receipt"  sales_receipt="{{  $allrecord->salesinvoice_id ?? '' }}" class="text-uppercase sales_receipt btn btn-success btn-sm">RECEIPT</button>
                                 <button type="button" name="view"  view="{{  $allrecord->id ?? '' }}" class="text-uppercase view btn btn-info btn-sm">View/Edit</button>
                             </td>
@@ -117,7 +118,7 @@ $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
  
   $.extend(true, $.fn.dataTable.defaults, {
-    pageLength: 50,
+    pageLength: 100,
     'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });
 

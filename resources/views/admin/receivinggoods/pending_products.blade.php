@@ -80,7 +80,7 @@
                                 {{  $product->product_remarks ?? '' }}
                             </td>
                             <td>
-                                {{ $product->created_at->format('l, j \\/ F / Y h:i:s A') }}
+                                {{ $product->created_at->format('M j , Y h:i A') }}
                             </td>
 
                             

@@ -224,6 +224,9 @@ class SalesInventoryController extends Controller
         }else{
             $rp = ReceivingProduct::find($sales_inventory);
             
+            if($rp->qty >  LocationProduct::where('product_id', $rp->product_id)->where('location_id',$rp->location_id)->sum('stock')){
+                return response()->json(['error_stock' => 'This product is unable to be removed.']);
+            }
             LocationProduct::where('product_id', $rp->product_id)
                                 ->where('location_id',$rp->location_id)
                                 ->decrement('stock', $rp->qty);

@@ -206,10 +206,50 @@
             </div>
 
             <!-- Modal body -->
-        
-            <div id="productlist">
+           
+                <div class="table-responsive mt-2">
+                    <div class="row m-2">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <small>Filter By Catogory</small>
+                                <select name="category_filter" id="category_filter" class="form-control select2">
+                                    <option value="">Filter Category</option>
+                                    @foreach ($categories as $category)
+                                        <option value="{{$category->name}}">{{$category->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <small>Filter By Supplier</small>
+                                <select name="supplier_filter" id="supplier_filter" class="form-control select2">
+                                    <option value="">Filter Supplier</option>
+                                    @foreach ($suppliers as $supplier)
+                                        <option value="{{$supplier->name}}">{{$supplier->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <small>Filter By Size</small>
+                                <select name="size_filter" id="size_filter" class="form-control select2">
+                                    <option value="">Filter Size</option>
+                                    @foreach ($sizes as $size)
+                                        <option value="{{$size->title}} {{$size->size}}"> {{$size->title}} {{$size->size}} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="max-height: 590px; overflow: auto;">
+                        <div id="productlist">
+                        
+                        </div>
+                    </div>
+                </div>
             
-            </div>
             
 
             <div class="modal-footer bg-white">
@@ -402,6 +442,11 @@
 
 <div id="success-order" class="success-order col-4 alert text-white fade hide fixed-bottom" style="margin-left: 65%; z-index: 9999;" role="alert">
     
+</div>
+
+
+<div id="success-checkout" class="success-order col-4 alert text-white fade hide fixed-bottom" style="margin-left: 65%; z-index: 9999;" role="alert">
+
 </div>
 
     <!-- Footer -->
@@ -1053,6 +1098,11 @@ $('#orderForm').on('submit', function(event){
             }
             
             if(data.success){
+                
+                loadSales();
+                loadAllTotal();
+                loadProductList();
+                
                 $('#orderModal').modal('hide');
                 $('.form-control').removeClass('is-invalid');
 
@@ -1063,7 +1113,7 @@ $('#orderForm').on('submit', function(event){
                 });
 
                
-                return loadProductList() , loadSales() , loadAllTotal();
+                
                
 
             }
@@ -1234,6 +1284,7 @@ $(document).on('click', '.viewsales', function(){
         }	
     })
 });
+
 
 
 

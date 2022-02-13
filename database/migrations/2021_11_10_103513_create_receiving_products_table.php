@@ -35,7 +35,7 @@ class CreateReceivingProductsTable extends Migration
             
             $table->longText('product_remarks')->nullable();
            
-            $table->string('location_id')->default(2);
+            $table->string('location_id')->default(1);
             $table->string('supplier_id')->default(1);
             
             $table->timestamps();

@@ -29,7 +29,9 @@ class ReceivingGoodController extends Controller
     {
         abort_if(Gate::denies('receiving_goods_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $account_payables = Supplier::where('current_balance', '>' , 0)->orderBy('id', 'asc')->get();
-        return view('admin.receivinggoods.receivinggoods', compact('account_payables'));
+        $suppliers = Supplier::where('isRemove', 0)->latest()->get();
+        $locations = Location::where('isRemove', 0)->latest()->get();
+        return view('admin.receivinggoods.receivinggoods', compact('account_payables','locations','suppliers'));
     }
     public function create()
     {
@@ -49,25 +51,41 @@ class ReceivingGoodController extends Controller
  
     public function load()
     {
-        $orders = ReceivingGood::where('isRemove', false)->latest()->get();
+        $orders = ReceivingGood::where('isVoid', false)->latest()->get();
         $title_filter  = 'All Receiving Goods';
 
         return view('admin.receivinggoods.loadreceivinggoods', compact('orders','title_filter'));
     }
     public function edit(ReceivingGood $receiving_good)
     {
-        abort_if(Gate::denies('receiving_goods_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $action = 'Edit';
-        $suppliers = Supplier::where('isRemove', 0)->latest()->get();
-        $locations = Location::where('isRemove', 0)->latest()->get();
-        $products = SalesInventory::latest()->get();
-        $categories = Category::where('isRemove', 0)->latest()->get();
-        $sizes = Size::where('isRemove', 0)->latest()->get();
-        $status = StatusReturn::where('isRemove', 0)->latest()->get();
-        $product_code = EmptyBottlesInventory::orderBy('product_id', 'asc')->get();
-        
-
-        return view('admin.receivinggoods.receiving_goods_form', compact('receiving_good','action','suppliers','products','categories','sizes','locations','status','product_code'));
+        $payment = $receiving_good->products()->sum('total_cost') - $receiving_good->returns()->sum('amount');
+        $change  = $receiving_good->cash1 - $payment;
+        if (request()->ajax()) {
+            return response()->json(
+                [
+                    'supplier_id' => $receiving_good->supplier_id,
+                    'location_id' => $receiving_good->location_id,
+                    'doc_no' => $receiving_good->doc_no,
+                    'entry_date' => $receiving_good->entry_date,
+                    'po_no' => $receiving_good->po_no,
+                    'po_date' => $receiving_good->po_date,
+                    'name_of_a_driver' => $receiving_good->name_of_a_driver,
+                    'plate_number' => $receiving_good->plate_number,
+                    'trade_discount' => $receiving_good->trade_discount,
+                    'terms_discount' => $receiving_good->terms_discount,
+                    'remarks' => $receiving_good->remarks,
+                    'reference' => $receiving_good->reference,
+                    'products'  => $receiving_good->products()->get(),
+                    'total_product_cost'  => number_format($receiving_good->products()->sum('total_cost'), 2, '.', ','),
+                    'total_return_amount'  => '('.number_format($receiving_good->returns()->sum('amount'), 2, '.', ',').')',
+                    'payment'               => number_format($payment, 2, '.', ','),
+                    'total_product_qty'  => $receiving_good->products()->sum('qty'),
+                    'total_return_qty'  => $receiving_good->returns()->sum('return_qty'),
+                    'balance'           => number_format($receiving_good->supplier->current_balance, 2, '.', ','),
+                    'cash1'              => $receiving_good->cash1,
+                    'change'            => number_format($change, 2, '.', ','),
+                ]);
+        }
     }
 
     public function pending_product(Request $request)
@@ -113,7 +131,7 @@ class ReceivingGoodController extends Controller
     {
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
-            'cash1' => ['required'],
+            'cash1' => ['required','numeric','min:0'],
             'supplier_id' => ['required'],
             'name_of_a_driver' => ['required'],
             'plate_number' => ['required'],
@@ -359,17 +377,14 @@ class ReceivingGoodController extends Controller
     {
         date_default_timezone_set('Asia/Manila');
         $validated =  Validator::make($request->all(), [
+            'cash1' => ['required','numeric','min:0'],
             'supplier_id' => ['required'],
+            'location_id' => ['required'],
+            'entry_date' => ['required' , 'date', 'after:yesterday'],
+            'po_date' => ['nullable', 'date' ,'after:yesterday'],
+
             'name_of_a_driver' => ['required'],
             'plate_number' => ['required'],
-            'remarks' => ['nullable'],
-
-            'doc_no' => ['nullable'],
-            'entry_date' => ['required' , 'date', 'after:yesterday'],
-            'po_no' => ['nullable'],
-            'po_date' => ['nullable', 'date' ,'after:yesterday'],
-            'location_id' => ['required'],
-            'reference' => ['nullable'],
 
             'trade_discount' => ['nullable' ,'numeric','min:0'],
             'terms_discount' => ['nullable' ,'numeric','min:0'],
@@ -379,28 +394,67 @@ class ReceivingGoodController extends Controller
         if ($validated->fails()) {
             return response()->json(['errors' => $validated->errors()]);
         }
-        
-        ReceivingGood::find($receiving_good->id)->update([
-            'supplier_id' => $request->input('supplier_id'),
-            'location_id' => $request->input('location_id'),
 
-            'doc_no' => $request->input('doc_no'),
-            'entry_date' => $request->input('entry_date'),
-            'po_no' => $request->input('po_no'),
-            'po_date' => $request->input('po_date'),
+        $payment = $receiving_good->products()->sum('total_cost') - $receiving_good->returns()->sum('amount');
+        $change  = $request->input('cash1') - $payment;
 
-            'plate_number' => $request->input('plate_number'),
-            'name_of_a_driver' => $request->input('name_of_a_driver'),
-            'trade_discount' => $request->input('trade_discount'),
-            'terms_discount' => $request->input('terms_discount'),
-            'remarks' => $request->input('remarks'),
-            'reference' => $request->input('reference'),
-            'cash1'          => $request->get('cash1'),
-            
+        foreach($receiving_good->products()->get() as $rp){
+            if($rp->qty >  LocationProduct::where('product_id', $rp->product_id)->where('location_id',$rp->location_id)->sum('stock')){
+                return response()->json(['error_stock' => 'This receiving goods is unable to be change location.']);
+            }
+        }
+
+        foreach($receiving_good->products()->get() as $rp){
+            LocationProduct::where('product_id', $rp->product_id)
+                    ->where('location_id',$receiving_good->location_id)
+                    ->decrement('stock', $rp->qty);
+            $location_product = LocationProduct::where('product_id', $rp->product_id)
+                            ->where('location_id',$request->input('location_id'))
+                            ->first();
+
+            if($location_product === null){
+                LocationProduct::create([
+                    'product_id'    => $rp->product_id,
+                    'location_id'   => $request->input('location_id'),
+                    'stock'         => $rp->qty,
+                ]);
+            }else{
+                LocationProduct::where('product_id', $rp->product_id)
+                                ->where('location_id',$request->input('location_id'))
+                                ->increment('stock', $rp->qty);
+            }
+        }
+
+        ReceivingProduct::where('receiving_good_id',$receiving_good->id)->update([
+            'supplier_id'             => $request->input('supplier_id'),
+            'location_id'             => $request->input('location_id'),
         ]);
 
-        return response()->json(['success' => 'Updated Receiving Good Successfully.']);
+        ReceivingGood::find($receiving_good->id)->update([
+            'supplier_id'             => $request->input('supplier_id'),
+            'location_id'             => $request->input('location_id'),
+            'doc_no'                  => $request->input('doc_no'),
+            'entry_date'              => $request->input('entry_date'),
+            'po_no'                   => $request->input('po_no'),
+            'po_date'                 => $request->input('po_date'),
+            'name_of_a_driver'        => $request->input('name_of_a_driver'),
+            'plate_number'            => $request->input('plate_number'),
+            'trade_discount'          => $request->input('trade_discount'),
+            'terms_discount'          => $request->input('terms_discount'),
+            'remarks'                 => $request->input('remarks'),
+            'reference'               => $request->input('reference'),
+            'cash1'                   => $request->input('cash1'),
+        ]);
 
+        return response()->json([
+            'payment'  => $payment,
+            'change'  => $change,
+            'total_product_cost' =>  $receiving_good->products()->sum('total_cost'),
+            'total_return_amount' => $receiving_good->returns()->sum('amount'),
+            'total_product_qty' => $receiving_good->products()->sum('qty'),
+            'total_return_qty'  => $receiving_good->returns()->sum('return_qty'),
+            'success' => 'Updated Successfully.'
+        ]);
     }
 
     
@@ -409,19 +463,19 @@ class ReceivingGoodController extends Controller
         $filter = $request->get('filter');
         if($filter == 'daily'){
             $title_filter  = 'From: ' . date('F d, Y') . ' To: ' . date('F d, Y');
-            $orders = ReceivingGood::where('isRemove', false)->whereDate('created_at', Carbon::today())->latest()->get();
+            $orders = ReceivingGood::where('isVoid', false)->whereDate('created_at', Carbon::today())->latest()->get();
         }
         if($filter == 'monthly'){
             $title_filter  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');
-            $orders = ReceivingGood::where('isRemove', false)->latest()->whereMonth('created_at', '=', date('m'))->get();
+            $orders = ReceivingGood::where('isVoid', false)->latest()->whereMonth('created_at', '=', date('m'))->get();
         }
         if($filter == 'yearly'){
             $title_filter  = 'From: ' .'Jan 1'. date(', Y') . ' To: ' .'Dec 31'. date(', Y');
-            $orders = ReceivingGood::where('isRemove', false)->latest()->whereYear('created_at', '=', date('Y'))->get();
+            $orders = ReceivingGood::where('isVoid', false)->latest()->whereYear('created_at', '=', date('Y'))->get();
         }
         if($filter == 'all'){
             $title_filter  = 'All Receiving Goods';
-            $orders = ReceivingGood::where('isRemove', false)->latest()->get();
+            $orders = ReceivingGood::where('isVoid', false)->latest()->get();
         }
         if($filter == 'fbd'){
             $from = $request->get('from');
@@ -429,7 +483,7 @@ class ReceivingGoodController extends Controller
             $title_filter =  'From: '.date('F d, Y', strtotime($from)). ' To: ' .date('F d, Y', strtotime($to));
 
             
-            $orders = ReceivingGood::where('isRemove', false)->latest()->whereBetween('created_at', [$from, $to])->get();
+            $orders = ReceivingGood::where('isVoid', false)->latest()->whereBetween('created_at', [$from, $to])->get();
                
 
         }
@@ -450,6 +504,7 @@ class ReceivingGoodController extends Controller
 
         return response()->json(['bad_orders' => $bad_orders]);
     }
+    
     public function empty_dd(){
         $products =  EmptyBottlesInventory::orderBy('product_id', 'asc')->get();
 
@@ -543,57 +598,6 @@ class ReceivingGoodController extends Controller
                 'result'  => $receiving_good,
             ]);
 
-        // $supplier_id = $request->get('supplier');
-        // $rg = ReceivingGood::where('supplier_id', $supplier_id)->orderBy('id', 'desc')->first();
-        // if($rg == null){
-        //     return response()->json(['nodata' => 'No available data in this supplier']);
-        // }
-
-        // $goods_id = ReceivingGood::orderby('id', 'desc')->first();
-        // if($goods_id == null){
-        //     $receiving_good_id = 1;
-        // }else{
-        //     $receiving_good_id = $goods_id->id + 1;
-        // }
-        // SalesInventory::where('receiving_good_id',$receiving_good_id)->delete();
-        // RecieveReturn::where('receiving_good_id',$receiving_good_id)->delete();
-        
-        // foreach($rg->products()->get() as $product)
-        // {
-        //     SalesInventory::create([
-        //         'receiving_good_id'  => $receiving_good_id,
-        //         'product_code'       => $product->product_code,
-        //         'category_id'        => $product->category_id,
-        //         'description'        => $product->description,
-        //         'qty'                => $product->qty,
-        //         'size_id'            => $product->size_id,
-        //         'expiration'         => $product->expiration,
-        //         'unit_cost'          => $product->unit_cost,
-        //         'regular_discount'   => $product->regular_discount,
-        //         'hauling_discount'   => $product->hauling_discount,
-        //         'price'              => $product->price,
-        //         'total_cost'         => $product->total_cost,
-        //         'product_remarks'    => $product->product_remarks,
-        //     ]);
-        // }
-        // foreach($rg->returns()->get() as $return)
-        // {
-        //     RecieveReturn::create([
-        //         'receiving_good_id'  => $receiving_good_id,
-        //         'product_id'         => $return->product_id,
-        //         'return_qty'         => $return->return_qty,
-        //         'unit_price'         => $return->unit_price,
-        //         'amount'             => $return->amount,
-        //         'status_id'          => $return->status_id,
-        //         'remarks'            => $return->remarks,
-        //     ]);
-        // }
-
-        // return response()->json(
-        //         [
-        //             'result' => $rg,
-        //             'success' => 'The data of this supplier successfully inserted.'
-        //         ]);
     }
 
     public function payables(Request $request){
@@ -603,6 +607,38 @@ class ReceivingGoodController extends Controller
             'current_balance' => $new_bal,
         ]);
         return response()->json(['success' => 'Successfully Updated Account Payable In This Supplier']);
+    }
+
+    public function void(ReceivingGood $receiving_good)
+    {   
+        foreach($receiving_good->products()->get() as $rp){
+            if($rp->qty >  LocationProduct::where('product_id', $rp->product_id)->where('location_id',$rp->location_id)->sum('stock')){
+                return response()->json(['error_stock' => 'This receiving goods is unable to be void.']);
+            }
+        }
+        
+        foreach($receiving_good->products()->get() as $rp){
+            LocationProduct::where('product_id', $rp->product_id)
+                            ->where('location_id', $rp->location_id)
+                            ->decrement('stock', $rp->qty);
+            UCS::where('product_id', $rp->id)->where('receiving_good_id', $rp->receiving_good_id)->delete();
+            $rp->delete();
+        }
+        foreach($receiving_good->returns()->get() as $receivingReturn){
+            if($receivingReturn->type_of_return == 'EMPTY'){
+                EmptyBottlesInventory::where('product_id', $receivingReturn->product_id)->increment('qty', $receivingReturn->return_qty);
+            }
+            if($receivingReturn->type_of_return == 'BAD_ORDER'){
+                LocationProduct::where('product_id', $receivingReturn->product_id)
+                                ->where('location_id', 3)
+                                ->increment('stock', $receivingReturn->return_qty);
+            }
+            $receivingReturn->delete();
+        }
+        $receiving_good->update([
+            'isVoid'    => true,
+        ]);
+        return response()->json(['success' => 'Transaction Successfully Void.']);
     }
 
     

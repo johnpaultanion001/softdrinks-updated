@@ -38,7 +38,7 @@ class CreateReceivingGoodsTable extends Migration
             $table->float('cash1')->nullable();
 
             
-            $table->boolean('isRemove')->default(false);
+            $table->boolean('isVoid')->default(false);
             $table->timestamps();
         });
     }

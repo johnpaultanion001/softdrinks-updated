@@ -29,7 +29,7 @@
                         {{$sale->purchase_qty ?? '' }}
                     </td>
                     <td>
-                        {{$sale->pricetype->price_type ?? ''}} / ₱ ( {{ number_format($sale->discounted ?? '' , 2, '.', ',') }} )
+                        {{$sale->pricetype->price_type ?? ''}} / ( {{ number_format($sale->discounted ?? '' , 2, '.', ',') }} )
                     </td>
                     <td>
                         {{ number_format($sale->product_price ?? '' , 2, '.', ',') }}

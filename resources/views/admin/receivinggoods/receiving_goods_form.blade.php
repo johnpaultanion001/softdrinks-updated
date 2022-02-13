@@ -743,7 +743,7 @@ $('#productForm').on('submit', function(event){
 
     if($('#product_action').val() == 'Edit'){
         var id = $('#product_hidden_id').val();
-        action_url = "sales_inventory/" + id;
+        action_url = "/admin/sales_inventory/" + id;
         type = "PUT";
     }
 
@@ -1124,7 +1124,6 @@ $(document).on('click', '#remove_all_returns', function(){
 
 
 //autocomplete
-
 $('#product_code').keyup(function(){ 
        
     if($('#product_action').val() == 'Edit'){

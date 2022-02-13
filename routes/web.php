@@ -190,6 +190,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('receiving_goods/empty/empty_dd', 'ReceivingGoodController@empty_dd')->name('receiving_goods.empty_dd');
     route::get('receiving_goods/compute/compute', 'ReceivingGoodController@compute')->name('receiving_goods.compute');
     route::get('receiving_goods/payables/payables', 'ReceivingGoodController@payables')->name('receiving_goods.payables');
+    Route::delete('receiving_goods/{receiving_good}/void','ReceivingGoodController@void')->name('receiving_goods.void');
 
     // Reuse Data 
     route::get('receiving_goods/supplier/get_supplier_id', 'ReceivingGoodController@get_supplier_id')->name('receiving_goods.get_supplier_id');

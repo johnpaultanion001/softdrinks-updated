@@ -52,7 +52,7 @@
                         {{  $product->remarks ?? '' }}
                     </td>
                     <td>
-                        {{ $product->created_at->format('F d,Y h:i A') }}
+                        {{ $product->created_at->format('M j , Y h:i A') }}
                     </td>
                 </tr>
             @endforeach

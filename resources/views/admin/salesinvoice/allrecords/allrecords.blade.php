@@ -20,6 +20,7 @@
                 <h3 class="mb-0 text-uppercase" id="titletable">All Records Sales Invoice</h3> 
             </div>
             <div class="col text-right">
+              <button type="button"  id="account_receivables" class="text-uppercase btn btn-sm btn-primary">Account Receivables</button>
               <button type="button" id="btn_sales_invoice" class="text-uppercase btn_sales_invoice btn btn-sm btn-primary">Sales Invoice</button>
             </div>
           </div>
@@ -32,17 +33,15 @@
                     <tr>
                         <th>Actions</th>
                         <th>ORDER #</th>
+                        <th>Assign Deliver</th>
                         <th>Customer Name / Area</th>
-                        <th>Payment</th>
 
-                        <th>Total Sales Amt</th>
-                        <th>Sold QTY</th>
-
-                        <th>Total Return Amt</th>
-                        <th>Return QTY</th>
-                        
                         <th>Cash</th>
                         <th>Change</th>
+                        <th>Payment</th>
+                        <th>Total Sales Amt</th>
+                        <th>Total Discount</th>
+                        <th>Total Return Amt</th>
                         <th>Created By</th>
                         <th>Remarks</th>
                         <th>Created At</th>
@@ -61,30 +60,28 @@
                                 {{ $allrecord->salesinvoice_id  ?? '' }}
                             </td>
                             <td>
+                                {{ $allrecord->deliver->title  ?? '' }}
+                            </td>
+                            <td>
                                 {{ $allrecord->customer->customer_name  ?? '' }} /  {{ $allrecord->customer->area  ?? '' }}
                             </td>
                             <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($payment , 2, '.', ',') }}
+                                {{  number_format($allrecord->cash , 2, '.', ',') }}
                             </td>
                             <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($allrecord->sales->sum('total') , 2, '.', ',') }}
+                                {{  number_format($allrecord->change , 2, '.', ',') }}
                             </td>
                             <td>
-                                {{  number_format($allrecord->sales->sum('purchase_qty') , 2, '.', ',') }}
-                            </td>
-
-                            <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> ({{  number_format($allrecord->returns->sum('amount') , 2, '.', ',') }})
+                                {{  number_format($payment , 2, '.', ',') }}
                             </td>
                             <td>
-                                {{  number_format($allrecord->returns->sum('return_qty') , 2, '.', ',') }}
-                            </td>
-                           
-                            <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($allrecord->cash , 2, '.', ',') }}
+                                {{  number_format($allrecord->sales->sum('total') , 2, '.', ',') }}
                             </td>
                             <td>
-                                <large class="text-success font-weight-bold mr-1">₱</large> {{  number_format($allrecord->change , 2, '.', ',') }}
+                                ({{  number_format($allrecord->sales->sum('discounted') , 2, '.', ',') }})
+                            </td>
+                            <td>
+                               ({{  number_format($allrecord->returns->sum('amount') , 2, '.', ',') }})
                             </td>
                             <td>
                                 {{  $allrecord->user->name ?? '' }}

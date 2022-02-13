@@ -29,8 +29,8 @@ class ReceivingGood extends Model
 
         'total_orders',
         'over_all_cost',
-        'cash',
-        'isRemove',
+        'cash1',
+        'isVoid',
     ];
     public function products()
     {

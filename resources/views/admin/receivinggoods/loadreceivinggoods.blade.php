@@ -39,13 +39,13 @@
               <tr>
                 <th scope="col">Actions</th>
                 <th scope="col">Receiving Goods ID</th>
-                <th scope="col">Supplier Code/Name</th>
                 <th scope="col">Driver/Plate #</th>
-                <th scope="col">Product Count</th>
-                <th scope="col">Return Count</th>
-                <th scope="col">Overall Product Cost</th>
-                <th scope="col">Overall Return Amount</th>
+                <th scope="col">Supplier Code/Name</th>
+                <th scope="col">Cash</th>
+                <th scope="col">Change</th>
                 <th scope="col">Payment</th>
+                <th scope="col">Total Product Cost</th>
+                <th scope="col">Total Return Amount</th>
                 <th scope="col">Created By</th>
                 <th scope="col">Remarks</th>
                 <th scope="col">Created At</th>
@@ -53,25 +53,32 @@
             </thead>
             <tbody class="text-uppercase font-weight-bold">
               @foreach($orders as $key => $order)
-                <?php $payment =  $order->products->sum('total_cost') - $order->returns->sum('amount') ?>
+                    <?php 
+                      $payment =  $order->products->sum('total_cost') - $order->returns->sum('amount');
+                      $change  =  $order->cash1 - $payment;
+                    ?>
                     <tr data-entry-id="{{ $order->id ?? '' }}">
                        <td>
+                            <button type="button"  void="{{  $order->id ?? '' }}" class="void text-uppercase btn btn-danger btn-sm">Void</button>
                             <button type="button"  edit_rg="{{  $order->id ?? '' }}" class="edit_rg text-uppercase btn btn-info btn-sm">View/Edit</button>
                         </td>
                         <td>
                             {{  $order->id ?? '' }}
                         </td>
                         <td>
-                           {{  $order->supplier->id ?? '' }} / {{  $order->supplier->name ?? '' }}
-                        </td>
-                        <td>
                             {{  $order->name_of_a_driver ?? '' }} / {{  $order->plate_number ?? '' }}
                         </td>
                         <td>
-                            {{  $order->products->count() ?? '' }}
+                           {{  $order->supplier->id ?? '' }} / {{  $order->supplier->name ?? '' }}
                         </td>
                         <td>
-                            {{  $order->returns->count() ?? '' }}
+                          {{ number_format($order->cash1 ?? '' , 2, '.', ',') }}
+                        </td>
+                        <td>
+                          {{ number_format($change ?? '' , 2, '.', ',') }}
+                        </td>
+                        <td>
+                           {{ number_format($payment ?? '' , 2, '.', ',') }}
                         </td>
                         <td>
                             {{ number_format($order->products->sum('total_cost') ?? '' , 2, '.', ',') }}
@@ -79,9 +86,7 @@
                         <td>
                             ({{ number_format($order->returns->sum('amount') ?? '' , 2, '.', ',') }})
                         </td>
-                        <td>
-                          {{ number_format($payment ?? '' , 2, '.', ',') }}
-                        </td>
+                        
                         <td>
                             {{  $order->user->name ?? '' }}
                         </td>

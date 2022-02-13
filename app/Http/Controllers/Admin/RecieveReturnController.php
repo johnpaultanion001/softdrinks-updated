@@ -8,6 +8,7 @@ use App\Models\RecieveReturn;
 use App\Models\ReceivingGood;
 use App\Models\SalesInventory;
 use App\Models\EmptyBottlesInventory;
+use App\Models\LocationProduct;
 use Validator;
 
 class RecieveReturnController extends Controller
@@ -141,9 +142,15 @@ class RecieveReturnController extends Controller
         if($rg_id == ""){
             RecieveReturn::find($recieve_return->id)->delete();
         }else{
-            RecieveReturn::find($recieve_return->id)->delete();
-            EmptyBottlesInventory::where('product_id', $recieve_return->product_id)
-                                    ->increment('qty', $recieve_return->return_qty);
+            if($recieve_return->type_of_return == 'EMPTY'){
+                EmptyBottlesInventory::where('product_id', $recieve_return->product_id)->increment('qty', $recieve_return->return_qty);
+            }
+            if($recieve_return->type_of_return == 'BAD_ORDER'){
+                LocationProduct::where('product_id', $recieve_return->product_id)
+                                ->where('location_id', 3)
+                                ->increment('stock', $recieve_return->return_qty);
+            }
+            $recieve_return->delete();
         }
         return response()->json(['success' => 'Returned Product Deleted Successfully.']);
     }

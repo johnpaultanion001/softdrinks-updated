@@ -3,7 +3,7 @@
                 <div class="col-xl-12">
                         <div class="row">
                                 <div class="col-sm-4">
-                                        <h5 class="text-white text-uppercase">Overall Product Cost:</h2>
+                                        <h5 class="text-white text-uppercase">TOTAL Product Cost:</h2>
                                         <div class="input-group mb-2">
                                                 <div class="input-group-prepend">
                                                         <div class="input-group-text">₱</div>
@@ -13,7 +13,7 @@
                                         </div>
                                 </div>
                                 <div class="col-sm-4">
-                                        <h5 class="text-white text-uppercase">Overall Return Amount:</h2>
+                                        <h5 class="text-white text-uppercase">TOTAL Return Amount:</h2>
                                         <div class="input-group mb-2">
                                                 <div class="input-group-prepend">
                                                         <div class="input-group-text">₱</div>
@@ -32,7 +32,7 @@
                                         </div>
                                 </div>
                                 <div class="col-sm-4">
-                                        <h5 class="text-white text-uppercase">OVERALL PRODUCT QTY:</h2>
+                                        <h5 class="text-white text-uppercase">TOTAL PRODUCT QTY:</h2>
                                         <div class="input-group mb-2">
                                                 <div class="input-group-prepend">
                                                         <div class="input-group-text">QTY</div>
@@ -41,7 +41,7 @@
                                         </div>
                                 </div>
                                 <div class="col-sm-4">
-                                        <h5 class="text-white text-uppercase">OVERALL RETURN QTY:</h2>
+                                        <h5 class="text-white text-uppercase">TOTAL RETURN QTY:</h2>
                                         <div class="input-group mb-2">
                                                 <div class="input-group-prepend">
                                                         <div class="input-group-text">QTY</div>
@@ -94,7 +94,7 @@
                                         </div>
                                 </div>
                                 <div class="col-sm-3">
-                                        <h4 class="text-white text-uppercase">CASH:</h2>
+                                        <h4 class="text-white text-uppercase">CASH:<span class="text-white">*</span></h2>
                                         <div class="input-group mb-2">
                                                 <div class="input-group-prepend">
                                                         <div class="input-group-text">₱</div>

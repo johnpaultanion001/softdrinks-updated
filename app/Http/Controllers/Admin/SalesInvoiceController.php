@@ -17,6 +17,9 @@ use App\Models\StatusReturn;
 use App\Models\EmptyBottlesInventory;
 use App\Models\LocationProduct;
 use App\Models\AssignDeliver;
+use App\Models\Category;
+use App\Models\Supplier;
+use App\Models\Size;
 use Carbon\Carbon;
 use Validator;
 use DB;
@@ -44,8 +47,12 @@ class SalesInvoiceController extends Controller
         $returned = SalesReturn::where('salesinvoice_id', $salesinvoice_id)->latest()->get();
         $date = date("F d,Y h:i A");
 
+        $categories = Category::where('isRemove', '0')->orderBy('id', 'asc')->get();
+        $suppliers = Supplier::where('isRemove', '0')->orderBy('id', 'asc')->get();
+        $sizes = Size::where('isRemove', '0')->orderBy('id', 'asc')->get();
 
-        return view('admin.salesinvoice.salesinvoice', compact('customers' ,'deliveries', 'orders' , 'pricetypes' , 'salesinvoice_id' , 'returned' , 'product_codes' ,'date','status'));
+
+        return view('admin.salesinvoice.salesinvoice', compact('customers' ,'deliveries', 'orders' , 'pricetypes' , 'salesinvoice_id' , 'returned' , 'product_codes' ,'date','status','categories','suppliers','sizes'));
     }
 
     public function alltotal(){
@@ -328,7 +335,8 @@ class SalesInvoiceController extends Controller
         date_default_timezone_set('Asia/Manila');
         $customers = Customer::where('isRemove', 0)->orderBy('id', 'asc')->get();
         $deliveries = AssignDeliver::where('isRemove', 0)->orderBy('id', 'asc')->get();
-        return view('admin.salesinvoice.allrecords.record_sales_invoice', compact('customers', 'deliveries'));
+        $account_receivables = Customer::where('current_balance', '>' , 0)->orderBy('id', 'asc')->get();
+        return view('admin.salesinvoice.allrecords.record_sales_invoice', compact('customers', 'deliveries','account_receivables'));
     }
     public function records(){
         $title_filter  = 'All SALES INVOICE';
@@ -373,7 +381,7 @@ class SalesInvoiceController extends Controller
                     'total_return_amount'    => '('. number_format($salesInvoice->returns()->sum('amount'), 2, '.', ',') .')', 
 
                     'balance'                => number_format($salesInvoice->customer->current_balance, 2, '.', ','),
-                    'cash'                => number_format($salesInvoice->cash, 2, '.', ','),
+                    'cash'                => $salesInvoice->cash,
                     'change'                => number_format($change, 2, '.', ','),
                     'payment'                => number_format($payment, 2, '.', ','),
                 ]
@@ -384,6 +392,41 @@ class SalesInvoiceController extends Controller
     
     public function update(Request $request, SalesInvoice $salesInvoice)
     {
+        date_default_timezone_set('Asia/Manila');
+        $validated =  Validator::make($request->all(), [
+            'deliver_id' => ['required'],
+            'cash' => ['required' ,'numeric','min:0'],
+        ]);
+        if ($validated->fails()) {
+            return response()->json(['errors' => $validated->errors()]);
+        }
+        $payment    = $salesInvoice->sales()->sum('total') - $salesInvoice->returns()->sum('amount');
+        $change       = $request->input('cash') - $payment;  
+
+        SalesInvoice::find($salesInvoice->id)->update([
+            'doc_no'         =>  $request->input('doc_no'),
+            'entry_date'     =>  $request->input('entry_date'),
+            'remarks'        =>  $request->input('remarks'),
+           
+            'deliver_id'     => $request->input('deliver_id'),
+
+            'subtotal'       =>  $salesInvoice->sales()->sum('total_amount_receipt'),
+            'total_discount' =>   $salesInvoice->sales()->sum('discounted'),
+            'total_amount'   => $payment ,
+
+            'total_return'   => $salesInvoice->returns()->sum('amount'),
+           
+            'total_inv_amt'  => $salesInvoice->sales()->sum('total'),
+            'cash'           => $request->input('cash'),
+            'change'         => $change,
+        ]);
+
+        return response()->json([
+            'success' => 'Transaction Successfully Updated.',
+            'change'  => number_format($change, 2, '.', ','),
+            'payment'  => number_format($payment, 2, '.', ','),
+        ]);
+     
         
     }
 

@@ -116,56 +116,8 @@
 <!-- Page content -->
 <div class="container-fluid mt--6">
       <div class="row">
-        <div class="col-xl-8">
-          <div class="card">
-            <div class="card-header border-0">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h3 class="mb-0 text-uppercase">Newly Products</h3>
-                </div>
-                <div class="col text-right">
-                  <a href="/admin/sales_inventory" class="btn btn-sm btn-primary text-uppercase">See all</a>
-                </div>
-              </div>
-            </div>
-            <div class="table-responsive">
-              <!-- Projects table -->
-              <table class="table align-items-center table-flush">
-                <thead class="thead-light">
-                  <tr>
-                    <th scope="col">Description</th>
-                    <th scope="col">Selling Area Stock</th>
-                    <th scope="col">Product price</th>
-                    <th scope="col">Sold</th>
-                  </tr>
-                </thead>
-                <tbody>
-                @forelse($newproduct as $key => $product)
-                <tr data-entry-id="{{ $order->id ?? '' }}">
-                    <td>
-                        {{  $product->description ?? '' }}
-                    </td>
-                    <td>
-                       {{  $product->location_products_stock() ?? '' }}
-                    </td>
-                    <td>
-                       <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($product->price ?? '' , 2, '.', ',') }}
-                    </td>
-                   <td>
-                        {{  $product->sold ?? '' }}
-                    </td>
-                </tr>
-                @empty
-                    <td>
-                        No Data
-                    </td>
-                @endforelse
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-4">
+        
+        <div class="col-xl-12">
           <div class="card">
             <div class="card-header border-0">
               <div class="row align-items-center">
@@ -220,6 +172,55 @@
                     </td>
                 @endforelse
                 </tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-12">
+          <div class="card">
+            <div class="card-header border-0">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h3 class="mb-0 text-uppercase">Newly Products</h3>
+                </div>
+                <div class="col text-right">
+                  <a href="/admin/sales_inventory" class="btn btn-sm btn-primary text-uppercase">See all</a>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <!-- Projects table -->
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Description</th>
+                    <th scope="col">Selling Area Stock</th>
+                    <th scope="col">Product price</th>
+                    <th scope="col">Sold</th>
+                  </tr>
+                </thead>
+                <tbody>
+                @forelse($newproduct as $key => $product)
+                <tr data-entry-id="{{ $order->id ?? '' }}">
+                    <td>
+                        {{  $product->description ?? '' }}
+                    </td>
+                    <td>
+                       {{  $product->location_products_stock() ?? '' }}
+                    </td>
+                    <td>
+                       <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($product->price ?? '' , 2, '.', ',') }}
+                    </td>
+                   <td>
+                        {{  $product->sold ?? '' }}
+                    </td>
+                </tr>
+                @empty
+                    <td>
+                        No Data
+                    </td>
+                @endforelse
                 </tbody>
               </table>
             </div>

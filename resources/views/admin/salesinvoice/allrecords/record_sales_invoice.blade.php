@@ -37,9 +37,6 @@
                     <p class="modal-title font-weight-bold text-uppercase text-white ">Modal Heading</p>
                     <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
                 </div>
-                
-
-                
                 <div class="modal-body">
                     <div class="row">
                             <div class="col-sm-12">
@@ -80,7 +77,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <label class="control-label text-uppercase" >Customer</label>
-                                <select name="customer_id" id="customer_id" class="form-control select2">
+                                <select name="customer_id" id="customer_id" class="form-control select2" disabled>
                                     <option value="" disabled selected>Select Customer</option>
                                     @foreach ($customers as $customer)
                                         <option value="{{$customer->id}}">{{$customer->customer_code}}</option>
@@ -175,7 +172,10 @@
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">₱</div>
                                         </div>
-                                            <input type="text" name="cash"  id="cash" class="form-control"/>
+                                            <input type="number" name="cash"  id="cash" class="form-control"/>
+                                            <span class="invalid-feedback text-dark" role="alert">
+                                                <strong id="error-cash"></strong>
+                                            </span>
                                         </div>
                                     </div>
                                     <div class="col-sm">
@@ -212,8 +212,9 @@
 
                 
                 <input type="hidden" name="si_hidden_id" id="si_hidden_id" />
+               
                 <div class="modal-footer bg-white">
-                    <input type="submit" name="action_si" id="action_si" class="text-uppercase btn btn-primary" value="UPDATE" />
+                    <input type="submit" name="action_button" id="action_button" class="text-uppercase btn btn-primary" value="Update" />
                     <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">CLOSE</button>
                 </div>
             </div>
@@ -291,6 +292,83 @@
     </div>
   </div>
 </div>
+
+<div class="modal accModal" id="accModal" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+    
+            <!-- Modal Header -->
+            <div class="modal-header bg-primary">
+                <p class="modal-title-acc text-white text-uppercase font-weight-bold">Modal Heading</p>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+
+                
+            <!-- Modal body -->
+            <div class="modal-body">
+              
+                <div id="modalbody" class="row print_report">
+                  <div class="col text-center">
+                     <h3 class="text-uppercase">Jewel & Nickel Store</h3>
+                     <p>Binangonan, <br> Rizal <br> 652-48-36</p>
+                     <h5 class="text-uppercase">Account Receivables</h5>
+                     <br>
+                  </div>
+                  <div class="table-responsive">
+          
+                    <table class="table align-items-center table-bordered display" cellspacing="0" width="100%">
+                      <thead class="thead-white">
+                        <tr>
+                          
+                          <th>Customer Code</th>
+                          <th>Customer Name</th>
+                          <th>Area</th>
+                          <th>Current Balance</th>
+                        
+                        </tr>
+                      </thead>
+                      <tbody class="text-uppercase font-weight-bold">
+                        @foreach($account_receivables as $customer)
+                              <tr data-entry-id="{{ $customer->id ?? '' }}">
+                                  <td>
+                                      {{  $customer->customer_code ?? '' }}
+                                  </td>
+                                  <td>
+                                      {{  $customer->customer_name ?? '' }}
+                                  </td>
+                                  <td>
+                                      {{ $customer->area ?? '' }}
+                                  </td>
+                                
+                                  <td>
+                                    {{  number_format($customer->current_balance , 2, ',', ',') }}
+                                  </td>
+                                
+                              
+                              </tr>
+                          @endforeach
+                      </tbody>
+                    </table>
+                 </div>
+                </div>
+                
+            </div>
+    
+            <!-- Modal footer -->
+            <div class="modal-footer bg-white">
+                <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
+                <button type="button" name="print_acc" id="print_acc" class="text-uppercase print_acc btn btn-default">Print Account Receivables</button>
+
+            </div>
+    
+        </div>
+    </div>
+</div>
+
+<div id="success-order" class="success-order col-4 alert text-white fade hide fixed-bottom" style="margin-left: 65%; z-index: 9999;" role="alert">
+    
+</div>
+
 @endsection
 
 @section('script')
@@ -477,7 +555,6 @@
             }
         })
     });
-
     
     //Filter
     $(document).on('click', '.filter', function(){
@@ -507,7 +584,8 @@
     //remove sales
     $(document).on('click', '.remove_sales', function(){
         var id = $(this).attr('remove_sales');
-        
+     
+
         $.confirm({
             title: 'Confirmation',
             content: 'You really want to remove this record?',
@@ -528,12 +606,13 @@
                             },
                             success:function(data){
                                 if(data.success){
-                                    $('#success-alert').addClass('bg-primary');
-                                    $('#success-alert').html('<strong>' + data.success + '</strong>');
-                                    $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
-                                        $("#success-alert").slideUp(500);
+                                    $('#success-order').addClass('bg-primary');
+                                    $('#success-order').html('<strong>' + data.success + '</strong>');
+                                    $("#success-order").fadeTo(5000, 500).slideUp(500, function(){
+                                        $("#success-order").slideUp(500);
                                     });
                                     sales();
+                                    loadRecords();
                                     
                                 }
                             }
@@ -553,7 +632,7 @@
     $(document).on('click', '.remove_return', function(){
         var id          = $(this).attr('remove_return');
         var is_purchase = $(this).attr('is_purchase');
-        
+      
         $.confirm({
             title: 'Confirmation',
             content: 'You really want to remove this record?',
@@ -577,12 +656,13 @@
                             success:function(data){
                                 
                                 if(data.success){
-                                    $('#success-alert').addClass('bg-primary');
-                                    $('#success-alert').html('<strong>' + data.success + '</strong>');
-                                    $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
-                                        $("#success-alert").slideUp(500);
+                                    $('#success-order').addClass('bg-primary');
+                                    $('#success-order').html('<strong>' + data.success + '</strong>');
+                                    $("#success-order").fadeTo(5000, 500).slideUp(500, function(){
+                                        $("#success-order").slideUp(500);
                                     });
                                     returns();
+                                    loadRecords();
                                 }
                             }
                         })
@@ -626,10 +706,10 @@
                                     $('.void').text('VOID');
                                     $('.void').attr('disabled', false);
                                     loadRecords();
-                                    $('#success-alert').addClass('bg-primary');
-                                    $('#success-alert').html('<strong>' + data.success + '</strong>');
-                                    $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
-                                        $("#success-alert").slideUp(500);
+                                    $('#success-order').addClass('bg-primary');
+                                    $('#success-order').html('<strong>' + data.success + '</strong>');
+                                    $("#success-order").fadeTo(5000, 500).slideUp(500, function(){
+                                        $("#success-order").slideUp(500);
                                     });
                                 }
                             }
@@ -644,6 +724,87 @@
             }
         });
     });
+
+    // account receivables
+    $(document).on('click', '#account_receivables', function(){
+        $('#accModal').modal('show');
+        $('.modal-title-acc').text('Account Receivables');
+    });
+    $(document).on('click', '#print_acc', function(){
+        var contents = $(".print_report").html();
+        var frame1 = $('<iframe />');
+        frame1[0].name = "frame1";
+        frame1.css({ "position": "absolute", "top": "-1000000px" });
+        $("body").append(frame1);
+        var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+        frameDoc.document.open();
+        //Create a new HTML document.
+        frameDoc.document.write('<html><head><title>Title</title>');
+        frameDoc.document.write('</head><body>');
+        //Append the external CSS file.
+        frameDoc.document.write('<link href="/assets/css/argon.css" rel="stylesheet" type="text/css" />');
+        frameDoc.document.write('<style>size: A4 portrait;</style>');
+        var source = 'bootstrap.min.js';
+        var script = document.createElement('script');
+        script.setAttribute('type', 'text/javascript');
+        script.setAttribute('src', source);
+        //Append the DIV contents.
+        frameDoc.document.write(contents);
+        frameDoc.document.write('</body></html>');
+        frameDoc.document.close();
+        setTimeout(function () {
+        window.frames["frame1"].focus();
+        window.frames["frame1"].print();
+        frame1.remove();
+        }, 500);
+    });
+
+    //Update 
+    $('#siForm').on('submit', function(event){
+        event.preventDefault();
+        $('.form-control').removeClass('is-invalid')
+        var id = $('#si_hidden_id').val();
+        var action_url = "/admin/salesInvoice/" + id;
+        var type = "PUT";
+        $.ajax({
+            url: action_url,
+            method:type,
+            data:$(this).serialize(),
+            dataType:"json",
+            beforeSend:function(){
+                $("#action_button").attr("disabled", true);
+                $("#action_button").attr("value", "Loading..");
+            },
+            success:function(data){
+                $("#action_button").attr("disabled", false);
+                $("#action_button").attr("value", "Update");
+
+                if(data.errors){
+                    $.each(data.errors, function(key,value){
+                        if(key == $('#'+key).attr('id')){
+                            $('#'+key).addClass('is-invalid')
+                            $('#error-'+key).text(value)
+                            window.location.href = '#'+key;
+                        }
+                    })
+                }
+            
+                if(data.success){
+                    $('#change').val(data.change);
+                    $('#payment').val(data.payment);
+                    $('#success-order').addClass('bg-primary');
+                    $('#success-order').html('<strong>' + data.success + '</strong>');
+                    $("#success-order").fadeTo(5000, 500).slideUp(500, function(){
+                        $("#success-order").slideUp(500);
+                    });
+                    loadRecords();
+                }
+        }
+    });
+    
+    });
+
+    
 
 
 </script>

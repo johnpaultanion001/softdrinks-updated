@@ -17,6 +17,15 @@ class PermissionsTableSeeder extends Seeder
                 'title' => 'receiving_goods_access',
             ],
             [
+                'title' => 'void_receiving_goods',
+            ],
+            [
+                'title' => 'update_receiving_goods',
+            ],
+            [
+                'title' => 'account_payables',
+            ],
+            [
                 'title' => 'sales_inventory_access',
             ],
             [
@@ -24,6 +33,15 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'title' => 'sales_invoice_access',
+            ],
+            [
+                'title' => 'account_receivable',
+            ],
+            [
+                'title' => 'void_sales_invoice',
+            ],
+            [
+                'title' => 'update_sales_invoice',
             ],
             [
                 'title' => 'location_transfer_access',

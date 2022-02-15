@@ -47,7 +47,7 @@ class SalesInventoryController extends Controller
         if($request->get('query'))
         {
             $query = $request->get('query');
-            $data = SalesInventory::where('isComplete', true)->where('isRemove', false)->where('product_code', 'LIKE', "%{$query}%")->get();
+            $data = SalesInventory::where('isComplete', true)->where('isRemove', false)->where('product_code', $query)->get();
            
             foreach($data as $row)
             {
@@ -61,10 +61,10 @@ class SalesInventoryController extends Controller
     public function index()
     {
         abort_if(Gate::denies('sales_inventory_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $categories = Category::where('isRemove', 0)->latest()->get();
-        $locations = Location::where('isRemove', 0)->latest()->get();
-        $suppliers = Supplier::where('isRemove', 0)->latest()->get();
-        $sizes = Size::where('isRemove', 0)->latest()->get();
+        $categories = Category::orderBy('id', 'asc')->get();
+        $locations = Location::orderBy('id', 'asc')->get();
+        $suppliers = Supplier::orderBy('id', 'asc')->get();
+        $sizes = Size::orderBy('id', 'asc')->get();
 
         return view('admin.salesinventories.inventories',compact('categories', 'sizes' ,'locations'  ,'suppliers'));
     }

@@ -522,7 +522,7 @@ class ReceivingGoodController extends Controller
     
     public function get_supplier_id(Request $request){
         $supplier_id = $request->get('supplier');
-        $rg = ReceivingGood::where('supplier_id', $supplier_id)->first();
+        $rg = ReceivingGood::where('supplier_id', $supplier_id)->where('isVoid', false)->first();
         $supplier_prev = Supplier::where('id', $supplier_id)->first();
 
         return response()->json(['receiving_goods' => $rg, 'supplier_prev' => $supplier_prev->current_balance]);

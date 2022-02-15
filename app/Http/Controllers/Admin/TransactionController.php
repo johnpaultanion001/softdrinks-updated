@@ -29,7 +29,7 @@ class TransactionController extends Controller
         $returns       = SalesReturn::latest()->whereDate('created_at', Carbon::today())->where('isComplete', true)->get();
         $products      = SalesInventory::orderBy('id', 'asc')->where('isComplete',true)->get();
         $salesinvoices = SalesInvoice::latest()->get();
-        $delivers      = AssignDeliver::orderBy('id', 'asc')->where('isRemove', false)->get();
+        $delivers      = AssignDeliver::orderBy('id', 'asc')->get();
         return view('admin.transactions.loadtransactions', compact('sales','returns', 'products','salesinvoices', 'title_filter', 'delivers'));
     }
     public function filter(Request $request){
@@ -37,7 +37,7 @@ class TransactionController extends Controller
         $filter        = $request->get('filter');
         $products      = SalesInventory::orderBy('id', 'asc')->where('isComplete',true)->get();
         $salesinvoices = SalesInvoice::latest()->get();
-        $delivers      = AssignDeliver::orderBy('id', 'asc')->where('isRemove', false)->get();
+        $delivers      = AssignDeliver::orderBy('id', 'asc')->get();
 
         if($filter == 'daily'){
             $title_filter  = 'From: ' . date('F d, Y') . ' To: ' . date('F d, Y');
@@ -139,80 +139,7 @@ class TransactionController extends Controller
     }
 
     public function assign_deliver_report(Request $request){
-        // date_default_timezone_set('Asia/Manila');
-        // $filter        = $request->get('filter');
-        // $deliver_id    = $request->get('value');
-
-
-        // $products      = SalesInventory::orderBy('id', 'asc')->where('isComplete',true)->get();
-        // $salesinvoices = SalesInvoice::latest()->get();
-        // $delivers      = AssignDeliver::orderBy('id', 'asc')->where('isRemove', false)->get();
-
-
-        // if($filter == 'daily'){
-        //     $salesinvoices_assign_delivers = SalesInvoice::whereDate('created_at', Carbon::today())->where('deliver_id', $deliver_id)->latest()->get();
-        // }
-        // if($filter == 'monthly'){
-        //     $salesinvoices_assign_delivers = SalesInvoice::whereMonth('created_at', '=', date('m'))->where('deliver_id', $deliver_id)->latest()->get();
-        // }
-        // if($filter == 'yearly'){
-        //     $salesinvoices_assign_delivers = SalesInvoice::whereYear('created_at', '=', date('Y'))->where('deliver_id', $deliver_id)->latest()->get();
-        // }
-        // if($filter == 'all'){
-        //     $salesinvoices_assign_delivers = SalesInvoice::where('deliver_id', $deliver_id)->latest()->get();
-        // }
-        // if($filter == 'fbd'){
-        //     $from = $request->get('from');
-        //     $to = $request->get('to');
-        //     $salesinvoices_assign_delivers = SalesInvoice::whereBetween('created_at', [$from, $to])->where('deliver_id', $deliver_id)->latest()->get();
-        // }
-        // if($filter == null){
-        //     $salesinvoices_assign_delivers = SalesInvoice::whereDate('created_at', Carbon::today())->where('deliver_id', $deliver_id)->latest()->get();
-        // }
-
-        // $title_filter  = 'ASSIGN DELIVER: '.$deliver_id;
         
-        // foreach($salesinvoices_assign_delivers->sales()->get() as $invoice){
-        //     $sales = $invoice->sales()->get();
-        // }
-        // foreach($salesinvoices_assign_delivers->returns()->get() as $invoice){
-        //     $returns = $invoice->returns()->get();
-        // }
-        
-
-        // return view('admin.transactions.loadtransactions', compact('sales','returns', 'products','salesinvoices', 'title_filter', 'delivers'));
-        
-
-        // foreach($salesinvoices as $invoice){
-        //     foreach($invoice->sales()->get() as $sale){
-        //         $sales[] = array(
-        //             'category' => $sale->product->category->name,
-        //             'product'  => $sale->product->product_code . '/' .$sale->product->description,
-        //             'size'     => $sale->product->size->title  .' '. $sale->product->size->size ,
-        //             'qty'      => $sale->purchase_qty,
-        //         );
-        //     }
-        //     foreach($invoice->returns()->get() as $return){
-        //         $returns[] = array(
-        //             'type_of_return'    => $return->type_of_return,
-        //             'category'          => $return->product->category->name,
-        //             'product'           => $return->product->product_code . '/' .$return->product->description,
-        //             'qty'               => $return->return_qty,
-        //         );
-        //     }
-
-        //     $data[] = array(
-        //         'id'              => $invoice->id,
-        //         'order_customer'  => $invoice->salesinvoice_id. '/' . $invoice->customer->customer_name,
-        //         'assign_deliver'  => $invoice->deliver->title,
-        //         'date'            => $invoice->created_at->format('M j , Y h:i A'),
-        //         'sales'           => $sales ?? '',
-        //         'returns'         => $returns ?? '',
-        //     );
-
-        // }
-
-        // return response()->json(['data' => $data ?? '' ]);
       
     }
     

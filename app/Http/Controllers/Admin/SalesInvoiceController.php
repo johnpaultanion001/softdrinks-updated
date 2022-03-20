@@ -558,7 +558,10 @@ class SalesInvoiceController extends Controller
         }
         if($filter == 'monthly'){
             $title_filter  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');
-            $allrecords = SalesInvoice::where('isVoid' , 0)->latest()->whereMonth('created_at', '=', date('m'))->get();
+            $allrecords = SalesInvoice::where('isVoid' , 0)->latest()
+                ->whereMonth('created_at', '=', date('m'))
+                ->whereYear('created_at', '=', date('Y'))
+                ->get();
         }
         if($filter == 'yearly'){
             $title_filter  = 'From: ' .'Jan 1'. date(', Y') . ' To: ' .'Dec 31'. date(', Y');

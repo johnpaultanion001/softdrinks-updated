@@ -23,13 +23,13 @@ class LocationProductSeeder extends Seeder
                 'created_at'  => date("Y-m-d H:i:s"),
                 'updated_at'  => date("Y-m-d H:i:s"),
             ],
-            [
-                'location_id' => '3',
-                'product_id'  => '1',
-                'stock'       => '5',
-                'created_at'  => date("Y-m-d H:i:s"),
-                'updated_at'  => date("Y-m-d H:i:s"),
-            ],
+            // [
+            //     'location_id' => '3',
+            //     'product_id'  => '1',
+            //     'stock'       => '5',
+            //     'created_at'  => date("Y-m-d H:i:s"),
+            //     'updated_at'  => date("Y-m-d H:i:s"),
+            // ],
 
             [
                 'location_id' => '1',
@@ -38,13 +38,13 @@ class LocationProductSeeder extends Seeder
                 'created_at'  => date("Y-m-d H:i:s"),
                 'updated_at'  => date("Y-m-d H:i:s"),
             ],
-            [
-                'location_id' => '3',
-                'product_id'  => '2',
-                'stock'       => '5',
-                'created_at'  => date("Y-m-d H:i:s"),
-                'updated_at'  => date("Y-m-d H:i:s"),
-            ],
+            // [
+            //     'location_id' => '3',
+            //     'product_id'  => '2',
+            //     'stock'       => '5',
+            //     'created_at'  => date("Y-m-d H:i:s"),
+            //     'updated_at'  => date("Y-m-d H:i:s"),
+            // ],
 
             [
                 'location_id' => '1',

@@ -31,15 +31,15 @@ class DatabaseSeeder extends Seeder
            
 
             // Receiving Goods
-            // UCSSeeder::class,
-            // ReceivingGoodSeeder::class,
-            // SalesInventorySeeder::class,
-            // ReceivingProductSeeder::class,
-            // LocationProductSeeder::class,
+            UCSSeeder::class,
+            ReceivingGoodSeeder::class,
+            SalesInventorySeeder::class,
+            ReceivingProductSeeder::class,
+            LocationProductSeeder::class,
 
             //Return
-            // EmptyBottlesInventorySeeder::class,
-            // ReceiveReturnSeeder::class,
+            EmptyBottlesInventorySeeder::class,
+            ReceiveReturnSeeder::class,
             // SalesReturnSeeder::class,
 
 

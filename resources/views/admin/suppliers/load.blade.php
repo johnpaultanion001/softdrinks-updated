@@ -100,7 +100,7 @@
             <div class="modal-body">
               
                 <div id="modalbody" class="row print_report">
-                  <div class="col text-center">
+                  <div class="col text-center" id="header_payable">
                      <h3 class="text-uppercase">Jewel & Nickel Store</h3>
                      <p>Binangonan, <br> Rizal <br> 652-48-36</p>
                      <h5 class="text-uppercase">Account Payables</h5>
@@ -108,7 +108,7 @@
                   </div>
                   <div class="table-responsive">
           
-                    <table class="table align-items-center table-bordered display" cellspacing="0" width="100%">
+                    <table class="table align-items-center table-bordered display" id="table_payable_report" cellspacing="0" width="100%">
                       <thead class="thead-white">
                         <tr>
                           <th>Supplier Code</th>
@@ -146,7 +146,8 @@
             <!-- Modal footer -->
             <div class="modal-footer bg-white">
                 <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
-                <button type="button"  id="print_acc" class="text-uppercase btn btn-default">Print Account Payables</button>
+                <button type="button" id="btn_excel_payable_report" class="text-uppercase btn btn-default">Excel Report</button>
+                <button type="button" id="btn_print_payable_report" class="text-uppercase btn btn-default">Print Report</button>
 
             </div>
     

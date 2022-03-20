@@ -8,6 +8,7 @@ use App\Models\UCS;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
 use Validator;
+use Carbon\Carbon;
 
 class UCSController extends Controller
 {
@@ -67,20 +68,32 @@ class UCSController extends Controller
         if($filter == 'daily'){
             $title_filter  = 'From: ' . date('F d, Y') . ' To: ' . date('F d, Y');
             $ucs_records = UCS::where('isRemove', false)->where('isComplete', true)->whereIn('isHide', $is_hide)
-                                ->latest()->whereDay('created_at', '=', date('d'))->get();
+                                ->latest()
+                                ->whereDate('created_at', Carbon::today())
+                                ->get();
             $ucs_softdrinks = UCS::where('isRemove', false)->where('isComplete', true)->whereIn('isHide', $is_hide)
-                                ->where('status_size', 'SOFTDRINKS')->whereDay('created_at', '=', date('d'))->sum('ucs');
+                                ->where('status_size', 'SOFTDRINKS')
+                                ->whereDate('created_at', Carbon::today())
+                                ->sum('ucs');
             $ucs_wj = UCS::where('isRemove', false)->where('isComplete', true)->whereIn('isHide', $is_hide)
-                                ->where('status_size', 'WATER/JUICES')->whereDay('created_at', '=', date('d'))->sum('ucs');
+                                ->where('status_size', 'WATER/JUICES')
+                                ->whereDate('created_at', Carbon::today())
+                                ->sum('ucs');
         }
         if($filter == 'monthly'){
             $title_filter  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');
             $ucs_records = UCS::where('isRemove', false)->where('isComplete', true)->whereIn('isHide', $is_hide)
-                                ->latest()->whereMonth('created_at', '=', date('m'))->get();
+                                ->latest()->whereMonth('created_at', '=', date('m'))
+                                ->whereYear('created_at', '=', date('Y'))
+                                ->get();
             $ucs_softdrinks = UCS::where('isRemove', false)->where('isComplete', true)->whereIn('isHide', $is_hide)
-                                ->where('status_size', 'SOFTDRINKS')->whereMonth('created_at', '=', date('m'))->sum('ucs');
+                                ->where('status_size', 'SOFTDRINKS')->whereMonth('created_at', '=', date('m'))
+                                ->whereYear('created_at', '=', date('Y'))
+                                ->sum('ucs');
             $ucs_wj = UCS::where('isRemove', false)->where('isComplete', true)->whereIn('isHide', $is_hide)
-                                ->where('status_size', 'WATER/JUICES')->whereMonth('created_at', '=', date('m'))->sum('ucs');
+                                ->where('status_size', 'WATER/JUICES')->whereMonth('created_at', '=', date('m'))
+                                ->whereYear('created_at', '=', date('Y'))
+                                ->sum('ucs');
         }
         if($filter == 'yearly'){
             $title_filter  = 'From: ' .'Jan 1'. date(', Y') . ' To: ' .'Dec 31'. date(', Y');

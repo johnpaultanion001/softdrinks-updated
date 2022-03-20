@@ -65,22 +65,14 @@
 
 <script>
 $(function () {
- 
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
- 
-  $.extend(true, $.fn.dataTable.defaults, {
-    pageLength: 100,
-    'columnDefs': [{ 'orderable': false, 'targets': 0 }],
-  });
-
-  $('.datatable-categories:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
+    $('.datatable-categories').DataTable({
+        bDestroy: true,
+        buttons: [
+           
+        ],
+        pageLength: 100,
     });
-    
+
 });
-
-
 
 </script>

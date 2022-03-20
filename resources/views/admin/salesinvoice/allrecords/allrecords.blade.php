@@ -21,7 +21,7 @@
             </div>
             <div class="col text-right">
                 @can('account_receivable')
-                    <button type="button"  id="account_receivables" class="text-uppercase btn btn-sm btn-primary">Account Receivables</button>
+                    <button type="button"  id="account_receivables" class="text-uppercase btn btn-sm btn-default">Account Receivables</button>
                 @endcan
               <button type="button" id="btn_sales_invoice" class="text-uppercase btn_sales_invoice btn btn-sm btn-primary">Sales Invoice</button>
             </div>

@@ -1,7 +1,7 @@
 
 
     <!-- Projects table -->
-    <table class="table align-items-center table-flush datatable-productlist display" cellspacing="0" width="100%">
+    <table class="table align-items-center table-flush display" id="datatable-productlist" cellspacing="0" width="100%">
         <thead class="thead-white">
             <tr>
                 <th scope="col">Actions</th> 
@@ -63,26 +63,22 @@
 <script>
 $(function () {
  
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
- 
-  $.extend(true, $.fn.dataTable.defaults, {
-    pageLength: 100,
-  });
-
-    var product_list = $('.datatable-productlist:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
+    $('#datatable-productlist').DataTable({
+        bDestroy: true,
+        buttons: [
+           
+        ],
+        pageLength: 100,
     });
 
     $('select[name="category_filter"]').on('change', function () {
-        product_list.columns(5).search( this.value ).draw();
+        $('#datatable-productlist').DataTable().columns(5).search( this.value ).draw();
     });
     $('select[name="supplier_filter"]').on('change', function () {
-        product_list.columns(4).search( this.value ).draw();
+        $('#datatable-productlist').DataTable().columns(4).search( this.value ).draw();
     });
     $('select[name="size_filter"]').on('change', function () {
-        product_list.columns(3).search( this.value ).draw();
+        $('#datatable-productlist').DataTable().columns(3).search( this.value ).draw();
     });
 });
 </script>

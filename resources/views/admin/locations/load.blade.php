@@ -22,7 +22,7 @@
         </div>
         <div class="table-responsive">
           <!-- Projects table -->
-          <table class="table align-items-center table-flush display" cellspacing="0" width="100%">
+          <table class="table align-items-center table-flush display datatable-categories" cellspacing="0" width="100%">
             <thead class="thead-white">
               <tr>
                 <th>Actions</th>
@@ -75,3 +75,17 @@
     @endsection
   </div>
 </div>
+
+<script>
+$(function () {
+    $('.datatable-categories').DataTable({
+        bDestroy: true,
+        buttons: [
+           
+        ],
+        pageLength: 100,
+    });
+
+});
+
+</script>

@@ -11,7 +11,9 @@
                     <button id="yearly" name="yearly" filter="yearly" class="filter text-uppercase btn btn-sm btn-primary mt-2 ">Yearly</button>
                     <button id="all" name="all" filter="all" class="filter text-uppercase btn btn-sm btn-primary mt-2 ">All</button>
                     <button data-toggle="modal" data-target="#modalfilter" class="text-uppercase btn btn-sm btn-primary mt-2">Filter By Date</button>
+                    @can('manager_dashboard_access')
                     <button id="btn_show_profit_report" class="text-uppercase btn btn-sm btn-default mt-2">Profit Report</button>
+                    @endcan
                     <button id="btn_inventory_report" class="text-uppercase btn btn-sm btn-default mt-2">Daily Inventory Report</button>
             </div>
             <div class="col-md-12 mt-2">
@@ -56,6 +58,7 @@
                             </div>
                         </div>
                     </div>
+                    @can('manager_dashboard_access')
                     <div class="col-md-4">
                         <div class="col-sm-12">
                         <h4 class="text-dark text-uppercase">Total Profit:</h4>
@@ -78,6 +81,7 @@
                             </div>
                         </div>
                     </div>
+                    @endcan
                 </div>
             </div>
         </div>
@@ -101,8 +105,10 @@
                         <th scope="col">Qty Sold</th>
                         <th scope="col">Discounted</th>
                         <th scope="col">Total Sales</th>
-                        <th scope="col">Total Cost</th>
-                        <th scope="col">Profit</th>
+                        @can('manager_dashboard_access')
+                            <th scope="col">Total Cost</th>
+                            <th scope="col">Profit</th>
+                        @endcan
                         <th scope="col">Created By</th>
                         <th scope="col">Date/Time</th>
                     </tr>
@@ -144,12 +150,14 @@
                             <td>
                                 {{ number_format($sale->total ?? '' , 2, '.', ',') }}
                             </td>    
+                            @can('manager_dashboard_access')
                             <td>
                                 {{ number_format($sale->total_cost ?? '' , 2, '.', ',') }}
                             </td>
                             <td>
                                 {{ number_format($sale->profit ?? '' , 2, '.', ',') }}
                             </td>
+                            @endcan
                             <td>
                                 {{  $sale->salesinvoice->user->name ?? '' }}
                             </td>
@@ -264,7 +272,7 @@
             <div class="modal-body">
               
                 <div id="modalbody" class="print_report">
-                  <div class="col text-center">
+                  <div class="col text-center" id="header_profit">
                      <h3 class="text-uppercase">Jewel & Nickel Store</h3>
                      <p>Binangonan, <br> Rizal <br> 652-48-36</p>
                      <h5 class="text-uppercase font-wiegth-bold">Profit Report</h5>
@@ -273,7 +281,7 @@
                   </div>
                   <div class="table-responsive">
           
-                    <table class="table align-items-center table-bordered display">
+                    <table class="table align-items-center table-bordered display" id="table_profit_report" cellspacing="0" width="100%">
                       <thead class="thead-white text-uppercase font-weight-bold">
                         <tr>
                           
@@ -323,26 +331,26 @@
                                     </td>
                                   
                                 </tr>
+                                <tr>
+                                    <td>Total:</td>
+                                    <td>{{$sales->sum->purchase_qty}}</td>
+                                    
+                                    
+                                    <td>{{ number_format($sales->sum->total , 2, '.', ',') }}</td>
+                                    <td>{{ number_format($sales->sum->total_cost , 2, '.', ',') }}</td>
+                                    <td>{{ number_format($sales->sum->profit , 2, '.', ',') }} </td>
+                                    
+                                </tr>
                       </tbody>
-                      <tfoot class="text-uppercase font-weight-bold">
-                            <tr>
-                            <td>Total:</td>
-                            <td>{{$sales->sum->purchase_qty}}</td>
-                            
-                            
-                            <td>{{ number_format($sales->sum->total , 2, '.', ',') }}</td>
-                            <td>{{ number_format($sales->sum->total_cost , 2, '.', ',') }}</td>
-                            <td>{{ number_format($sales->sum->profit , 2, '.', ',') }} </td>
-                            
-                            </tr>
-                      </tfoot>
+                    
                     </table>
                   </div>
                 </div>
                  <!-- Modal footer -->
                 <div class="bg-white m-2 text-right">
                     <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
-                    <button type="button" id="btn_print_profit_report" class="text-uppercase btn btn-default" >Print Profit Report</button>
+                    <button type="button" id="btn_excel_profit_report" class="text-uppercase btn btn-default">Excel Report</button>
+                    <button type="button" id="btn_print_profit_report" class="text-uppercase btn btn-default">Print Report</button>
                 </div>
             </div>
     
@@ -404,8 +412,6 @@
                     <button type="button" id="btn_print_inventory_report" class="text-uppercase btn btn-default">Print Report</button>
                 </div>
             </div>
-    
-             
 
          
     

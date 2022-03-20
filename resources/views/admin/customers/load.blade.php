@@ -16,7 +16,7 @@
               <h3 class="mb-0 text-uppercase" id="titletable">Customers</h3>
             </div>
             <div class="col text-right">
-              <button type="button" name="account_receivables" id="account_receivables" class="text-uppercase account_receivables btn btn-sm btn-primary">Account Receivables</button>
+              <button type="button" name="account_receivables" id="account_receivables" class="text-uppercase account_receivables btn btn-sm btn-default">Account Receivables</button>
               <button type="button" name="create_record" id="create_record" class="text-uppercase create_record btn btn-sm btn-primary">New Customer</button>
             </div>
           </div>
@@ -92,7 +92,7 @@
             <div class="modal-body">
               
                 <div id="modalbody" class="row print_report">
-                  <div class="col text-center">
+                  <div class="col text-center" id="header_account">
                      <h3 class="text-uppercase">Jewel & Nickel Store</h3>
                      <p>Binangonan, <br> Rizal <br> 652-48-36</p>
                      <h5 class="text-uppercase">Account Receivables</h5>
@@ -100,7 +100,7 @@
                   </div>
                   <div class="table-responsive">
           
-                    <table class="table align-items-center table-bordered display" cellspacing="0" width="100%">
+                    <table class="table align-items-center table-bordered display" id="table_account_report" cellspacing="0" width="100%">
                       <thead class="thead-white">
                         <tr>
                           
@@ -141,7 +141,9 @@
             <!-- Modal footer -->
             <div class="modal-footer bg-white">
                 <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
-                <button type="button" name="print_acc" id="print_acc" class="text-uppercase print_acc btn btn-default">Print Account Receivables</button>
+                <button type="button" id="btn_excel_account_report" class="text-uppercase btn btn-default">Excel Report</button>
+                <button type="button" id="btn_print_account_report" class="text-uppercase btn btn-default">Print Report</button>
+
 
             </div>
     

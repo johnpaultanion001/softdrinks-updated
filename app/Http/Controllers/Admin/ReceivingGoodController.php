@@ -467,6 +467,10 @@ class ReceivingGoodController extends Controller
             $title_filter  = 'From: ' . date('F d, Y') . ' To: ' . date('F d, Y');
             $orders = ReceivingGood::where('isVoid', false)->whereDate('created_at', Carbon::today())->latest()->get();
         }
+        if($filter == 'weekly'){
+            $title_filter  = 'From: ' . Carbon::now()->startOfWeek()->format('F d, Y') . ' To: ' . Carbon::now()->endOfWeek()->format('F d, Y');
+            $orders = ReceivingGood::where('isVoid', false)->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->latest()->get();
+        }
         if($filter == 'monthly'){
             $title_filter  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');
             $orders = ReceivingGood::where('isVoid', false)->latest()->whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))->whereYear('created_at', '=', date('Y'))->get();

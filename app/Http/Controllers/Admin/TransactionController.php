@@ -46,6 +46,11 @@ class TransactionController extends Controller
             $sales         = Sales::latest()->whereDate('created_at', Carbon::today())->get();
             $returns       = SalesReturn::latest()->whereDate('created_at', Carbon::today())->where('isComplete', true)->get();
         }
+        if($filter == 'weekly'){
+            $title_filter  = 'From: ' . Carbon::now()->startOfWeek()->format('F d, Y') . ' To: ' . Carbon::now()->endOfWeek()->format('F d, Y');
+            $sales         = Sales::latest()->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+            $returns       = SalesReturn::latest()->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->where('isComplete', true)->get();
+        }
         if($filter == 'monthly'){
             $title_filter  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');
             $sales         = Sales::latest()->whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))->get();

@@ -80,6 +80,21 @@ class UCSController extends Controller
                                 ->whereDate('created_at', Carbon::today())
                                 ->sum('ucs');
         }
+        if($filter == 'weekly'){
+            $title_filter  = 'From: ' . Carbon::now()->startOfWeek()->format('F d, Y') . ' To: ' . Carbon::now()->endOfWeek()->format('F d, Y');
+            $ucs_records = UCS::where('isRemove', false)->where('isComplete', true)->whereIn('isHide', $is_hide)
+                                ->latest()
+                                ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->latest()
+                                ->get();
+            $ucs_softdrinks = UCS::where('isRemove', false)->where('isComplete', true)->whereIn('isHide', $is_hide)
+                                ->where('status_size', 'SOFTDRINKS')
+                                ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->latest()
+                                ->sum('ucs');
+            $ucs_wj = UCS::where('isRemove', false)->where('isComplete', true)->whereIn('isHide', $is_hide)
+                                ->where('status_size', 'WATER/JUICES')
+                                ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->latest()
+                                ->sum('ucs');
+        }
         if($filter == 'monthly'){
             $title_filter  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');
             $ucs_records = UCS::where('isRemove', false)->where('isComplete', true)->whereIn('isHide', $is_hide)

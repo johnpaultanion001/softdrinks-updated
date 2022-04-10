@@ -556,6 +556,10 @@ class SalesInvoiceController extends Controller
             $title_filter  = 'From: ' . date('F d, Y') . ' To: ' . date('F d, Y');
             $allrecords = SalesInvoice::where('isVoid' , 0)->whereDate('created_at', Carbon::today())->latest()->get();
         }
+        if($filter == 'weekly'){
+            $title_filter  = 'From: ' . Carbon::now()->startOfWeek()->format('F d, Y') . ' To: ' . Carbon::now()->endOfWeek()->format('F d, Y');
+            $allrecords = SalesInvoice::where('isVoid' , 0)->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->latest()->get();
+        }
         if($filter == 'monthly'){
             $title_filter  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');
             $allrecords = SalesInvoice::where('isVoid' , 0)->latest()

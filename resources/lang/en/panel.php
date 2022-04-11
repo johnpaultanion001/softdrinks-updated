@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'site_title' => 'JEWEL & NICKEL STORE',
+    'site_title' => 'JEWEL & NICKLE STORE',
 ];

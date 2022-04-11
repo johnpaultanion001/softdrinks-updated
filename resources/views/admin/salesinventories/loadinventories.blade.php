@@ -21,13 +21,15 @@
                 <th scope="col">Product ID</th>
 
                 <th scope="col">Product Code/Desc</th>
+                <th scope="col">Size</th>
+                <th scope="col">Category</th>
+                <th scope="col">Supplier</th>
+
                 <th scope="col">Overall Stock</th>
                 <th scope="col">Location Stock</th>
                 <th scope="col">Sold</th>
 
-                <th scope="col">Size</th>
-                <th scope="col">Category</th>
-                <th scope="col">Supplier</th>
+                
                 
 
                 <th scope="col">Unit Price</th>
@@ -57,6 +59,15 @@
                           {{  $product->product_code ?? '' }}/{{  $product->description ?? '' }}
                       </td>
                       <td>
+                          {{  $product->size->title ?? '' }}  {{  $product->size->size ?? '' }}
+                      </td>
+                      <td>
+                          {{  $product->category->name ?? '' }}
+                      </td>
+                      <td>
+                          {{  $product->receiving_good->supplier->name ?? '' }}
+                      </td>
+                      <td>
                           {{  $product->location_products->sum('stock') ?? ''}}
                       </td>
                       <td>
@@ -70,15 +81,7 @@
                           {{  $product->sold ?? '' }}
                       </td>
                       
-                      <td>
-                          {{  $product->size->title ?? '' }}  {{  $product->size->size ?? '' }}
-                      </td>
-                      <td>
-                          {{  $product->category->name ?? '' }}
-                      </td>
-                      <td>
-                          {{  $product->receiving_good->supplier->name ?? '' }}
-                      </td>
+                     
                       <td>
                           {{  number_format($product->price , 2, '.', ',') }}
                       </td>

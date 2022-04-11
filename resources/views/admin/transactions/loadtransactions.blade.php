@@ -393,8 +393,9 @@
                           <th>Category</th>
                           <th>Beginning Inventory</th>
                           <th>Sales Inventory</th>
-                          <th>Ending Inventory</th>
+                         
                           <th>Delivery for today</th>
+                          <th>Ending Inventory</th>
                         </tr>
                       </thead>
                       <tbody class="text-uppercase font-weight-bold" id="list_inventory_report">

@@ -262,11 +262,12 @@ $(document).on('click', '#btn_inventory_report', function(){
                         list += value.sales_inventory;
                     list += '</td>';
                     list += '<td>';
-                        list += value.ending_inventory;
-                    list += '</td>';
-                    list += '<td>';
                         list += value.delivery_inventory;
                     list += '</td>';
+                    list += '<td>';
+                        list += value.ending_inventory;
+                    list += '</td>';
+                    
                 list += '</tr>';
             });
             

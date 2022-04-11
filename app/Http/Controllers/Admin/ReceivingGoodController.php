@@ -657,6 +657,11 @@ class ReceivingGoodController extends Controller
                 $delivery_product_ids = ReceivingProduct::whereDate('created_at', Carbon::today())
                 ->select(['product_id'])->get()->toArray();
             }
+            if($filter == 'weekly'){
+                $title_filter_daily  =  'From: ' . Carbon::now()->startOfWeek()->format('F d, Y') . ' To: ' . Carbon::now()->endOfWeek()->format('F d, Y');
+                $delivery_product_ids = ReceivingProduct::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+                ->select(['product_id'])->get()->toArray();
+            }
             if($filter == 'monthly'){
                 $title_filter_daily  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');
                 $delivery_product_ids = ReceivingProduct::whereMonth('created_at', '=', date('m'))

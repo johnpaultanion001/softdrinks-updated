@@ -63,7 +63,7 @@
               </div>
             </li>
             <li class="nav-item d-sm-none text-white">
-              LOGO
+              {{ trans('panel.site_title') }}
             </li>
             
             

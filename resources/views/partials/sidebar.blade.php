@@ -6,7 +6,7 @@
         <a class="navbar-brand" href="{{ route("admin.dashboard") }}">
           <!-- <img src="../assets/img/brand/blue.png" class="navbar-brand-img" alt="..."> -->
 
-          <h3 class="text-primary">JEWEL & NICKEL STORE</h3>
+          <h3 class="text-primary">{{ trans('panel.site_title') }}</h3>
           <hr class="my-1 bg-primary">
         </a>
       </div>
@@ -35,7 +35,7 @@
               <li class="nav-item">
                 <a class="nav-link {{ request()->is('admin/sales_inventory') || request()->is('admin/sales_inventory/*') ? 'active' : '' }}" href="{{ route("admin.sales_inventory.index") }}">
                   <i class="ni ni-bullet-list-67"></i>
-                  <span class="nav-link-text text-uppercase">Sales Inventories</span>
+                  <span class="nav-link-text text-uppercase">Sales And Inventories</span>
                 </a>
               </li>
             @endcan

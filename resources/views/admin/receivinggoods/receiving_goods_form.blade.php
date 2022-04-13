@@ -18,196 +18,187 @@
     </div>
 
 
-    <div class="container-fluid mt--6">
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="card">
-                    <div class="card-header border-0">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <h3 class="mb-0 text-uppercase title-head" >RECEIVING GOODS</h3> 
+    <div class="card mt--6">
+        <div class="card-header border-0">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="mb-0 text-uppercase title-head" >RECEIVING GOODS</h3> 
+                </div>
+                <div class="col text-right">
+                    <button type="button" name="all_records_btn" id="all_records_btn" class="all_records_btn text-uppercase btn btn-sm btn-primary">All Records</button>
+                </div> 
+            
+            </div>
+        </div>
+        <div id="loading-containermodal" class="loading-container">
+            <div class="loading"></div>
+            <div id="loading-text">loading</div>
+        </div>
+        <div class="card-body" id="rg_card_body">
+            <form method="post" id="purchaseorderForm" class="form-horizontal ">
+                @csrf
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col"><label class="control-label text-uppercase" >Supplier<span class="text-danger">*</span> </label></div>
+                                <div class="col text-right">
+                                    <a class="btn btn-sm btn-white text-uppercase" href="/admin/suppliers">New Supplier?</a>
+                                </div>
                             </div>
-                            <div class="col text-right">
-                                <button type="button" name="all_records_btn" id="all_records_btn" class="all_records_btn text-uppercase btn btn-sm btn-primary">All Records</button>
-                            </div> 
-                        
+                            <select name="supplier_id" id="supplier_id" class="form-control select2">
+                                <option value="">SELECT SUPPLIER</option>
+                                @foreach ($suppliers as $supplier)
+                                    <option value="{{$supplier->id}}">{{$supplier->name}}</option>
+                                @endforeach
+                            </select>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-supplier_id"></strong>
+                            </span>
+                            <input id="supplier_id_hidden" type="hidden" value="{{$receiving_good->supplier_id ?? ''}}">
                         </div>
                     </div>
-                    <div id="loading-containermodal" class="loading-container">
-                        <div class="loading"></div>
-                        <div id="loading-text">loading</div>
-                    </div>
-                    <div class="card-body" id="rg_card_body">
-                        <form method="post" id="purchaseorderForm" class="form-horizontal ">
-                            @csrf
+                    <div class="col-sm-6">
+                        <div class="form-group">
                             <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col"><label class="control-label text-uppercase" >Supplier<span class="text-danger">*</span> </label></div>
-                                            <div class="col text-right">
-                                                <a class="btn btn-sm btn-white text-uppercase" href="/admin/suppliers">New Supplier?</a>
-                                            </div>
-                                        </div>
-                                        <select name="supplier_id" id="supplier_id" class="form-control select2">
-                                            <option value="">SELECT SUPPLIER</option>
-                                            @foreach ($suppliers as $supplier)
-                                                <option value="{{$supplier->id}}">{{$supplier->name}}</option>
-                                            @endforeach
-                                        </select>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-supplier_id"></strong>
-                                        </span>
-                                        <input id="supplier_id_hidden" type="hidden" value="{{$receiving_good->supplier_id ?? ''}}">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col"><label class="control-label text-uppercase" >Location<span class="text-danger">*</span></label></div>
-                                            <div class="col text-right">
-                                                <a class="btn btn-sm btn-white text-uppercase" href="/admin/locations">New Location?</a>
-                                            </div>
-                                        </div>
-                                        <select name="location_id" id="location_id" class="form-control select2">
-                                            <option value="">SELECT LOCATION</option>
-                                            @foreach ($locations as $location)
-                                                <option value="{{$location->id}}">{{$location->location_name}}</option>
-                                            @endforeach
-                                        </select>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-location_id"></strong>
-                                        </span>
-                                        <input id="location_id_hidden" type="hidden" value="{{$receiving_good->location_id ?? ''}}">
-                                        <input id="cash_hidden" type="hidden" value="{{$receiving_good->cash1 ?? ''}}">
-                                    
-                                    </div>
-                                </div>    
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >DOC NO.</label>
-                                        <input type="text" name="doc_no" id="doc_no" class="form-control" value="{{$receiving_good->doc_no ?? ''}}"/>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-doc_no"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Entry Date<span class="text-danger">*</span></label>
-                                        <input type="date" name="entry_date" id="entry_date" class="form-control"  value="{{$receiving_good->entry_date ?? ''}}"/>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-entry_date"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >PO NO.</label>
-                                        <input type="text" name="po_no" id="po_no" class="form-control" value="{{$receiving_good->po_no ?? ''}}"/>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-po_no"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >PO Date.</label>
-                                        <input type="date" name="po_date" id="po_date" class="form-control" value="{{$receiving_good->po_date ?? ''}}"/>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-po_date"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Name of a Driver<span class="text-danger">*</span></label>
-                                        <input type="text" name="name_of_a_driver" id="name_of_a_driver" class="form-control" value="{{$receiving_good->name_of_a_driver ?? ''}}"/>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-name_of_a_driver"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Plate Number<span class="text-danger">*</span> </label>
-                                        <input type="text" name="plate_number" id="plate_number" class="form-control" value="{{$receiving_good->plate_number ?? ''}}"/>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-plate_number"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Trade Discount:</label>
-                                        <input type="text" name="trade_discount" id="trade_discount" class="form-control" value="{{$receiving_good->trade_discount ?? ''}}"/>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-trade_discount"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Terms Discount: </label>
-                                        <input type="text" name="terms_discount" id="terms_discount" class="form-control" value="{{$receiving_good->terms_discount ?? ''}}"/>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-terms_discount"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Remarks: </label>
-                                        <textarea name="remarks" id="remarks" autocomplete="on" class="form-control">{{$receiving_good->remarks ?? ''}}</textarea>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-remarks"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Reference: </label>
-                                        <textarea name="reference" id="reference" autocomplete="on" class="form-control">{{$receiving_good->reference ?? ''}}</textarea>
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong id="error-reference"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div class="col-xl-12">
-                                    <div class="row">
-                                        <div class="col-xl-12">
-                                            <div class="card">
-                                                <div id="sales_inventory"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-12">
-                                            <div class="card">
-                                                <div id="return-product"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            
-                                <div class="col-xl-12">
-                                    <div id="alltotal"></div>
+                                <div class="col"><label class="control-label text-uppercase" >Location<span class="text-danger">*</span></label></div>
+                                <div class="col text-right">
+                                    <a class="btn btn-sm btn-white text-uppercase" href="/admin/locations">New Location?</a>
                                 </div>
                             </div>
-                            <input type="hidden" name="purchase_action" id="purchase_action" value="Compute" />
-                            <input type="hidden" name="purchase_hidden_id" id="purchase_hidden_id" value="{{$receiving_good->id ?? ''}}" />
-
-                            <div class="card-footer text-right">
-                                <button type="button" class="btn btn-danger text-uppercase" >Cancel</button>
-                                <input type="submit" name="purchase_button" id="purchase_button" class="text-uppercase btn btn-primary" value="Compute" />
-                            </div>
+                            <select name="location_id" id="location_id" class="form-control select2">
+                                <option value="">SELECT LOCATION</option>
+                                @foreach ($locations as $location)
+                                    <option value="{{$location->id}}">{{$location->location_name}}</option>
+                                @endforeach
+                            </select>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-location_id"></strong>
+                            </span>
+                            <input id="location_id_hidden" type="hidden" value="{{$receiving_good->location_id ?? ''}}">
+                            <input id="cash_hidden" type="hidden" value="{{$receiving_good->cash1 ?? ''}}">
                         
-                        </form>
+                        </div>
+                    </div>    
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label text-uppercase" >DOC NO.</label>
+                            <input type="text" name="doc_no" id="doc_no" class="form-control" value="{{$receiving_good->doc_no ?? ''}}"/>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-doc_no"></strong>
+                            </span>
+                        </div>
                     </div>
-                    
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label text-uppercase" >Entry Date<span class="text-danger">*</span></label>
+                            <input type="date" name="entry_date" id="entry_date" class="form-control"  value="{{$receiving_good->entry_date ?? ''}}"/>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-entry_date"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label text-uppercase" >PO NO.</label>
+                            <input type="text" name="po_no" id="po_no" class="form-control" value="{{$receiving_good->po_no ?? ''}}"/>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-po_no"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label text-uppercase" >PO Date.</label>
+                            <input type="date" name="po_date" id="po_date" class="form-control" value="{{$receiving_good->po_date ?? ''}}"/>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-po_date"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label text-uppercase" >Name of a Driver<span class="text-danger">*</span></label>
+                            <input type="text" name="name_of_a_driver" id="name_of_a_driver" class="form-control" value="{{$receiving_good->name_of_a_driver ?? ''}}"/>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-name_of_a_driver"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label text-uppercase" >Plate Number<span class="text-danger">*</span> </label>
+                            <input type="text" name="plate_number" id="plate_number" class="form-control" value="{{$receiving_good->plate_number ?? ''}}"/>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-plate_number"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label text-uppercase" >Trade Discount:</label>
+                            <input type="text" name="trade_discount" id="trade_discount" class="form-control" value="{{$receiving_good->trade_discount ?? ''}}"/>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-trade_discount"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label text-uppercase" >Terms Discount: </label>
+                            <input type="text" name="terms_discount" id="terms_discount" class="form-control" value="{{$receiving_good->terms_discount ?? ''}}"/>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-terms_discount"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label text-uppercase" >Remarks: </label>
+                            <textarea name="remarks" id="remarks" autocomplete="on" class="form-control">{{$receiving_good->remarks ?? ''}}</textarea>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-remarks"></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="control-label text-uppercase" >Reference: </label>
+                            <textarea name="reference" id="reference" autocomplete="on" class="form-control">{{$receiving_good->reference ?? ''}}</textarea>
+                            <span class="invalid-feedback" role="alert">
+                                <strong id="error-reference"></strong>
+                            </span>
+                        </div>
+                    </div>
 
+                    <div class="col-xl-12">
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div id="sales_inventory"></div>
+                                </div>
+                            </div>
+                            <div class="col-xl-12">
+                                <div class="card">
+                                    <div id="return-product"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="col-xl-12">
+                        <div id="alltotal"></div>
+                    </div>
                 </div>
-            </div>
+                <input type="hidden" name="purchase_action" id="purchase_action" value="Compute" />
+                <input type="hidden" name="purchase_hidden_id" id="purchase_hidden_id" value="{{$receiving_good->id ?? ''}}" />
 
+                <div class="card-footer text-right">
+                    <button type="button" class="btn btn-danger text-uppercase" >Cancel</button>
+                    <input type="submit" name="purchase_button" id="purchase_button" class="text-uppercase btn btn-primary" value="Compute" />
+                </div>
+            
+            </form>
         </div>
     </div>
 

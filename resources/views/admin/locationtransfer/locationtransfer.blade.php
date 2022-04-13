@@ -16,110 +16,101 @@
     </div>
 </div>
 
-<div class="container-fluid mt--6">
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="card">
-                    <div class="card-header border-0">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <h3 class="mb-0 text-uppercase title-head" >LOCATION TRANSFER</h3> 
-                            </div>
-                            <div class="col text-right">
-                                <button type="button" name="all_records" id="all_records" class="all_records btn btn-sm btn-default text-uppercase">All Records</button>
-                            </div> 
-                        
-                        </div>
-                    </div>
-                    
-                    <div class="card-body">
-                        <div id="loading-containermodal" class="loading-container">
-                            <div class="loading"></div>
-                            <div id="loading-text">loading</div>
-                        </div>
-                        
-                        <form method="post" id="myForm" class="form-horizontal">
-                            @csrf
-                            <div class="row" id="rg_card_body">
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Entry Date <span class="text-danger">*</span></label>
-                                        <input type="date" name="entry_date" id="entry_date" class="form-control"/>
-                                        <span class="invalid-feedback text-danger" role="alert">
-                                            <strong id="error-entry_date"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2"></div>
-                                <div class="col-sm-2"></div>
-
-                                <div class="col-sm-2">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Reference</label>
-                                        <input type="text" name="reference" id="reference" class="form-control" />
-                                        <span class="invalid-feedback text-danger" role="alert">
-                                            <strong id="error-reference"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Reference Date</label>
-                                        <input type="date" name="reference_date" id="reference_date" class="form-control" />
-                                        <span class="invalid-feedback text-danger" role="alert">
-                                            <strong id="error-reference_date"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                        
-                                <div class="col-sm-5">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Prepared By</label>
-                                        <input type="text" name="prepared_by" id="prepared_by" value="{{ Auth::user()->name }}" class="form-control" readonly/>
-                                        <span class="invalid-feedback text-danger" role="alert">
-                                            <strong id="error-prepared_by"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-2"></div>
-                                <div class="col-sm-5">
-                                    <div class="form-group">
-                                        <label class="control-label text-uppercase" >Remarks</label>
-                                        <input type="text" name="remarks" id="remarks" class="form-control"/>
-                                        <span class="invalid-feedback text-danger" role="alert">
-                                            <strong id="error-remarks"></strong>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-xl-12">
-                                    <div class="row">
-                                        <div class="col-xl-12">
-                                            <div class="card">
-                                                <div id="pending_transfer"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-12">
-                                            <div class="card">
-                                                <div id="products"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-footer text-right">
-                                <button type="button" class="btn btn-danger text-uppercase" >Cancel</button>
-                                <input type="submit" name="transfer_button" id="transfer_button" class="text-uppercase btn btn-primary" value="Submit" />
-                            </div>
-                        
-                        </form>
-                    </div>
-                    
-
-                </div>
+<div class="card mt--6">
+    <div class="card-header border-0">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="mb-0 text-uppercase title-head" >LOCATION TRANSFER</h3> 
             </div>
-
+            <div class="col text-right">
+                <button type="button" name="all_records" id="all_records" class="all_records btn btn-sm btn-default text-uppercase">All Records</button>
+            </div> 
+        
         </div>
     </div>
+    
+    <div class="card-body">
+        <div id="loading-containermodal" class="loading-container">
+            <div class="loading"></div>
+            <div id="loading-text">loading</div>
+        </div>
+        
+        <form method="post" id="myForm" class="form-horizontal">
+            @csrf
+            <div class="row" id="rg_card_body">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="control-label text-uppercase" >Entry Date <span class="text-danger">*</span></label>
+                        <input type="date" name="entry_date" id="entry_date" class="form-control"/>
+                        <span class="invalid-feedback text-danger" role="alert">
+                            <strong id="error-entry_date"></strong>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-2"></div>
+                <div class="col-sm-2"></div>
+
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label class="control-label text-uppercase" >Reference</label>
+                        <input type="text" name="reference" id="reference" class="form-control" />
+                        <span class="invalid-feedback text-danger" role="alert">
+                            <strong id="error-reference"></strong>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="control-label text-uppercase" >Reference Date</label>
+                        <input type="date" name="reference_date" id="reference_date" class="form-control" />
+                        <span class="invalid-feedback text-danger" role="alert">
+                            <strong id="error-reference_date"></strong>
+                        </span>
+                    </div>
+                </div>
+        
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label class="control-label text-uppercase" >Prepared By</label>
+                        <input type="text" name="prepared_by" id="prepared_by" value="{{ Auth::user()->name }}" class="form-control" readonly/>
+                        <span class="invalid-feedback text-danger" role="alert">
+                            <strong id="error-prepared_by"></strong>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-2"></div>
+                <div class="col-sm-5">
+                    <div class="form-group">
+                        <label class="control-label text-uppercase" >Remarks</label>
+                        <input type="text" name="remarks" id="remarks" class="form-control"/>
+                        <span class="invalid-feedback text-danger" role="alert">
+                            <strong id="error-remarks"></strong>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xl-12">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div id="pending_transfer"></div>
+                            </div>
+                        </div>
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div id="products"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-right">
+                <button type="button" class="btn btn-danger text-uppercase" >Cancel</button>
+                <input type="submit" name="transfer_button" id="transfer_button" class="text-uppercase btn btn-primary" value="Submit" />
+            </div>
+        
+        </form>
+    </div>
+</div>
 
 <!-- Product -->
 <form method="post" id="productForm" class="form-horizontal">

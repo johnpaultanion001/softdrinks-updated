@@ -34,7 +34,12 @@ class CreateSalesInventoriesTable extends Migration
             $table->float('total_cost');
             
             $table->longText('product_remarks')->nullable();
-           
+            
+            $table->string('shell')->nullable();
+            $table->string('bottles')->nullable();
+            $table->string('big_palettes')->nullable();
+            $table->string('small_palettes')->nullable();
+
             $table->string('supplier_id')->nullable();
             
             $table->boolean('isComplete')->default(false);

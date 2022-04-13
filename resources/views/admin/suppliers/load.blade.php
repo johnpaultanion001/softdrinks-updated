@@ -6,85 +6,79 @@
 </div>
 
 <!-- Page content -->
-<div class="container-fluid mt--6 table-load">
-  <div class="row">
-    <div class="col-xl-12">
-      <div class="card">
-        <div class="card-header border-0">
-          <div class="row align-items-center">
-            <div class="col">
-              <h3 class="mb-0 text-uppercase" id="titletable">Suppliers</h3>
-            </div>
-            <div class="col text-right">
-              @can('account_payables')
-                <button type="button" id="account_payable" class="text-uppercase btn btn-sm btn-default">Account Payables</button>
-              @endcan
-              <button type="button" name="create_record" id="create_record" class="text-uppercase create_record btn btn-sm btn-primary">New Supplier</button>
-            </div>
-          </div>
-        </div>
-        <div class="table-responsive">
-          <!-- Projects table -->
-          <table class="table align-items-center table-flush datatable-suppliers display" cellspacing="0" width="100%">
-            <thead class="thead-white">
-              <tr>
-                <th>Actions</th>
-                <th>Supplier Code</th>
-                <th>Supplier Name</th>
-                <th>Address</th>
-                <th>Contact Number</th>
-                <th>Current Balance</th>
-                <th>Remarks</th>
-                <th>Created At</th>
-                
-                
-              </tr>
-            </thead>
-            <tbody class="text-uppercase font-weight-bold">
-              @foreach($suppliers as $key => $supplier)
-                    <tr data-entry-id="{{ $supplier->id ?? '' }}">
-                        <td>
-                            <button type="button" name="edit" edit="{{  $supplier->id ?? '' }}" class="text-uppercase edit btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
-                            <button type="button" name="remove" remove="{{  $supplier->id ?? '' }}" id="{{  $supplier->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                        </td>
-                        <td>
-                            {{  $supplier->id ?? '' }}
-                        </td>
-                        <td>
-                            {{  $supplier->name ?? '' }}
-                        </td>
-                        <td>
-                            {{  $supplier->address ?? '' }}
-                        </td>
-                        <td>
-                             {{ $supplier->contact_number ?? '' }}
-                        </td>
-                        <td>
-                             {{  number_format($supplier->current_balance , 2, ',', ',') }}
-                          </td>
-                        <td>
-                            {{  $supplier->remarks ?? '' }}
-                        </td>
-                        <td>
-                            {{ $supplier->created_at->format('M j , Y h:i A') }}
-                        </td>
-                        
-                    </tr>
-                @endforeach
-            </tbody>
-          </table>
-        </div>
+
+<div class="mt--6 card">
+  <div class="card-header border-0">
+    <div class="row align-items-center">
+      <div class="col">
+        <h3 class="mb-0 text-uppercase" id="titletable">Suppliers</h3>
+      </div>
+      <div class="col text-right">
+        @can('account_payables')
+          <button type="button" id="account_payable" class="text-uppercase btn btn-sm btn-default">Account Payables</button>
+        @endcan
+        <button type="button" name="create_record" id="create_record" class="text-uppercase create_record btn btn-sm btn-primary">New Supplier</button>
       </div>
     </div>
-    
-    <!-- Footer -->
-    @section('footer')
+  </div>
+  <div class="table-responsive">
+    <!-- Projects table -->
+    <table class="table align-items-center table-flush datatable-suppliers display" cellspacing="0" width="100%">
+      <thead class="thead-white">
+        <tr>
+          <th>Actions</th>
+          <th>Supplier Code</th>
+          <th>Supplier Name</th>
+          <th>Address</th>
+          <th>Contact Number</th>
+          <th>Current Balance</th>
+          <th>Remarks</th>
+          <th>Created At</th>
+          
+          
+        </tr>
+      </thead>
+      <tbody class="text-uppercase font-weight-bold">
+        @foreach($suppliers as $key => $supplier)
+              <tr data-entry-id="{{ $supplier->id ?? '' }}">
+                  <td>
+                      <button type="button" name="edit" edit="{{  $supplier->id ?? '' }}" class="text-uppercase edit btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                      <button type="button" name="remove" remove="{{  $supplier->id ?? '' }}" id="{{  $supplier->id ?? '' }}" class="text-uppercase remove btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                  </td>
+                  <td>
+                      {{  $supplier->id ?? '' }}
+                  </td>
+                  <td>
+                      {{  $supplier->name ?? '' }}
+                  </td>
+                  <td>
+                      {{  $supplier->address ?? '' }}
+                  </td>
+                  <td>
+                        {{ $supplier->contact_number ?? '' }}
+                  </td>
+                  <td>
+                        {{  number_format($supplier->current_balance , 2, ',', ',') }}
+                    </td>
+                  <td>
+                      {{  $supplier->remarks ?? '' }}
+                  </td>
+                  <td>
+                      {{ $supplier->created_at->format('M j , Y h:i A') }}
+                  </td>
+                  
+              </tr>
+          @endforeach
+      </tbody>
+    </table>
+  </div>
+
+   <!-- Footer -->
+   @section('footer')
         @include('../partials.footer')
     @endsection
-  </div>
 </div>
-
-
+    
 <div class="modal payableModal" id="payableModal" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -101,7 +95,7 @@
               
                 <div id="modalbody" class="row print_report">
                   <div class="col text-center" id="header_payable">
-                     <h3 class="text-uppercase">Jewel & Nickel Store</h3>
+                     <h3 class="text-uppercase">{{ trans('panel.site_title') }}</h3>
                      <p>Binangonan, <br> Rizal <br> 652-48-36</p>
                      <h5 class="text-uppercase">Account Payables</h5>
                      <br>

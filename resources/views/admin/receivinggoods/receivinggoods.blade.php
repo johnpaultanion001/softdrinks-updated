@@ -75,7 +75,7 @@
               
                 <div id="modalbody" class="row print_report">
                   <div class="col text-center" id="header_payable">
-                     <h3 class="text-uppercase">Jewel & Nickel Store</h3>
+                     <h3 class="text-uppercase">{{ trans('panel.site_title') }}</h3>
                      <p>Binangonan, <br> Rizal <br> 652-48-36</p>
                      <h5 class="text-uppercase">Account Payables</h5>
                      <br>
@@ -396,7 +396,7 @@
               
                 <div class="row">
                   <div class="col text-center" id="header_delivery">
-                     <h3 class="text-uppercase">Jewel & Nickel Store</h3>
+                     <h3 class="text-uppercase">{{ trans('panel.site_title') }}</h3>
                      <p>Binangonan, <br> Rizal <br> 652-48-36</p>
                      <h5 class="text-uppercase font-wiegth-bold">Delivery Report</h5>
                      <h4 class="filter_delivery">{{$title_filter_daily}}</h4> 
@@ -715,7 +715,7 @@ $(document).on('click', '.removereturn', function(){
 
 });
 
-var filter = 'daily';
+var filter = 'all';
 var from = null;
 var to = null;
 
@@ -751,6 +751,10 @@ $(document).on('click', '#account_payable', function(){
     var header = $('#header_payable').html();
     $('#table_payable_report').DataTable({
         bDestroy: true,
+        bDestroy: true,
+        responsive: true,
+        scrollY: 500,
+        scrollCollapse: true,
         buttons: [
             { 
                 extend: 'excel',
@@ -883,6 +887,9 @@ function table_delivery_report(){
     var header = $('#header_delivery').html();
     $('#table_delivery_report').DataTable({
         bDestroy: true,
+        responsive: true,
+        scrollY: 500,
+        scrollCollapse: true,
         buttons: [
             { 
                 extend: 'excel',

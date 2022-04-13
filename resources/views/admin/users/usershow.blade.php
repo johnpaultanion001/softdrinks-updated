@@ -22,23 +22,21 @@
 </div>
 
 <!-- Page content -->
-<div class="container-fluid mt--6">
-  <div class="row">
-    <div class="col-xl-12">
-      <div class="card">
-        <div class="card-header border-0">
-          <div class="row align-items-center">
-            <div class="col">
-              <h3 class="mb-0 text-uppercase" id="titletable">User - {{$user->name}}</h3>
-            </div>
-            
-          </div>
-        </div>
 
-        <div class="card-body">
+<div class="card mt--6">
+    <div class="card-header border-0">
+        <div class="row align-items-center">
+        <div class="col">
+            <h3 class="mb-0 text-uppercase" id="titletable">User - {{$user->name}}</h3>
+        </div>
+        
+        </div>
+    </div>
+
+    <div class="card-body">
         <form method="post" id="myForm" class="form-horizontal">
             @csrf
-       
+        
             <div class="col-sm-12">
                 <div class="form-group">
                     <label class="control-label text-uppercase" >Name: </label>
@@ -94,16 +92,14 @@
                 <input type="submit" name="action_button" id="action_button" class="text-uppercase btn btn-default" value="Submit" />
             </div>
         </form>
-        </div>
-      </div>
     </div>
-    
-    <!-- Footer -->
-    @section('footer')
-        @include('../partials.footer')
-    @endsection
-  </div>
 </div>
+
+<!-- Footer -->
+@section('footer')
+    @include('../partials.footer')
+@endsection
+
 
 
 @endsection

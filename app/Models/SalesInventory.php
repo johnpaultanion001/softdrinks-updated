@@ -29,6 +29,12 @@ class SalesInventory extends Model
         'hauling_discount',
     
         'product_remarks',
+        
+        'shell',
+        'bottles',
+        'big_palettes',
+        'small_palettes',
+        
         'supplier_id',
 
         'isComplete',
@@ -72,6 +78,10 @@ class SalesInventory extends Model
     {
         return $this->hasMany(LocationProduct::class, 'product_id', 'id')->where('location_id', 1)->sum('stock');
     }
-
+    public function emptyBottles()
+    {
+        return $this->hasMany(EmptyBottlesInventory::class, 'product_id', 'id')->sum('qty');
+    }
+   
 
 }

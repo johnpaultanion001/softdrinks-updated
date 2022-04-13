@@ -8,32 +8,33 @@
 @endsection
 
 @section('content')
-<div class="header bg-primary pb-6">
-    <div class="container-fluid">
-      
-    </div>
-</div>
+<style>
+   .input_ending {
+        background-color: transparent;
+        cursor: not-allowed;
+        border: none;
+    }
+    .input_ending:focus{
+        background-color: transparent;
+        cursor: not-allowed;
+        border: none;
+    }
+</style>
 
 <div id="loading-container" class="loading-container">
     <div class="loading"></div>
     <div id="loading-text">loading</div>
 </div>
 <!-- Page content -->
-<div class="container-fluid mt--6">
-      <div class="row">
-        
-        <div class="col-xl-12" id="load_transactions">
-          
-        </div>
-       
-
-       
-        <!-- Footer -->
-        @section('footer')
-            @include('../partials.footer')
-        @endsection
-      </div>
+  
+<div id="load_transactions">
+    
 </div>
+
+<!-- Footer -->
+@section('footer')
+    @include('../partials.footer')
+@endsection
 
 <!-- modal for Filter -->
 <div class="modal fade" id="modalfilter" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -70,9 +71,6 @@
     </div>
   </div>
 </div>
-
-
-
 
 @endsection
 
@@ -117,6 +115,9 @@ $(document).on('click', '#btn_show_profit_report', function(){
     var header = $('#header_profit').html();
     $('#table_profit_report').DataTable({
         bDestroy: true,
+        responsive: true,
+        scrollY: 500,
+        scrollCollapse: true,
         buttons: [
             { 
                 extend: 'excel',
@@ -253,6 +254,9 @@ $(document).on('click', '#btn_inventory_report', function(){
                         list += value.product;
                     list += '</td>';
                     list += '<td>';
+                        list += value.description;
+                    list += '</td>';
+                    list += '<td>';
                         list += value.category;
                     list += '</td>';
                     list += '<td>';
@@ -285,6 +289,9 @@ function table_inventory_report(){
     var header = $('#header_inventory').html();
     $('#table_inventory_report').DataTable({
         bDestroy: true,
+        responsive: true,
+        scrollY: 500,
+        scrollCollapse: true,
         buttons: [
             { 
                 extend: 'excel',
@@ -302,6 +309,157 @@ function table_inventory_report(){
             }
         ],
     });
+}
+
+$(document).on('click', '#btn_ending_inventory_report', function(){
+    $('#modal_ending_inventory').modal('show');
+    
+    data_ending_inventory();
+    
+});
+
+function data_ending_inventory(){
+    
+    $.ajax({
+        url: "/admin/transactions/ending_inventory_report", 
+        type: "get",
+        data: {_token: '{!! csrf_token() !!}'},
+        dataType: "json",
+        beforeSend: function() {
+            $('#btn_ending_inventory_report').attr('disabled', true);
+        },
+        success: function(data){
+            $('#btn_ending_inventory_report').attr('disabled', false);
+            
+            var list = '';
+            $.each(data.data, function(key,value){
+                list += '<tr>';
+                    list += '<td>';
+                       list += '<button type="button" id="edit_inv'+value.product_id+'" edit_inv="'+value.product_id+'" class="text-uppercase edit_inv btn btn-info btn-sm">EDIT</button>'
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.product;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.category;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.full_goods;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.full_emptys;
+                    list += '</td>';
+                    list += '<td>';
+                        list += '<input type="text" id="shell'+value.product_id+'" value="'+value.shell+'" class="input_ending" readonly onkeypress="return AddKeyPress(event);"/> <span style="display: none;">'+value.shell+'</span>';
+                    list += '</td>';
+                    list += '<td>';
+                        list += '<input type="text" id="bottles'+value.product_id+'" value="'+value.bottles+'" class="input_ending" readonly onkeypress="return AddKeyPress(event);"/> <span style="display: none;">'+value.bottles+'</span>';   
+                    list += '</td>';
+                    list += '<td>';
+                        list += '<input type="text" id="big_palettes'+value.product_id+'" value="'+value.big_palettes+'" class="input_ending" readonly onkeypress="return AddKeyPress(event);"/> <span style="display: none;">'+value.big_palettes+'</span>';   
+                    list += '</td>';
+                    list += '<td>';
+                        list += '<input type="text" id="small_palettes'+value.product_id+'" value="'+value.small_palettes+'" class="input_ending" readonly onkeypress="return AddKeyPress(event);"/> <span style="display: none;">'+value.small_palettes+'</span>';   
+                    list += '</td>';
+                list += '</tr>';
+            });
+            $('#list_ending_inventory_report').empty().append(list);
+            table_ending_inventory_report();
+        }	
+    })
+
+    
+}
+
+function table_ending_inventory_report(){
+    var title = $('#title_ending_inv_report').text();
+    var header = $('#header_ending_inventory').html();
+    $('#table_ending_inventory_report').DataTable({
+        bDestroy: true,
+        responsive: true,
+        scrollY: 500,
+        scrollCollapse: true,
+        buttons: [
+            { 
+                extend: 'excel',
+                className: 'd-none',
+                title: title,
+                exportOptions: {
+                    columns: [1,2,3,4,5,6,7,8]
+                }
+            },
+            { 
+                extend: 'print',
+                title:  '<center>' + header + '</center>',
+                className: 'd-none',
+                exportOptions: {
+                    columns: [1,2,3,4,5,6,7,8]
+                }
+            },
+        ],
+    });
+}
+
+$(document).on('click', '#btn_print_ending_inventory_report', function(){
+    $('#table_ending_inventory_report').DataTable().buttons(0,1).trigger()
+});
+
+$(document).on('click', '#btn_excel_ending_inventory_report', function(){
+    $('#table_ending_inventory_report').DataTable().buttons(0,0).trigger()
+});
+
+
+var id = null;
+
+$(document).on('click', '.edit_inv', function(){
+    id = $(this).attr('edit_inv');
+    var action = $(this).text();
+
+    if(action == 'EDIT'){
+        $(this).text('SAVE');
+        $(this).removeClass('btn-info');
+        $(this).addClass('btn-success');
+
+        $('#shell'+id).removeClass('input_ending');
+        $('#shell'+id).attr('readonly', false);
+        $('#shell'+id).focus();
+
+        $('#bottles'+id).removeClass('input_ending');
+        $('#bottles'+id).attr('readonly', false);
+
+        $('#big_palettes'+id).removeClass('input_ending');
+        $('#big_palettes'+id).attr('readonly', false);
+
+        $('#small_palettes'+id).removeClass('input_ending');
+        $('#small_palettes'+id).attr('readonly', false);
+    }
+    else if(action == 'SAVE'){
+        $.ajax({
+            url: "/admin/transactions/ending_inventory_report/" + id, 
+            type: "put",
+            data: {shell:$('#shell'+id).val(),bottles:$('#bottles'+id).val(),big_palettes:$('#big_palettes'+id).val(),
+                    small_palettes:$('#small_palettes'+id).val(),_token: '{!! csrf_token() !!}'},
+            dataType: "json",
+            beforeSend: function() {
+                $(this).text('SAVING');
+            },
+            success: function(data){
+                if(data.success){
+                    $('#table_ending_inventory_report').DataTable().destroy();
+                    data_ending_inventory();
+                }
+            }	
+        })
+    }
+});
+
+function AddKeyPress(e) { 
+    e = e || window.event;
+    if (e.keyCode == 13) {
+        $('#edit_inv'+id).click();
+        return false;
+    }
+    return true;
 }
 
 

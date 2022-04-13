@@ -1,7 +1,7 @@
 <div id="receiptreportsales" class="d-print-inline-flex receiptreport p4 bg-white mt-2" style="border-radius: 5px;">
                 
                 <div class="col">
-                    <h4 class="text-center card-title text-uppercase text-dark mb-0">Jewel & Nickel <br> Store </h4>
+                    <h4 class="text-center card-title text-uppercase text-dark mb-0">{{ trans('panel.site_title') }}</h4>
                     <h5 class="text-center card-title text-muted mb-0">J.P Extension Libis Binangonan , Rizal <br>
                     Fernando L. Arada - Prop. <br>
                     Tel. No. 986-2433 Cel No. 0923-6738-296 </h5>

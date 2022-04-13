@@ -4,8 +4,8 @@
         <thead class="thead-white">
             <tr>
                 <th scope="col">Action</th>
-                <th scope="col">ID</th>
-                <th scope="col">Product Code/Desc</th>
+                <th scope="col">Product Code</th>
+                <th scope="col">Description</th>
                 <th scope="col">Sold Qty</th>
                 <th scope="col">Price Type/Discounted</th>
                 <th scope="col">Unit Price</th>
@@ -20,10 +20,10 @@
                         <button type="button" remove_sales="{{  $sale->id ?? '' }}" class="remove_sales text-uppercase btn btn-danger btn-sm">Remove</button>
                     </td>
                     <td>
-                        {{$sale->id ?? '' }}
+                        {{$sale->product->product_code ?? '' }}
                     </td>
                     <td>
-                        {{$sale->product->product_code ?? '' }}/{{$sale->product->description ?? '' }}
+                        {{$sale->product->description ?? '' }}
                     </td>
                     <td>
                         {{$sale->purchase_qty ?? '' }}
@@ -49,7 +49,10 @@ $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 
     $.extend(true, $.fn.dataTable.defaults, {
-        pageLength: 10,
+        bDestroy: true,
+        responsive: true,
+        scrollY: 500,
+        scrollCollapse: true,
         'columnDefs': [{ 'orderable': false, 'targets': 0 }],
     });
     $('.datatable-sales:not(.ajaxTable)').DataTable({ buttons: dtButtons });

@@ -126,7 +126,8 @@ class TransactionController extends Controller
             $ending_inventory = $beginning_inventory + $delivery_inventory - $sales_inventory;
             
             $sales[] = array(
-                'product'              => $product->product_code .'/'.$product->description,
+                'product'              => $product->product_code,
+                'description'          => $product->description,
                 'category'             => $product->category->name,
                 'beginning_inventory'  => $beginning_inventory,
                 'sales_inventory'      => $sales_inventory,
@@ -141,9 +142,37 @@ class TransactionController extends Controller
         return response()->json(['data' => $sales ]);
     }
 
-    public function assign_deliver_report(Request $request){
-        
+    public function ending_inventory_report(Request $request){
+        $products_list    = SalesInventory::where('isComplete', true)->get();
+
+        foreach($products_list as $product){
+          
+            $products[] = array(
+                'product_id'           => $product->id,
+                'product'              => $product->product_code .'/'.$product->description,
+                'category'             => $product->category->name,
+                'full_goods'           => $product->location_products->sum('stock'),
+                'full_emptys'          => $product->emptyBottles(),
+                'shell'                => $product->shell ?? '0',
+                'bottles'              => $product->bottles ?? '0',
+                'big_palettes'         => $product->big_palettes ?? '0',
+                'small_palettes'       => $product->small_palettes ?? '0',
+            );
+        }
+
+        return response()->json(['data' => $products ]);
       
     }
+
+    public function ending_inventory_update(Request $request, SalesInventory $product){
+        $product->update([
+            'shell'     => $request->get('shell'),
+            'bottles'     => $request->get('bottles'),
+            'big_palettes'     => $request->get('big_palettes'),
+            'small_palettes'     => $request->get('small_palettes'),
+        ]);
+        return response()->json(['success' => 'success']);
+    }
+    
     
 }

@@ -22,22 +22,19 @@
 </div>
 
 <!-- Page content -->
-<div class="container-fluid mt--6">
-  <div class="row">
-    <div class="col-xl-12">
-      <div class="card">
-        <div class="card-header border-0">
-          <div class="row align-items-center">
-            <div class="col">
-              <h3 class="mb-0" id="titletable">Role - Edit</h3>
-            </div>
-            <div class="col text-right">
-                <a href="{{ route("admin.roles.create") }}"  class="btn btn-sm btn-primary">New Role</a>
-            </div>
-          </div>
-        </div>
 
-        <div class="card-body">
+<div class="card mt--6">
+    <div class="card-header border-0">
+        <div class="row align-items-center">
+        <div class="col">
+            <h3 class="mb-0" id="titletable">Role - Edit</h3>
+        </div>
+        <div class="col text-right">
+            <a href="{{ route("admin.roles.create") }}"  class="btn btn-sm btn-primary">NEW ROLE</a>
+        </div>
+        </div>
+    </div>
+    <div class="card-body">
         <form method="POST" action="{{ route("admin.roles.update", [$role->id]) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
@@ -49,7 +46,7 @@
                         {{ $errors->first('title') }}
                     </div>
                 @endif
-               
+            
             </div>
             <div class="form-group">
                 <label class="required" for="permissions">Permissions</label>
@@ -75,16 +72,13 @@
             </div>
         </form>
     </div>
-        
-      </div>
-    </div>
     
-    <!-- Footer -->
-    @section('footer')
-        @include('../partials.footer')
-    @endsection
-  </div>
 </div>
+
+<!-- Footer -->
+@section('footer')
+    @include('../partials.footer')
+@endsection
 
 
 @endsection

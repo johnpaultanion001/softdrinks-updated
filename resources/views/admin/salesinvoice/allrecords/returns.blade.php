@@ -4,9 +4,9 @@
         <thead class="thead-white">
             <tr>
                 <th scope="col">Action</th>
-                <th scope="col">ID</th>
                 <th scope="col">Type Of Return</th>
-                <th scope="col">Product Code/Desc</th>
+                <th scope="col">Product Code</th>
+                <th scope="col">Description</th>
                 <th scope="col">Return Qty</th>
                 <th scope="col">Unit Price</th>
                 <th scope="col">Amount</th>
@@ -20,13 +20,13 @@
                         <button type="button" remove_return="{{  $return->id ?? '' }}" is_purchase="YES" class="remove_return text-uppercase btn btn-danger btn-sm">Remove</button>
                     </td>
                     <td>
-                        {{$return->id ?? '' }}
-                    </td>
-                    <td>
                         {{$return->type_of_return ?? '' }}
                     </td>
                     <td>
-                        {{$return->product->product_code ?? '' }}/{{$return->product->description ?? '' }}
+                        {{$return->product->product_code ?? '' }}
+                    </td>
+                    <td>
+                        {{$return->product->description ?? '' }}
                     </td>
                     <td>
                         {{$return->return_qty ?? '' }}
@@ -49,7 +49,10 @@ $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 
     $.extend(true, $.fn.dataTable.defaults, {
-        pageLength: 10,
+        bDestroy: true,
+        responsive: true,
+        scrollY: 500,
+        scrollCollapse: true,
         'columnDefs': [{ 'orderable': false, 'targets': 0 }],
     });
     $('.datatable-returns:not(.ajaxTable)').DataTable({ buttons: dtButtons });

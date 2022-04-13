@@ -15,10 +15,9 @@
             <thead class="thead-white">
                 <tr>
                     <th scope="col">Actions</th>
-                    <th scope="col">ID</th>
                     <th scope="col">RG ID</th>
-                    <th scope="col">Product ID</th>
-                    <th scope="col">Product Code/Desc</th>
+                    <th scope="col">Product Code</th>
+                    <th scope="col">Description</th>
 
                     <th scope="col">Size</th>
                     <th scope="col">Category</th>
@@ -41,16 +40,13 @@
                                 <button type="button" name="remove" remove="{{  $product->id ?? '' }}" id="{{  $product->id ?? '' }}" class="remove text-uppercase btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                             </td>
                             <td>
-                                {{ $product->id }}
-                            </td>
-                            <td>
                                 {{  $product->receiving_good_id ?? '' }}
                             </td>
                             <td>
-                                {{  $product->product->id ?? $product->id }}
+                                {{  $product->product_code ?? '' }}
                             </td>
                             <td>
-                                {{  $product->product_code ?? '' }}/{{  $product->description ?? '' }}
+                                {{  $product->description ?? '' }}
                             </td>
                             <td>
                                 {{  $product->size->title ?? '' }} {{  $product->size->size ?? '' }}
@@ -98,6 +94,9 @@ $(function () {
  
   $.extend(true, $.fn.dataTable.defaults, {
     pageLength: 100,
+    responsive: true,
+    scrollY: 500,
+    scrollCollapse: true,
   });
 
     $('.datatable-products:not(.ajaxTable)').DataTable({ buttons: dtButtons })

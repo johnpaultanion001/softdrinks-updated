@@ -18,10 +18,7 @@
 </div>
 
 <!-- Page content -->
-<div class="container-fluid mt--6 table-load">
-  <div class="row">
-    <div class="col-xl-12">
-      <div class="card">
+<div class="card mt--6">
         <div class="card-header border-0">
           <div class="row align-items-center">
             <div class="col">
@@ -36,7 +33,8 @@
             <thead class="thead-white">
               <tr>
                 <th>Remarks</th>
-                <th>Product Code/Desc</th>
+                <th>Product Code</th>
+                <th>Description</th>
                 <th>QTY</th>
                 <th>Updated At</th>
               </tr>
@@ -67,8 +65,11 @@
                               
                         </td>
                         <td>
-                          {{  $bottle->product->product_code ?? '' }}/{{  $bottle->product->description ?? '' }}
+                          {{  $bottle->product->product_code ?? '' }}
                             
+                        </td>
+                        <td>
+                          {{  $bottle->product->description ?? '' }}
                         </td>
                         <td>
                             {{$bottle->qty ?? ''}}
@@ -83,32 +84,26 @@
             </tbody>
           </table>
         </div>
-      </div>
-    </div>
     
     <!-- Footer -->
     @section('footer')
         @include('../partials.footer')
     @endsection
-  </div>
 </div>
 @endsection
 
 @section('script')
 <script>
     $(function () {
-        let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-
-        $.extend(true, $.fn.dataTable.defaults, {
-        pageLength: 100,
-        'columnDefs': [{ 'orderable': false, 'targets': 0 }],
-        });
-
-        $('.datatable-emptybottles:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-            $($.fn.dataTable.tables(true)).DataTable()
-                .columns.adjust();
-        });
+      $('.datatable-emptybottles').DataTable({
+          bDestroy: true,
+          responsive: true,
+          scrollY: 500,
+          scrollCollapse: true,
+          buttons: [
+              
+          ],
+      });
     
     });
 </script>

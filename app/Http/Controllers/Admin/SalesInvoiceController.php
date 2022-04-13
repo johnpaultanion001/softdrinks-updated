@@ -42,7 +42,7 @@ class SalesInvoiceController extends Controller
         $deliveries = AssignDeliver::where('isRemove', 0)->orderBy('id', 'asc')->get();
         $orders = Order::where('status', '0')->latest()->get();
         $pricetypes = PriceType::where('isRemove', '0')->orderBy('id', 'asc')->get();
-        $product_codes = SalesInventory::where('isComplete' , true)->where('isRemove' , false)->latest()->get();
+        $product_codes = SalesInventory::where('isComplete' , true)->where('isRemove' , false)->orderBy('id', 'asc')->get();
 
         $returned = SalesReturn::where('salesinvoice_id', $salesinvoice_id)->latest()->get();
         $date = date("F d,Y h:i A");
@@ -92,13 +92,24 @@ class SalesInvoiceController extends Controller
         return view('admin.salesinvoice.allrecordsreturn', compact('returned'));
     }
 
-    public function productlist(){
+    public function productlist(Request $request){
         date_default_timezone_set('Asia/Manila');
-        // $inventories = SalesInventory::where('isComplete' , true)->where('isRemove', false)->where('stock' , '>' , 0)->where('location_id', 2)
-        // ->get();
+        $products_list = LocationProduct::where('location_id', 1)->where('stock' , '>' , 0)->orderBy('id','asc')->get();
 
-        $products = LocationProduct::where('location_id', 1)->where('stock' , '>' , 0)->orderBy('id','asc')->get();
-        return view('admin.salesinvoice.product_sales_modal.productlist', compact('products'));
+        foreach($products_list as $product){
+            $products[] = array(
+                'product_id'            => $product->product->id,
+                'product'               => $product->product->product_code .'/'.$product->product->description,
+                'size'                  => $product->product->size->title .' '. $product->product->size->size,
+                'supplier'              => $product->product->supplier->name,
+                'category'              => $product->product->category->name,
+                'expiration'            => $product->product->expiration,
+                'selling_area_stock'    => $product->product->location_products_stock(),
+                'orders'                => $product->product->orders,
+                'sold'                  => $product->product->sold,
+            );
+        }
+        return response()->json(['data' => $products ]);
     }
 
     public function receipt()

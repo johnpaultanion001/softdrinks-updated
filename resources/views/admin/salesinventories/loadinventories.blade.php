@@ -1,8 +1,5 @@
-
-<div class="container-fluid mt--6 table-load">
-  <div class="row">
-    <div class="col-xl-12">
-      <div class="card">
+<div class="card mt--6">
+  
         <div class="card-header border-0">
           <div class="row align-items-center">
             <div class="col">
@@ -18,9 +15,9 @@
               <tr>
                 <th scope="col">Actions</th>
                 <th scope="col">RG ID</th>
-                <th scope="col">Product ID</th>
 
-                <th scope="col">Product Code/Desc</th>
+                <th scope="col">Product Code</th>
+                <th scope="col">Description</th>
                 <th scope="col">Size</th>
                 <th scope="col">Category</th>
                 <th scope="col">Supplier</th>
@@ -52,11 +49,10 @@
                           {{  $product->receiving_good_id ?? '' }}
                       </td>
                       <td>
-                          {{  $product->id ?? '' }}
+                          {{  $product->product_code ?? '' }}
                       </td>
-
                       <td>
-                          {{  $product->product_code ?? '' }}/{{  $product->description ?? '' }}
+                      {{  $product->description ?? '' }}
                       </td>
                       <td>
                           {{  $product->size->title ?? '' }}  {{  $product->size->size ?? '' }}
@@ -100,22 +96,23 @@
             </tbody>
           </table>
         </div>
-      </div>
-    </div>
-    
     <!-- Footer -->
     @section('footer')
         @include('../partials.footer')
     @endsection
-  </div>
 </div>
 
 <script>
 $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
 
+
   $.extend(true, $.fn.dataTable.defaults, {
     pageLength: 100,
+    bDestroy: true,
+    responsive: true,
+    scrollY: 500,
+    scrollCollapse: true,
     'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });
 

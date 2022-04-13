@@ -49,17 +49,14 @@
 
 <script>
 $(function () {
- 
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
- 
-  $.extend(true, $.fn.dataTable.defaults, {
-    pageLength: 25,
-  });
-
-    $('.datatable-location_products:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
+    $('.datatable-location_products').DataTable({
+          bDestroy: true,
+          responsive: true,
+          scrollY: 500,
+          scrollCollapse: true,
+          buttons: [
+              
+          ],
     });
 });
 </script>

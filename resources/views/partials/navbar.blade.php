@@ -10,7 +10,7 @@
                 @elseif(request()->is('admin/receiving_goods') || request()->is('admin/receiving_goods/*'))
                     Receiving Goods   
                 @elseif(request()->is('admin/sales_inventory'))
-                    Sales inventories
+                    Sales And inventories
                 @elseif(request()->is('admin/empty_bottles_inventory'))
                     EMPTY BOTTLES INVENTORIES
                 @elseif(request()->is('admin/salesInvoice') || request()->is('admin/salesInvoice/*'))

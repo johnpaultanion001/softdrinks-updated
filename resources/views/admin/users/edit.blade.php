@@ -22,22 +22,20 @@
 </div>
 
 <!-- Page content -->
-<div class="container-fluid mt--6">
-  <div class="row">
-    <div class="col-xl-12">
-      <div class="card">
-        <div class="card-header border-0">
-          <div class="row align-items-center">
-            <div class="col">
-              <h3 class="mb-0" id="titletable">User - Edit</h3>
-            </div>
-            <div class="col text-right">
-                <a href="{{ route("admin.users.create") }}"  class="btn btn-sm btn-primary">New User</a>
-            </div>
-          </div>
-        </div>
 
-        <div class="card-body">
+<div class="card mt--6">
+    <div class="card-header border-0">
+        <div class="row align-items-center">
+        <div class="col">
+            <h3 class="mb-0" id="titletable">User - Edit</h3>
+        </div>
+        <div class="col text-right">
+            <a href="{{ route("admin.users.create") }}"  class="btn btn-sm btn-primary">New User</a>
+        </div>
+        </div>
+    </div>
+
+    <div class="card-body">
         <form method="POST" action="{{ route("admin.users.update", [$user->id]) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
@@ -49,7 +47,7 @@
                         {{ $errors->first('name') }}
                     </div>
                 @endif
-               
+            
             </div>
             <div class="form-group">
                 <label class="required" for="email">Email :</label>
@@ -87,7 +85,7 @@
                         {{ $errors->first('roles') }}
                     </div>
                 @endif
-               
+            
             </div>
             <div class="form-group text-right">
                 <a href="{{ route("admin.users.index") }}" class="btn-secondary btn">Back</a>
@@ -95,16 +93,13 @@
             </div>
         </form>
     </div>
-        
-      </div>
-    </div>
+</div>
     
     <!-- Footer -->
     @section('footer')
         @include('../partials.footer')
     @endsection
-  </div>
-</div>
+
 @endsection
 @section('script')
 <script type="text/javascript">

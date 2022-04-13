@@ -43,6 +43,18 @@ class PermissionRoleTableSeeder extends Seeder
                 'role_id' => '2',
                 'permission_id' => '24', 
             ],
+            [
+                'role_id' => '2',
+                'permission_id' => '5', 
+            ],
+            [
+                'role_id' => '2',
+                'permission_id' => '10', 
+            ],
+            [
+                'role_id' => '2',
+                'permission_id' => '25', 
+            ],
         ];
 
         DB::table('permission_role')->insert($cashier_permissions);

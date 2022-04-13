@@ -22,19 +22,17 @@
 </div>
 
 <!-- Page content -->
-<div class="container-fluid mt--6">
-  <div class="row">
-    <div class="col-xl-12">
-      <div class="card">
-        <div class="card-header border-0">
-          <div class="row align-items-center">
-            <div class="col">
-              <h3 class="mb-0" id="titletable">Role - Create</h3>
-            </div>
-          
-          </div>
+
+<div class="card mt--6">
+    <div class="card-header border-0">
+        <div class="row align-items-center">
+        <div class="col">
+            <h3 class="mb-0" id="titletable">Role - Create</h3>
         </div>
-        <div class="card-body">
+        
+        </div>
+    </div>
+    <div class="card-body">
         <form method="POST" action="{{ route("admin.roles.store") }}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
@@ -45,7 +43,7 @@
                         {{ $errors->first('title') }}
                     </div>
                 @endif
-               
+            
             </div>
             <div class="form-group">
                 <label class="required" for="permissions">Permissions</label>
@@ -73,17 +71,12 @@
             </div>
         </form>
     </div>
-       
-        
-      </div>
-    </div>
-    
-    <!-- Footer -->
-    @section('footer')
-        @include('../partials.footer')
-    @endsection
-  </div>
 </div>
+
+<!-- Footer -->
+@section('footer')
+    @include('../partials.footer')
+@endsection
 
 
 @endsection

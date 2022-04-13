@@ -17,6 +17,13 @@
   <link href="{{ asset('/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('/assets/css/argon.css?v=1.2.0') }}" rel="stylesheet" />
 
+  <style>
+    .form-control{
+        border: 1px solid #111;
+        color: #111;
+        font-weight: bold;
+    }
+  </style>
 </head>
 
 <body class="bg-default">
@@ -82,7 +89,7 @@
                 </div>
                
                 <div class="text-center">
-                  <button type="submit" class="btn btn-primary my-4 form-control">Sign in</button>
+                  <button type="submit" class="btn btn-primary my-4" style="width: 100%;">Sign in</button>
                   
                 </div>
                  

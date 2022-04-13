@@ -460,6 +460,7 @@ $('#productForm').on('submit', function(event){
                     $("#success-alert").slideUp(500);
                 });
                 $('.form-control').removeClass('is-invalid')
+                loadInventories();
             }
             if(data.unit_price){
                 $('#unit_price').val(data.unit_price);

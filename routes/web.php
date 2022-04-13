@@ -49,7 +49,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('transactions_filter', 'TransactionController@filter')->name('transactions.filter');
     Route::get('transactions/inventory_report', 'TransactionController@inventory_report')->name('transactions.inventory_report');
     Route::get('transactions/assign_deliver_report', 'TransactionController@assign_deliver_report')->name('transactions.assign_deliver_report');
-    
+    Route::get('transactions/ending_inventory_report', 'TransactionController@ending_inventory_report')->name('transactions.ending_inventory_report');
+    Route::put('transactions/ending_inventory_report/{product}', 'TransactionController@ending_inventory_update')->name('transactions.ending_inventory_update');
+
     //sales remove
     Route::delete('transactions/{sales}', 'TransactionController@destroy_sales')->name('transactions.destroy_sales');
 

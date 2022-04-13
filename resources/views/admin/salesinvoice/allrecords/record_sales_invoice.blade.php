@@ -308,7 +308,7 @@
               
                 <div id="modalbody" class="row print_report">
                   <div class="col text-center" id="header_account">
-                     <h3 class="text-uppercase">Jewel & Nickel Store</h3>
+                     <h3 class="text-uppercase">{{ trans('panel.site_title') }}</h3>
                      <p>Binangonan, <br> Rizal <br> 652-48-36</p>
                      <h5 class="text-uppercase">Account Receivables</h5>
                      <br>

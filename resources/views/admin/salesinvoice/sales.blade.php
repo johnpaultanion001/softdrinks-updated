@@ -56,18 +56,15 @@
 
 <script>
 $(function () {
- 
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
- 
-  $.extend(true, $.fn.dataTable.defaults, {
-    pageLength: 10,
-  });
-
-  $('.datatable-sales:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
-    });
+    $('.datatable-sales').DataTable({
+          bDestroy: true,
+          responsive: true,
+          scrollY: 500,
+          scrollCollapse: true,
+          buttons: [
+              
+          ],
+      });
 
     
 });

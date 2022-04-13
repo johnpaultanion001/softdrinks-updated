@@ -18,186 +18,178 @@
 </div>
 
 
-<div class="container-fluid mt--6">
-    <div class="row">
-        <div class="col-xl-12">
-            <div class="card">
-                <div class="card-header border-0">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <h3 class="mb-0 text-uppercase title-head" >SALES INVOICE</h3> 
-                        </div>
-                        <div class="col text-right">
-                            <button type="button" name="all_records_btn" id="all_records_btn" class="all_records_btn text-uppercase btn btn-sm btn-primary">All Records</button>
-                        </div> 
-                    
-                    </div>
+<div class="card mt--6">
+    <div class="card-header border-0">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="mb-0 text-uppercase title-head" >SALES INVOICE</h3> 
+            </div>
+            <div class="col text-right">
+                <button type="button" name="all_records_btn" id="all_records_btn" class="all_records_btn text-uppercase btn btn-sm btn-primary">All Records</button>
+            </div> 
+        
+        </div>
+    </div>
+
+    <div class="card-body">
+        <form method="post" id="myForm" class="form-horizontal">
+        @csrf
+        <div class="row">
+
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <h5 class="text-uppercase">Doc No:</h5>
+                    <input type="text" name="doc_no" id="doc_no" class="form-control" />
+                    <span class="invalid-feedback " role="alert">
+                        <strong id="error-doc_no"></strong>
+                    </span>
                 </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <h5 class="text-uppercase">Entry Date<span class="text-danger">*</span></h5>
+                    <input type="date" name="entry_date" id="entry_date" class="form-control" />
+                    <span class="invalid-feedback " role="alert">
+                        <strong id="error-entry_date"></strong>
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <h5 class="text-uppercase">Remarks</h5>
+                    <textarea name="remarks" id="remarks" class="form-control"></textarea>
+                    <span class="invalid-feedback " role="alert">
+                        <strong id="error-remarks"></strong>
+                    </span>
+                </div>
+            </div>
+            
+            
 
-                <div class="card-body">
-                    <form method="post" id="myForm" class="form-horizontal">
-                    @csrf
-                    <div class="row">
-
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <h5 class="text-uppercase">Doc No:</h5>
-                                <input type="text" name="doc_no" id="doc_no" class="form-control" />
-                                <span class="invalid-feedback " role="alert">
-                                    <strong id="error-doc_no"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <h5 class="text-uppercase">Entry Date<span class="text-danger">*</span></h5>
-                                <input type="date" name="entry_date" id="entry_date" class="form-control" />
-                                <span class="invalid-feedback " role="alert">
-                                    <strong id="error-entry_date"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <h5 class="text-uppercase">Remarks</h5>
-                                <textarea name="remarks" id="remarks" class="form-control"></textarea>
-                                <span class="invalid-feedback " role="alert">
-                                    <strong id="error-remarks"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        
-                        
-
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <h5 class="text-uppercase">Assign Deliver:<span class="text-danger">*</span></h5>
-                                <select name="deliver_id" id="deliver_id" class="form-control select2">
-                                    <option value="">Select Deliver</option>
-                                    @foreach ($deliveries as $deliver)
-                                        <option value="{{$deliver->id}}">{{$deliver->title}}</option>
-                                    @endforeach
-                                </select>
-                                <span class="invalid-feedback " role="alert">
-                                    <strong id="error-deliver_id"></strong>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <h5 class="text-uppercase">Customer:<span class="text-danger">*</span></h5>
-                                <select name="customer_id" id="customer_id" class="form-control select2">
-                                    <option value="">Select Customer</option>
-                                    @foreach ($customers as $customer)
-                                        <option value="{{$customer->id}}">{{$customer->customer_code}}</option>
-                                    @endforeach
-                                </select>
-                                <span class="invalid-feedback " role="alert">
-                                    <strong id="error-customer_id"></strong>
-                                </span>
-                                <input type="hidden" name="customer_name" id="customer_name" readonly/>
-                                <input type="hidden" name="area" id="area" readonly/>
-                            </div>
-                        </div>
-                        
-                               
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <h5 class="text-uppercase">Assign Deliver:<span class="text-danger">*</span></h5>
+                    <select name="deliver_id" id="deliver_id" class="form-control select2">
+                        <option value="">Select Deliver</option>
+                        @foreach ($deliveries as $deliver)
+                            <option value="{{$deliver->id}}">{{$deliver->title}}</option>
+                        @endforeach
+                    </select>
+                    <span class="invalid-feedback " role="alert">
+                        <strong id="error-deliver_id"></strong>
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <h5 class="text-uppercase">Customer:<span class="text-danger">*</span></h5>
+                    <select name="customer_id" id="customer_id" class="form-control select2">
+                        <option value="">Select Customer</option>
+                        @foreach ($customers as $customer)
+                            <option value="{{$customer->id}}">{{$customer->customer_code}}</option>
+                        @endforeach
+                    </select>
+                    <span class="invalid-feedback " role="alert">
+                        <strong id="error-customer_id"></strong>
+                    </span>
+                    <input type="hidden" name="customer_name" id="customer_name" readonly/>
+                    <input type="hidden" name="area" id="area" readonly/>
+                </div>
+            </div>
+            
+                    
 
 
-                        <div class="col-xl-12">
-                            <div class="row">
-                                <div class="col-xl-12">
-                                    <div class="card">
-                                        <div id="loadsales"></div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-12">
-                                    <div class="card">
-                                        <div id="loadreturn"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-12">
-                           
-                                <div id="alltotal">
-
-                                </div>
-                           
+            <div class="col-xl-12">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div id="loadsales"></div>
                         </div>
                     </div>
-                    
-                        <div class="modal" id="receiptModal" data-keyboard="false" data-backdrop="static">
-                            <div class="modal-dialog modal-lg modal-dialog-centered ">
-                                <div class="modal-content">
-                            
-                                    <!-- Modal Header -->
-                                    <div class="modal-header bg-primary">
-                                        <p class="modal-title-receipt font-weight-bold text-uppercase text-white ">Modal Heading</p>
-                                        <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
-                                    </div>
-                            
-                                    <!-- Modal body -->
-                                    <div class="modal-body">
-                                            <div id="receiptreport" class="d-print-inline-flex receiptreport p4 bg-white mt-2" style="border-radius: 5px;">
-                                            <div class="col">
-                                                <h4 class="text-center card-title text-uppercase text-dark mb-0">Jewel & Nickel <br> Store </h4>
-                                                <h5 class="text-center card-title text-muted mb-0">J.P Extension Libis Binangonan , Rizal <br>
-                                                Fernando L. Arada - Prop. <br>
-                                                Tel. No. 986-2433 Cel No. 0923-6738-296 </h5>
-                                                <br>
-                                                <div class="col text-right"><h6 class="card-title text-uppercase text-muted mb-0">Date:  {{ $date ?? '' }} </h6></div>
-
-                                                <div class="form-group row">
-                                                    <div class="col-sm-12">
-                                                        <small class="text-muted mt-3 ml-1">Sold To:</small>
-                                                        <div class="col-sm-8">
-                                                            <small id="sold_to_receipt"></small>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        <small class="text-muted mt-3 ml-1 address">Area:</small>
-                                                        <div class="col-sm-8">
-                                                            <small id="area_receipt"></small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div id="receiptmodal">
-                                            
-                                            </div>
-                                        </div>
-                                        <!-- <input type="hidden" name="action" id="action" value="Add" />
-                                        <input type="hidden" name="hidden_id" id="hidden_id" /> -->
-                                    </div>
-                            
-                                    <!-- Modal footer -->
-                                    <div class="modal-footer bg-white">
-                                        <input type="button" name="print_button" id="print_button" class="btn btn-primary text-uppercase" value="Print & Save"/>
-                                        <button type="button" id="btn_receipt" class="btn btn-primary text-uppercase">Print</button>
-                                        <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
-                                    </div>
-                            
-                                </div>
-                            </div>
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div id="loadreturn"></div>
                         </div>
-                        <input type="hidden" name="action_salesinvoice" id="action_salesinvoice" value="compute"/>
-
-                        <div class="card-footer text-right">
-                            <button type="button" class="btn btn-danger text-uppercase" >Cancel</button>
-                            <input type="submit" name="action_button" id="action_button" class="btn btn-primary text-uppercase" value="Compute" />
-                        </div>
-                    </form>
+                    </div>
                 </div>
+            </div>
+            <div class="col-xl-12">
+                
+                    <div id="alltotal">
 
+                    </div>
+                
             </div>
         </div>
+        
+            <div class="modal" id="receiptModal" data-keyboard="false" data-backdrop="static">
+                <div class="modal-dialog modal-lg modal-dialog-centered ">
+                    <div class="modal-content">
+                
+                        <!-- Modal Header -->
+                        <div class="modal-header bg-primary">
+                            <p class="modal-title-receipt font-weight-bold text-uppercase text-white ">Modal Heading</p>
+                            <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
+                        </div>
+                
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                                <div id="receiptreport" class="d-print-inline-flex receiptreport p4 bg-white mt-2" style="border-radius: 5px;">
+                                <div class="col">
+                                    <h4 class="text-center card-title text-uppercase text-dark mb-0">{{ trans('panel.site_title') }}</h4>
+                                    <h5 class="text-center card-title text-muted mb-0">J.P Extension Libis Binangonan , Rizal <br>
+                                    Fernando L. Arada - Prop. <br>
+                                    Tel. No. 986-2433 Cel No. 0923-6738-296 </h5>
+                                    <br>
+                                    <div class="col text-right"><h6 class="card-title text-uppercase text-muted mb-0">Date:  {{ $date ?? '' }} </h6></div>
 
+                                    <div class="form-group row">
+                                        <div class="col-sm-12">
+                                            <small class="text-muted mt-3 ml-1">Sold To:</small>
+                                            <div class="col-sm-8">
+                                                <small id="sold_to_receipt"></small>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <small class="text-muted mt-3 ml-1 address">Area:</small>
+                                            <div class="col-sm-8">
+                                                <small id="area_receipt"></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="receiptmodal">
+                                
+                                </div>
+                            </div>
+                            <!-- <input type="hidden" name="action" id="action" value="Add" />
+                            <input type="hidden" name="hidden_id" id="hidden_id" /> -->
+                        </div>
+                
+                        <!-- Modal footer -->
+                        <div class="modal-footer bg-white">
+                            <input type="button" name="print_button" id="print_button" class="btn btn-primary text-uppercase" value="Print & Save"/>
+                            <button type="button" id="btn_receipt" class="btn btn-primary text-uppercase">Print</button>
+                            <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
+                        </div>
+                
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="action_salesinvoice" id="action_salesinvoice" value="compute"/>
+
+            <div class="card-footer text-right">
+                <button type="button" class="btn btn-danger text-uppercase" >Cancel</button>
+                <input type="submit" name="action_button" id="action_button" class="btn btn-primary text-uppercase" value="Compute" />
+            </div>
+        </form>
     </div>
 </div>
 
 <!-- product list modal -->
 <div class="modal " id="productlistModal" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
 
             <!-- Modal Header -->
@@ -208,7 +200,7 @@
 
             <!-- Modal body -->
            
-                <div class="table-responsive mt-2">
+                <div class="table-responsive">
                     <div class="row m-2">
                         <div class="col-sm-4">
                             <div class="form-group">
@@ -244,11 +236,25 @@
                             </div>
                         </div>
                     </div>
-                    <div style="max-height: 590px; overflow: auto;">
-                        <div id="productlist">
-                        
-                        </div>
-                    </div>
+                    <table class="table align-items-center table-bordered display" id="datatable-productlist" cellspacing="0" width="100%">
+                        <thead class="thead-white">
+                            <tr>
+                                <th scope="col">Actions</th> 
+                                <th scope="col">Product Code/Desc</th>
+                                <th scope="col">Size</th>
+                                <th scope="col">Supplier</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Expiration</th>
+                                <th scope="col">Selling Area Stock</th>
+                                <th scope="col">Orders</th>
+                                <th scope="col">Sold</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="text-uppercase font-weight-bold" id="list_product_list">
+                            
+                        </tbody>
+                    </table>
                 </div>
             
             
@@ -464,8 +470,6 @@ $(function () {
     
 });
 
-
-
 function loadSales(){
     $.ajax({
         url: "salesInvoice-sales", 
@@ -483,9 +487,6 @@ function loadSales(){
         }	
     })
 }
-
-
-
 
 function loadReturn(){
     $.ajax({
@@ -511,7 +512,7 @@ function loadAllTotal(){
         type: "get",
         dataType: "HTMl",
         beforeSend: function() {
-            $(".title-head").text('Computing...');
+            $(".title-head").text('Loading...');
         },
         success: function(response){
             $(".title-head").text('SALES INVOICE');
@@ -551,22 +552,75 @@ function receivables(){
 
 function loadProductList(){
     $.ajax({
-        url: "salesInvoice-productlist", 
+        url: "/admin/salesInvoice-productlist", 
         type: "get",
-        dataType: "HTMl",
+        data: {_token: '{!! csrf_token() !!}'},
+        dataType: "json",
         beforeSend: function() {
             $('.modal-title-productlist').text('Loading Product...');
         },
-        success: function(response){
+        success: function(data){
             $('.modal-title-productlist').text('Choose a Product');
-            $("#productlist").html(response);
+            var list = '';
+            $.each(data.data, function(key,value){
+                list += '<tr>';
+                    list += '<td>';
+                        list += '<button type="button" id="order" name="order" order="'+value.product_id+'" class="text-uppercase order btn btn-info btn-sm">Order</button>';
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.product;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.size;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.supplier;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.category;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.expiration;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.selling_area_stock;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.orders;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.sold;
+                    list += '</td>';
+                    
+                list += '</tr>';
+            });
+            $('#list_product_list').empty().append(list);
+            $('#datatable-productlist').DataTable({
+                bDestroy: true,
+                responsive: true,
+                scrollY: 400,
+                scrollCollapse: true,
+                buttons: [
+                
+                ],
+            });
         }	
     })
 }
 
+$('select[name="category_filter"]').on('change', function () {
+    $('#datatable-productlist').DataTable().columns(5).search( this.value ).draw();
+});
+$('select[name="supplier_filter"]').on('change', function () {
+    $('#datatable-productlist').DataTable().columns(4).search( this.value ).draw();
+});
+$('select[name="size_filter"]').on('change', function () {
+    $('#datatable-productlist').DataTable().columns(3).search( this.value ).draw();
+});
+
 $(document).on('click', '#create_sales', function(){
     $('#productlistModal').modal('show');
-    return loadProductList();
+    loadProductList();
 });
 
 
@@ -823,7 +877,7 @@ $(document).on('click', '#print_button', function(){
             $("#print_button").attr("value", "Print & Save");
             
             if(data.success){
-                
+                $("#btn_receipt").click();
                 $('#success-checkout').addClass('bg-primary');
                 $('#success-checkout').html('Click <a href="/admin/transactions" class="btn-white btn btn-sm">HERE</a> To view your trasaction' );
                 $("#success-checkout").fadeTo(10000, 500).slideUp(500, function(){
@@ -831,7 +885,7 @@ $(document).on('click', '#print_button', function(){
                 });
                 $('#receiptModal').modal('hide');
                 $('.form-control').removeClass('is-invalid');
-                $("#btn_receipt").click();
+                
                 return loadSales() , loadReturn() , loadAllTotal() , receivables();;
             }
            
@@ -1102,11 +1156,9 @@ $('#orderForm').on('submit', function(event){
             
             if(data.success){
                 
-                loadSales();
-                loadAllTotal();
-                loadProductList();
                 
                 $('#orderModal').modal('hide');
+
                 $('.form-control').removeClass('is-invalid');
 
                 $('#success-order').addClass('bg-primary');
@@ -1115,7 +1167,10 @@ $('#orderForm').on('submit', function(event){
                     $("#success-order").slideUp(500);
                 });
 
-               
+                $('#datatable-productlist').DataTable().destroy();
+                loadSales();
+                loadAllTotal();
+                loadProductList();
                 
                
 

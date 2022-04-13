@@ -18,9 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 class DashboardController extends Controller
 {
     public function dashboard(){
-
       return view('admin.dashboard');
-
     }
     public function loaddashboard(){
       date_default_timezone_set('Asia/Manila');
@@ -33,20 +31,13 @@ class DashboardController extends Controller
 
       $allprofit = Sales::all();
       $profitmonthly = Sales::whereMonth('created_at', '=', date('m'))->get(); 
-      
-      $newproduct = SalesInventory::latest()->where('isRemove', 0)->where('isComplete', 1)->paginate(5);
-     
-
-      if(auth()->user()->roles()->pluck('id')->implode(', ') == '1'){
-        $sales = Sales::latest()->whereDate('created_at', Carbon::today())->latest()->get();
-        $returns = SalesReturn::latest()->whereDate('created_at', Carbon::today())->where('isComplete', true)->get();
-      }else{
-        $sales = Sales::latest()->whereDate('created_at', Carbon::today())->where('user_id', auth()->user()->id)->get();
-        $returns = SalesReturn::latest()->whereDate('created_at', Carbon::today())->where('user_id', auth()->user()->id)->where('isComplete', true)->get();
-      }
+    
+      $sales = Sales::latest()->whereDate('created_at', Carbon::today())->latest()->get();
+      $returns = SalesReturn::latest()->whereDate('created_at', Carbon::today())->where('isComplete', true)->get();
+    
 
       
-      return view('admin.loaddashboard', compact('allproducts', 'productsmonthly' , 'salesmonthly', 'allprofit','profitmonthly', 'newproduct','sales','returns'));
+      return view('admin.loaddashboard', compact('allproducts', 'productsmonthly' , 'salesmonthly', 'allprofit','profitmonthly','sales','returns'));
     }
 
 }

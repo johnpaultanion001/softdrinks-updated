@@ -71,7 +71,7 @@ class SalesInventoryController extends Controller
 
     public function load()
     {
-        $products = SalesInventory::where('isComplete', true)->where('isRemove', false)->latest()->get();
+        $products = SalesInventory::where('isComplete', true)->where('isRemove', false)->orderBy('id', 'asc')->get();
         return view('admin.salesinventories.loadinventories',compact('products'));
     }
 

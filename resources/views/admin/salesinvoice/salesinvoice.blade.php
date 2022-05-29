@@ -609,18 +609,19 @@ function loadProductList(){
 }
 
 $('select[name="category_filter"]').on('change', function () {
-    $('#datatable-productlist').DataTable().columns(5).search( this.value ).draw();
-});
-$('select[name="supplier_filter"]').on('change', function () {
     $('#datatable-productlist').DataTable().columns(4).search( this.value ).draw();
 });
-$('select[name="size_filter"]').on('change', function () {
+$('select[name="supplier_filter"]').on('change', function () {
     $('#datatable-productlist').DataTable().columns(3).search( this.value ).draw();
+});
+$('select[name="size_filter"]').on('change', function () {
+    $('#datatable-productlist').DataTable().columns(2).search( this.value ).draw();
 });
 
 $(document).on('click', '#create_sales', function(){
     $('#productlistModal').modal('show');
     loadProductList();
+
 });
 
 
@@ -809,7 +810,9 @@ $('#myForm').on('submit', function(event){
 
             }
             if(data.print){
-                return printmodal();
+                
+                printmodal();
+                
             }
            
            
@@ -843,6 +846,7 @@ $(document).on('click', '#btn_receipt', function(){
         frameDoc.document.write('</body></html>');
         frameDoc.document.close();
         setTimeout(function () {
+        
         window.frames["frame1"].focus();
         window.frames["frame1"].print();
         frame1.remove();
@@ -878,6 +882,7 @@ $(document).on('click', '#print_button', function(){
             
             if(data.success){
                 $("#btn_receipt").click();
+
                 $('#success-checkout').addClass('bg-primary');
                 $('#success-checkout').html('Click <a href="/admin/transactions" class="btn-white btn btn-sm">HERE</a> To view your trasaction' );
                 $("#success-checkout").fadeTo(10000, 500).slideUp(500, function(){
@@ -886,7 +891,7 @@ $(document).on('click', '#print_button', function(){
                 $('#receiptModal').modal('hide');
                 $('.form-control').removeClass('is-invalid');
                 
-                return loadSales() , loadReturn() , loadAllTotal() , receivables();;
+                loadSales() , loadReturn() , loadAllTotal() , receivables();;
             }
            
         }
@@ -1167,10 +1172,9 @@ $('#orderForm').on('submit', function(event){
                     $("#success-order").slideUp(500);
                 });
 
-                $('#datatable-productlist').DataTable().destroy();
+                
                 loadSales();
                 loadAllTotal();
-                loadProductList();
                 
                
 

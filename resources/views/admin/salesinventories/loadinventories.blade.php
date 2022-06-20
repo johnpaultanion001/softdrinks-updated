@@ -4,11 +4,59 @@
           <div class="row align-items-center">
             <div class="col">
               <h3 class="mb-0 text-uppercase" id="titletable">SALES INVENTORIES</h3> 
-             
+              <br>
+              <h4 class="mb-0 text-uppercase">PALLETS</h4> 
             </div>
           </div>
         </div>
-
+        <div class="table-responsive">
+          <table class="table align-items-center table-flush datatable-pallets display table-lg" cellspacing="0" width="100%">
+            <thead class="thead-white">
+              <tr>
+                <th scope="col">Actions</th>
+                <th scope="col">Title</th>
+                <th scope="col">Unit Price</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Updated At</th>
+              </tr>
+            </thead>
+            <tbody class="text-uppercase font-weight-bold">
+              @foreach($pallets as $pallet)
+                    <tr>
+                    
+                      <td>
+                      @can('update_sales_inventory')
+                          <button type="button" ev_pallet="{{  $pallet->id ?? '' }}"  class="ev_pallet text-uppercase btn btn-info btn-sm">View/Edit</button>
+                      @endcan
+                      </td>
+                      <td>
+                          {{  $pallet->title ?? '' }}
+                      </td>
+                      <td>
+                          {{  number_format($pallet->price , 2, '.', ',') }}
+                      </td>
+    
+                      <td>
+                          {{  $pallet->stock ?? '' }}
+                      </td>
+                      <td>
+                          {{ $pallet->updated_at->format('M j , Y h:i A') }}
+                      </td>
+                    </tr>
+                @endforeach
+            </tbody>
+          </table>
+        </div>
+        
+        
+        <br>
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h4 class="mb-0 text-uppercase">PRODUCTS</h4> 
+            </div>
+          </div>
+        </div>
         <div class="table-responsive">
           <table class="table align-items-center table-flush datatable-inventries display table-lg" cellspacing="0" width="100%">
             <thead class="thead-white">
@@ -96,6 +144,7 @@
             </tbody>
           </table>
         </div>
+        
     <!-- Footer -->
     @section('footer')
         @include('../partials.footer')
@@ -115,6 +164,7 @@ $(function () {
     scrollCollapse: true,
     'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });
+  $('.datatable-pallets').DataTable();
 
   var table = $('.datatable-inventries:not(.ajaxTable)').DataTable({ buttons: dtButtons });
   $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
@@ -122,6 +172,8 @@ $(function () {
         .columns.adjust();
   });
 
+ 
+  
   $('select[name="filter_category"]').on("change", function(event){
     table.columns(8).search( this.value ).draw();
   });

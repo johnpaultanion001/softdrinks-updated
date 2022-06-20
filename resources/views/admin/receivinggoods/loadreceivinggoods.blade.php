@@ -56,7 +56,10 @@
               <tbody class="text-uppercase font-weight-bold">
                 @foreach($orders as $key => $order)
                       <?php 
-                        $payment =  $order->products->sum('total_cost') - $order->returns->sum('amount');
+                        $total_cost = $order->products->sum('total_cost') + $order->pallets->sum('amount');
+                        $total_return = $order->returns->sum('amount') + $order->pallets_returns->sum('amount');
+                
+                        $payment = $total_cost - $total_return;
                         $change  =  $order->cash1 - $payment;
                       ?>
                       <tr data-entry-id="{{ $order->id ?? '' }}">
@@ -87,10 +90,10 @@
                             {{ number_format($payment ?? '' , 2, '.', ',') }}
                           </td>
                           <td>
-                              {{ number_format($order->products->sum('total_cost') ?? '' , 2, '.', ',') }}
+                              {{ number_format($total_cost ?? '' , 2, '.', ',') }}
                           </td>
                           <td>
-                              ({{ number_format($order->returns->sum('amount') ?? '' , 2, '.', ',') }})
+                              ({{ number_format($total_return ?? '' , 2, '.', ',') }})
                           </td>
                           
                           <td>

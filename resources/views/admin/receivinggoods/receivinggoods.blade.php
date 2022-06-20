@@ -258,6 +258,13 @@
                                 </div>
 
                             </div>
+                            <div class="col-sm-12 mt-2 row">
+                               
+                               <div class="col-sm-12" id="pallets_table">
+
+                               </div>
+
+                           </div>
 
                             <div class="col-sm-12 mt-3 p-2 bg-default">
                                 <div class="row">
@@ -514,6 +521,7 @@ $(document).on('click', '.edit_rg', function(){
             $('#reference').val(data.reference);
             loadProducts();
             loadReturnProduct();
+            pallets_table();
             $('#total_product_cost').val(data.total_product_cost);
             $('#total_return_amount').val(data.total_return_amount);
             $('#payment').val(data.payment);
@@ -611,6 +619,22 @@ function loadReturnProduct(){
         success: function(response){
             $('#action_button').attr('disabled', false);
             $("#returns_products").html(response);
+        }	
+    })
+}
+
+function pallets_table(){
+    var rgs_id = rg_id;
+    $.ajax({
+        url: "/admin/receiving/rpallets_table", 
+        type: "get",
+        data: {rg_id:rgs_id, _token: '{!! csrf_token() !!}'},
+        dataType: "HTMl",
+        beforeSend: function() {
+
+        },
+        success: function(response){
+            $("#pallets_table").html(response);
         }	
     })
 }
@@ -713,6 +737,49 @@ $(document).on('click', '.removereturn', function(){
       }
   });
 
+});
+
+$(document).on('click', '.remove_pallet', function(){
+    var id = $(this).attr('remove_pallet');
+    var rgs_id = rg_id;
+    $.confirm({
+      title: 'Confirmation',
+      content: 'You really want to remove this data?',
+      type: 'red',
+      buttons: {
+          confirm: {
+              text: 'confirm',
+              btnClass: 'btn-blue',
+              keys: ['enter', 'shift'],
+              action: function(){
+                  return $.ajax({
+                      url:"/admin/receiving/rpallet/"+ id,
+                      method:'DELETE',
+                      data: {rg_id:rgs_id,_token: '{!! csrf_token() !!}'},
+                      dataType:"json",
+                      beforeSend:function(){
+                        
+                      },
+                      success:function(data){
+                          if(data.success){
+                                $('#success-alert').addClass('bg-primary');
+                                $('#success-alert').html('<strong>' + data.success + '</strong>');
+                                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                                    $("#success-alert").slideUp(500);
+                                });
+                                pallets_table();
+                          }
+                      }
+                  })
+              }
+          },
+          cancel:  {
+              text: 'cancel',
+              btnClass: 'btn-red',
+              keys: ['enter', 'shift'],
+          }
+      }
+  });
 });
 
 var filter = 'all';

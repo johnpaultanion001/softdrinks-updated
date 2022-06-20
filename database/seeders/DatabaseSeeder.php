@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
             
             
             AssignDeliverSeeder::class,
-            
+            PalletSeeder::class,
             
         ]);
     }

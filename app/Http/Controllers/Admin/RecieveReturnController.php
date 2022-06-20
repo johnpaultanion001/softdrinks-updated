@@ -63,6 +63,7 @@ class RecieveReturnController extends Controller
                 'receiving_good_id' => $receiving_good_id,
                 'product_id' => $request->input('product_id'),
                 'type_of_return'  => $request->input('type_of_return'),
+                'status_id'         => $request->input('status_id'),
             ],
             [
                 'product_id'        => $request->input('product_id'),
@@ -152,7 +153,7 @@ class RecieveReturnController extends Controller
             }
             $recieve_return->delete();
         }
-        return response()->json(['success' => 'Returned Product Deleted Successfully.']);
+        return response()->json(['success' => 'Returned Product Removed Successfully.']);
     }
 
     public function remove_all()

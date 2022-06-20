@@ -18,6 +18,7 @@ use App\Models\Location;
 use App\Models\PriceType;
 use App\Models\ReceivingProduct;
 use App\Models\LocationProduct;
+use App\Models\Pallet;
 
 
 
@@ -65,6 +66,7 @@ class SalesInventoryController extends Controller
         $locations = Location::orderBy('id', 'asc')->get();
         $suppliers = Supplier::orderBy('id', 'asc')->get();
         $sizes = Size::orderBy('id', 'asc')->get();
+       
 
         return view('admin.salesinventories.inventories',compact('categories', 'sizes' ,'locations'  ,'suppliers'));
     }
@@ -72,7 +74,8 @@ class SalesInventoryController extends Controller
     public function load()
     {
         $products = SalesInventory::where('isComplete', true)->where('isRemove', false)->orderBy('id', 'asc')->get();
-        return view('admin.salesinventories.loadinventories',compact('products'));
+        $pallets    = Pallet::latest()->get();
+        return view('admin.salesinventories.loadinventories',compact('products','pallets'));
     }
 
     

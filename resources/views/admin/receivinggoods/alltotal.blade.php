@@ -8,7 +8,7 @@
                                                 <div class="input-group-prepend">
                                                         <div class="input-group-text">₱</div>
                                                 </div>
-                                                <input type="text"  class="form-control" style="font-weight: bold;" readonly value="{{ number_format($products->sum('total_cost') ?? '' , 2, '.', ',') }}"/>
+                                                <input type="text"  class="form-control" style="font-weight: bold;" readonly value="{{ number_format($total_cost ?? '' , 2, '.', ',') }}"/>
 
                                         </div>
                                 </div>
@@ -18,7 +18,7 @@
                                                 <div class="input-group-prepend">
                                                         <div class="input-group-text">₱</div>
                                                 </div>
-                                                <input type="text"  class="form-control" style="font-weight: bold;" readonly value="( {{ number_format($returns->sum('amount') ?? '' , 2, '.', ',') }} )"/>
+                                                <input type="text"  class="form-control" style="font-weight: bold;" readonly value="( {{ number_format($total_return ?? '' , 2, '.', ',') }} )"/>
                                         </div>
                                 </div>
                                 <div class="col-sm-4">

@@ -295,6 +295,71 @@
     </div>
 </form>
 
+<form method="post" id="palletsForm" class="form-horizontal ">
+    @csrf
+    <div class="modal" id="palletsModal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <p class="font-weight-bold text-uppercase text-white">PALLET INFORMATION</p>
+                    <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12 row">
+                           
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label class="control-label text-uppercase" >Title</label>
+                                        <input type="text"  id="title_pallet" step="any" class="form-control" readonly/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label text-uppercase" >Stock</label>
+                                        <input type="number" id="stock_pallet" class="form-control" readonly/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label text-uppercase" >Unit Price<span class="text-danger">*</span></label>
+                                        <input type="number" name="unit_price_pallet" id="unit_price_pallet" step="any" class="form-control"/>
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong id="error-unit_price_pallet"></strong>
+                                        </span>
+                                    </div>
+                                </div>
+
+                        </div>
+                        <div class="col-sm-12 row">
+                            <div class="col-sm-6 mb-2">
+                                <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">
+                                    Stock History
+                                </h4>
+                            </div>
+                           <div class="col-sm-12" id="pallet_data">
+
+                           </div>
+
+                        </div>
+                    </div>
+                    
+
+                    <input type="hidden" name="pallet_hidden_id" id="pallet_hidden_id" />
+
+                   
+                </div>
+
+                <div class="modal-footer bg-white">
+                    <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">CLOSE</button>
+                    <input type="submit" name="pallet_button" id="pallet_button" class="text-uppercase btn btn-primary" value="UPDATE" />
+                </div>
+        
+            </div>
+        </div>
+    </div>
+</form>
+
 
 
 @endsection
@@ -374,6 +439,7 @@ $(document).on('click', '.ev_product', function(){
         }
     })
 });
+
 
 function stock_history(){
     var id = $('#product_hidden_id').val();
@@ -472,7 +538,54 @@ $('#productForm').on('submit', function(event){
     });
 });
 
+$(document).on('click', '.ev_pallet', function(){
+    $('#palletsModal').modal('show');
+    $('#palletsForm')[0].reset();
+    $('.form-control').removeClass('is-invalid');
+    var id = $(this).attr('ev_pallet');
+    $('#pallet_hidden_id').val(id);
 
+    $.ajax({
+        url :"/admin/pallets/"+id,
+        dataType:"json",
+        beforeSend:function(){
+            $("#pallet_button").attr("disabled", true);
+        },
+        success:function(data){
+          
+            $("#pallet_button").attr("disabled", false);
+            $.each(data.data, function(key,value){
+                if(key == 'title'){
+                    $('#title_pallet').val(value);
+                }
+                if(key == 'stock'){
+                    $('#stock_pallet').val(value);
+                }
+                if(key == 'price'){
+                    $('#unit_price_pallet').val(value);
+                }
+            })
+            stock_history_pallets();
+
+        }
+    })
+});
+
+function stock_history_pallets(){
+    var id = $('#pallet_hidden_id').val();
+
+    $.ajax({
+        url: "/admin/pallets/"+id+"/stock_history", 
+        type: "get",
+        dataType: "HTMl",
+        beforeSend: function() {
+           
+        },
+        success: function(response){
+            $("#pallet_data").html(response);
+        }	
+    })
+}
 
 
 

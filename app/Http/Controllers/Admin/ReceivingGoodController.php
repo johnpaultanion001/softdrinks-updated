@@ -16,6 +16,8 @@ use App\Models\PendingReturnedProduct;
 use App\Models\RecieveReturn;
 use App\Models\EmptyBottlesInventory;
 use App\Models\LocationProduct;
+use App\Models\ReceivingPallet;
+use App\Models\Pallet;
 use Validator;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -60,8 +62,11 @@ class ReceivingGoodController extends Controller
     }
     public function edit(ReceivingGood $receiving_good)
     {
-        $payment = $receiving_good->products()->sum('total_cost') - $receiving_good->returns()->sum('amount');
+        $total_cost = $receiving_good->products->sum('total_cost') + $receiving_good->pallets->sum('amount');
+        $total_return = $receiving_good->returns->sum('amount') + $receiving_good->pallets_returns->sum('amount');
+        $payment = $total_cost - $total_return;
         $change  = $receiving_good->cash1 - $payment;
+
         if (request()->ajax()) {
             return response()->json(
                 [
@@ -78,8 +83,8 @@ class ReceivingGoodController extends Controller
                     'remarks' => $receiving_good->remarks,
                     'reference' => $receiving_good->reference,
                     'products'  => $receiving_good->products()->get(),
-                    'total_product_cost'  => number_format($receiving_good->products()->sum('total_cost'), 2, '.', ','),
-                    'total_return_amount'  => '('.number_format($receiving_good->returns()->sum('amount'), 2, '.', ',').')',
+                    'total_product_cost'  => number_format($total_cost, 2, '.', ','),
+                    'total_return_amount'  => '('.number_format($total_return, 2, '.', ',').')',
                     'payment'               => number_format($payment, 2, '.', ','),
                     'total_product_qty'  => $receiving_good->products()->sum('qty'),
                     'total_return_qty'  => $receiving_good->returns()->sum('return_qty'),
@@ -110,21 +115,24 @@ class ReceivingGoodController extends Controller
             $receiving_good_id = $goods_id->id + 1;
         }
 
-        $rg_id = $request->get('rg_id');
-        if($rg_id == ""){
-            $returns = RecieveReturn::where('receiving_good_id', $receiving_good_id)->latest()->get();
-            $products = SalesInventory::where('isComplete', false)->where('isRemove', false)->latest()->get();
+        $returns = RecieveReturn::where('receiving_good_id', $receiving_good_id)->latest()->get();
+        $products = SalesInventory::where('isComplete', false)->where('isRemove', false)->latest()->get();
 
-            $payment = $products->sum('total_cost') - $returns->sum('amount');
-        }else{
-            $returns = RecieveReturn::where('receiving_good_id', $rg_id)->latest()->get();
-            $products = ReceivingProduct::where('receiving_good_id', $rg_id)->latest()->get();
+        $total_pallets = ReceivingPallet::where('receiving_good_id', $receiving_good_id)
+                                            ->where('type', 'BUY')
+                                            ->latest()->get();
+        $total_return_pallets = ReceivingPallet::where('receiving_good_id', $receiving_good_id)
+                                            ->where('type', 'RETURN')
+                                            ->latest()->get();
 
-            $payment = $products->sum('total_cost') - $returns->sum('amount');
-        }
+        $total_cost = $products->sum('total_cost') + $total_pallets->sum('amount');
+        $total_return = $returns->sum('amount') + $total_return_pallets->sum('amount');
+
+        $payment = $total_cost - $total_return;
+        
         
     
-        return view('admin.receivinggoods.alltotal', compact('products', 'returns' , 'payment'));
+        return view('admin.receivinggoods.alltotal', compact('products', 'returns' , 'payment','total_cost','total_return'));
     }
 
 
@@ -370,7 +378,20 @@ class ReceivingGoodController extends Controller
                 
             
         }  
-        RecieveReturn::where('receiving_good_id', $receiving_good_id)->update(['isComplete'    => true]);
+        RecieveReturn::where('receiving_good_id', $receiving_good_id)->update(['isComplete' => true]);
+
+        $pallets = ReceivingPallet::where('receiving_good_id', $receiving_good_id)->latest()->get();
+        foreach($pallets as $pallet){
+            if($pallet->type == "RETURN"){
+                Pallet::where('id', $pallet->pallet_id)
+                        ->decrement('stock', $pallet->qty);
+            }
+            if($pallet->type == "BUY"){
+                Pallet::where('id', $pallet->pallet_id)
+                        ->increment('stock', $pallet->qty);
+            }
+        }  
+
         return response()->json(['success' => 'Added Receiving Good Successfully.']);
 
     }
@@ -397,7 +418,11 @@ class ReceivingGoodController extends Controller
             return response()->json(['errors' => $validated->errors()]);
         }
 
-        $payment = $receiving_good->products()->sum('total_cost') - $receiving_good->returns()->sum('amount');
+        $total_cost = $receiving_good->products->sum('total_cost') + $receiving_good->pallets->sum('amount');
+        $total_return = $receiving_good->returns->sum('amount') + $receiving_good->pallets_returns->sum('amount');
+        $payment = $total_cost - $total_return;
+
+
         $change  = $request->input('cash1') - $payment;
 
         foreach($receiving_good->products()->get() as $rp){
@@ -449,10 +474,11 @@ class ReceivingGoodController extends Controller
         ]);
 
         return response()->json([
-            'payment'  => $payment,
-            'change'  => $change,
-            'total_product_cost' =>  $receiving_good->products()->sum('total_cost'),
-            'total_return_amount' => $receiving_good->returns()->sum('amount'),
+            
+            'payment'  => number_format($payment, 2, '.', ','),
+            'change'  =>  number_format($change, 2, '.', ','),
+            'total_product_cost' =>  number_format($total_cost, 2, '.', ','),
+            'total_return_amount' => '('.number_format($total_return, 2, '.', ',').')',
             'total_product_qty' => $receiving_good->products()->sum('qty'),
             'total_return_qty'  => $receiving_good->returns()->sum('return_qty'),
             'success' => 'Updated Successfully.'
@@ -640,6 +666,14 @@ class ReceivingGoodController extends Controller
                                 ->increment('stock', $receivingReturn->return_qty);
             }
             $receivingReturn->delete();
+        }
+        foreach($receiving_good->pallets()->get() as $pallet){
+            Pallet::where('id', $pallet->pallet_id)->decrement('stock', $pallet->qty);
+            $pallet->delete();
+        }
+        foreach($receiving_good->pallets_returns()->get() as $pallet){
+            Pallet::where('id', $pallet->pallet_id)->increment('stock', $pallet->qty);
+            $pallet->delete();
         }
         $receiving_good->update([
             'isVoid'    => true,

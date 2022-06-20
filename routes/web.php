@@ -210,7 +210,15 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
      //Assing Deliver
      route::resource('assign_deliver', 'AssignDeliverController');
 
+     // PALLETS
+     route::get('receiving/rpallets_table', 'PalletController@rpallets_table')->name('receiving.rpallets_table');
+     route::get('receiving/rpallet/{pallet}/unit_price', 'PalletController@unit_price')->name('receiving.unit_price');
+     route::post('receiving/rpallet', 'PalletController@store_rpallet')->name('receiving.store_rpallet');
+     route::get('receiving/rpallet/{pallet}/edit', 'PalletController@edit_rpallet')->name('receiving.edit_rpallet');
+     route::delete('receiving/rpallet/{pallet}', 'PalletController@destroy_rpallet')->name('receiving.destroy_rpallet');
     
+     route::get('pallets/{pallet}', 'PalletController@pallet')->name('pallets.pallet');
+     route::get('pallets/{pallet}/stock_history', 'PalletController@stock_history')->name('pallets.stock_history');
     
     
 });

@@ -56,6 +56,7 @@ class SalesReturnController extends Controller
             'salesinvoice_id' => $id,
             'type_of_return'  => $request->input('type_of_return'),
             'user_id'               =>  auth()->user()->id,
+            'status_id'         => $request->input('status_id'),
         ],
         [
             'product_id'        => $request->input('product_id'),

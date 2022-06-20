@@ -40,6 +40,14 @@ class ReceivingGood extends Model
     {
         return $this->hasMany(RecieveReturn::class, 'receiving_good_id', 'id');
     }
+    public function pallets()
+    {
+        return $this->hasMany(ReceivingPallet::class, 'receiving_good_id', 'id')->where('type', 'BUY');
+    }
+    public function pallets_returns()
+    {
+        return $this->hasMany(ReceivingPallet::class, 'receiving_good_id', 'id')->where('type', 'RETURN');
+    }
   
     public function user()
     {

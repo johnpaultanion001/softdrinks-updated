@@ -47,7 +47,15 @@
             </thead>
             <tbody class="text-uppercase font-weight-bold">
                 @foreach($allrecords as $allrecord)
-                    <?php $payment =  $allrecord->sales->sum('total') - $allrecord->returns->sum('amount') ?>
+                    <?php 
+
+                        $total_cost   = $allrecord->sales->sum('total') + $allrecord->pallets->sum('amount');
+                        $total_return = $allrecord->returns->sum('amount') + $allrecord->pallets_returns->sum('amount');
+
+                        $payment = $total_cost - $total_return;
+                        $change  =  $allrecord->cash  - $payment;
+
+                    ?>
                     <tr data-entry-id="{{ $allrecord->id ?? '' }}">
                         <td>
                             @can('void_sales_invoice')
@@ -72,19 +80,19 @@
                             {{  number_format($allrecord->cash , 2, '.', ',') }}
                         </td>
                         <td>
-                            {{  number_format($allrecord->change , 2, '.', ',') }}
+                            {{  number_format($change , 2, '.', ',') }}
                         </td>
                         <td>
                             {{  number_format($payment , 2, '.', ',') }}
                         </td>
                         <td>
-                            {{  number_format($allrecord->sales->sum('total') , 2, '.', ',') }}
+                            {{  number_format($total_cost , 2, '.', ',') }}
                         </td>
                         <td>
                             ({{  number_format($allrecord->sales->sum('discounted') , 2, '.', ',') }})
                         </td>
                         <td>
-                            ({{  number_format($allrecord->returns->sum('amount') , 2, '.', ',') }})
+                            ({{  number_format($total_return , 2, '.', ',') }})
                         </td>
                         <td>
                             {{  $allrecord->user->name ?? '' }}

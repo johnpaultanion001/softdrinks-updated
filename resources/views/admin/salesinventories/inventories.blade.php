@@ -587,6 +587,48 @@ function stock_history_pallets(){
     })
 }
 
+$('#palletsForm').on('submit', function(event){
+    event.preventDefault();
+    $('.form-control').removeClass('is-invalid')
+    var id = $('#pallet_hidden_id').val();
+    action_url = "/admin/pallets/"+id;
+    type = "PUT";
+   
+
+    $.ajax({
+        url: action_url,
+        method:type,
+        data:$(this).serialize(),
+        dataType:"json",
+        beforeSend:function(){
+            $("#pallet_button").attr("disabled", true);
+        },
+        success:function(data){
+            $("#pallet_button").attr("disabled", false);
+
+            if(data.errors){
+                $.each(data.errors, function(key,value){
+                    if(key == $('#'+key).attr('id')){
+                        $('#'+key).addClass('is-invalid')
+                        $('#error-'+key).text(value)
+                    }
+                })
+            }
+            if(data.success){
+                $('#palletsModal').modal('hide');
+                $('#success-alert').addClass('bg-primary');
+                $('#success-alert').html('<strong>' + data.success + '</strong>');
+                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                    $("#success-alert").slideUp(500);
+                });
+                $('.form-control').removeClass('is-invalid')
+                loadInventories()
+            }
+        }
+    });
+});
+
+
 
 
 

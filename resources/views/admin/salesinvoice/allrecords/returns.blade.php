@@ -17,7 +17,7 @@
                 @foreach($returns as $return)
                 <tr data-entry-id="{{ $return->id ?? '' }}">
                     <td>
-                        <button type="button" remove_return="{{  $return->id ?? '' }}" is_purchase="YES" class="remove_return text-uppercase btn btn-danger btn-sm">Remove</button>
+                        <button type="button" remove_return="{{  $return->id ?? '' }}" is_purchase="YES" class="remove_return text-uppercase btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                     </td>
                     <td>
                         {{$return->type_of_return ?? '' }}

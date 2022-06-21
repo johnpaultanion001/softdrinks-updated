@@ -17,7 +17,7 @@
                 @foreach($sales as $sale)
                 <tr data-entry-id="{{ $sale->id ?? '' }}">
                     <td>
-                        <button type="button" remove_sales="{{  $sale->id ?? '' }}" class="remove_sales text-uppercase btn btn-danger btn-sm">Remove</button>
+                        <button type="button" remove_sales="{{  $sale->id ?? '' }}" class="remove_sales text-uppercase btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                     </td>
                     <td>
                         {{$sale->product->product_code ?? '' }}

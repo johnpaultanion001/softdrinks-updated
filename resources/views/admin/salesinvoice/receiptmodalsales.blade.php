@@ -25,7 +25,16 @@
                     </div>
                 </div>
                 <div class="receipt-body mt--3 p-2" id="receipt-body-sales">
-                    <?php $payment =  $salesInvoices->sales->sum('total') - $salesInvoices->returns->sum('amount') ?>
+                    <?php 
+                        $subtotal     = $salesInvoices->sales->sum('total_amount_receipt') + $salesInvoices->pallets->sum('amount');
+
+                        $total_cost   = $salesInvoices->sales->sum('total') + $salesInvoices->pallets->sum('amount');
+                        $total_return = $salesInvoices->returns->sum('amount') + $salesInvoices->pallets_returns->sum('amount');
+
+                        $payment = $total_cost - $total_return;
+                        $change  =  $salesInvoices->cash  - $payment;
+
+                    ?>
                     <table class="table table-bordered table-sm">
                             <thead>
                                 <tr>
@@ -45,7 +54,7 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    @forelse($salesInvoices->receipt_product as $key => $receipt)
+                                    @foreach($salesInvoices->receipt_product as $key => $receipt)
                                         <tr>
                                             <td></td>
                                             <td>{{$receipt->purchase_qty ?? ''}}</td>
@@ -54,16 +63,17 @@
                                             <td>₱ {{ number_format($receipt->product->price ?? '' , 2, '.', ',') }}</td>
                                             <td>₱  {{ number_format($receipt->total_amount_receipt ?? '' , 2, '.', ',') }}</td>
                                         </tr>
-                                    @empty
-                                    <tr>
+                                    @endforeach
+                                    @foreach($salesInvoices->pallets as $pallet)
+                                        <tr>
                                             <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>No Data Available</td>
-                                            <td></td>
-                                            <td></td>
-                                    </tr>
-                                    @endforelse
+                                            <td>{{$pallet->qty ?? ''}}</td>
+                                            <td>PALLET</td>
+                                            <td>{{$pallet->pallet->title ?? ''}}</td>
+                                            <td>₱ {{ number_format($pallet->unit_price ?? '' , 2, '.', ',') }}</td>
+                                            <td>₱ {{ number_format($pallet->amount ?? '' , 2, '.', ',') }}</td>
+                                        </tr>
+                                    @endforeach
                                     <tr>
                                         <td></td>
                                         <td></td>
@@ -76,7 +86,7 @@
                                             
                                         </td>
                                         <td> 
-                                                ₱ {{ number_format($salesInvoices->receipt_product->sum->total_amount_receipt ?? '' , 2, '.', ',') }}
+                                                ₱ {{ number_format($subtotal ?? '' , 2, '.', ',') }}
                                             <br>
                                                 ₱ ( {{ number_format($salesInvoices->receipt_product->sum->discounted ?? '' , 2, '.', ',') }} )
                                         </td>
@@ -89,7 +99,7 @@
                                             <td></td>
                                             <td></td>
                                     </tr>
-                                    @forelse($salesInvoices->receipt_return as $return)
+                                    @foreach($salesInvoices->receipt_return as $return)
                                         <tr>
                                             <td></td>
                                             <td>{{$return->return_qty ?? ''}}</td>
@@ -98,16 +108,17 @@
                                             <td>₱ {{ number_format($return->unit_price ?? '' , 2, '.', ',') }}</td>
                                             <td>₱ {{ number_format($return->amount ?? '' , 2, '.', ',') }}</td>
                                         </tr>
-                                    @empty
+                                    @endforeach
+                                    @foreach($salesInvoices->pallets_returns as $pallet)
                                         <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>No Data Available</td>
-                                                <td></td>
-                                                <td></td>
+                                            <td></td>
+                                            <td>{{$pallet->qty ?? ''}}</td>
+                                            <td>PALLET</td>
+                                            <td>{{$pallet->pallet->title ?? ''}}</td>
+                                            <td>₱ {{ number_format($pallet->unit_price ?? '' , 2, '.', ',') }}</td>
+                                            <td>₱ {{ number_format($pallet->amount ?? '' , 2, '.', ',') }}</td>
                                         </tr>
-                                    @endforelse
+                                    @endforeach
                                 </tbody>
                                 <tfoot>
                                     <tr>
@@ -119,7 +130,7 @@
                                             Total Return Amt:
                                         </td>
                                         <td> 
-                                                ₱ ( {{ number_format($salesInvoices->receipt_return->sum->amount ?? '' , 2, '.', ',') }} )
+                                                ₱ ( {{ number_format($total_return ?? '' , 2, '.', ',') }} )
                                         </td>
                                     </tr>
                                     <tr>
@@ -139,7 +150,7 @@
                                             <br>
                                                 ₱ {{ number_format($salesInvoices->cash ?? '' , 2, '.', ',') }}
                                             <br>
-                                                ₱ {{ number_format($salesInvoices->change ?? '' , 2, '.', ',') }}
+                                                ₱ {{ number_format($change ?? '' , 2, '.', ',') }}
 
                                         </td>
                                     </tr>

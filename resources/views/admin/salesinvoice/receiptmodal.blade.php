@@ -1,5 +1,13 @@
 
+                    <?php 
+                        $subtotal     = $receipts->sum('total_amount_receipt') + $pallets->sum('amount');
 
+                        $total_cost   = $receipts->sum('total') + $pallets->sum('amount');
+                        $total_return = $returns->sum('amount') + $return_pallets->sum('amount');
+
+                        $total_amount = $total_cost - $total_return;
+                      
+                      ?>
                 <div class="receipt-body mt--3 p-2" id="receipt-body">
                     <table class="table table-bordered table-sm">
                             <thead>
@@ -20,7 +28,7 @@
                                             </span>
                                         </td>
                                     </tr>
-                                    @forelse($receipts as $key => $receipt)
+                                    @foreach($receipts as $key => $receipt)
                                         <tr>
                                             <td></td>
                                             <td>{{$receipt->purchase_qty ?? ''}}</td>
@@ -29,16 +37,17 @@
                                             <td>₱ {{ number_format($receipt->product->price ?? '' , 2, '.', ',') }}</td>
                                             <td>₱ {{ number_format($receipt->total_amount_receipt ?? '' , 2, '.', ',') }}</td>
                                         </tr>
-                                    @empty
-                                    <tr>
+                                    @endforeach
+                                    @foreach($pallets as $pallet)
+                                        <tr>
                                             <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>No Data Availalbe</td>
-                                            <td></td>
-                                            <td></td>
-                                    </tr>
-                                    @endforelse
+                                            <td>{{$pallet->qty ?? ''}}</td>
+                                            <td>PALLET</td>
+                                            <td>{{$pallet->pallet->title ?? ''}}</td>
+                                            <td>₱ {{ number_format($pallet->unit_price ?? '' , 2, '.', ',') }}</td>
+                                            <td>₱ {{ number_format($pallet->amount ?? '' , 2, '.', ',') }}</td>
+                                        </tr>
+                                    @endforeach
                                     <tr>
                                         <td></td>
                                         <td></td>
@@ -51,7 +60,7 @@
                                             
                                         </td>
                                         <td> 
-                                            ₱ {{ number_format($receipts->sum->total_amount_receipt ?? '' , 2, '.', ',') }}
+                                            ₱ {{ number_format($subtotal ?? '' , 2, '.', ',') }}
                                             <br>
                                             ₱ ( {{ number_format($receipts->sum->discounted ?? '' , 2, '.', ',') }} )
                                         </td>
@@ -64,7 +73,7 @@
                                             <td></td>
                                             <td></td>
                                     </tr>
-                                    @forelse($returns as $return)
+                                    @foreach($returns as $return)
                                         <tr>
                                             <td></td>
                                             <td>{{$return->return_qty}}</td>
@@ -73,16 +82,17 @@
                                             <td>₱ {{ number_format($return->unit_price ?? '' , 2, '.', ',') }}</td>
                                             <td>₱ {{ number_format($return->amount ?? '' , 2, '.', ',') }}</td>
                                         </tr>
-                                    @empty
+                                    @endforeach
+                                    @foreach($return_pallets as $pallet)
                                         <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>No Data Availalbe</td>
-                                                <td></td>
-                                                <td></td>
+                                            <td></td>
+                                            <td>{{$pallet->qty ?? ''}}</td>
+                                            <td>PALLET</td>
+                                            <td>{{$pallet->pallet->title ?? ''}}</td>
+                                            <td>₱ {{ number_format($pallet->unit_price ?? '' , 2, '.', ',') }}</td>
+                                            <td>₱ {{ number_format($pallet->amount ?? '' , 2, '.', ',') }}</td>
                                         </tr>
-                                    @endforelse
+                                    @endforeach
                                 </tbody>
                                 <tfoot>
                                     <tr>
@@ -94,7 +104,7 @@
                                             Total Return Amt:
                                         </td>
                                         <td> 
-                                            ₱ ( {{ number_format($totalsalesreturn ?? '' , 2, '.', ',') }} )
+                                            ₱ ( {{ number_format($total_return ?? '' , 2, '.', ',') }} )
                                            
                                         </td>
                                     </tr>
@@ -111,7 +121,7 @@
                                             Change:
                                         </td>
                                         <td> 
-                                            ₱ {{ number_format($total ?? '' , 2, '.', ',') }}
+                                            ₱ {{ number_format($total_amount ?? '' , 2, '.', ',') }}
                                             <br>
                                             <span id="cashreceipt"></span>
                                             <br>

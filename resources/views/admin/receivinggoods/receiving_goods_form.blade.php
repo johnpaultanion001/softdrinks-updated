@@ -579,6 +579,7 @@
                         </div>
                     </div>
                     <div class="modal-footer bg-white">
+                        <input type="hidden" name="action_pallet" id="action_pallet" value="RECEIVING" />
                         <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">CLOSE</button>
                         <input type="submit" name="pallet_button" id="pallet_button" class="text-uppercase btn btn-default" value="Submit" />
                     </div>
@@ -696,7 +697,7 @@ function loadReturnProduct(){
     })
 }
 
-//Return Products
+//Pallets Products
 function pallets_table(){
     var rg_id = $('#purchase_hidden_id').val();
     $.ajax({
@@ -747,159 +748,6 @@ $(document).on('click', '#create_return', function(){
     $('#product_id').attr('disabled', false);
     empty_dd();
 });
-
-$(document).on('click', '#create_pallet', function(){
-    $('#palletModal').modal('show');
-    $('#palletForm')[0].reset();
-    $('.form-control').removeClass('is-invalid')
-    $('.modal-title-pallet').text('Insert Pallet');
-    $('#pallet_button').val('Submit');
-    $('#pallet_action').val('Add');
-    $('#pallet').trigger('change'); 
-    $('#type').trigger('change'); 
-});
-
-$('select[name="pallet"]').on("change", function(event){
-    $pallet = $("#pallet").val();
-    $.ajax({
-        url :"/admin/receiving/rpallet/"+$pallet+"/unit_price",
-        dataType:"json",
-        beforeSend:function(){
-            $('#pallet_button').attr('disabled', true);
-        },
-        success:function(data){
-           if(data.unit_price){
-                $('#pallet_button').attr('disabled', false);
-                $('#pallet_unit_price').val(data.unit_price);
-           }
-        }
-    })
-});
-
-$('#palletForm').on('submit', function(event){
-    event.preventDefault();
-    
-    $('.form-control').removeClass('is-invalid')
-    var action_url = "{{ route('admin.receiving.store_rpallet') }}";
-    var type = "POST";
-
-    $.ajax({
-        url: action_url,
-        method:type,
-        data:$(this).serialize(),
-        dataType:"json",
-        beforeSend:function(){
-            $('#pallet_button').attr('disabled', true);
-        },
-        success:function(data){
-            $('#pallet_button').attr('disabled', false);
-            if(data.errors){
-                $.each(data.errors, function(key,value){
-                    if(key == $('#'+key).attr('id')){
-                        $('#'+key).addClass('is-invalid')
-                        $('#error-'+key).text(value)
-                    }
-                })
-            }
-            if(data.max_stock){
-                $('#pallet_qty').addClass('is-invalid');
-                $('#error-pallet_qty').text(data.max_stock);
-            }
-            if(data.success){
-                $('#success-alert').addClass('bg-primary');
-                $('#success-alert').html('<strong>' + data.success + '</strong>');
-                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
-                    $("#success-alert").slideUp(500);
-                });
-                $('.form-control').removeClass('is-invalid')
-                $('#palletModal').modal('hide'); 
-                rgForm();
-                supplier_prev_bal();
-                
-            }
-        }
-    });
-});
-
-$(document).on('click', '.edit_pallet', function(){
-    $('#palletModal').modal('show');
-    $('.modal-title-pallet').text('Edit Pallet');
-    $('#palletForm')[0].reset();
-    $('.form-control').removeClass('is-invalid')
-    var id = $(this).attr('edit_pallet');
-
-    $.ajax({
-        url :"/admin/receiving/rpallet/"+id+"/edit",
-        dataType:"json",
-        beforeSend:function(){
-            $('#pallet_button').attr('disabled', true);
-        },
-        success:function(data){
-            $('#pallet_button').attr('disabled', false);
-            $.each(data.data, function(key,value){
-                    if(key == 'pallet_id'){
-                        $('#pallet').val(value);
-                        $('#pallet').trigger('change'); 
-                    }
-                    if(key == 'type'){
-                        $('#type').val(value);
-                        $('#type').trigger('change'); 
-                    }
-                    if(key == 'qty'){
-                        $('#pallet_qty').val(value);
-                    }
-                    if(key == 'unit_price'){
-                        $('#pallet_unit_price').val(value);
-                    }
-            })
-        }
-    })
-});
-
-$(document).on('click', '.remove_pallet', function(){
-    var id = $(this).attr('remove_pallet');
-    var rg_id = $('#purchase_hidden_id').val();
-    $.confirm({
-      title: 'Confirmation',
-      content: 'You really want to remove this data?',
-      type: 'red',
-      buttons: {
-          confirm: {
-              text: 'confirm',
-              btnClass: 'btn-blue',
-              keys: ['enter', 'shift'],
-              action: function(){
-                  return $.ajax({
-                      url:"/admin/receiving/rpallet/"+ id,
-                      method:'DELETE',
-                      data: {rg_id:rg_id,_token: '{!! csrf_token() !!}'},
-                      dataType:"json",
-                      beforeSend:function(){
-                        
-                      },
-                      success:function(data){
-                          if(data.success){
-                                $('#success-alert').addClass('bg-primary');
-                                $('#success-alert').html('<strong>' + data.success + '</strong>');
-                                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
-                                    $("#success-alert").slideUp(500);
-                                });
-                                rgForm()
-                          }
-                      }
-                  })
-              }
-          },
-          cancel:  {
-              text: 'cancel',
-              btnClass: 'btn-red',
-              keys: ['enter', 'shift'],
-          }
-      }
-  });
-});
-
-
 
 //edit product
 $(document).on('click', '.edit', function(){
@@ -1672,6 +1520,160 @@ function payables(){
     
     }
 }
+
+// Pallets
+$(document).on('click', '#create_pallet', function(){
+    $('#palletModal').modal('show');
+    $('#palletForm')[0].reset();
+    $('.form-control').removeClass('is-invalid')
+    $('.modal-title-pallet').text('Insert Pallet');
+    $('#pallet_button').val('Submit');
+    $('#pallet_action').val('Add');
+    $('#pallet').trigger('change'); 
+    $('#type').trigger('change'); 
+});
+
+$('select[name="pallet"]').on("change", function(event){
+    $pallet = $("#pallet").val();
+    $.ajax({
+        url :"/admin/receiving/rpallet/"+$pallet+"/unit_price",
+        dataType:"json",
+        beforeSend:function(){
+            $('#pallet_button').attr('disabled', true);
+        },
+        success:function(data){
+           if(data.unit_price){
+                $('#pallet_button').attr('disabled', false);
+                $('#pallet_unit_price').val(data.unit_price);
+           }
+        }
+    })
+});
+
+$('#palletForm').on('submit', function(event){
+    event.preventDefault();
+    
+    $('.form-control').removeClass('is-invalid')
+    var action_url = "{{ route('admin.receiving.store_rpallet') }}";
+    var type = "POST";
+
+    $.ajax({
+        url: action_url,
+        method:type,
+        data:$(this).serialize(),
+        dataType:"json",
+        beforeSend:function(){
+            $('#pallet_button').attr('disabled', true);
+        },
+        success:function(data){
+            $('#pallet_button').attr('disabled', false);
+            if(data.errors){
+                $.each(data.errors, function(key,value){
+                    if(key == $('#'+key).attr('id')){
+                        $('#'+key).addClass('is-invalid')
+                        $('#error-'+key).text(value)
+                    }
+                })
+            }
+            if(data.max_stock){
+                $('#pallet_qty').addClass('is-invalid');
+                $('#error-pallet_qty').text(data.max_stock);
+            }
+            if(data.success){
+                $('#success-alert').addClass('bg-primary');
+                $('#success-alert').html('<strong>' + data.success + '</strong>');
+                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                    $("#success-alert").slideUp(500);
+                });
+                $('.form-control').removeClass('is-invalid')
+                $('#palletModal').modal('hide'); 
+                rgForm();
+                supplier_prev_bal();
+                
+            }
+        }
+    });
+});
+
+$(document).on('click', '.edit_pallet', function(){
+    $('#palletModal').modal('show');
+    $('.modal-title-pallet').text('Edit Pallet');
+    $('#palletForm')[0].reset();
+    $('.form-control').removeClass('is-invalid')
+    var id = $(this).attr('edit_pallet');
+    var action_pallet = "RECEIVING";
+
+    $.ajax({
+        url :"/admin/receiving/rpallet/"+id+"/edit",
+        dataType:"json",
+        data: {action_pallet:action_pallet,_token: '{!! csrf_token() !!}'},
+        beforeSend:function(){
+            $('#pallet_button').attr('disabled', true);
+        },
+        success:function(data){
+            $('#pallet_button').attr('disabled', false);
+            $.each(data.data, function(key,value){
+                    if(key == 'pallet_id'){
+                        $('#pallet').val(value);
+                        $('#pallet').trigger('change'); 
+                    }
+                    if(key == 'type'){
+                        $('#type').val(value);
+                        $('#type').trigger('change'); 
+                    }
+                    if(key == 'qty'){
+                        $('#pallet_qty').val(value);
+                    }
+                    if(key == 'unit_price'){
+                        $('#pallet_unit_price').val(value);
+                    }
+            })
+        }
+    })
+});
+
+$(document).on('click', '.remove_pallet', function(){
+    var id = $(this).attr('remove_pallet');
+    var rg_id = $('#purchase_hidden_id').val();
+    $.confirm({
+      title: 'Confirmation',
+      content: 'You really want to remove this data?',
+      type: 'red',
+      buttons: {
+          confirm: {
+              text: 'confirm',
+              btnClass: 'btn-blue',
+              keys: ['enter', 'shift'],
+              action: function(){
+                  return $.ajax({
+                      url:"/admin/receiving/rpallet/"+ id,
+                      method:'DELETE',
+                      data: {rg_id:rg_id,_token: '{!! csrf_token() !!}'},
+                      dataType:"json",
+                      beforeSend:function(){
+                        
+                      },
+                      success:function(data){
+                          if(data.success){
+                                $('#success-alert').addClass('bg-primary');
+                                $('#success-alert').html('<strong>' + data.success + '</strong>');
+                                $("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+                                    $("#success-alert").slideUp(500);
+                                });
+                                rgForm()
+                          }
+                      }
+                  })
+              }
+          },
+          cancel:  {
+              text: 'cancel',
+              btnClass: 'btn-red',
+              keys: ['enter', 'shift'],
+          }
+      }
+  });
+});
 
 </script>
 @endsection

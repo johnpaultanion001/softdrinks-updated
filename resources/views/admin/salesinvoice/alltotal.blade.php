@@ -8,7 +8,7 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text">₱</div>
                         </div>
-                        <input type="text" class="form-control" name="subtotal" id="subtotal" value="{{ number_format($orders->sum->total_amount_receipt ?? '' , 2, '.', ',') }}" readonly>
+                        <input type="text" class="form-control" name="subtotal" id="subtotal" value="{{ number_format($subtotal ?? '' , 2, '.', ',') }}" readonly>
                         </div>
                     </div>
                     <div class="col-sm-4">
@@ -26,7 +26,7 @@
                             <div class="input-group-prepend">
                                 <div class="input-group-text">₱</div>
                             </div>
-                            <input type="text" name="total_inv_amt" id="total_inv_amt" class="form-control" value="{{ number_format($orders->sum->total ?? '' , 2, '.', ',') }}" readonly/>
+                            <input type="text" name="total_inv_amt" id="total_inv_amt" class="form-control" value="{{ number_format($total_cost ?? '' , 2, '.', ',') }}" readonly/>
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                             <div class="input-group-prepend">
                                 <div class="input-group-text">₱</div>
                             </div>
-                            <input type="text" name="total_return" id="total_return" class="form-control" value="({{ number_format($returned->sum->amount ?? '' , 2, '.', ',') }})" readonly/>
+                            <input type="text" name="total_return" id="total_return" class="form-control" value="({{ number_format($total_return ?? '' , 2, '.', ',') }})" readonly/>
                         </div>
                 </div>
             </div>

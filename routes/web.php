@@ -163,6 +163,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('salesInvoice/salesInvoice/records','SalesInvoiceController@records')->name('salesInvoice.records');
     route::get('salesInvoice/{sales_records}/sales_records', 'SalesInvoiceController@sales_records')->name('salesInvoice.sales_records');
     route::get('salesInvoice/{return_records}/return_records', 'SalesInvoiceController@return_records')->name('salesInvoice.return_records');
+    route::get('salesInvoice/{pallet}/pallets_records', 'SalesInvoiceController@pallets_records')->name('salesInvoice.pallets_records');
     route::get('salesInvoice_filter', 'SalesInvoiceController@filter')->name('salesInvoice.filter');
 
     //Sales Inventory
@@ -219,6 +220,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     
      route::get('pallets/{pallet}', 'PalletController@pallet')->name('pallets.pallet');
      route::get('pallets/{pallet}/stock_history', 'PalletController@stock_history')->name('pallets.stock_history');
+     route::put('pallets/{pallet}', 'PalletController@update_pallets')->name('pallets.update_pallets');
     
+     route::get('sales_pallets/spallets_table', 'PalletController@spallets_table')->name('sales_pallets.spallets_table');
+     route::delete('sales_pallets/spallet/{pallet}', 'PalletController@destroy_spallet')->name('sales_pallets.destroy_spallet');
     
 });

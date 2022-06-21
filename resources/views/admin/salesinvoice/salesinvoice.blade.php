@@ -112,6 +112,11 @@
                             <div id="loadreturn"></div>
                         </div>
                     </div>
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div id="pallets_table"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-xl-12">
@@ -447,6 +452,67 @@
     </div>
 </div>
 
+<!-- PALLETS FORM -->
+<form method="post" id="palletForm" class="form-horizontal">
+        @csrf
+        <div class="modal" id="palletModal" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <p class="modal-title-pallet font-weight-bold text-uppercase text-white">Modal Heading</p>
+                        <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Title:<span class="text-danger">*</span></label>
+                                    <select name="pallet" id="pallet" class="form-control select2">
+                                        <option value="1">BIG PALLET</option>
+                                        <option value="2">SMALL PALLET</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Type:<span class="text-danger">*</span></label>
+                                    <select name="type" id="type" class="form-control select2">
+                                        <option value="BUY">BUY</option>
+                                        <option value="RETURN">RETURN</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >QTY:<span class="text-danger">*</span></label>
+                                    <input type="number" name="pallet_qty" id="pallet_qty" class="form-control" step="any" />
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-pallet_qty"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Unit Price:<span class="text-danger">*</span></label>
+                                    <input type="number" name="pallet_unit_price" id="pallet_unit_price" class="form-control" step="any" />
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-pallet_unit_price"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-white">
+                        <input type="hidden" name="action_pallet" id="action_pallet" value="SALES" />
+                        <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">CLOSE</button>
+                        <input type="submit" name="pallet_button" id="pallet_button" class="text-uppercase btn btn-default" value="Submit" />
+                    </div>
+            
+                </div>
+            </div>
+        </div>
+    </form>
+
 <div id="success-order" class="success-order col-4 alert text-white fade hide fixed-bottom" style="margin-left: 65%; z-index: 9999;" role="alert">
     
 </div>
@@ -466,7 +532,7 @@
 <script>
 
 $(function () {
-    return loadSales() , loadReturn() , loadAllTotal();
+    return loadSales() , loadReturn() ,pallets_table() , loadAllTotal();
     
 });
 
@@ -502,6 +568,20 @@ function loadReturn(){
             $("#action_button").attr("disabled", false);
             $("#action_button").attr("value", "Compute");
             $("#loadreturn").html(response);
+        }	
+    })
+}
+
+function pallets_table(){
+    $.ajax({
+        url: "/admin/sales_pallets/spallets_table", 
+        type: "get",
+        dataType: "HTMl",
+        beforeSend: function() {
+
+        },
+        success: function(response){
+            $("#pallets_table").html(response);
         }	
     })
 }
@@ -891,7 +971,7 @@ $(document).on('click', '#print_button', function(){
                 $('#receiptModal').modal('hide');
                 $('.form-control').removeClass('is-invalid');
                 
-                loadSales() , loadReturn() , loadAllTotal() , receivables();;
+                loadSales() , loadReturn(), pallets_table() , loadAllTotal() , receivables();;
             }
            
         }
@@ -1160,8 +1240,6 @@ $('#orderForm').on('submit', function(event){
             }
             
             if(data.success){
-                
-                
                 $('#orderModal').modal('hide');
 
                 $('.form-control').removeClass('is-invalid');
@@ -1171,13 +1249,8 @@ $('#orderForm').on('submit', function(event){
                 $("#success-order").fadeTo(10000, 500).slideUp(500, function(){
                     $("#success-order").slideUp(500);
                 });
-
-                
                 loadSales();
                 loadAllTotal();
-                
-               
-
             }
             
         }
@@ -1345,6 +1418,162 @@ $(document).on('click', '.viewsales', function(){
             $("#viewsales").html(response);
         }	
     })
+});
+
+
+// Pallets
+$(document).on('click', '#create_pallet', function(){
+    $('#palletModal').modal('show');
+    $('#palletForm')[0].reset();
+    $('.form-control').removeClass('is-invalid')
+    $('.modal-title-pallet').text('Insert Pallet');
+    $('#pallet_button').val('Submit');
+    $('#pallet_action').val('Add');
+    $('#pallet').trigger('change'); 
+    $('#type').trigger('change'); 
+});
+
+$('select[name="pallet"]').on("change", function(event){
+    $pallet = $("#pallet").val();
+    $.ajax({
+        url :"/admin/receiving/rpallet/"+$pallet+"/unit_price",
+        dataType:"json",
+        beforeSend:function(){
+            $('#pallet_button').attr('disabled', true);
+        },
+        success:function(data){
+           if(data.unit_price){
+                $('#pallet_button').attr('disabled', false);
+                $('#pallet_unit_price').val(data.unit_price);
+           }
+        }
+    })
+});
+
+$('#palletForm').on('submit', function(event){
+    event.preventDefault();
+    $('.form-control').removeClass('is-invalid')
+    var action_url = "{{ route('admin.receiving.store_rpallet') }}";
+    var type = "POST";
+
+    $.ajax({
+        url: action_url,
+        method:type,
+        data:$(this).serialize(),
+        dataType:"json",
+        beforeSend:function(){
+            $('#pallet_button').attr('disabled', true);
+        },
+        success:function(data){
+            $('#pallet_button').attr('disabled', false);
+            if(data.errors){
+                $.each(data.errors, function(key,value){
+                    if(key == $('#'+key).attr('id')){
+                        $('#'+key).addClass('is-invalid')
+                        $('#error-'+key).text(value)
+                    }
+                })
+            }
+            if(data.max_stock){
+                $('#pallet_qty').addClass('is-invalid');
+                $('#error-pallet_qty').text(data.max_stock);
+            }
+            if(data.success){
+                $('#palletModal').modal('hide');
+
+                $('.form-control').removeClass('is-invalid');
+
+                $('#success-order').addClass('bg-primary');
+                $('#success-order').html('<strong>' + data.success + '</strong>' );
+                $("#success-order").fadeTo(10000, 500).slideUp(500, function(){
+                    $("#success-order").slideUp(500);
+                });
+                pallets_table();
+                loadAllTotal();
+            }
+        }
+    });
+});
+
+$(document).on('click', '.edit_pallet', function(){
+    $('#palletModal').modal('show');
+    $('.modal-title-pallet').text('Edit Pallet');
+    $('#palletForm')[0].reset();
+    $('.form-control').removeClass('is-invalid')
+    var id = $(this).attr('edit_pallet');
+    var action_pallet = "SALES";
+
+    $.ajax({
+        url :"/admin/receiving/rpallet/"+id+"/edit",
+        dataType:"json",
+        data: {action_pallet:action_pallet,_token: '{!! csrf_token() !!}'},
+        beforeSend:function(){
+            $('#pallet_button').attr('disabled', true);
+        },
+        success:function(data){
+            $('#pallet_button').attr('disabled', false);
+            $.each(data.data, function(key,value){
+                    if(key == 'pallet_id'){
+                        $('#pallet').val(value);
+                        $('#pallet').trigger('change'); 
+                    }
+                    if(key == 'type'){
+                        $('#type').val(value);
+                        $('#type').trigger('change'); 
+                    }
+                    if(key == 'qty'){
+                        $('#pallet_qty').val(value);
+                    }
+                    if(key == 'unit_price'){
+                        $('#pallet_unit_price').val(value);
+                    }
+            })
+        }
+    })
+});
+
+$(document).on('click', '.remove_pallet', function(){
+    var id = $(this).attr('remove_pallet');
+
+    $.confirm({
+      title: 'Confirmation',
+      content: 'You really want to remove this data?',
+      type: 'red',
+      buttons: {
+          confirm: {
+              text: 'confirm',
+              btnClass: 'btn-blue',
+              keys: ['enter', 'shift'],
+              action: function(){
+                  return $.ajax({
+                      url:"/admin/sales_pallets/spallet/"+ id,
+                      method:'DELETE',
+                      data: {_token: '{!! csrf_token() !!}'},
+                      dataType:"json",
+                      beforeSend:function(){
+                        
+                      },
+                      success:function(data){
+                          if(data.success){
+                                $('#success-order').addClass('bg-primary');
+                                $('#success-order').html('<strong>' + data.success + '</strong>' );
+                                $("#success-order").fadeTo(10000, 500).slideUp(500, function(){
+                                    $("#success-order").slideUp(500);
+                                });
+                                pallets_table();
+                                loadAllTotal();
+                          }
+                      }
+                  })
+              }
+          },
+          cancel:  {
+              text: 'cancel',
+              btnClass: 'btn-red',
+              keys: ['enter', 'shift'],
+          }
+      }
+  });
 });
 
 

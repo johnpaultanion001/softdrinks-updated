@@ -87,7 +87,7 @@
 
                             <div class="col-sm-12 mt-2 row">
                                 <div class="col-sm-6 mb-2">
-                                    <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">Sales Records</h4>
+                                    <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">Sales</h4>
                                 </div>
                                 <div class="col-sm-12" id="sales">
 
@@ -97,9 +97,19 @@
 
                             <div class="col-sm-12 mt-2 row">
                                 <div class="col-sm-6 mb-2">
-                                    <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">Returns Records</h4>
+                                    <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">Returns</h4>
                                 </div>
                                 <div class="col-sm-12" id="returns">
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-12 mt-2 row">
+                                <div class="col-sm-6 mb-2">
+                                    <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">Pallets</h4>
+                                </div>
+                                <div class="col-sm-12" id="pallets">
 
                                 </div>
 
@@ -509,7 +519,23 @@
             }	
         })
     }
-    
+    function pallets(){
+        var id = $('#si_hidden_id').val();
+
+        $.ajax({
+            url: "/admin/salesInvoice/"+id+"/pallets_records", 
+            type: "get",
+            dataType: "HTMl",
+            beforeSend: function() {
+            
+            },
+            success: function(response){
+                $("#pallets").html(response);
+            }	
+        })
+    }
+   
+
     $(document).on('click', '.view', function(){
         $('#siModal').modal('show');
         $('.modal-title').text('VEIW/EDIT SALES INVOICE');
@@ -549,6 +575,7 @@
 
                 sales();
                 returns();
+                pallets();
                 $('#loading-containermodal').hide();
                 $('#si_content').show();
             }
@@ -800,12 +827,51 @@
                     loadRecords();
                 }
         }
-    });
+        });
     
     });
 
-    
-
-
+    $(document).on('click', '.remove_pallet', function(){
+        var id = $(this).attr('remove_pallet');
+        var is_purchase = $(this).attr('is_purchase');
+        $.confirm({
+        title: 'Confirmation',
+        content: 'You really want to remove this data?',
+        type: 'red',
+        buttons: {
+            confirm: {
+                text: 'confirm',
+                btnClass: 'btn-blue',
+                keys: ['enter', 'shift'],
+                action: function(){
+                    return $.ajax({
+                        url:"/admin/sales_pallets/spallet/"+ id,
+                        method:'DELETE',
+                        data: {is_purchase:is_purchase, _token: '{!! csrf_token() !!}'},
+                        dataType:"json",
+                        beforeSend:function(){
+                            
+                        },
+                        success:function(data){
+                            if(data.success){
+                                    $('#success-order').addClass('bg-primary');
+                                    $('#success-order').html('<strong>' + data.success + '</strong>');
+                                    $("#success-order").fadeTo(5000, 500).slideUp(500, function(){
+                                        $("#success-order").slideUp(500);
+                                    });
+                                    pallets();
+                            }
+                        }
+                    })
+                }
+            },
+            cancel:  {
+                text: 'cancel',
+                btnClass: 'btn-red',
+                keys: ['enter', 'shift'],
+            }
+        }
+        });
+    });
 </script>
 @endsection

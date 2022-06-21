@@ -58,6 +58,14 @@ class SalesInvoice extends Model
     {
         return $this->hasMany(SalesReturn::class, 'salesinvoice_id' , 'salesinvoice_id')->latest();
     }
+    public function pallets()
+    {
+        return $this->hasMany(SalesPallet::class, 'salesinvoice_id', 'salesinvoice_id')->where('type', 'BUY');
+    }
+    public function pallets_returns()
+    {
+        return $this->hasMany(SalesPallet::class, 'salesinvoice_id', 'salesinvoice_id')->where('type', 'RETURN');
+    }
 
     
 }

@@ -17,13 +17,20 @@
                 <th scope="col">Title</th>
                 <th scope="col">Unit Price</th>
                 <th scope="col">Stock</th>
+                <th scope="col">Inventory Amount</th>
                 <th scope="col">Updated At</th>
               </tr>
             </thead>
             <tbody class="text-uppercase font-weight-bold">
-              @foreach($pallets as $pallet)
+                @php
+                  $total_inv_amt = 0;
+                @endphp
+                @foreach($pallets as $pallet)
+                    @php
+                      $total_inv = $pallet->price * $pallet->stock;
+                      $total_inv_amt = $total_inv_amt + $total_inv;
+                    @endphp
                     <tr>
-                    
                       <td>
                       @can('update_sales_inventory')
                           <button type="button" ev_pallet="{{  $pallet->id ?? '' }}"  class="ev_pallet text-uppercase btn btn-info btn-sm">View/Edit</button>
@@ -35,15 +42,34 @@
                       <td>
                           {{  number_format($pallet->price , 2, '.', ',') }}
                       </td>
-    
                       <td>
                           {{  $pallet->stock ?? '' }}
+                      </td>
+                      <td>
+                          {{  number_format($total_inv , 2, '.', ',') }}
                       </td>
                       <td>
                           {{ $pallet->updated_at->format('M j , Y h:i A') }}
                       </td>
                     </tr>
                 @endforeach
+                  <tr>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                        Total Inventory Amount:
+                      </td>
+                      <td>
+                        {{  number_format($total_inv_amt , 2, '.', ',') }}
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+                    
             </tbody>
           </table>
         </div>
@@ -74,17 +100,22 @@
                 <th scope="col">Location Stock</th>
                 <th scope="col">Sold</th>
 
-                
-                
-
                 <th scope="col">Unit Price</th>
+                <th scope="col">Inventory Amount</th>
                 <th scope="col">Remarks</th>
                 <th scope="col">Updated At</th>
                 <th scope="col">Created At</th>
               </tr>
             </thead>
             <tbody class="text-uppercase font-weight-bold">
-              @foreach($products as $key => $product)
+                @php
+                  $total_inv_amt_p = 0;
+                @endphp
+                @foreach($products as $key => $product)
+                    @php
+                      $total_inv_p = $product->price * $product->location_products->sum('stock');
+                      $total_inv_amt_p = $total_inv_amt_p + $total_inv_p;
+                    @endphp
                     <tr data-entry-id="{{ $product->id ?? '' }}">
                     
                       <td>
@@ -129,7 +160,10 @@
                       <td>
                           {{  number_format($product->price , 2, '.', ',') }}
                       </td>
-    
+                      <td>
+                          {{  number_format($total_inv_p , 2, '.', ',') }}
+                      </td>
+                      
                       <td>
                           {{  $product->product_remarks ?? '' }}
                       </td>
@@ -141,6 +175,40 @@
                       </td>
                     </tr>
                 @endforeach
+                    <tr>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                        Total Inventory Amount:
+                      </td>
+                      <td>
+                        {{  number_format($total_inv_amt_p , 2, '.', ',') }}
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
             </tbody>
           </table>
         </div>

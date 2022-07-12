@@ -114,6 +114,16 @@
                                 </div>
 
                             </div>
+                            
+                            <div class="col-sm-12 mt-2 row">
+                                <div class="col-sm-6 mb-2">
+                                    <h4 class="mb-0 text-uppercase bg-primary text-white" style="border-radius: 5px; padding: 5px;">Deposits</h4>
+                                </div>
+                                <div class="col-sm-12" id="deposits">
+
+                                </div>
+
+                            </div>
 
                             <div class="col-sm-12 mt-3 p-2 bg-default">
                                 <div class="row">
@@ -534,6 +544,22 @@
             }	
         })
     }
+
+    function deposits(){
+        var id = $('#si_hidden_id').val();
+
+        $.ajax({
+            url: "/admin/salesInvoice/"+id+"/deposits_records", 
+            type: "get",
+            dataType: "HTMl",
+            beforeSend: function() {
+            
+            },
+            success: function(response){
+                $("#deposits").html(response);
+            }	
+        })
+    }
    
 
     $(document).on('click', '.view', function(){
@@ -576,6 +602,7 @@
                 sales();
                 returns();
                 pallets();
+                deposits();
                 $('#loading-containermodal').hide();
                 $('#si_content').show();
             }
@@ -873,5 +900,49 @@
         }
         });
     });
+
+    $(document).on('click', '.remove_deposit', function(){
+    var id = $(this).attr('remove_deposit');
+
+    $.confirm({
+      title: 'Confirmation',
+      content: 'You really want to remove this data?',
+      type: 'red',
+      buttons: {
+          confirm: {
+              text: 'confirm',
+              btnClass: 'btn-blue',
+              keys: ['enter', 'shift'],
+              action: function(){
+                  return $.ajax({
+                      url:"/admin/deposits/"+ id,
+                      method:'DELETE',
+                      data: {_token: '{!! csrf_token() !!}'},
+                      dataType:"json",
+                      beforeSend:function(){
+                        
+                      },
+                      success:function(data){
+                          if(data.success){
+                                $('#success-order').addClass('bg-primary');
+                                $('#success-order').html('<strong>' + data.success + '</strong>' );
+                                $("#success-order").fadeTo(10000, 500).slideUp(500, function(){
+                                    $("#success-order").slideUp(500);
+                                });
+                                deposits();
+                          }
+                      }
+                  })
+              }
+          },
+          cancel:  {
+              text: 'cancel',
+              btnClass: 'btn-red',
+              keys: ['enter', 'shift'],
+          }
+      }
+  });
+});
+
 </script>
 @endsection

@@ -66,6 +66,10 @@ class SalesInvoice extends Model
     {
         return $this->hasMany(SalesPallet::class, 'salesinvoice_id', 'salesinvoice_id')->where('type', 'RETURN');
     }
+    public function deposits()
+    {
+        return $this->hasMany(Deposit::class, 'salesinvoice_id', 'salesinvoice_id');
+    }
 
     
 }

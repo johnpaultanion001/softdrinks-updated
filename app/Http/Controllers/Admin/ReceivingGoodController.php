@@ -356,14 +356,14 @@ class ReceivingGoodController extends Controller
             ]
         );
 
-        $product_ids = EmptyBottlesInventory::select(['product_id'])->get()->toArray();
-        $returnBottle = RecieveReturn::where('receiving_good_id', $receiving_good_id)->where('type_of_return', 'EMPTY')->get();
-        foreach($returnBottle as $return){
-            if (in_array(array('product_id' => $return->product_id), $product_ids)){
-                EmptyBottlesInventory::where('product_id', $return->product_id)
-                                        ->decrement('qty', $return->return_qty);
-            }
-        } 
+        // $product_ids = EmptyBottlesInventory::select(['product_id'])->get()->toArray();
+        // $returnBottle = RecieveReturn::where('receiving_good_id', $receiving_good_id)->where('type_of_return', 'EMPTY')->get();
+        // foreach($returnBottle as $return){
+        //     if (in_array(array('product_id' => $return->product_id), $product_ids)){
+        //         EmptyBottlesInventory::where('product_id', $return->product_id)
+        //                                 ->decrement('qty', $return->return_qty);
+        //     }
+        // } 
 
         //BAD ORDER
         $bad_orders = RecieveReturn::where('receiving_good_id', $receiving_good_id)->where('type_of_return', 'BAD_ORDER')->get();
@@ -534,7 +534,7 @@ class ReceivingGoodController extends Controller
             );
         }
 
-        return response()->json(['bad_orders' => $bad_orders]);
+        return response()->json(['bad_orders' => $bad_orders ?? '']);
     }
     
     public function empty_dd(){
@@ -543,13 +543,14 @@ class ReceivingGoodController extends Controller
         foreach($products as $product){
             $empties[] = array(
                 'id'           => $product->product_id,
-                'product_code' => $product->product->product_code ?? 'NO BRAND',
-                'description'  => $product->product->description ?? '',
-                'stock'        => $product->qty,    
+                'product_code' => $product->product->product_code ?? '',
+                'empties'      => $product->empties_qty(),
+                'shells'      => $product->shells_qty(),
+                'bottles'      => $product->bottles_qty(),
             );
         }
 
-        return response()->json(['empties' => $empties]);
+        return response()->json(['empties' => $empties ?? '']);
     }
     
     public function get_supplier_id(Request $request){
@@ -657,9 +658,6 @@ class ReceivingGoodController extends Controller
             $rp->delete();
         }
         foreach($receiving_good->returns()->get() as $receivingReturn){
-            if($receivingReturn->type_of_return == 'EMPTY'){
-                EmptyBottlesInventory::where('product_id', $receivingReturn->product_id)->increment('qty', $receivingReturn->return_qty);
-            }
             if($receivingReturn->type_of_return == 'BAD_ORDER'){
                 LocationProduct::where('product_id', $receivingReturn->product_id)
                                 ->where('location_id', 3)

@@ -28,7 +28,7 @@
                     <?php 
                         $subtotal     = $salesInvoices->sales->sum('total_amount_receipt') + $salesInvoices->pallets->sum('amount');
 
-                        $total_cost   = $salesInvoices->sales->sum('total') + $salesInvoices->pallets->sum('amount');
+                        $total_cost   = $salesInvoices->sales->sum('total') + $salesInvoices->pallets->sum('amount') + $salesInvoices->deposits->sum('amount');
                         $total_return = $salesInvoices->returns->sum('amount') + $salesInvoices->pallets_returns->sum('amount');
 
                         $payment = $total_cost - $total_return;
@@ -127,10 +127,14 @@
                                         <td></td>
                                         <td></td>
                                         <td>
-                                            Total Return Amt:
+                                            Total Return Amt: 
+                                                <br>
+                                            Total Deposit Amt:
                                         </td>
                                         <td> 
-                                                ₱ ( {{ number_format($total_return ?? '' , 2, '.', ',') }} )
+                                                ₱ ( {{ number_format($total_return ?? '' , 2, '.', ',') }} ) 
+                                                    <br>
+                                                ₱ {{ number_format($salesInvoices->deposits->sum('amount') ?? '' , 2, '.', ',') }}
                                         </td>
                                     </tr>
                                     <tr>

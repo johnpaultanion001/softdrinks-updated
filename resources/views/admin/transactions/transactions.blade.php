@@ -335,9 +335,6 @@ function data_ending_inventory(){
             $.each(data.data, function(key,value){
                 list += '<tr>';
                     list += '<td>';
-                       list += '<button type="button" id="edit_inv'+value.product_id+'" edit_inv="'+value.product_id+'" class="text-uppercase edit_inv btn btn-info btn-sm">EDIT</button>'
-                    list += '</td>';
-                    list += '<td>';
                         list += value.product;
                     list += '</td>';
                     list += '<td>';
@@ -355,14 +352,56 @@ function data_ending_inventory(){
                     list += '<td>';
                         list += '<input type="text" id="bottles'+value.product_id+'" value="'+value.bottles+'" class="input_ending" readonly onkeypress="return AddKeyPress(event);"/> <span style="display: none;">'+value.bottles+'</span>';   
                     list += '</td>';
-                    list += '<td>';
-                        list += '<input type="text" id="big_palettes'+value.product_id+'" value="'+value.big_palettes+'" class="input_ending" readonly onkeypress="return AddKeyPress(event);"/> <span style="display: none;">'+value.big_palettes+'</span>';   
-                    list += '</td>';
-                    list += '<td>';
-                        list += '<input type="text" id="small_palettes'+value.product_id+'" value="'+value.small_palettes+'" class="input_ending" readonly onkeypress="return AddKeyPress(event);"/> <span style="display: none;">'+value.small_palettes+'</span>';   
-                    list += '</td>';
                 list += '</tr>';
             });
+                list += '<tr>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                list += '</tr>';
+                list += '<tr>';
+                    list += '<td>';
+                        list += 'PALLETS';
+                    list += '</td>';
+                    list += '<td>';
+                        list += 'STOCKS';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                list += '</tr>';
+                $.each(data.pallets, function(key,value){
+                    list += '<tr>';
+                        list += '<td>';
+                            list += value.title;
+                        list += '</td>';
+                        list += '<td>';
+                            list += value.stock;
+                        list += '</td>';
+                        list += '<td>';
+                        list += '</td>';
+                        list += '<td>';
+                        list += '</td>';
+                        list += '<td>';
+                        list += '</td>';
+                        list += '<td>';
+                        list += '</td>';
+                    list += '</tr>';
+                });
             $('#list_ending_inventory_report').empty().append(list);
             table_ending_inventory_report();
         }	
@@ -407,60 +446,6 @@ $(document).on('click', '#btn_print_ending_inventory_report', function(){
 $(document).on('click', '#btn_excel_ending_inventory_report', function(){
     $('#table_ending_inventory_report').DataTable().buttons(0,0).trigger()
 });
-
-
-var id = null;
-
-$(document).on('click', '.edit_inv', function(){
-    id = $(this).attr('edit_inv');
-    var action = $(this).text();
-
-    if(action == 'EDIT'){
-        $(this).text('SAVE');
-        $(this).removeClass('btn-info');
-        $(this).addClass('btn-success');
-
-        $('#shell'+id).removeClass('input_ending');
-        $('#shell'+id).attr('readonly', false);
-        $('#shell'+id).focus();
-
-        $('#bottles'+id).removeClass('input_ending');
-        $('#bottles'+id).attr('readonly', false);
-
-        $('#big_palettes'+id).removeClass('input_ending');
-        $('#big_palettes'+id).attr('readonly', false);
-
-        $('#small_palettes'+id).removeClass('input_ending');
-        $('#small_palettes'+id).attr('readonly', false);
-    }
-    else if(action == 'SAVE'){
-        $.ajax({
-            url: "/admin/transactions/ending_inventory_report/" + id, 
-            type: "put",
-            data: {shell:$('#shell'+id).val(),bottles:$('#bottles'+id).val(),big_palettes:$('#big_palettes'+id).val(),
-                    small_palettes:$('#small_palettes'+id).val(),_token: '{!! csrf_token() !!}'},
-            dataType: "json",
-            beforeSend: function() {
-                $(this).text('SAVING');
-            },
-            success: function(data){
-                if(data.success){
-                    $('#table_ending_inventory_report').DataTable().destroy();
-                    data_ending_inventory();
-                }
-            }	
-        })
-    }
-});
-
-function AddKeyPress(e) { 
-    e = e || window.event;
-    if (e.keyCode == 13) {
-        $('#edit_inv'+id).click();
-        return false;
-    }
-    return true;
-}
 
 
 </script>

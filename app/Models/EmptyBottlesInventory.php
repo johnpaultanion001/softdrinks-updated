@@ -29,5 +29,38 @@ class EmptyBottlesInventory extends Model
         return $this->hasMany(RecieveReturn::class, 'product_id' , 'product_id')->where('isComplete', true)->latest();
     }
 
+    public function deposits()
+    {
+        return $this->hasMany(Deposit::class, 'product_id' , 'product_id')->where('isComplete', true)->latest();
+    }
+
+    public function empties_qty()
+    {
+        $sales = $this->hasMany(SalesReturn::class, 'product_id' , 'product_id')->where('type_of_return', 'EMPTY')->where('isComplete', true)->latest()->where('status_id', 1)->sum('return_qty');
+        $receive = $this->hasMany(RecieveReturn::class, 'product_id' , 'product_id')->where('isComplete', true)->latest()->where('status_id', 1)->sum('return_qty');
+        $deposit = $this->hasMany(Deposit::class, 'product_id' , 'product_id')->where('isComplete', true)->latest()->where('status_id', 1)->sum('qty');
+        $total = $sales - $receive - $deposit;
+
+        return $total ?? '0';
+    }
+
+    public function shells_qty()
+    {
+        $sales = $this->hasMany(SalesReturn::class, 'product_id' , 'product_id')->where('type_of_return', 'EMPTY')->where('isComplete', true)->latest()->where('status_id', 2)->sum('return_qty');
+        $receive = $this->hasMany(RecieveReturn::class, 'product_id' , 'product_id')->where('isComplete', true)->latest()->where('status_id', 2)->sum('return_qty');
+        $deposit = $this->hasMany(Deposit::class, 'product_id' , 'product_id')->where('isComplete', true)->latest()->where('status_id', 2)->sum('qty');
+        $total = $sales - $receive - $deposit;
+
+        return $total ?? '0';
+    }
     
+    public function bottles_qty()
+    {
+        $sales = $this->hasMany(SalesReturn::class, 'product_id' , 'product_id')->where('type_of_return', 'EMPTY')->where('isComplete', true)->latest()->where('status_id', 3)->sum('return_qty');
+        $receive = $this->hasMany(RecieveReturn::class, 'product_id' , 'product_id')->where('isComplete', true)->latest()->where('status_id', 3)->sum('return_qty');
+        $deposit = $this->hasMany(Deposit::class, 'product_id' , 'product_id')->where('isComplete', true)->latest()->where('status_id', 3)->sum('qty');
+        $total = $sales - $receive - $deposit;
+
+        return $total ?? '0';
+    }
 }

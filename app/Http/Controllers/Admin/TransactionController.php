@@ -11,6 +11,9 @@ use App\Models\SalesInventory;
 use App\Models\AssignDeliver;
 use App\Models\LocationProduct;
 use App\Models\ReceivingProduct;
+use App\Models\Deposit;
+use App\Models\EmptyBottlesInventory;
+use App\Models\Pallet;
 use Carbon\Carbon;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,8 +34,10 @@ class TransactionController extends Controller
         $products      = SalesInventory::orderBy('id', 'asc')->where('isComplete',true)->get();
         $salesinvoices = SalesInvoice::latest()->get();
         $delivers      = AssignDeliver::orderBy('id', 'asc')->get();
+        $deposits      = Deposit::latest()->get();
+
         $title_filter_daily  = date('F d, Y');
-        return view('admin.transactions.loadtransactions', compact('sales','returns', 'products','salesinvoices', 'title_filter', 'delivers','title_filter_daily'));
+        return view('admin.transactions.loadtransactions', compact('sales','returns', 'products','salesinvoices', 'title_filter', 'delivers','title_filter_daily','deposits'));
     }
     public function filter(Request $request){
         date_default_timezone_set('Asia/Manila');
@@ -45,26 +50,31 @@ class TransactionController extends Controller
             $title_filter  = 'From: ' . date('F d, Y') . ' To: ' . date('F d, Y');
             $sales         = Sales::latest()->whereDate('created_at', Carbon::today())->get();
             $returns       = SalesReturn::latest()->whereDate('created_at', Carbon::today())->where('isComplete', true)->get();
+            $deposits      = Deposit::latest()->whereDate('created_at', Carbon::today())->get();
         }
         if($filter == 'weekly'){
             $title_filter  = 'From: ' . Carbon::now()->startOfWeek()->format('F d, Y') . ' To: ' . Carbon::now()->endOfWeek()->format('F d, Y');
             $sales         = Sales::latest()->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
             $returns       = SalesReturn::latest()->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->where('isComplete', true)->get();
+            $deposits      = Deposit::latest()->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
         }
         if($filter == 'monthly'){
             $title_filter  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');
             $sales         = Sales::latest()->whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))->get();
             $returns       = SalesReturn::latest()->whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))->where('isComplete', true)->get();
+            $deposits      = Deposit::latest()->whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))->get();
         }
         if($filter == 'yearly'){
             $title_filter  = 'From: ' .'Jan 1'. date(', Y') . ' To: ' .'Dec 31'. date(', Y');
             $sales         = Sales::latest()->whereYear('created_at', '=', date('Y'))->get();
             $returns       = SalesReturn::latest()->whereYear('created_at', '=', date('Y'))->where('isComplete', true)->get();
+            $deposits      = Deposit::latest()->whereYear('created_at', '=', date('Y'))->get();
         }
         if($filter == 'all'){
             $title_filter  = 'ALL TRANSACTIONS RECORDS';
             $sales = Sales::latest()->get();
             $returns = SalesReturn::latest()->where('isComplete', true)->get();
+            $deposits      = Deposit::latest()->get();
         }
         if($filter == 'fbd'){
             $from = $request->get('from');
@@ -73,12 +83,14 @@ class TransactionController extends Controller
             $title_filter  =  'From: '.date('F d, Y', strtotime($from)). ' To: ' .date('F d, Y', strtotime($to));
             $sales         = Sales::latest()->whereBetween('created_at', [$from, $to])->get();
             $returns       = SalesReturn::latest()->whereBetween('created_at', [$from, $to])->where('isComplete', true)->get();
+            $deposits      = Deposit::latest()->whereBetween('created_at', [$from, $to])->get();
         }
         if($filter == 'dd_products'){
             $title_filter  = 'PRODUCT';
             $product_id = $request->get('value');
             $sales = Sales::latest()->where('product_id', $product_id)->get();
             $returns = SalesReturn::latest()->where('product_id', $product_id)->where('isComplete', true)->get();
+            $deposits      = Deposit::latest()->where('product_id', $product_id)->get();
         }
         if($filter == 'dd_orders#'){
             $order_id = $request->get('value');
@@ -86,10 +98,11 @@ class TransactionController extends Controller
             
             $sales = Sales::latest()->where('salesinvoice_id', $order_id)->get();
             $returns = SalesReturn::latest()->where('salesinvoice_id', $order_id)->where('isComplete', true)->get();
+            $deposits      = Deposit::latest()->where('salesinvoice_id', $order_id)->get();
         }
         $title_filter_daily  = date('F d, Y');
 
-        return view('admin.transactions.loadtransactions', compact('sales','returns', 'products','salesinvoices', 'title_filter', 'delivers','title_filter_daily'));
+        return view('admin.transactions.loadtransactions', compact('sales','returns', 'products','salesinvoices', 'title_filter', 'delivers','title_filter_daily','deposits'));
     }
 
     public function destroy_sales(Sales $sales){
@@ -144,23 +157,41 @@ class TransactionController extends Controller
 
     public function ending_inventory_report(Request $request){
         $products_list    = SalesInventory::where('isComplete', true)->get();
+        $pallets1          = Pallet::latest()->get();
 
         foreach($products_list as $product){
-          
+            $empty_record = EmptyBottlesInventory::where('product_id', $product->id)->first();
+            if($empty_record == null){
+                $empties = '0';
+                $shells = '0';
+                $bottles = '0';
+            }else{
+                $empties = $empty_record->empties_qty();
+                $shells = $empty_record->shells_qty();
+                $bottles = $empty_record->bottles_qty();
+            }
             $products[] = array(
                 'product_id'           => $product->id,
                 'product'              => $product->product_code .'/'.$product->description,
                 'category'             => $product->category->name,
                 'full_goods'           => $product->location_products->sum('stock'),
-                'full_emptys'          => $product->emptyBottles(),
-                'shell'                => $product->shell ?? '0',
-                'bottles'              => $product->bottles ?? '0',
+                'full_emptys'          => $empties,
+                'shell'                => $shells,
+                'bottles'              => $bottles,
                 'big_palettes'         => $product->big_palettes ?? '0',
                 'small_palettes'       => $product->small_palettes ?? '0',
             );
         }
 
-        return response()->json(['data' => $products ]);
+        foreach($pallets1 as $pallet){
+            $pallets[] = array(
+                'title' => $pallet->title,
+                'stock'   => $pallet->stock,
+            );
+        }
+        
+
+        return response()->json(['data' => $products , 'pallets' => $pallets]);
       
     }
 

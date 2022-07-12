@@ -8,6 +8,7 @@ use App\Models\Sales;
 use App\Models\Order;
 use App\Models\OrderSales;
 use App\Models\SalesReturn;
+use App\Models\Deposit;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\SalesInventory;
@@ -52,9 +53,10 @@ class SalesInvoiceController extends Controller
         $categories = Category::where('isRemove', '0')->orderBy('id', 'asc')->get();
         $suppliers = Supplier::where('isRemove', '0')->orderBy('id', 'asc')->get();
         $sizes = Size::where('isRemove', '0')->orderBy('id', 'asc')->get();
+        $product_deposits = EmptyBottlesInventory::orderby('id','asc')->get();
 
 
-        return view('admin.salesinvoice.salesinvoice', compact('customers' ,'deliveries', 'orders' , 'pricetypes' , 'salesinvoice_id' , 'returned' , 'product_codes' ,'date','status','categories','suppliers','sizes'));
+        return view('admin.salesinvoice.salesinvoice', compact('customers' ,'deliveries', 'orders' , 'pricetypes' , 'salesinvoice_id' , 'returned' , 'product_codes' ,'date','status','categories','suppliers','sizes','product_deposits'));
     }
 
     public function alltotal(){
@@ -69,12 +71,15 @@ class SalesInvoiceController extends Controller
         $total_pallets = SalesPallet::where('salesinvoice_id', $salesinvoice_id)
                                             ->where('type', 'BUY')
                                             ->latest()->get();
+
         $total_return_pallets = SalesPallet::where('salesinvoice_id', $salesinvoice_id)
                                             ->where('type', 'RETURN')
                                             ->latest()->get();
 
-        $subtotal = $orders->sum('total_amount_receipt') + $total_pallets->sum('amount');
-        $total_cost = $orders->sum('total') + $total_pallets->sum('amount');
+        $total_deposits = Deposit::where('salesinvoice_id', $salesinvoice_id)->latest()->get();
+
+        $subtotal = $orders->sum('total_amount_receipt') + $total_pallets->sum('amount') + $total_deposits->sum('amount');
+        $total_cost = $orders->sum('total') + $total_pallets->sum('amount') + $total_deposits->sum('amount');
         $total_return = $returned->sum('amount') + $total_return_pallets->sum('amount');
 
         $total_amount = $total_cost - $total_return;
@@ -97,6 +102,15 @@ class SalesInvoiceController extends Controller
 
         $returned = SalesReturn::where('salesinvoice_id', $salesinvoice_id)->latest()->get();
         return view('admin.salesinvoice.return', compact('returned'));
+    }
+
+    public function deposits()
+    {
+        $ordernumber = OrderNumber::orderby('id', 'desc')->first();
+        $salesinvoice_id = $ordernumber->salesinvoice_id;
+
+        $deposits = Deposit::where('salesinvoice_id', $salesinvoice_id)->latest()->get();
+        return view('admin.salesinvoice.deposits_table', compact('deposits'));
     }
 
     public function allreturn()
@@ -135,6 +149,8 @@ class SalesInvoiceController extends Controller
 
         $returns = SalesReturn::where('salesinvoice_id',$salesinvoice_id)->latest()->get();
 
+        $total_deposit = Deposit::where('salesinvoice_id',$salesinvoice_id)->sum('amount');
+
         $pallets = SalesPallet::where('salesinvoice_id', $salesinvoice_id)
                                             ->where('type', 'BUY')
                                             ->latest()->get();
@@ -144,7 +160,7 @@ class SalesInvoiceController extends Controller
                                             ->latest()->get();
 
 
-        return view('admin.salesinvoice.receiptmodal', compact('receipts', 'salesinvoice_id','returns','pallets', 'return_pallets'));
+        return view('admin.salesinvoice.receiptmodal', compact('receipts', 'salesinvoice_id','returns','pallets', 'return_pallets','total_deposit'));
     }
     public function compute(Request $request)
     {
@@ -306,18 +322,17 @@ class SalesInvoiceController extends Controller
                                         
         }
         //EMPTY
-        $product_ids = EmptyBottlesInventory::select(['product_id'])->get()->toArray();
+        
         $returnBottle = SalesReturn::where('salesinvoice_id', $salesinvoice_id)->where('type_of_return', 'EMPTY')->get();
         foreach($returnBottle as $return){
-            if (in_array(array('product_id' => $return->product_id), $product_ids)){
-                EmptyBottlesInventory::where('product_id', $return->product_id)
-                                ->increment('qty', $return->return_qty);
-            }else{
-                EmptyBottlesInventory::create([
-                    'product_id' => $return->product_id,
-                    'qty'        => $return->return_qty
-                ]);
-            }
+                EmptyBottlesInventory::updateOrCreate(
+                    [
+                        'product_id' => $return->product_id,
+                    ],
+                    [
+                        'product_id' => $return->product_id,
+                    ],
+                );
         }
         //FULL
         $returnFullBottle = SalesReturn::where('salesinvoice_id', $salesinvoice_id)->where('type_of_return', 'FULL')->get();
@@ -341,6 +356,11 @@ class SalesInvoiceController extends Controller
                         ->update([
                             'isComplete'    => true,
                             'user_id'       => auth()->user()->id,
+                        ]);
+        // DEPOSITS
+        Deposit::where('salesinvoice_id', $salesinvoice_id)
+                        ->update([
+                            'isComplete'    => true,
                         ]);
         // PALLETS
         $pallets = SalesPallet::where('salesinvoice_id', $salesinvoice_id)->latest()->get();
@@ -416,8 +436,8 @@ class SalesInvoiceController extends Controller
     
     public function edit(SalesInvoice $salesInvoice)
     {
-        $subtotal     = $salesInvoice->sales->sum('total_amount_receipt') + $salesInvoice->pallets->sum('amount');
-        $total_cost   = $salesInvoice->sales->sum('total') + $salesInvoice->pallets->sum('amount');
+        $subtotal     = $salesInvoice->sales->sum('total_amount_receipt') + $salesInvoice->pallets->sum('amount') + $salesInvoice->deposits->sum('amount');
+        $total_cost   = $salesInvoice->sales->sum('total') + $salesInvoice->pallets->sum('amount') + $salesInvoice->deposits->sum('amount');
         $total_return = $salesInvoice->returns->sum('amount') + $salesInvoice->pallets_returns->sum('amount');
 
         $payment = $total_cost - $total_return;
@@ -523,6 +543,9 @@ class SalesInvoiceController extends Controller
             Pallet::where('id', $pallet->pallet_id)->decrement('stock', $pallet->qty);
             $pallet->delete();
         }
+        foreach($salesInvoice->deposits()->get() as $deposit){
+            $deposit->delete();
+        }
 
         $salesInvoice->delete();
         return response()->json(['success' => 'Transaction Successfully Void.']);
@@ -611,7 +634,10 @@ class SalesInvoiceController extends Controller
         $pallets = SalesPallet::where('salesinvoice_id', $pallet->salesinvoice_id)->latest()->get();
         return view('admin.salesinvoice.allrecords.pallets',compact('pallets'));
     }
-
+    public function deposits_records(SalesInvoice $deposit){
+        $deposits = Deposit::where('salesinvoice_id', $deposit->salesinvoice_id)->latest()->get();
+        return view('admin.salesinvoice.allrecords.deposits',compact('deposits'));
+    }
 
     public function filter(Request $request){
         date_default_timezone_set('Asia/Manila');

@@ -267,6 +267,80 @@
             </div>
         </div>
         
+        <div class="mb-2">
+            <div class="col-md-4">
+                <div class="col-sm-12">
+                <h4 class="text-dark text-uppercase">Total Deposit Amount:</h4>
+                    <div class="input-group ">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text text-primary">₱</div>
+                    </div>
+                        <input type="text" class="form-control" value="{{ number_format($deposits->sum->amount , 2, '.', ',') }}" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mb-2">
+            <h5 class="mb-0 text-uppercase bg-primary text-white mb-2" style="border-radius: 5px; padding: 5px;  width: 50%;">Deposit Records</h5>
+            <div class="table-responsive">
+                <table class="table align-items-center table-bordered datatable-deposits display" cellspacing="0" width="100%">
+                    <thead class="thead-white">
+                        <tr>
+                            <th scope="col">ORDER #</th>
+                            <th scope="col">Customer</th>
+                            <th scope="col">Assign Deliver</th>
+                            <th scope="col">Product Code/Desc</th>
+                            <th scope="col">Qty</th>
+                            <th scope="col">Unit Price</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Status</th> 
+                            <th scope="col">Remarks</th> 
+                            <th scope="col">Created By</th>
+                            <th scope="col">Date/Time</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-uppercase font-weight-bold">
+                        @foreach($deposits as $deposit)
+                            <tr data-entry-id="{{ $deposit->id ?? '' }}">
+                                <td>
+                                    {{  $deposit->salesinvoice_id ?? '' }}
+                                </td>
+                                <td>
+                                    {{$deposit->salesinvoice->customer->customer_name ?? ''}}
+                                </td>
+                                <td>
+                                    {{$deposit->salesinvoice->deliver->title ?? '' }}
+                                </td>
+                                <td>
+                                 {{  $deposit->product->product_code ?? '' }}/{{  $deposit->product->description ?? '' }} 
+                                </td>
+                                <td>
+                                    {{  $deposit->qty ?? '' }}
+                                </td>
+                                <td>
+                                    {{  number_format($deposit->unit_price , 2, '.', ',') }}
+                                </td>
+                                <td>
+                                    {{  number_format($deposit->amount , 2, '.', ',') }}
+                                </td>
+                                <td>
+                                    {{ $deposit->status->title ?? '' }}
+                                </td>
+                                <td>
+                                    {{ $deposit->remarks ?? '' }}
+                                </td>
+                                <td>
+                                    {{ $deposit->salesinvoice->user->name ?? '' }}
+                                </td>
+                                <td>
+                                    {{ $deposit->created_at->format('M j , Y h:i A') }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
 </div>
 
@@ -472,15 +546,12 @@
                     <table class="table align-items-center table-bordered display nowrap" id="table_ending_inventory_report" width="100%">
                       <thead class="thead-white text-uppercase font-weight-bold">
                         <tr>
-                          <th>Action</th>
                           <th>Product Code/Desc</th>
                           <th>Category</th>
                           <th>Full Goods</th>
                           <th>Full Emptys</th>
                           <th>Shell</th>
                           <th>Bottles</th>
-                          <th>Big Palettes</th>
-                          <th>Small Palettes</th>
                         </tr>
                       </thead>
                       <tbody class="text-uppercase font-weight-bold" id="list_ending_inventory_report">
@@ -521,6 +592,7 @@ $(function () {
 
     var table_sales = $('.datatable-sales:not(.ajaxTable)').DataTable({ buttons: dtButtons })
     var table_returns = $('.datatable-returns:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+    var table_deposits = $('.datatable-deposits:not(.ajaxTable)').DataTable({ buttons: dtButtons })
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
         $($.fn.dataTable.tables(true)).DataTable()
@@ -534,6 +606,7 @@ $(function () {
     $('select[name="filter_deliver"]').on('change', function () {
         table_sales.columns(2).search( this.value ).draw();
         table_returns.columns(2).search( this.value ).draw();
+        table_deposits.columns(2).search( this.value ).draw();
     });
 });
 

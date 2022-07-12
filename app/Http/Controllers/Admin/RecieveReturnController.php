@@ -47,6 +47,25 @@ class RecieveReturnController extends Controller
         if ($validated->fails()) {
             return response()->json(['errors' => $validated->errors()]);
         }
+        if($request->input('type_of_return') == 'EMPTY'){
+            $product = EmptyBottlesInventory::where('product_id', $request->input('product_id'))->first();
+            if($request->input('status_id') == '1'){
+                if($request->input('return_qty') > $product->empties_qty()){
+                    return response()->json(['max_stock' => 'Out of stock, Available stock of this product is '.$product->empties_qty()]);
+                }
+            }
+            if($request->input('status_id') == '2'){
+                if($request->input('return_qty') > $product->shells_qty()){
+                    return response()->json(['max_stock' => 'Out of stock, Available stock of this product is '.$product->shells_qty()]);
+                }
+            }
+            if($request->input('status_id') == '3'){
+                if($request->input('return_qty') > $product->bottles_qty()){
+                    return response()->json(['max_stock' => 'Out of stock, Available stock of this product is '.$product->bottles_qty()]);
+                }
+            }
+        }
+        
 
         $amount = $request->input('return_qty') * $request->input('unit_price');
 
@@ -91,11 +110,10 @@ class RecieveReturnController extends Controller
         if($recieve_return->type_of_return == 'BAD_ORDER'){
             $product = $recieve_return->bad_order->product->product_code . '/' .  $recieve_return->bad_order->product->description .'('.$recieve_return->bad_order->stock.')';
         }else{
-            if($recieve_return->product_id == 0){
-                $product = 'NO BRAND'. '/' .'('.$recieve_return->empty_inventory->qty.')';
-            }else{
-                $product = $recieve_return->empty_inventory->product->product_code . '/' .  $recieve_return->empty_inventory->product->description .'('.$recieve_return->empty_inventory->qty.')';
-            }
+            $product = $recieve_return->empty_inventory->product->product_code . ' / ' 
+                .'Empties('.$recieve_return->empty_inventory->empties_qty().')'
+                .' Shells('.$recieve_return->empty_inventory->shells_qty().')'
+                .' Bottles('.$recieve_return->empty_inventory->bottles_qty().')';
         }
         if (request()->ajax()) {
             return response()->json(
@@ -143,9 +161,6 @@ class RecieveReturnController extends Controller
         if($rg_id == ""){
             RecieveReturn::find($recieve_return->id)->delete();
         }else{
-            if($recieve_return->type_of_return == 'EMPTY'){
-                EmptyBottlesInventory::where('product_id', $recieve_return->product_id)->increment('qty', $recieve_return->return_qty);
-            }
             if($recieve_return->type_of_return == 'BAD_ORDER'){
                 LocationProduct::where('product_id', $recieve_return->product_id)
                                 ->where('location_id', 3)

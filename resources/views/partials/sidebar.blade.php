@@ -119,14 +119,7 @@
                       </a>
                     </li>
                     @endcan
-                    @can('status_return_access')
-                      <li class="nav-item">
-                        <a class="nav-link {{ request()->is('admin/status-return') || request()->is('admin/status-return/*') ? 'active' : '' }}" href="{{ route("admin.status-return.index") }}">
-                        <i class="text-pink fas fa-tags"></i>
-                          <span class="nav-link-text text-uppercase">Status of Return</span>
-                        </a>
-                      </li>
-                    @endcan
+                    
                     @can('assign_deliver_access')
                       <li class="nav-item">
                         <a class="nav-link {{ request()->is('admin/assign_deliver') || request()->is('admin/assign_deliver/*') ? 'active' : '' }}" href="{{ route("admin.assign_deliver.index") }}">

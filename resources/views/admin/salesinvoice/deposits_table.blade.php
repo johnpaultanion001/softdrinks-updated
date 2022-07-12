@@ -2,52 +2,52 @@
     <div class="card-header border-0">
         <div class="row align-items-center">
             <div class="col">
-                <h3 class="mb-0 text-uppercase">Pallets</h3>
+                <h3 class="mb-0 text-uppercase">Deposits</h3>
             </div>
             <div class="col text-right">
-              <button type="button" id="create_pallet" class="text-uppercase create_return btn btn-sm btn-primary">Insert</button>
+              <button type="button" id="create_deposit" class="text-uppercase btn btn-sm btn-primary">Insert</button>
             </div>
         </div>
     </div>
     <div class="table-responsive">
        
         <!-- Projects table -->
-        <table class="table align-items-center table-flush datatable-pallets display" cellspacing="0" width="100%">
+        <table class="table align-items-center table-flush datatable-deposits display" cellspacing="0" width="100%">
         <thead class="thead-white">
             <tr>
                     <th scope="col">Actions</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Type</th>
+                    <th scope="col">Product Code/Desc</th>
                     <th scope="col">Qty</th>
                     <th scope="col">Unit Price</th>
                     <th scope="col">Amount</th>
-                    <th scope="col">Date</th>
+                    <th scope="col">Status</th> 
+                    <th scope="col">Remarks</th> 
             </tr>
         </thead>
         <tbody class="text-uppercase font-weight-bold">
-                @foreach($pallets as $pallet)
+                @foreach($deposits as $deposit)
                         <tr>
                             <td>
-                                <button type="button" edit_pallet="{{  $pallet->id ?? '' }}"  class="edit_pallet text-uppercase btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
-                                <button type="button" remove_pallet="{{  $pallet->id ?? '' }}" class="remove_pallet text-uppercase btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                <button type="button" edit_deposit="{{  $deposit->id ?? '' }}"  class="edit_deposit text-uppercase btn btn-info btn-sm"><i class="fas fa-edit"></i></button>
+                                <button type="button" remove_deposit="{{  $deposit->id ?? '' }}" class="remove_deposit text-uppercase btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                             </td>
                             <td>
-                                {{  $pallet->pallet->title ?? '' }}
+                                 {{  $deposit->product->product_code ?? '' }}/{{  $deposit->product->description ?? '' }} 
                             </td>
                             <td>
-                                {{  $pallet->type ?? '' }}
+                                {{  $deposit->qty ?? '' }}
                             </td>
                             <td>
-                                {{  $pallet->qty ?? '' }}
+                                {{  number_format($deposit->unit_price , 2, '.', ',') }}
                             </td>
                             <td>
-                                {{  number_format($pallet->unit_price , 2, '.', ',') }}
+                                {{  number_format($deposit->amount , 2, '.', ',') }}
                             </td>
                             <td>
-                                {{  number_format($pallet->amount , 2, '.', ',') }}
+                                {{ $deposit->status->title ?? '' }}
                             </td>
                             <td>
-                                {{ $pallet->created_at->format('M j , Y h:i A') }}
+                                {{ $deposit->remarks ?? '' }}
                             </td>
                         </tr>
                 @endforeach
@@ -61,7 +61,7 @@
 <script>
 $(function () {
  
-    $('.datatable-pallets').DataTable({
+    $('.datatable-deposits').DataTable({
           bDestroy: true,
           responsive: true,
           scrollY: 500,

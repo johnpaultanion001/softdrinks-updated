@@ -145,6 +145,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('salesInvoice-sales/storeandcheckout','SalesInvoiceController@storeandcheckout')->name('salesInvoice.storeandcheckout');
     Route::get('salesInvoice-sales','SalesInvoiceController@sales')->name('salesInvoice.sales');
     Route::get('salesInvoice-return','SalesInvoiceController@return')->name('salesInvoice.return');
+    Route::get('salesInvoice-deposits','SalesInvoiceController@deposits')->name('salesInvoice.deposits');
     Route::get('salesInvoice-allreturn','SalesInvoiceController@allreturn')->name('salesInvoice.allreturn');
     Route::get('salesInvoice-productlist','SalesInvoiceController@productlist')->name('salesInvoice.productlist');
     Route::get('salesInvoice-receipt','SalesInvoiceController@receipt')->name('salesInvoice.receipt');
@@ -164,6 +165,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('salesInvoice/{sales_records}/sales_records', 'SalesInvoiceController@sales_records')->name('salesInvoice.sales_records');
     route::get('salesInvoice/{return_records}/return_records', 'SalesInvoiceController@return_records')->name('salesInvoice.return_records');
     route::get('salesInvoice/{pallet}/pallets_records', 'SalesInvoiceController@pallets_records')->name('salesInvoice.pallets_records');
+    route::get('salesInvoice/{deposit}/deposits_records', 'SalesInvoiceController@deposits_records')->name('salesInvoice.deposits_records');
     route::get('salesInvoice_filter', 'SalesInvoiceController@filter')->name('salesInvoice.filter');
 
     //Sales Inventory
@@ -225,4 +227,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
      route::get('sales_pallets/spallets_table', 'PalletController@spallets_table')->name('sales_pallets.spallets_table');
      route::delete('sales_pallets/spallet/{pallet}', 'PalletController@destroy_spallet')->name('sales_pallets.destroy_spallet');
     
+     // DEPOSITS
+     route::resource('deposits', 'DepositController');
 });

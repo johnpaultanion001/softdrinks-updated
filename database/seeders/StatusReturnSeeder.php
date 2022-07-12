@@ -17,8 +17,8 @@ class StatusReturnSeeder extends Seeder
         $status = [
             [
                 'id'    => '1',
-                'code' => 'FCS',
-                'title' => 'FULL CASE OF SOFTDRINKS',
+                'code' => 'Empties',
+                'title' => 'Empties',
                 'user_id' => '1',
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
@@ -26,8 +26,8 @@ class StatusReturnSeeder extends Seeder
             ],
             [
                 'id'    => '2',
-                'code' => 'EFCS',
-                'title' => 'EMPTY FULL CASE OF SOFTDRINKS',
+                'code' => 'Shells',
+                'title' => 'Shells',
                 'user_id' => '1',
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),
@@ -35,8 +35,8 @@ class StatusReturnSeeder extends Seeder
             ],
             [
                 'id'    => '3',
-                'code' => 'MBCS',
-                'title' => 'MISSING BOTTLES CASE OF SOFTDRINKS',
+                'code' => 'Bottles',
+                'title' => 'Bottles',
                 'user_id' => '1',
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s"),

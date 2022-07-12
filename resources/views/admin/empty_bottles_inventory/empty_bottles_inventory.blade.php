@@ -35,12 +35,15 @@
                 <th>Remarks</th>
                 <th>Product Code</th>
                 <th>Description</th>
-                <th>QTY</th>
+                <th>QTY EMPTIES</th>
+                <th>QTY SHELLS</th>
+                <th>QTY BOTTLES</th>
                 <th>Updated At</th>
               </tr>
             </thead>
             <tbody class="text-uppercase font-weight-bold">
               @foreach($emptybottles as $bottle)
+                  
                     <tr data-entry-id="{{ $bottle->id ?? '' }}">
                         <td>
                               <div style="max-height: 250px; overflow: auto;">
@@ -60,6 +63,14 @@
                                     {{$return->remarks ?? ''}}
                                   </div> <br>
                                 @endforeach
+                                @foreach($bottle->deposits as $deposit)
+                                  <div class="bg-success text-white" style="border-radius: 5px; padding: 5px;">
+                                    {{$deposit->salesinvoice->customer->customer_name ?? ''}} <br>
+                                    QTY: - {{$deposit->qty ?? ''}} <br>
+                                    Status: {{$deposit->status->title ?? ''}} <br> 
+                                    {{$deposit->remarks ?? ''}}
+                                  </div> <br>
+                                @endforeach
                               </div>
                               
                               
@@ -72,7 +83,13 @@
                           {{  $bottle->product->description ?? '' }}
                         </td>
                         <td>
-                            {{$bottle->qty ?? ''}}
+                            {{$bottle->empties_qty() ?? ''}}
+                        </td>
+                        <td>
+                            {{$bottle->shells_qty() ?? ''}}
+                        </td>
+                        <td>
+                            {{$bottle->bottles_qty() ?? ''}}
                         </td>
                         <td>
                             {{ $bottle->updated_at->format('M j , Y h:i A') }}

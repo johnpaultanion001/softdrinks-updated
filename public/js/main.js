@@ -51,7 +51,7 @@ $(document).ready(function () {
     $select2.trigger('change')
   })
 
-  $('.select2').select2()
+  $('.select2').select2();
 
   $('.treeview').each(function () {
     var shouldExpand = false

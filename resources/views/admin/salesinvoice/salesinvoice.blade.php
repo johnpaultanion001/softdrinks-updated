@@ -117,6 +117,11 @@
                             <div id="pallets_table"></div>
                         </div>
                     </div>
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div id="deposits_table"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-xl-12">
@@ -370,7 +375,7 @@
                                 <label class="control-label text-uppercase" >Status:<span class="text-danger">*</span> </label> 
                                 <select name="status_id" id="status_id" class="form-control select2">
                                     @foreach ($status as $sp)
-                                        <option value="{{$sp->id}}" class="text-uppercase"> {{$sp->code}} - {{$sp->title}}  </option>
+                                        <option value="{{$sp->id}}" class="text-uppercase">{{$sp->title}}  </option>
                                     @endforeach
                                 </select>
                                 <span class="invalid-feedback" role="alert">
@@ -455,63 +460,148 @@
 <!-- PALLETS FORM -->
 <form method="post" id="palletForm" class="form-horizontal">
         @csrf
-        <div class="modal" id="palletModal" data-keyboard="false" data-backdrop="static">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header bg-primary">
-                        <p class="modal-title-pallet font-weight-bold text-uppercase text-white">Modal Heading</p>
-                        <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Title:<span class="text-danger">*</span></label>
-                                    <select name="pallet" id="pallet" class="form-control select2">
-                                        <option value="1">BIG PALLET</option>
-                                        <option value="2">SMALL PALLET</option>
-                                    </select>
-                                </div>
+    <div class="modal" id="palletModal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <p class="modal-title-pallet font-weight-bold text-uppercase text-white">Modal Heading</p>
+                    <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label text-uppercase" >Title:<span class="text-danger">*</span></label>
+                                <select name="pallet" id="pallet" class="form-control select2">
+                                    <option value="1">BIG PALLET</option>
+                                    <option value="2">SMALL PALLET</option>
+                                    <option value="3">RC PALLET</option>
+                                </select>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Type:<span class="text-danger">*</span></label>
-                                    <select name="type" id="type" class="form-control select2">
-                                        <option value="BUY">BUY</option>
-                                        <option value="RETURN">RETURN</option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label text-uppercase" >Type:<span class="text-danger">*</span></label>
+                                <select name="type" id="type" class="form-control select2">
+                                    <option value="BUY">BUY</option>
+                                    <option value="RETURN">RETURN</option>
+                                </select>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >QTY:<span class="text-danger">*</span></label>
-                                    <input type="number" name="pallet_qty" id="pallet_qty" class="form-control" step="any" />
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-pallet_qty"></strong>
-                                    </span>
-                                </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label text-uppercase" >QTY:<span class="text-danger">*</span></label>
+                                <input type="number" name="pallet_qty" id="pallet_qty" class="form-control" step="any" />
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-pallet_qty"></strong>
+                                </span>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Unit Price:<span class="text-danger">*</span></label>
-                                    <input type="number" name="pallet_unit_price" id="pallet_unit_price" class="form-control" step="any" />
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-pallet_unit_price"></strong>
-                                    </span>
-                                </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label text-uppercase" >Unit Price:<span class="text-danger">*</span></label>
+                                <input type="number" name="pallet_unit_price" id="pallet_unit_price" class="form-control" step="any" />
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-pallet_unit_price"></strong>
+                                </span>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer bg-white">
-                        <input type="hidden" name="action_pallet" id="action_pallet" value="SALES" />
-                        <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">CLOSE</button>
-                        <input type="submit" name="pallet_button" id="pallet_button" class="text-uppercase btn btn-default" value="Submit" />
-                    </div>
-            
                 </div>
+                <div class="modal-footer bg-white">
+                    <input type="hidden" name="action_pallet" id="action_pallet" value="SALES" />
+                    <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">CLOSE</button>
+                    <input type="submit" name="pallet_button" id="pallet_button" class="text-uppercase btn btn-default" value="Submit" />
+                </div>
+        
             </div>
         </div>
-    </form>
+    </div>
+</form>
+
+<!-- DEPOSIT FORM -->
+<form method="post" id="depositForm" class="form-horizontal">
+        @csrf
+    <div class="modal" id="depositModal" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <p class="font-weight-bold text-uppercase text-white">Deposit</p>
+                    <button type="button" class="close  text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                            <label class="control-label text-uppercase" >Product Code/Stocks:<span class="text-danger">*</span></label>
+                                <select name="product_deposit" id="product_deposit" class="form-control select2">
+                                    <option value="">Select Product</option>
+                                    @foreach ($product_deposits as $product_code)
+                                        <option value="{{$product_code->product->id}}">
+                                            {{$product_code->product->product_code}} / 
+                                            Empties({{$product_code->empties_qty()}})
+                                            Shells({{$product_code->shells_qty()}})
+                                            Bottles({{$product_code->bottles_qty()}})
+                                            
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-product_deposit"></strong>
+                                </span>
+                                
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label text-uppercase" >Status:<span class="text-danger">*</span> </label> 
+                                <select name="status_deposit" id="status_deposit" class="form-control select2">
+                                    @foreach ($status as $sp)
+                                        <option value="{{$sp->id}}" class="text-uppercase">{{$sp->title}}  </option>
+                                    @endforeach
+                                </select>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-status_deposit"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label text-uppercase" >QTY:<span class="text-danger">*</span> </label>
+                                <input type="number" name="qty_deposit" id="qty_deposit" class="form-control" step="any"/>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-qty_deposit"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label text-uppercase" >Unit Price:<span class="text-danger">*</span> </label>
+                                <input type="number" name="unit_price_deposit" id="unit_price_deposit" step="any" class="form-control"/>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-unit_price_deposit"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label text-uppercase" >Remarks:</label>
+                                <input type="text" name="remarks_deposit" id="remarks_deposit" class="form-control"/>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="modal-footer bg-white">
+                    <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">CLOSE</button>
+                    <input type="submit" id="deposit_button" class="text-uppercase btn btn-default" value="Submit" />
+                </div>
+        
+            </div>
+        </div>
+    </div>
+</form>
 
 <div id="success-order" class="success-order col-4 alert text-white fade hide fixed-bottom" style="margin-left: 65%; z-index: 9999;" role="alert">
     
@@ -532,7 +622,7 @@
 <script>
 
 $(function () {
-    return loadSales() , loadReturn() ,pallets_table() , loadAllTotal();
+    return loadSales() , loadReturn() ,pallets_table(), deposits_table() , loadAllTotal();
     
 });
 
@@ -582,6 +672,20 @@ function pallets_table(){
         },
         success: function(response){
             $("#pallets_table").html(response);
+        }	
+    })
+}
+
+function deposits_table(){
+    $.ajax({
+        url: "salesInvoice-deposits", 
+        type: "get",
+        dataType: "HTMl",
+        beforeSend: function() {
+
+        },
+        success: function(response){
+            $("#deposits_table").html(response);
         }	
     })
 }
@@ -1561,6 +1665,142 @@ $(document).on('click', '.remove_pallet', function(){
                                     $("#success-order").slideUp(500);
                                 });
                                 pallets_table();
+                                loadAllTotal();
+                          }
+                      }
+                  })
+              }
+          },
+          cancel:  {
+              text: 'cancel',
+              btnClass: 'btn-red',
+              keys: ['enter', 'shift'],
+          }
+      }
+  });
+});
+
+
+//DEPOSIT
+
+// Pallets
+$(document).on('click', '#create_deposit', function(){
+    $('#depositModal').modal('show');
+    $('#depositForm')[0].reset();
+    $('.form-control').removeClass('is-invalid');
+});
+
+$('#depositForm').on('submit', function(event){
+    event.preventDefault();
+    $('.form-control').removeClass('is-invalid')
+    var action_url = "{{ route('admin.deposits.store') }}";
+    var type = "POST";
+
+    $.ajax({
+        url: action_url,
+        method:type,
+        data:$(this).serialize(),
+        dataType:"json",
+        beforeSend:function(){
+            $('#deposit_button').attr('disabled', true);
+        },
+        success:function(data){
+            $('#deposit_button').attr('disabled', false);
+            if(data.errors){
+                $.each(data.errors, function(key,value){
+                    if(key == $('#'+key).attr('id')){
+                        $('#'+key).addClass('is-invalid')
+                        $('#error-'+key).text(value)
+                    }
+                })
+            }
+            if(data.max_stock){
+                $('#qty_deposit').addClass('is-invalid');
+                $('#error-qty_deposit').text(data.max_stock);
+            }
+            if(data.success){
+                $('#depositModal').modal('hide');
+
+                $('.form-control').removeClass('is-invalid');
+
+                $('#success-order').addClass('bg-primary');
+                $('#success-order').html('<strong>' + data.success + '</strong>' );
+                $("#success-order").fadeTo(10000, 500).slideUp(500, function(){
+                    $("#success-order").slideUp(500);
+                });
+                deposits_table();
+                loadAllTotal();
+            }
+        }
+    });
+});
+
+$(document).on('click', '.edit_deposit', function(){
+    $('#depositModal').modal('show');
+    $('#depositForm')[0].reset();
+    $('.form-control').removeClass('is-invalid')
+    var id = $(this).attr('edit_deposit');
+
+    $.ajax({
+        url :"/admin/deposits/"+id+"/edit",
+        dataType:"json",
+        beforeSend:function(){
+            $('#deposit_button').attr('disabled', true);
+        },
+        success:function(data){
+            $('#deposit_button').attr('disabled', false);
+            $.each(data.data, function(key,value){
+                    if(key == 'product_id'){
+                        $('#product_deposit').val(value);
+                        $('#product_deposit').trigger('change'); 
+                    }
+                    if(key == 'status_id'){
+                        $('#status_deposit').val(value);
+                        $('#status_deposit').trigger('change'); 
+                    }
+                    if(key == 'qty'){
+                        $('#qty_deposit').val(value);
+                    }
+                    if(key == 'unit_price'){
+                        $('#unit_price_deposit').val(value);
+                    }
+                    if(key == 'remarks'){
+                        $('#remarks_deposit').val(value);
+                    }
+            })
+        }
+    })
+});
+
+$(document).on('click', '.remove_deposit', function(){
+    var id = $(this).attr('remove_deposit');
+
+    $.confirm({
+      title: 'Confirmation',
+      content: 'You really want to remove this data?',
+      type: 'red',
+      buttons: {
+          confirm: {
+              text: 'confirm',
+              btnClass: 'btn-blue',
+              keys: ['enter', 'shift'],
+              action: function(){
+                  return $.ajax({
+                      url:"/admin/deposits/"+ id,
+                      method:'DELETE',
+                      data: {_token: '{!! csrf_token() !!}'},
+                      dataType:"json",
+                      beforeSend:function(){
+                        
+                      },
+                      success:function(data){
+                          if(data.success){
+                                $('#success-order').addClass('bg-primary');
+                                $('#success-order').html('<strong>' + data.success + '</strong>' );
+                                $("#success-order").fadeTo(10000, 500).slideUp(500, function(){
+                                    $("#success-order").slideUp(500);
+                                });
+                                deposits_table();
                                 loadAllTotal();
                           }
                       }

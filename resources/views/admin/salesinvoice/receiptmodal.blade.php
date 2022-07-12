@@ -101,11 +101,14 @@
                                         <td></td>
                                         <td></td>
                                         <td>
-                                            Total Return Amt:
+                                            Total Return Amt: 
+                                                <br>
+                                            Total Deposit Amt:
                                         </td>
                                         <td> 
                                             ₱ ( {{ number_format($total_return ?? '' , 2, '.', ',') }} )
-                                           
+                                           <br>
+                                            ₱ {{ number_format($total_deposit ?? '' , 2, '.', ',') }}
                                         </td>
                                     </tr>
                                     <tr>

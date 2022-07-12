@@ -49,7 +49,7 @@
                 @foreach($allrecords as $allrecord)
                     <?php 
 
-                        $total_cost   = $allrecord->sales->sum('total') + $allrecord->pallets->sum('amount');
+                        $total_cost   = $allrecord->sales->sum('total') + $allrecord->pallets->sum('amount') +  $allrecord->deposits->sum('amount');
                         $total_return = $allrecord->returns->sum('amount') + $allrecord->pallets_returns->sum('amount');
 
                         $payment = $total_cost - $total_return;

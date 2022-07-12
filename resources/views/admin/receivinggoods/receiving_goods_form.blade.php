@@ -406,15 +406,20 @@
                                     <br>
                                     <br>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <div class="form-group">
-                                    <label class="control-label text-uppercase" >PRODUCT CODE/DESC (STOCK):<span class="text-danger">*</span> </label>
+                                    <label class="control-label text-uppercase" >PRODUCT CODE/STOCKS:<span class="text-danger">*</span> </label>
                                     <select name="product_id" id="product_id" class="form-control select2">
                                         <option value="">SELECT PRODUCT</option>
                                         @foreach ($product_code as $return)
-                                            <option value="{{$return->product_id}}" class="text-uppercase">
-                                               {{$return->product->product_code ?? ''}}/{{$return->product->description ?? ''}} ({{$return->qty ?? ''}})
+                                            <option value="{{$return->product->id}}">
+                                                {{$return->product->product_code}} / 
+                                                Empties({{$return->empties_qty()}})
+                                                Shells({{$return->shells_qty()}})
+                                                Bottles({{$return->bottles_qty()}})
+                                                
                                             </option>
+
                                         @endforeach
                                     </select>
                                     <span class="invalid-feedback" role="alert">
@@ -427,13 +432,11 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col"><label class="control-label text-uppercase" >Status:<span class="text-danger">*</span> </label></div>
-                                        <div class="col text-right">
-                                            <a class="btn btn-sm btn-white text-uppercase" href="/admin/status-return">New Status?</a>
-                                        </div>
+                                       
                                     </div>
                                     <select name="status_id" id="status_id" class="form-control select2">
                                         @foreach ($status as $sp)
-                                            <option value="{{$sp->id}}" class="text-uppercase"> {{$sp->code}} - {{$sp->title}}  </option>
+                                            <option value="{{$sp->id}}" class="text-uppercase">{{$sp->title}}  </option>
                                         @endforeach
                                     </select>
                                     <span class="invalid-feedback" role="alert">
@@ -442,16 +445,6 @@
                                 </div>
                             </div>
 
-                            
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label class="control-label text-uppercase" >Unit Price:<span class="text-danger">*</span></label>
-                                    <input type="number" name="unit_price" id="unit_price" class="form-control" step="any" />
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong id="error-unit_price"></strong>
-                                    </span>
-                                </div>
-                            </div>
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="control-label text-uppercase" >Return QTY:<span class="text-danger">*</span> </label>
@@ -461,8 +454,18 @@
                                     </span>
                                 </div>
                             </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label class="control-label text-uppercase" >Unit Price:<span class="text-danger">*</span></label>
+                                    <input type="number" name="unit_price" id="unit_price" class="form-control" step="any" />
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-unit_price"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            
                         
-                            <div class="col-sm-12">
+                            <div class="col-sm-6">
                                 <div class="form-group">
                                     <label class="control-label text-uppercase" >Remarks: </label>
                                     <textarea name="remarks" id="remarks_return" class="form-control"></textarea>
@@ -546,6 +549,7 @@
                                     <select name="pallet" id="pallet" class="form-control select2">
                                         <option value="1">BIG PALLET</option>
                                         <option value="2">SMALL PALLET</option>
+                                        <option value="3">RC PALLET</option>
                                     </select>
                                 </div>
                             </div>
@@ -913,6 +917,10 @@ $('#returnForm').on('submit', function(event){
                         $('#error-'+key).text(value)
                     }
                 })
+            }
+            if(data.max_stock){
+                $('#return_qty').addClass('is-invalid');
+                $('#error-return_qty').text(data.max_stock);
             }
             if(data.success){
                 $('#success-alert').addClass('bg-primary');
@@ -1442,7 +1450,7 @@ function empty_dd(){
             var empties = '';
             empties += '<option value="">SELECT PRODUCT</option>';
             $.each(data.empties, function(key,value){
-                empties += '<option value="'+value.id+'">'+value.product_code+'/'+value.description+' ('+value.stock+')</option>';
+                empties += '<option value="'+value.id+'">'+value.product_code+' / Empties('+value.empties+') Shells('+value.shells+') Bottles('+value.bottles+')</option>';
             });
             $('#product_id').empty().append(empties);
         }	

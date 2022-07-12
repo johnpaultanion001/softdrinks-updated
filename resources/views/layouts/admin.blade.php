@@ -49,6 +49,7 @@
     border-radius: 4px;
     height: auto;
     }
+    
     .modal-backdrop
     {
         opacity:0.5 !important;

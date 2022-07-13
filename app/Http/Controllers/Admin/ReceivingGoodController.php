@@ -55,7 +55,7 @@ class ReceivingGoodController extends Controller
  
     public function load()
     {
-        $orders = ReceivingGood::where('isVoid', false)->latest()->get();
+        $orders = ReceivingGood::where('isVoid', false)->orderBy('id','desc')->get();
         $title_filter  = 'All Receiving Goods';
 
         return view('admin.receivinggoods.loadreceivinggoods', compact('orders','title_filter'));

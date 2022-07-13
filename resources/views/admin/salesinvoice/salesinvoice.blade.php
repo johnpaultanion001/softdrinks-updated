@@ -152,7 +152,11 @@
                                     Fernando L. Arada - Prop. <br>
                                     Tel. No. 986-2433 Cel No. 0923-6738-296 </h5>
                                     <br>
-                                    <div class="col text-right"><h6 class="card-title text-uppercase text-muted mb-0">Date:  {{ $date ?? '' }} </h6></div>
+                                    <div class="col-md-12">
+                                        <div class="col text-left"><h6 class="card-title text-uppercase text-danger mb-0" id="doc_number_receipt"> </h6></div>
+                                        <div class="col text-right"><h6 class="card-title text-uppercase text-muted mb-0">Date:  {{ $date ?? '' }} </h6></div>
+                                    </div>
+                                   
 
                                     <div class="form-group row">
                                         <div class="col-sm-12">
@@ -1075,7 +1079,7 @@ $(document).on('click', '#print_button', function(){
                 $('#receiptModal').modal('hide');
                 $('.form-control').removeClass('is-invalid');
                 
-                loadSales() , loadReturn(), pallets_table() , loadAllTotal() , receivables();;
+                loadSales() , loadReturn(), pallets_table() ,deposits_table(), loadAllTotal() , receivables();;
             }
            
         }
@@ -1466,6 +1470,7 @@ function customer(){
                 if(key == 'area'){
                     $('#area_receipt').text(value)
                 }
+                $('#doc_number_receipt').text($("#doc_no").val());
             }) 
         }
     });

@@ -6,7 +6,11 @@
                     Fernando L. Arada - Prop. <br>
                     Tel. No. 986-2433 Cel No. 0923-6738-296 </h5>
                     <br>
-                    <div class="col text-right"><h6 class="card-title text-uppercase text-muted mb-0">Date:  {{ $salesInvoices->created_at->format('F d,Y h:i A') ?? '' }} </h6></div>
+                    <div class="col-md-12">
+                        <div class="col text-left"><h6 class="card-title text-uppercase text-danger mb-0">{{ $salesInvoices->doc_no ?? '' }} </h6></div>
+                        <div class="col text-right"><h6 class="card-title text-uppercase text-muted mb-0">Date: {{ $salesInvoices->created_at->format('F d,Y h:i A') ?? '' }} </h6></div>
+                    </div>
+                    
 
                     <div class="form-group row">
                         <div class="col-sm-12">

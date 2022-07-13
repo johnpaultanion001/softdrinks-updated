@@ -415,7 +415,7 @@ class SalesInvoiceController extends Controller
     }
     public function records(){
         $title_filter  = 'All SALES INVOICE';
-        $allrecords = SalesInvoice::where('isVoid' , 0)->latest()->get();
+        $allrecords = SalesInvoice::where('isVoid' , 0)->orderBy('id','desc')->get();
         return view('admin.salesinvoice.allrecords.allrecords', compact('allrecords','title_filter'));
     }
 

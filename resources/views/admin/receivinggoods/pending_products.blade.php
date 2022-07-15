@@ -25,8 +25,9 @@
 
                     <th scope="col">QTY</th>
                     <th scope="col">Unit Cost</th>
-                    <th scope="col">Regular Discount</th>
-                    <th scope="col">Hauling Discount</th>
+                    <th scope="col">Regular Disc</th>
+                    <th scope="col">Hauling Disc</th>
+                    <th scope="col">Additional Disc</th>
                     <th scope="col">Total Cost</th>
                     <th scope="col">Remarks</th>
                     <th scope="col">Date</th>
@@ -68,6 +69,9 @@
                             </td>
                             <td>
                                 ( {{  number_format($product->hauling_discount , 2, '.', ',') }} )
+                            </td>
+                            <td>
+                                ( {{  number_format($product->additional_discount , 2, '.', ',') }} )
                             </td>
                             <td>
                                 {{  number_format($product->total_cost , 2, '.', ',') }}

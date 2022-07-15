@@ -30,6 +30,8 @@ class CreateReceivingProductsTable extends Migration
             $table->float('unit_cost');
             $table->float('regular_discount');
             $table->float('hauling_discount');
+            $table->float('additional_discount');
+            
             $table->float('price');
             $table->float('total_cost');
             

@@ -287,27 +287,28 @@ class ReceivingGoodController extends Controller
                                     ->where('isComplete', true)->first();
 
                 $rp = ReceivingProduct::create([
-                    'receiving_good_id' => $product->receiving_good_id,
-                    'product_id'        => $ep->id ?? $product->id,
+                    'receiving_good_id'   => $product->receiving_good_id,
+                    'product_id'          => $ep->id ?? $product->id,
 
-                    'product_code'      => $product->product_code,
-                    'category_id'       => $product->category_id,
-                    'description'       => $product->description,
+                    'product_code'        => $product->product_code,
+                    'category_id'         => $product->category_id,
+                    'description'         => $product->description,
 
-                    'qty'               => $product->qty,
-                    'size_id'           => $product->size_id,
-                    'expiration'        => $product->expiration,
+                    'qty'                 => $product->qty,
+                    'size_id'             => $product->size_id,
+                    'expiration'          => $product->expiration,
 
-                    'unit_cost'         => $product->unit_cost,
-                    'regular_discount'  => $product->regular_discount,
-                    'hauling_discount'  => $product->hauling_discount,
-                    'price'             => $product->price,
-                    'total_cost'        => $product->total_cost,
+                    'unit_cost'           => $product->unit_cost,
+                    'regular_discount'    => $product->regular_discount,
+                    'hauling_discount'    => $product->hauling_discount,
+                    'additional_discount' => $product->additional_discount,
+                    'price'               => $product->price,
+                    'total_cost'          => $product->total_cost,
 
 
-                    'product_remarks'   => $product->product_remarks,
-                    'location_id'       => $request->input('location_id'),
-                    'supplier_id'       => $request->input('supplier_id'),
+                    'product_remarks'     => $product->product_remarks,
+                    'location_id'         => $request->input('location_id'),
+                    'supplier_id'         => $request->input('supplier_id'),
                 ]);
 
                 $ucs = Size::where('id', $product->size_id)->first();
@@ -555,11 +556,11 @@ class ReceivingGoodController extends Controller
     
     public function get_supplier_id(Request $request){
         $supplier_id = $request->get('supplier');
-        $rg = ReceivingGood::where('supplier_id', $supplier_id)->where('isVoid', false)->first();
         $supplier_prev = Supplier::where('id', $supplier_id)->first();
 
-        return response()->json(['receiving_goods' => $rg, 'supplier_prev' => $supplier_prev->current_balance]);
-
+        return response()->json([
+            'supplier_prev' => number_format($supplier_prev->current_balance, 2, '.', ',')
+        ]);
     }
     public function list_receiving_goods(Request $request){
         $supplier_id = $request->get('supplier');
@@ -636,10 +637,12 @@ class ReceivingGoodController extends Controller
     public function payables(Request $request){
         $new_bal = $request->get('new_bal');
         $supplier = $request->get('supplier');
+        $new_bal = floatval(str_replace(",", "", $new_bal));
+
         Supplier::where('id', $supplier)->update([
             'current_balance' => $new_bal,
         ]);
-        return response()->json(['success' => 'Successfully Updated Account Payable In This Supplier']);
+        return response()->json(['success' => 'SUCCESSFULLY UPDATED ACCOUNT PAYABLE IN THIS SUPPLIER']);
     }
 
     public function void(ReceivingGood $receiving_good)

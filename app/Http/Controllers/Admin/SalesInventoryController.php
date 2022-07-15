@@ -108,6 +108,8 @@ class SalesInventoryController extends Controller
         
         $cost =  $request->input('unit_cost') - $request->input('regular_discount') - $request->input('hauling_discount');
         $total_cost = $request->input('qty') * $cost;
+        $total_cost = $total_cost - $request->input('additional_discount');
+
 
         $goods_id = ReceivingGood::orderby('id', 'desc')->first();
         if($goods_id == null){
@@ -138,6 +140,7 @@ class SalesInventoryController extends Controller
                 'total_cost' => $total_cost ,
                 'regular_discount' => $request->input('regular_discount'),
                 'hauling_discount' => $request->input('hauling_discount'),
+                'additional_discount' => $request->input('additional_discount'),
 
                 'product_remarks' => $request->input('product_remarks'),
             ]
@@ -193,6 +196,7 @@ class SalesInventoryController extends Controller
         
         $cost =  $request->input('unit_cost') - $request->input('regular_discount') - $request->input('hauling_discount');
         $total_cost = $request->input('qty') * $cost;
+        $total_cost = $total_cost - $request->input('additional_discount');
 
         $product = SalesInventory::find($sales_inventory->id)->update(
             [
@@ -210,6 +214,7 @@ class SalesInventoryController extends Controller
                 'total_cost' => $total_cost ,
                 'regular_discount' => $request->input('regular_discount'),
                 'hauling_discount' => $request->input('hauling_discount'),
+                'additional_discount' => $request->input('additional_discount'),
 
                 'product_remarks' => $request->input('product_remarks'),
             ]

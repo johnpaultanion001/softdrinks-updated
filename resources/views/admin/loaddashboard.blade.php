@@ -48,8 +48,8 @@
                   <div class="col">
                       <h5 class="card-title text-uppercase text-muted mb-0">Sales</h5>
                       <span class="h2 font-weight-bold mb-0">
-                        @if($allprofit->sum->total > 0 )
-                              {{ number_format($allprofit->sum->total ?? '' , 2, '.', ',') }}
+                        @if($alltotal_sales > 0 )
+                              {{ number_format($alltotal_sales ?? '' , 2, '.', ',') }}
                         @else
                               0.00
                         @endif  
@@ -63,8 +63,8 @@
                   </div>
                   <p class="mt-3 mb-0 text-sm">
                   <span class="text-success mr-2"><i class="fa fa-arrow-up"></i>
-                        @if($salesmonthly->sum->total > 0 ) 
-                              {{ number_format($salesmonthly->sum->total ?? '' , 2, '.', ',') }}
+                        @if($mtotal_sales > 0 ) 
+                              {{ number_format($mtotal_sales ?? '' , 2, '.', ',') }}
                         @else
                               0.00
                         @endif
@@ -124,7 +124,13 @@
             <div class="col">
               
                 <h5 class="mb-0 text-uppercase">Sales for today</h5>
-                <h3 class="mb-0"><large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sales->sum->total , 2, '.', ',') }}</h3>
+                <h3 class="mb-0"><large class="text-success font-weight-bold mr-1">₱</large> 
+                @php 
+                  $sales1 = $sales->sum->total + $deposits->sum->amount;
+                  $total_sales = $sales1 - $returns->sum->amount;
+                @endphp
+                {{ number_format($total_sales , 2, '.', ',') }}
+                </h3>
              
             </div>
             <div class="col text-right">
@@ -217,6 +223,61 @@
                   </td>
                   <td>
                     <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($return->amount ?? '' , 2, '.', ',') }}
+                  </td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deposit Table -->
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+            
+              <h5 class="mb-0 text-uppercase">Deposit for today</h5>
+              <h3 class="mb-0"><large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($deposits->sum->amount , 2, '.', ',') }}</h3>
+            </div>
+            <div class="col text-right">
+              @can('transaction_access')
+                <a href="/admin/transactions" class="btn btn-sm btn-primary text-uppercase">See all</a>
+              @endcan
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive" style="max-height: 380px">
+          <!-- Projects table -->
+          <table class="table align-items-center table-flush" >
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Product Code/Desc</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Deposit QTY</th>
+                <th scope="col">Status</th>
+                <th scope="col">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($deposits as $deposit)
+              <tr>
+                  <td>
+                    {{  $deposit->product->product_code ?? '' }}/{{  $deposit->product->description ?? '' }}
+                  </td>
+                  <td>
+                    {{$deposit->salesinvoice->customer->customer_name ?? ''}}
+                  </td>
+                  <td>
+                    {{  $deposit->qty ?? '' }}
+                  </td>
+                  <td>
+                    {{  $deposit->status->title ?? '' }}
+                  </td>
+                  <td>
+                    <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($deposit->amount ?? '' , 2, '.', ',') }}
                   </td>
               </tr>
               @endforeach

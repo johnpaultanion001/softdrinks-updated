@@ -42,9 +42,14 @@ class OrderingController extends Controller
     }
 
     public function selectcustomer(Request $request,Customer $customer){
-        if (request()->ajax()) {
-            return response()->json(['result' => $customer]);
-        }
+       
+        return response()->json([
+            'name' => $customer->customer_code,
+            'area' => $customer->area,
+            'balance' => number_format($customer->current_balance, 2, '.', ','),
+
+        ]);
+        
     }
     public function selectpricetype(Request $request, PriceType $pricetype){
         if (request()->ajax()) {

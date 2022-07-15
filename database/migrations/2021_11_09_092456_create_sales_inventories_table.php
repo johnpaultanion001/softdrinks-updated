@@ -30,15 +30,14 @@ class CreateSalesInventoriesTable extends Migration
             $table->float('unit_cost');
             $table->float('regular_discount');
             $table->float('hauling_discount');
+            $table->float('additional_discount');
+
             $table->float('price');
             $table->float('total_cost');
             
             $table->longText('product_remarks')->nullable();
             
-            $table->string('shell')->nullable();
-            $table->string('bottles')->nullable();
-            $table->string('big_palettes')->nullable();
-            $table->string('small_palettes')->nullable();
+       
 
             $table->string('supplier_id')->nullable();
             

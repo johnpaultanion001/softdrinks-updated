@@ -1460,18 +1460,12 @@ function customer(){
     method:"GET",
     dataType:"json",
         success:function(data){
-            $.each(data.result, function(key,value){
-                if(key == $('#'+key).attr('id')){
-                    $('#'+key).val(value)
-                }
-                if(key == 'customer_name'){
-                    $('#sold_to_receipt').text(value)
-                }
-                if(key == 'area'){
-                    $('#area_receipt').text(value)
-                }
-                $('#doc_number_receipt').text($("#doc_no").val());
-            }) 
+            $('#sold_to_receipt').text(data.name)
+            $('#area_receipt').text(data.area)
+            $('#current_balance').val(data.balance)
+            $('#doc_number_receipt').text($("#doc_no").val());
+
+            
         }
     });
 }

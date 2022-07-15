@@ -399,11 +399,13 @@ class SalesInvoiceController extends Controller
 
     public function receivables(Request $request){
         $new_bal = $request->get('new_bal');
+        $new_bal = floatval(str_replace(",", "", $new_bal));
+        
         $customer = $request->get('customer');
         Customer::where('id', $customer)->update([
             'current_balance' => $new_bal,
         ]);
-        return response()->json(['success' => 'Successfully Updated Account Balance In This Customer']);
+        return response()->json(['success' => 'SUCCESSFULLY UPDATED ACCOUNT BALANCE IN THIS CUSTOMER']);
     }
 
     public function allrecords(){

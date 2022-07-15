@@ -324,7 +324,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     <label class="control-label" >Unit Cost<span class="text-danger">*</span></label>
                                     <input type="number" name="unit_cost" id="unit_cost" class="form-control" step="any" />
@@ -333,7 +333,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     <label class="control-label" >Regular Discount<span class="text-danger">*</span></label>
                                     <input type="number" name="regular_discount" id="regular_discount" class="form-control" step="any"/>
@@ -342,12 +342,21 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     <label class="control-label" >Hauling Discount<span class="text-danger">*</span></label>
                                     <input type="number" name="hauling_discount" id="hauling_discount" class="form-control" step="any"/>
                                     <span class="invalid-feedback" role="alert">
                                         <strong id="error-hauling_discount"></strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label" >Additional Discount</label>
+                                    <input type="number" name="additional_discount" id="additional_discount" class="form-control" step="any"/>
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong id="error-additional_discount"></strong>
                                     </span>
                                 </div>
                             </div>

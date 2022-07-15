@@ -27,13 +27,11 @@ class SalesInventory extends Model
         'total_cost',
         'regular_discount',
         'hauling_discount',
+        'additional_discount',
     
         'product_remarks',
         
-        'shell',
-        'bottles',
-        'big_palettes',
-        'small_palettes',
+    
         
         'supplier_id',
 

@@ -62,7 +62,11 @@
                             <div class="input-group-prepend">
                                 <div class="input-group-text text-primary">₱</div>
                             </div>
-                                <input type="text" class="form-control" value="{{ number_format($sales->sum->total , 2, '.', ',') }}" readonly>
+                                @php 
+                                    $sales1 = $sales->sum->total + $deposits->sum->amount;
+                                    $total_sales = $sales1 - $returns->sum->amount;
+                                @endphp
+                                <input type="text" class="form-control" value="{{ number_format($total_sales , 2, '.', ',') }}" readonly>
                             </div>
                         </div>
                     </div>

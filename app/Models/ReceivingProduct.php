@@ -24,6 +24,8 @@ class ReceivingProduct extends Model
         'unit_cost',
         'regular_discount',
         'hauling_discount',
+        'additional_discount',
+
         'price',
         'total_cost',
         

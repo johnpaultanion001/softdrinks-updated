@@ -34,7 +34,7 @@ class TransactionController extends Controller
         $products      = SalesInventory::orderBy('id', 'asc')->where('isComplete',true)->get();
         $salesinvoices = SalesInvoice::latest()->get();
         $delivers      = AssignDeliver::orderBy('id', 'asc')->get();
-        $deposits      = Deposit::latest()->get();
+        $deposits      = Deposit::latest()->whereDate('created_at', Carbon::today())->where('isComplete', true)->get();
 
         $title_filter_daily  = date('F d, Y');
         return view('admin.transactions.loadtransactions', compact('sales','returns', 'products','salesinvoices', 'title_filter', 'delivers','title_filter_daily','deposits'));

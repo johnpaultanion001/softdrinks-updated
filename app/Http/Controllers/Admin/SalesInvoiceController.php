@@ -83,7 +83,7 @@ class SalesInvoiceController extends Controller
         $total_return = $returned->sum('amount') + $total_return_pallets->sum('amount');
 
         $total_amount = $total_cost - $total_return;
-        
+
 
         return view('admin.salesinvoice.alltotal', compact('orders', 'returned','total_amount','total_cost','total_return','subtotal'));
     }
@@ -286,12 +286,13 @@ class SalesInvoiceController extends Controller
             'total_amount' => $total_amount,
 
             'total_return' => $totalsalesreturn,
-            'prev_bal' => $request->get('prev_bal'),
+            'prev_bal' => floatval(str_replace(",", "", $request->get('prev_bal'))),
             'total_inv_amt' => $total_inv_amt,
             'cash' => $request->get('cash'),
             'change' => $change,
-            'new_bal' => $total_amount,
+            'new_bal' => floatval(str_replace(",", "", $request->get('new_bal'))),
             'user_id' => $userid,
+            'isReceivable'  => $request->get('receivables'),
         ]);
 
         $order_number_id = $ordernumber->order_number;

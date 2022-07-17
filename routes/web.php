@@ -142,7 +142,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
 
     //Sales Invoice
     Route::resource('salesInvoice', 'SalesInvoiceController');
-    Route::post('salesInvoice-sales/storeandcheckout','SalesInvoiceController@storeandcheckout')->name('salesInvoice.storeandcheckout');
+    Route::get('salesInvoice-sales/storeandcheckout','SalesInvoiceController@storeandcheckout')->name('salesInvoice.storeandcheckout');
     Route::get('salesInvoice-sales','SalesInvoiceController@sales')->name('salesInvoice.sales');
     Route::get('salesInvoice-return','SalesInvoiceController@return')->name('salesInvoice.return');
     Route::get('salesInvoice-deposits','SalesInvoiceController@deposits')->name('salesInvoice.deposits');

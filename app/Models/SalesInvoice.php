@@ -28,6 +28,7 @@ class SalesInvoice extends Model
         'user_id',
         'isVoid',
         'change',
+        'isReceivable',
        
     ];
     public function customer()

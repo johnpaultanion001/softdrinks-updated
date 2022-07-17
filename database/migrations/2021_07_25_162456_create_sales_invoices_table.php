@@ -32,6 +32,7 @@ class CreateSalesInvoicesTable extends Migration
             $table->float('change');
             $table->float('new_bal');
             $table->integer('isVoid')->default(0);
+            $table->boolean('isReceivable')->default(false);
     
             $table->timestamps();
         });

@@ -109,6 +109,7 @@
                           <th>Supplier Name</th>
                           <th>Address</th>
                           <th>Current Balance</th>
+                          <th>Updated At</th>
                         
                         </tr>
                       </thead>
@@ -127,6 +128,9 @@
                                 
                                   <td>
                                     {{  number_format($supplier->current_balance , 2, ',', ',') }}
+                                  </td>
+                                  <td>
+                                    {{ $supplier->updated_at->format('M j , Y h:i A') }}
                                   </td>
                               </tr>
                           @endforeach

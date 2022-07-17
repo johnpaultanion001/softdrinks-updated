@@ -37,7 +37,18 @@ class TransactionController extends Controller
         $deposits      = Deposit::latest()->whereDate('created_at', Carbon::today())->where('isComplete', true)->get();
 
         $title_filter_daily  = date('F d, Y');
-        return view('admin.transactions.loadtransactions', compact('sales','returns', 'products','salesinvoices', 'title_filter', 'delivers','title_filter_daily','deposits'));
+
+        $sales_invioce_bal =  
+                SalesInvoice::whereDate('created_at', Carbon::today())
+                            ->where('isVoid', false)
+                            ->where('isReceivable', true)
+                            ->sum('new_bal') - 
+                SalesInvoice::whereDate('created_at', Carbon::today())
+                            ->where('isVoid', false)
+                            ->where('isReceivable', true)
+                            ->sum('prev_bal');
+
+        return view('admin.transactions.loadtransactions', compact('sales_invioce_bal','sales','returns', 'products','salesinvoices', 'title_filter', 'delivers','title_filter_daily','deposits'));
     }
     public function filter(Request $request){
         date_default_timezone_set('Asia/Manila');
@@ -51,30 +62,73 @@ class TransactionController extends Controller
             $sales         = Sales::latest()->whereDate('created_at', Carbon::today())->get();
             $returns       = SalesReturn::latest()->whereDate('created_at', Carbon::today())->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->whereDate('created_at', Carbon::today())->get();
+            $sales_invioce_bal =  
+                SalesInvoice::whereDate('created_at', Carbon::today())
+                            ->where('isVoid', false)
+                            ->where('isReceivable', true)
+                            ->sum('new_bal') - 
+                SalesInvoice::whereDate('created_at', Carbon::today())
+                            ->where('isVoid', false)
+                            ->where('isReceivable', true)
+                            ->sum('prev_bal');
         }
         if($filter == 'weekly'){
             $title_filter  = 'From: ' . Carbon::now()->startOfWeek()->format('F d, Y') . ' To: ' . Carbon::now()->endOfWeek()->format('F d, Y');
             $sales         = Sales::latest()->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
             $returns       = SalesReturn::latest()->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+            $sales_invioce_bal =  
+                            SalesInvoice::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+                                        ->where('isVoid', false)
+                                        ->where('isReceivable', true)
+                                        ->sum('new_bal') - 
+                            SalesInvoice::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+                                        ->where('isVoid', false)
+                                        ->where('isReceivable', true)
+                                        ->sum('prev_bal');
         }
         if($filter == 'monthly'){
             $title_filter  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');
             $sales         = Sales::latest()->whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))->get();
             $returns       = SalesReturn::latest()->whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))->get();
+            $sales_invioce_bal =  
+                            SalesInvoice::whereMonth('created_at', '=', date('m'))
+                                        ->where('isVoid', false)
+                                        ->where('isReceivable', true)
+                                        ->sum('new_bal') - 
+                            SalesInvoice::whereMonth('created_at', '=', date('m'))
+                                        ->where('isVoid', false)
+                                        ->where('isReceivable', true)
+                                        ->sum('prev_bal');
         }
         if($filter == 'yearly'){
             $title_filter  = 'From: ' .'Jan 1'. date(', Y') . ' To: ' .'Dec 31'. date(', Y');
             $sales         = Sales::latest()->whereYear('created_at', '=', date('Y'))->get();
             $returns       = SalesReturn::latest()->whereYear('created_at', '=', date('Y'))->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->whereYear('created_at', '=', date('Y'))->get();
+            $sales_invioce_bal =  
+                            SalesInvoice::whereYear('created_at', '=', date('Y'))
+                                        ->where('isVoid', false)
+                                        ->where('isReceivable', true)
+                                        ->sum('new_bal') - 
+                            SalesInvoice::whereYear('created_at', '=', date('Y'))
+                                        ->where('isVoid', false)
+                                        ->where('isReceivable', true)
+                                        ->sum('prev_bal');
         }
         if($filter == 'all'){
             $title_filter  = 'ALL TRANSACTIONS RECORDS';
             $sales = Sales::latest()->get();
             $returns = SalesReturn::latest()->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->get();
+            $sales_invioce_bal =  
+                            SalesInvoice::where('isVoid', false)
+                                        ->where('isReceivable', true)
+                                        ->sum('new_bal') - 
+                            SalesInvoice::where('isVoid', false)
+                                        ->where('isReceivable', true)
+                                        ->sum('prev_bal');
         }
         if($filter == 'fbd'){
             $from = $request->get('from');
@@ -84,6 +138,15 @@ class TransactionController extends Controller
             $sales         = Sales::latest()->whereBetween('created_at', [$from, $to])->get();
             $returns       = SalesReturn::latest()->whereBetween('created_at', [$from, $to])->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->whereBetween('created_at', [$from, $to])->get();
+            $sales_invioce_bal =  
+                            SalesInvoice::whereBetween('created_at', [$from, $to])
+                                        ->where('isVoid', false)
+                                        ->where('isReceivable', true)
+                                        ->sum('new_bal') - 
+                            SalesInvoice::whereBetween('created_at', [$from, $to])
+                                        ->where('isVoid', false)
+                                        ->where('isReceivable', true)
+                                        ->sum('prev_bal');
         }
         if($filter == 'dd_products'){
             $title_filter  = 'PRODUCT';
@@ -91,6 +154,13 @@ class TransactionController extends Controller
             $sales = Sales::latest()->where('product_id', $product_id)->get();
             $returns = SalesReturn::latest()->where('product_id', $product_id)->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->where('product_id', $product_id)->get();
+            $sales_invioce_bal =  
+                            SalesInvoice::where('isVoid', false)
+                                        ->where('isReceivable', true)
+                                        ->sum('new_bal') - 
+                            SalesInvoice::where('isVoid', false)
+                                        ->where('isReceivable', true)
+                                        ->sum('prev_bal');
         }
         if($filter == 'dd_orders#'){
             $order_id = $request->get('value');
@@ -99,10 +169,19 @@ class TransactionController extends Controller
             $sales = Sales::latest()->where('salesinvoice_id', $order_id)->get();
             $returns = SalesReturn::latest()->where('salesinvoice_id', $order_id)->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->where('salesinvoice_id', $order_id)->get();
+            $sales_invioce_bal =  
+                            SalesInvoice::where('salesinvoice_id', $order_id)
+                                        ->where('isVoid', false)
+                                        ->where('isReceivable', true)
+                                        ->sum('new_bal') - 
+                            SalesInvoice::where('salesinvoice_id', $order_id)
+                                        ->where('isVoid', false)
+                                        ->where('isReceivable', true)
+                                        ->sum('prev_bal');
         }
         $title_filter_daily  = date('F d, Y');
 
-        return view('admin.transactions.loadtransactions', compact('sales','returns', 'products','salesinvoices', 'title_filter', 'delivers','title_filter_daily','deposits'));
+        return view('admin.transactions.loadtransactions', compact('sales_invioce_bal','sales','returns', 'products','salesinvoices', 'title_filter', 'delivers','title_filter_daily','deposits'));
     }
 
     public function destroy_sales(Sales $sales){

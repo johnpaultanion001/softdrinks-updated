@@ -159,17 +159,17 @@
                                    
 
                                     <div class="form-group row">
-                                        <div class="col-sm-12">
-                                            <small class="text-muted mt-3 ml-1">Sold To:</small>
-                                            <div class="col-sm-8">
-                                                <small id="sold_to_receipt"></small>
-                                            </div>
+                                        <div class="col-sm-6">
+                                            <small class="text-muted mt-3 ml-1">Sold To:</small><br>
+                                            <small id="sold_to_receipt"></small>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <small class="text-muted mt-3 ml-1">Assign Deliver:</small><br>
+                                                <small id="assign_to_receipt"></small>
                                         </div>
                                         <div class="col-sm-12">
-                                            <small class="text-muted mt-3 ml-1 address">Area:</small>
-                                            <div class="col-sm-8">
-                                                <small id="area_receipt"></small>
-                                            </div>
+                                            <small class="text-muted mt-3 ml-1 address">Area:</small> <br>
+                                            <small id="area_receipt"></small>
                                         </div>
                                     </div>
                                 </div>
@@ -1050,14 +1050,21 @@ $(document).on('click', '#print_button', function(){
     var customer_id = $('#customer_id').val();
     var deliver_id = $('#deliver_id').val();
     var prev_bal = $('#current_balance').val();
+    var new_bal = $('#new_bal').val();
     var cash = $('#cash').val();
+    var receivables1 = '';
+    if($('input[name="receivables"]').is(':checked')){
+        receivables1 = 1;
+    }else{
+        receivables1 = 0;
+    }
    
     var action_url = "{{ route('admin.salesInvoice.storeandcheckout') }}";
-    var type = "POST";
+    var type = "GET";
     $.ajax({
         url: action_url,
         method:type,
-        data:{doc_no:doc_no, entry_date:entry_date, remarks:remarks, customer_id:customer_id, deliver_id:deliver_id,
+        data:{receivables:receivables1,new_bal:new_bal,doc_no:doc_no, entry_date:entry_date, remarks:remarks, customer_id:customer_id, deliver_id:deliver_id,
                 prev_bal:prev_bal, cash:cash, _token:'{!! csrf_token() !!}'},
         dataType:"json",
         beforeSend:function(){
@@ -1464,8 +1471,6 @@ function customer(){
             $('#area_receipt').text(data.area)
             $('#current_balance').val(data.balance)
             $('#doc_number_receipt').text($("#doc_no").val());
-
-            
         }
     });
 }
@@ -1477,6 +1482,10 @@ $('select[name="customer_id"]').on("change", function(event){
     $("#action_button").attr("disabled", false);
     $("#action_button").attr("value", "Compute");
 
+});
+
+$('select[name="deliver_id"]').on("change", function(event){
+    $('#assign_to_receipt').text($("#deliver_id option:selected").text());
 });
 
 

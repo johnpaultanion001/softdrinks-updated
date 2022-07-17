@@ -127,7 +127,8 @@
                 <h3 class="mb-0"><large class="text-success font-weight-bold mr-1">₱</large> 
                 @php 
                   $sales1 = $sales->sum->total + $deposits->sum->amount;
-                  $total_sales = $sales1 - $returns->sum->amount;
+                  $total_sales = $sales1 - $returns->sum->amount - $sales_invioce_bal;
+
                 @endphp
                 {{ number_format($total_sales , 2, '.', ',') }}
                 </h3>

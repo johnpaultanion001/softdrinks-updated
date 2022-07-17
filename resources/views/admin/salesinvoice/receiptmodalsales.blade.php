@@ -11,20 +11,18 @@
                         <div class="col text-right"><h6 class="card-title text-uppercase text-muted mb-0">Date: {{ $salesInvoices->created_at->format('F d,Y h:i A') ?? '' }} </h6></div>
                     </div>
                     
-
                     <div class="form-group row">
-                        <div class="col-sm-12">
-                            <small class="text-muted mt-3 ml-1">Sold To: {{$salesInvoices->customer->customer_name ?? ''}}</small>
-                            <div class="col-sm-8">
-                                <small id="customer_name"></small>
-                            </div>
+                        <div class="col-sm-6">
+                            <small class="text-muted mt-3 ml-1">Sold To:</small><br>
+                            <small id="sold_to_receipt">{{$salesInvoices->customer->customer_name ?? ''}}</small>
+                        </div>
+                        <div class="col-sm-6">
+                            <small class="text-muted mt-3 ml-1">Assign Deliver:</small><br>
+                                <small id="assign_to_receipt">{{$salesInvoices->deliver->title ?? ''}}</small>
                         </div>
                         <div class="col-sm-12">
-                            <small class="text-muted mt-3 ml-1">Area: {{$salesInvoices->customer->area ?? ''}}</small>
-                            <div class="col-sm-8">
-                                    <small id="area"></small>
-                                    <small id="current_balance"></small>
-                            </div>
+                            <small class="text-muted mt-3 ml-1 address">Area:</small> <br>
+                            <small id="area_receipt">{{$salesInvoices->customer->area ?? ''}}</small>
                         </div>
                     </div>
                 </div>

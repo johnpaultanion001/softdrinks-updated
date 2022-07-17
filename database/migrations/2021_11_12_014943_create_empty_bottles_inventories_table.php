@@ -16,7 +16,7 @@ class CreateEmptyBottlesInventoriesTable extends Migration
         Schema::create('empty_bottles_inventories', function (Blueprint $table) {
             $table->id();
             $table->string('product_id')->default(0);
-            $table->float('qty');
+            $table->float('qty')->default(0);;
             $table->timestamps();
         });
     }

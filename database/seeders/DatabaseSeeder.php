@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
 
             //Return
             EmptyBottlesInventorySeeder::class,
-            ReceiveReturnSeeder::class,
+            //ReceiveReturnSeeder::class,
             // SalesReturnSeeder::class,
 
 

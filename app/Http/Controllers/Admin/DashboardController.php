@@ -35,18 +35,48 @@ class DashboardController extends Controller
       $returns = SalesReturn::latest()->whereDate('created_at', Carbon::today())->where('isComplete', true)->get();
       $deposits = Deposit::latest()->whereDate('created_at', Carbon::today())->where('isComplete', true)->get();
 
+      
       //ALL
+      $sales_invioce_bal_all =  
+                SalesInvoice::where('isVoid', false)
+                            ->where('isReceivable', true)
+                            ->sum('new_bal') - 
+                SalesInvoice::where('isVoid', false)
+                            ->where('isReceivable', true)
+                            ->sum('prev_bal');
+
       $allsales = Sales::sum('total') + Deposit::where('isComplete', true)->sum('amount');
       $allreturns = SalesReturn::where('isComplete', true)->sum('amount');
-      $alltotal_sales = $allsales - $allreturns;
-
-      //Mountly Sales
-      $msales = Sales::whereMonth('created_at', '=', date('m'))->sum('total') + Deposit::whereMonth('created_at', '=', date('m'))->where('isComplete', true)->sum('amount');
-      $mreturns = SalesReturn::whereMonth('created_at', '=', date('m'))->where('isComplete', true)->sum('amount');
-      $mtotal_sales = $msales - $mreturns;
+      $alltotal_sales = $allsales - $allreturns - $sales_invioce_bal_all;
 
       
-      return view('admin.loaddashboard', compact('alltotal_sales','mtotal_sales','allproducts', 'productsmonthly' , 'allprofit','profitmonthly','sales','returns','deposits'));
+      //Mountly Sales
+      $sales_invioce_bal_m =  
+                SalesInvoice::whereMonth('created_at', '=', date('m'))
+                            ->where('isVoid', false)
+                            ->where('isReceivable', true)
+                            ->sum('new_bal') - 
+                SalesInvoice::whereMonth('created_at', '=', date('m'))
+                            ->where('isVoid', false)
+                            ->where('isReceivable', true)
+                            ->sum('prev_bal');
+
+      $msales = Sales::whereMonth('created_at', '=', date('m'))->sum('total') + Deposit::whereMonth('created_at', '=', date('m'))->where('isComplete', true)->sum('amount');
+      $mreturns = SalesReturn::whereMonth('created_at', '=', date('m'))->where('isComplete', true)->sum('amount');
+      $mtotal_sales = $msales - $mreturns - $sales_invioce_bal_m;
+
+      $sales_invioce_bal =  
+                SalesInvoice::whereDate('created_at', Carbon::today())
+                            ->where('isVoid', false)
+                            ->where('isReceivable', true)
+                            ->sum('new_bal') - 
+                SalesInvoice::whereDate('created_at', Carbon::today())
+                            ->where('isVoid', false)
+                            ->where('isReceivable', true)
+                            ->sum('prev_bal');
+    
+      
+      return view('admin.loaddashboard', compact('sales_invioce_bal','alltotal_sales','mtotal_sales','allproducts', 'productsmonthly' , 'allprofit','profitmonthly','sales','returns','deposits'));
     }
 
 }

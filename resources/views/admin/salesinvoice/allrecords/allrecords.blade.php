@@ -55,6 +55,13 @@
                         $payment = $total_cost - $total_return;
                         $change  =  $allrecord->cash  - $payment;
 
+                        if ($allrecord->isReceivable == 1){    
+                            $change = $change - $allrecord->prev_bal;
+                                if($change < 0 ){
+                                    $change = 0;
+                                }
+                        }
+
                     ?>
                     <tr data-entry-id="{{ $allrecord->id ?? '' }}">
                         <td>

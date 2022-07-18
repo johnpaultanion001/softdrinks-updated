@@ -173,7 +173,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="receiptmodal">
+                                <div id="receiptcontent">
                                 
                                 </div>
                             </div>
@@ -898,6 +898,14 @@ $('#frm_return_cu').on('submit', function(event){
     });
 });
 
+function parseCurrency( num ) {
+    return parseFloat( num.replace( /,/g, '') );
+}
+let formatNumber = Intl.NumberFormat('en-US', {
+    style: "currency",
+    currency: "PHP",
+});
+
 //show print modal
 function printmodal(){
     $('#receiptModal').modal('show');
@@ -909,14 +917,32 @@ function printmodal(){
             $('.modal-title-receipt').text('Loading Receipt...');
             $("#print_button").attr("disabled", true);
             $("#print_button").attr("value", "Loading..");
-            $("#receiptmodal").hide();
+            $("#receiptcontent").hide();
         },
         success: function(response){
+            var new_bal = "";
+            var change = "";
+            if($('input[name="receivables"]').is(':checked')){
+                new_bal = $('#new_bal').val();
+                var prev_bal = parseCurrency($('#current_balance').val());
+                var change1 = parseCurrency($('#change').val());;
+                    change = change1 - prev_bal;
+                    if(change < 0 ){
+                        change = 0;
+                    }
+            }else{
+                new_bal = $('#current_balance').val();
+                change = $('#change').val();
+            }
+
             $('.modal-title-receipt').text('Print Receipt');
             $("#print_button").attr("disabled", false);
             $('#print_button').val('Print & Save');
-            $("#receiptmodal").show();
-            $("#receiptmodal").html(response);
+            
+            $("#receiptcontent").show();
+            $("#receiptcontent").html(response);
+            $('#total_bal').html('₱ '+ $('#current_balance').val() + '<br> ₱  ' + new_bal)
+            $('#changereceipt').text(formatNumber.format(change));
         }	
     })
 }

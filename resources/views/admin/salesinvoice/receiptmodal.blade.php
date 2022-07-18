@@ -98,8 +98,14 @@
                                     <tr>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>
+                                            Prev Bal.: 
+                                            <br>
+                                            New Bal.:
+                                        </td>
+                                        <td>
+                                            <div id="total_bal"></div>
+                                        </td>
                                         <td>
                                             Total Return Amt: 
                                                 <br>
@@ -174,12 +180,8 @@
             style: "currency",
             currency: "PHP",
         });
-
-        var cash = $('#cash').val();
-        var change = $('#change').val();
-
-        $('#cashreceipt').text(formatNumber.format(cash));
-        $('#changereceipt').text('₱ ' + change);
+        $('#cashreceipt').text(formatNumber.format($('#cash').val()));
+       
     });
 </script>
 

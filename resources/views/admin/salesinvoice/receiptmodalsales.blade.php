@@ -35,6 +35,13 @@
 
                         $payment = $total_cost - $total_return;
                         $change  =  $salesInvoices->cash  - $payment;
+            
+                        if ($salesInvoices->isReceivable == 1){    
+                            $change = $change - $salesInvoices->prev_bal;
+                                if($change < 0 ){
+                                    $change = 0;
+                                }
+                        }
 
                     ?>
                     <table class="table table-bordered table-sm">
@@ -126,8 +133,17 @@
                                     <tr>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>
+                                            Prev Bal.: 
+                                            <br>
+                                            New Bal.:
+                                        </td>
+                                        <td>
+                                            ₱ {{ number_format($salesInvoices->prev_bal ?? '' , 2, '.', ',') }}
+                                            <br>
+                                            ₱ {{ number_format($salesInvoices->new_bal ?? '' , 2, '.', ',') }}
+                                           
+                                        </td>
                                         <td>
                                             Total Return Amt: 
                                                 <br>

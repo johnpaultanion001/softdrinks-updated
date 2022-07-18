@@ -206,7 +206,6 @@ class SalesInvoiceController extends Controller
             }else{
                 $new_bal = $prev_bal - $change;
             }
-            
         }
         if($cash < $payment){
             // return response()->json(['insufficient_cash'  => 'cash must be greater than the payment <br> check the Receivable Checkbox to proceed this transaction']);
@@ -216,6 +215,13 @@ class SalesInvoiceController extends Controller
             if ($validated->fails()) {
                 return response()->json(['errors' => $validated->errors()]);
             }
+        }
+
+        if ($request->input('receivables')){    
+                $change = $change - $prev_bal;
+                    if($change < 0 ){
+                        $change = 0;
+                    }
         }
         
         return response()->json(
@@ -445,6 +451,12 @@ class SalesInvoiceController extends Controller
 
         $payment = $total_cost - $total_return;
         $change  =  $salesInvoice->cash  - $payment;
+        if ($salesInvoice->isReceivable == 1){    
+            $change = $change - $salesInvoice->prev_bal;
+                if($change < 0 ){
+                    $change = 0;
+                }
+        }
 
         if (request()->ajax()) {
             return response()->json(

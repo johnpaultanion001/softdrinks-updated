@@ -348,7 +348,7 @@
                         </tr>
                       </thead>
                       <tbody class="text-uppercase font-weight-bold">
-                        @foreach($account_receivables as $customer)
+                         @foreach($account_receivables as $customer)
                               <tr data-entry-id="{{ $customer->id ?? '' }}">
                                   <td>
                                       {{  $customer->customer_code ?? '' }}
@@ -368,6 +368,21 @@
                                   </td>
                               </tr>
                           @endforeach
+                          <tr>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                
+                                <td>
+                                  Total Current Balance:
+                                </td>
+                                <td>
+                                  {{  number_format($account_receivables->sum->current_balance , 2, '.', ',') }}
+                                </td>
+                                <td>
+                                </td>
+                              </tr>
                       </tbody>
                     </table>
                  </div>

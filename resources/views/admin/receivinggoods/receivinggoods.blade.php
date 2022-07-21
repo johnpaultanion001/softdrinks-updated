@@ -113,6 +113,21 @@
                                   </td>
                               </tr>
                           @endforeach
+                            <tr>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                
+                                <td>
+                                  Total Current Balance:
+                                </td>
+                                <td>
+                                  {{  number_format($account_payables->sum->current_balance , 2, '.', ',') }}
+                                </td>
+                                <td>
+                                </td>
+                              </tr>
                       </tbody>
                     </table>
                  </div>

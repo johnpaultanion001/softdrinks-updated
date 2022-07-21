@@ -424,7 +424,7 @@ function table_ending_inventory_report(){
                 className: 'd-none',
                 title: title,
                 exportOptions: {
-                    columns: [1,2,3,4,5,6,7,8]
+                    columns: ':visible'
                 }
             },
             { 
@@ -432,7 +432,7 @@ function table_ending_inventory_report(){
                 title:  '<center>' + header + '</center>',
                 className: 'd-none',
                 exportOptions: {
-                    columns: [1,2,3,4,5,6,7,8]
+                    columns: ':visible'
                 }
             },
         ],

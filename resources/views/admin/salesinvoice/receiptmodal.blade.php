@@ -2,12 +2,11 @@
                     <?php 
                         $subtotal     = $receipts->sum('total_amount_receipt') + $pallets->sum('amount');
 
-                        $total_cost   = $receipts->sum('total') + $pallets->sum('amount');
+                        $total_cost   = $receipts->sum('total') + $pallets->sum('amount') + $total_deposit;
                         $total_return = $returns->sum('amount') + $return_pallets->sum('amount');
 
                         $total_amount = $total_cost - $total_return;
-                      
-                      ?>
+                    ?>
                 <div class="receipt-body mt--3 p-2" id="receipt-body">
                     <table class="table table-bordered table-sm">
                             <thead>
@@ -120,8 +119,12 @@
                                     <tr>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>
+                                            Over Payment:
+                                        </td>
+                                        <td>
+                                            <div id="over_payment_reciept"></div>
+                                        </td>
                                         <td>
                                             Total: 
                                             <br>
@@ -160,14 +163,13 @@
                 <div class="col">
                     <div class="row mt-2 p-2 ">
                         <div class="col-6">
-                            <small>Dealer Of:</small>     
+                            <small>Dealer Of: <br>
+                            Coke Products/San Miguel Beer Products And Rice</small>     
                         </div>
                         <div class="col-6">
-                            <small>By:___________________</small>      
+                            <small>Created By: <br>{{Auth()->user()->name ?? ''}}</small>      
                         </div>
-                        <div class="col-12">
-                            <small>Coke Products/San Miguel Beer Products And Rice</small>     
-                        </div>
+                        
                     </div>
                 </div>
 

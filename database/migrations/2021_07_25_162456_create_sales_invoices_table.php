@@ -33,7 +33,9 @@ class CreateSalesInvoicesTable extends Migration
             $table->float('new_bal');
             $table->integer('isVoid')->default(0);
             $table->boolean('isReceivable')->default(false);
-    
+            $table->boolean('isOverPayment')->default(false);
+            $table->float('over_payment')->default(0);
+
             $table->timestamps();
         });
     }

@@ -81,7 +81,23 @@
                     <label class="form-check-label text-white" for="receivables">RECEIVABLE</label>
                 </div>
         </div>
-        
+        <div class="col-sm-2">
+            <h5 class="text-white text-uppercase">Over Payment:</h5>
+
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">₱</div>
+                </div>
+                <input type="text" name="over_payment" id="over_payment" class="form-control" value="0.00" readonly/>
+                <span class="invalid-feedback text-dark" role="alert">
+                    <strong id="error-over_payment"></strong>
+                </span>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="over_payment_checkbox" name="over_payment_checkbox">
+                <label class="form-check-label text-white" for="over_payment_checkbox">OVER PAYMENT</label>
+            </div>
+        </div>
         <div class="col-sm-2">
                 <h4 class="text-white text-uppercase">Cash:</h4>
                 <div class="input-group mb-2">
@@ -103,6 +119,7 @@
                 <input type="text" name="change" id="change" class="form-control" value="" readonly/>
             </div>
         </div>
+        
         <div class="col-sm-2">
             <h4 class="text-white text-uppercase">Payment:</h4>
 

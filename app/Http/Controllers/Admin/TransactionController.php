@@ -14,6 +14,7 @@ use App\Models\ReceivingProduct;
 use App\Models\Deposit;
 use App\Models\EmptyBottlesInventory;
 use App\Models\Pallet;
+use App\Models\Customer;
 use Carbon\Carbon;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,6 +36,15 @@ class TransactionController extends Controller
         $salesinvoices = SalesInvoice::latest()->get();
         $delivers      = AssignDeliver::orderBy('id', 'asc')->get();
         $deposits      = Deposit::latest()->whereDate('created_at', Carbon::today())->where('isComplete', true)->get();
+        $plus_over_payments =  SalesInvoice::whereDate('created_at', Carbon::today())   
+                              ->where('isOverPayment', true)
+                              ->where('isVoid', false)
+                              ->sum('over_payment');
+
+        $minus_over_payments = SalesInvoice::whereDate('created_at', Carbon::today())   
+                              ->where('isOverPayment', false)
+                              ->where('isVoid', false)
+                              ->sum('over_payment');
 
         $title_filter_daily  = date('F d, Y');
 
@@ -48,7 +58,7 @@ class TransactionController extends Controller
                             ->where('isReceivable', true)
                             ->sum('prev_bal');
 
-        return view('admin.transactions.loadtransactions', compact('sales_invioce_bal','sales','returns', 'products','salesinvoices', 'title_filter', 'delivers','title_filter_daily','deposits'));
+        return view('admin.transactions.loadtransactions', compact('plus_over_payments','minus_over_payments','sales_invioce_bal','sales','returns', 'products','salesinvoices', 'title_filter', 'delivers','title_filter_daily','deposits'));
     }
     public function filter(Request $request){
         date_default_timezone_set('Asia/Manila');
@@ -62,6 +72,16 @@ class TransactionController extends Controller
             $sales         = Sales::latest()->whereDate('created_at', Carbon::today())->get();
             $returns       = SalesReturn::latest()->whereDate('created_at', Carbon::today())->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->whereDate('created_at', Carbon::today())->get();
+            $plus_over_payments =  SalesInvoice::whereDate('created_at', Carbon::today())   
+                              ->where('isOverPayment', true)
+                              ->where('isVoid', false)
+                              ->sum('over_payment');
+
+            $minus_over_payments = SalesInvoice::whereDate('created_at', Carbon::today())   
+                                ->where('isOverPayment', false)
+                                ->where('isVoid', false)
+                                ->sum('over_payment');
+
             $sales_invioce_bal =  
                 SalesInvoice::whereDate('created_at', Carbon::today())
                             ->where('isVoid', false)
@@ -77,6 +97,16 @@ class TransactionController extends Controller
             $sales         = Sales::latest()->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
             $returns       = SalesReturn::latest()->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+            $plus_over_payments =  SalesInvoice::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])   
+                              ->where('isOverPayment', true)
+                              ->where('isVoid', false)
+                              ->sum('over_payment');
+
+            $minus_over_payments = SalesInvoice::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])   
+                                ->where('isOverPayment', false)
+                                ->where('isVoid', false)
+                                ->sum('over_payment');
+
             $sales_invioce_bal =  
                             SalesInvoice::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
                                         ->where('isVoid', false)
@@ -92,6 +122,17 @@ class TransactionController extends Controller
             $sales         = Sales::latest()->whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))->get();
             $returns       = SalesReturn::latest()->whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))->get();
+            
+            $plus_over_payments =  SalesInvoice::whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))   
+                        ->where('isOverPayment', true)
+                        ->where('isVoid', false)
+                        ->sum('over_payment');
+
+            $minus_over_payments = SalesInvoice::whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))
+                        ->where('isOverPayment', false)
+                        ->where('isVoid', false)
+                        ->sum('over_payment');
+
             $sales_invioce_bal =  
                             SalesInvoice::whereMonth('created_at', '=', date('m'))
                                         ->where('isVoid', false)
@@ -107,6 +148,16 @@ class TransactionController extends Controller
             $sales         = Sales::latest()->whereYear('created_at', '=', date('Y'))->get();
             $returns       = SalesReturn::latest()->whereYear('created_at', '=', date('Y'))->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->whereYear('created_at', '=', date('Y'))->get();
+            $plus_over_payments =  SalesInvoice::whereYear('created_at', '=', date('Y'))   
+                        ->where('isOverPayment', true)
+                        ->where('isVoid', false)
+                        ->sum('over_payment');
+
+            $minus_over_payments = SalesInvoice::whereYear('created_at', '=', date('Y'))
+                        ->where('isOverPayment', false)
+                        ->where('isVoid', false)
+                        ->sum('over_payment');
+
             $sales_invioce_bal =  
                             SalesInvoice::whereYear('created_at', '=', date('Y'))
                                         ->where('isVoid', false)
@@ -122,6 +173,14 @@ class TransactionController extends Controller
             $sales = Sales::latest()->get();
             $returns = SalesReturn::latest()->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->get();
+            $plus_over_payments =  SalesInvoice::where('isOverPayment', true)
+                        ->where('isVoid', false)
+                        ->sum('over_payment');
+
+            $minus_over_payments = SalesInvoice::where('isOverPayment', false)
+                        ->where('isVoid', false)
+                        ->sum('over_payment');
+
             $sales_invioce_bal =  
                             SalesInvoice::where('isVoid', false)
                                         ->where('isReceivable', true)
@@ -138,6 +197,17 @@ class TransactionController extends Controller
             $sales         = Sales::latest()->whereBetween('created_at', [$from, $to])->get();
             $returns       = SalesReturn::latest()->whereBetween('created_at', [$from, $to])->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->whereBetween('created_at', [$from, $to])->get();
+            
+            $plus_over_payments =  SalesInvoice::whereBetween('created_at', [$from, $to])
+                        ->where('isOverPayment', true)
+                        ->where('isVoid', false)
+                        ->sum('over_payment');
+
+            $minus_over_payments = SalesInvoice::whereBetween('created_at', [$from, $to])
+                        ->where('isOverPayment', false)
+                        ->where('isVoid', false)
+                        ->sum('over_payment');
+
             $sales_invioce_bal =  
                             SalesInvoice::whereBetween('created_at', [$from, $to])
                                         ->where('isVoid', false)
@@ -154,6 +224,15 @@ class TransactionController extends Controller
             $sales = Sales::latest()->where('product_id', $product_id)->get();
             $returns = SalesReturn::latest()->where('product_id', $product_id)->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->where('product_id', $product_id)->get();
+            $plus_over_payments =  SalesInvoice::where('isOverPayment', true)
+                        ->where('isVoid', false)
+                        ->sum('over_payment');
+
+            $minus_over_payments = SalesInvoice::where('isOverPayment', false)
+                        ->where('isVoid', false)
+                        ->sum('over_payment');
+
+
             $sales_invioce_bal =  
                             SalesInvoice::where('isVoid', false)
                                         ->where('isReceivable', true)
@@ -169,6 +248,17 @@ class TransactionController extends Controller
             $sales = Sales::latest()->where('salesinvoice_id', $order_id)->get();
             $returns = SalesReturn::latest()->where('salesinvoice_id', $order_id)->where('isComplete', true)->get();
             $deposits      = Deposit::latest()->where('salesinvoice_id', $order_id)->get();
+            
+            $plus_over_payments =  SalesInvoice::where('salesinvoice_id', $order_id)
+                                    ->where('isOverPayment', true)
+                                    ->where('isVoid', false)
+                                    ->sum('over_payment');
+
+            $minus_over_payments = SalesInvoice::where('salesinvoice_id', $order_id)
+                                    ->where('isOverPayment', false)
+                                    ->where('isVoid', false)
+                                    ->sum('over_payment');
+
             $sales_invioce_bal =  
                             SalesInvoice::where('salesinvoice_id', $order_id)
                                         ->where('isVoid', false)
@@ -181,7 +271,7 @@ class TransactionController extends Controller
         }
         $title_filter_daily  = date('F d, Y');
 
-        return view('admin.transactions.loadtransactions', compact('sales_invioce_bal','sales','returns', 'products','salesinvoices', 'title_filter', 'delivers','title_filter_daily','deposits'));
+        return view('admin.transactions.loadtransactions', compact('plus_over_payments','minus_over_payments','sales_invioce_bal','sales','returns', 'products','salesinvoices', 'title_filter', 'delivers','title_filter_daily','deposits'));
     }
 
     public function destroy_sales(Sales $sales){

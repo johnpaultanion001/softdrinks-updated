@@ -12,6 +12,7 @@ use App\Models\Sales;
 use App\Models\SalesReturn;
 use App\Models\Deposit;
 use App\Models\SalesInvoice;
+use App\Models\Customer;
 use Carbon\Carbon;
 use Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -74,9 +75,21 @@ class DashboardController extends Controller
                             ->where('isVoid', false)
                             ->where('isReceivable', true)
                             ->sum('prev_bal');
+
+                         
+      $plus_over_payments =  SalesInvoice::whereDate('created_at', Carbon::today())   
+                              ->where('isOverPayment', true)
+                              ->where('isVoid', false)
+                              ->sum('over_payment');
+
+      $minus_over_payments = SalesInvoice::whereDate('created_at', Carbon::today())   
+                              ->where('isOverPayment', false)
+                              ->where('isVoid', false)
+                              ->sum('over_payment');
+                            
     
       
-      return view('admin.loaddashboard', compact('sales_invioce_bal','alltotal_sales','mtotal_sales','allproducts', 'productsmonthly' , 'allprofit','profitmonthly','sales','returns','deposits'));
+      return view('admin.loaddashboard', compact('plus_over_payments','minus_over_payments','sales_invioce_bal','alltotal_sales','mtotal_sales','allproducts', 'productsmonthly' , 'allprofit','profitmonthly','sales','returns','deposits'));
     }
 
 }

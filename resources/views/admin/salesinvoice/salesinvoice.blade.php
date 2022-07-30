@@ -943,6 +943,7 @@ function printmodal(){
             $("#receiptcontent").html(response);
             $('#total_bal').html('₱ '+ $('#current_balance').val() + '<br> ₱  ' + new_bal)
             $('#changereceipt').text(formatNumber.format(change));
+            $('#over_payment_reciept').text('₱ '+$('#over_payment').val())
         }	
     })
 }
@@ -1000,6 +1001,7 @@ $('#myForm').on('submit', function(event){
                                     keys: ['enter', 'shift'],
                                     action: function(){
                                         $('input[name="receivables"]').prop('checked', true);
+                                        $('input[name="over_payment_checkbox"]').prop('checked', false);
                                     }
                                 },
                             }
@@ -1021,7 +1023,7 @@ $('#myForm').on('submit', function(event){
                 $("#action_button").attr("value", "Submit");
                 $('#change').val(data.change);
                 $('#new_bal').val(data.new_bal);
-
+                $('#over_payment').val(data.over_payment);
             }
             if(data.print){
                 
@@ -1079,10 +1081,18 @@ $(document).on('click', '#print_button', function(){
     var new_bal = $('#new_bal').val();
     var cash = $('#cash').val();
     var receivables1 = '';
+    var isOverPayment = '';
+    var over_payment = $('#over_payment').val();
+
     if($('input[name="receivables"]').is(':checked')){
         receivables1 = 1;
     }else{
         receivables1 = 0;
+    }
+    if($('input[name="over_payment_checkbox"]').is(':checked')){
+        isOverPayment = 1;
+    }else{
+        isOverPayment = 0;
     }
    
     var action_url = "{{ route('admin.salesInvoice.storeandcheckout') }}";
@@ -1090,8 +1100,19 @@ $(document).on('click', '#print_button', function(){
     $.ajax({
         url: action_url,
         method:type,
-        data:{receivables:receivables1,new_bal:new_bal,doc_no:doc_no, entry_date:entry_date, remarks:remarks, customer_id:customer_id, deliver_id:deliver_id,
-                prev_bal:prev_bal, cash:cash, _token:'{!! csrf_token() !!}'},
+        data:{
+              over_payment:over_payment,
+              isOverPayment:isOverPayment,
+              receivables:receivables1,
+              new_bal:new_bal,
+              doc_no:doc_no, 
+              entry_date:entry_date, 
+              remarks:remarks, 
+              customer_id:customer_id, 
+              deliver_id:deliver_id,
+              prev_bal:prev_bal, 
+              cash:cash, 
+              _token:'{!! csrf_token() !!}'},
         dataType:"json",
         beforeSend:function(){
             $("#print_button").attr("disabled", true);
@@ -1496,6 +1517,7 @@ function customer(){
             $('#sold_to_receipt').text(data.name)
             $('#area_receipt').text(data.area)
             $('#current_balance').val(data.balance)
+            $('#over_payment').val(data.over_payment)
             $('#doc_number_receipt').text($("#doc_no").val());
         }
     });
@@ -1850,6 +1872,19 @@ $(document).on('click', '.remove_deposit', function(){
   });
 });
 
+// OVer payment check box
+$(document).on('click', '#over_payment_checkbox', function(){
+    $('#action_salesinvoice').val('compute');
+    $("#action_button").attr("disabled", false);
+    $("#action_button").attr("value", "Compute");
+});
+
+// OVer payment check box
+$(document).on('click', '#receivables', function(){
+    $('#action_salesinvoice').val('compute');
+    $("#action_button").attr("disabled", false);
+    $("#action_button").attr("value", "Compute");
+});
 
 
 

@@ -42,7 +42,9 @@
                                     $change = 0;
                                 }
                         }
-
+                        if($salesInvoices->over_payment > 0){
+                            $change = 0;
+                        }
                     ?>
                     <table class="table table-bordered table-sm">
                             <thead>
@@ -141,7 +143,13 @@
                                         <td>
                                             ₱ {{ number_format($salesInvoices->prev_bal ?? '' , 2, '.', ',') }}
                                             <br>
-                                            ₱ {{ number_format($salesInvoices->new_bal ?? '' , 2, '.', ',') }}
+
+                                            @if($salesInvoices->isReceivable == 1)
+                                                ₱ {{ number_format($salesInvoices->new_bal ?? '' , 2, '.', ',') }}
+                                            @else
+                                                ₱  0.00
+                                            @endif
+                                           
                                            
                                         </td>
                                         <td>
@@ -158,8 +166,12 @@
                                     <tr>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>
+                                            Over Payment:
+                                        </td>
+                                        <td>
+                                            ₱ {{ number_format($salesInvoices->over_payment ?? '' , 2, '.', ',') }}
+                                        </td>
                                         <td>
                                                 Total: 
                                             <br>
@@ -196,16 +208,15 @@
                     </div>
                 </div>
                 <div class="col">
-                    <div class="row mt-2 p-2 ">
+                    <div class="row mt-2 p-2 mx-auto">
                         <div class="col-6">
-                            <small>Dealer Of:</small>     
+                            <small>Dealer Of: <br>
+                            Coke Products/San Miguel Beer Products And Rice</small>     
                         </div>
                         <div class="col-6">
-                            <small>By:___________________</small>      
+                            <small>Created By: <br>{{$salesInvoices->user->name ?? ''}}</small>      
                         </div>
-                        <div class="col-12">
-                            <small>Coke Products/San Miguel Beer Products And Rice</small>     
-                        </div>
+                        
                     </div>
                 </div>
 

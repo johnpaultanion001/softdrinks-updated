@@ -30,6 +30,7 @@
           <th>Area</th>
           <th>Contact Number</th>
           <th>Current Balance</th>
+          <th>Over Payment</th>
           <th>Created At</th>
         </tr>
       </thead>
@@ -54,6 +55,9 @@
                   </td>
                   <td>
                       {{  number_format($customer->current_balance , 2, '.', ',') }}
+                  </td>
+                  <td>
+                    {{  number_format($customer->over_payment , 2, ',', ',') }}
                   </td>
                   <td>
                       {{ $customer->created_at->format('M j , Y h:i A') }}

@@ -47,6 +47,7 @@ class OrderingController extends Controller
             'name' => $customer->customer_code,
             'area' => $customer->area,
             'balance' => number_format($customer->current_balance, 2, '.', ','),
+            'over_payment' => number_format($customer->over_payment, 2, '.', ','),
 
         ]);
         

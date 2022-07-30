@@ -29,6 +29,8 @@ class SalesInvoice extends Model
         'isVoid',
         'change',
         'isReceivable',
+        'isOverPayment',
+        'over_payment',
        
     ];
     public function customer()

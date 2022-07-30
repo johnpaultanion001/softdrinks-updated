@@ -14,6 +14,7 @@ class Customer extends Model
         'customer_name',
         'area',
         'contact_number',
+        'over_payment',
         'current_balance',
         'isRemove',
     ];

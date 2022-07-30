@@ -160,7 +160,8 @@ class SalesInvoiceController extends Controller
                                             ->latest()->get();
 
 
-        return view('admin.salesinvoice.receiptmodal', compact('receipts', 'salesinvoice_id','returns','pallets', 'return_pallets','total_deposit'));
+        return view('admin.salesinvoice.receiptmodal', 
+        compact('receipts', 'salesinvoice_id','returns','pallets', 'return_pallets','total_deposit'));
     }
     public function compute(Request $request)
     {
@@ -207,10 +208,11 @@ class SalesInvoiceController extends Controller
                 $new_bal = $prev_bal - $change;
             }
         }
+        $payment = $payment - floatval(str_replace(",", "", $request->input('over_payment')));
         if($cash < $payment){
             // return response()->json(['insufficient_cash'  => 'cash must be greater than the payment <br> check the Receivable Checkbox to proceed this transaction']);
             $validated =  Validator::make($request->all(), [
-                'receivables' =>'accepted'
+                'receivables' =>'accepted',
             ]);
             if ($validated->fails()) {
                 return response()->json(['errors' => $validated->errors()]);
@@ -223,12 +225,20 @@ class SalesInvoiceController extends Controller
                         $change = 0;
                     }
         }
-        
+        if($request->input('over_payment_checkbox')){
+            $over_payment = $change;
+            $change = '0.00';
+        }
+        if(0 < floatval(str_replace(",", "", $request->input('over_payment')))){
+            $change = '0.00';
+        }
+
         return response()->json(
             [
               'submit'  => 'submit',
               'change' => number_format($change, 2, '.', ','),
               'new_bal' => number_format($new_bal, 2, '.', ','),
+              'over_payment' => number_format($over_payment ?? floatval(str_replace(",", "", $request->input('over_payment'))), 2, '.', ','),
             ]
         );
     }
@@ -245,15 +255,7 @@ class SalesInvoiceController extends Controller
         $total_return_amount = SalesReturn::where('salesinvoice_id', $salesinvoice_id)->sum('amount');
         $payment = $total_order_amount - $total_return_amount;
 
-        if($cash < $payment){
-            // return response()->json(['insufficient_cash'  => 'cash must be greater than the payment <br> check the Receivable Checkbox to proceed this transaction']);
-            $validated =  Validator::make($request->all(), [
-                'receivables' =>'accepted'
-            ]);
-            if ($validated->fails()) {
-                return response()->json(['errors' => $validated->errors()]);
-            }
-        }
+        
         return response()->json(['print'  => 'PRINT']);
     }
 
@@ -299,7 +301,18 @@ class SalesInvoiceController extends Controller
             'new_bal' => floatval(str_replace(",", "", $request->get('new_bal'))),
             'user_id' => $userid,
             'isReceivable'  => $request->get('receivables'),
+            'isOverPayment'  => $request->get('isOverPayment'),
+            'over_payment' => floatval(str_replace(",", "", $request->get('over_payment')))
         ]);
+        if($request->get('isOverPayment') == '1'){
+            Customer::where('id', $request->get('customer_id'))->update([
+                'over_payment' => floatval(str_replace(",", "", $request->get('over_payment'))),
+            ]);
+        }else{
+            Customer::where('id', $request->get('customer_id'))->update([
+                'over_payment' => '0',
+            ]);
+        }
 
         $order_number_id = $ordernumber->order_number;
         $total_profit = Order::sum('profit');
@@ -420,11 +433,14 @@ class SalesInvoiceController extends Controller
         $customers = Customer::where('isRemove', 0)->orderBy('id', 'asc')->get();
         $deliveries = AssignDeliver::where('isRemove', 0)->orderBy('id', 'asc')->get();
         $account_receivables = Customer::where('current_balance', '>' , 0)->orderBy('id', 'asc')->get();
-        return view('admin.salesinvoice.allrecords.record_sales_invoice', compact('customers', 'deliveries','account_receivables'));
+        $over_payments = Customer::where('over_payment', '>' , 0)->orderBy('id', 'asc')->get();
+        return view('admin.salesinvoice.allrecords.record_sales_invoice', compact('over_payments','customers', 'deliveries','account_receivables'));
     }
     public function records(){
-        $title_filter  = 'All SALES INVOICE';
-        $allrecords = SalesInvoice::where('isVoid' , 0)->orderBy('id','desc')->get();
+        $title_filter  = 'From: ' . date('F d, Y') . ' To: ' . date('F d, Y');
+        $allrecords = SalesInvoice::where('isVoid' , 0)
+            ->whereDate('created_at', Carbon::today())
+            ->orderBy('id','desc')->get();
         return view('admin.salesinvoice.allrecords.allrecords', compact('allrecords','title_filter'));
     }
 

@@ -401,6 +401,94 @@
     </div>
 </div>
 
+<div class="modal" id="overPaymentModal" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+    
+            <!-- Modal Header -->
+            <div class="modal-header bg-primary">
+                <p class="text-white text-uppercase font-weight-bold">Over Payment</p>
+                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              
+                <div id="modalbody" class="row print_report">
+                  <div class="col text-center">
+                     <h3 class="text-uppercase">{{ trans('panel.site_title') }}</h3>
+                     <p>Binangonan, <br> Rizal <br> 652-48-36</p>
+                     <h5 class="text-uppercase">Over Payment</h5>
+                     <br>
+                  </div>
+                  <div class="table-responsive">
+          
+                    <table class="table align-items-center table-bordered display" id="table_over_payment" cellspacing="0" width="100%">
+                      <thead class="thead-white">
+                        <tr>
+                          
+                          <th>Customer Code</th>
+                          <th>Customer Name</th>
+                          <th>Area</th>
+                          <th>Over Payment</th>
+                          <th>Updated At</th>
+                        
+                        </tr>
+                      </thead>
+                      <tbody class="text-uppercase font-weight-bold">
+                         @foreach($over_payments as $customer)
+                              <tr data-entry-id="{{ $customer->id ?? '' }}">
+                                  <td>
+                                      {{  $customer->customer_code ?? '' }}
+                                  </td>
+                                  <td>
+                                      {{  $customer->customer_name ?? '' }}
+                                  </td>
+                                  <td>
+                                      {{ $customer->area ?? '' }}
+                                  </td>
+                                
+                                  <td>
+                                    {{  number_format($customer->over_payment , 2, ',', ',') }}
+                                  </td>
+                                  <td>
+                                    {{ $customer->updated_at->format('M j , Y h:i A') }}
+                                  </td>
+                              </tr>
+                          @endforeach
+                          <tr>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                
+                                <td>
+                                  Total Over Payment:
+                                </td>
+                                <td>
+                                  {{  number_format($over_payments->sum->over_payment , 2, '.', ',') }}
+                                </td>
+                                <td>
+                                </td>
+                              </tr>
+                      </tbody>
+                    </table>
+                 </div>
+                </div>
+                
+            </div>
+    
+            <!-- Modal footer -->
+            <div class="modal-footer bg-white">
+                <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
+                <button type="button" id="btn_excel_over_payment_report" class="text-uppercase btn btn-default">Excel Report</button>
+                <button type="button" id="btn_print_over_payment_report" class="text-uppercase btn btn-default">Print Report</button>
+            </div>
+    
+        </div>
+    </div>
+</div>
+
 <div id="success-order" class="success-order col-4 alert text-white fade hide fixed-bottom" style="margin-left: 65%; z-index: 9999;" role="alert">
     
 </div>
@@ -919,47 +1007,82 @@
     });
 
     $(document).on('click', '.remove_deposit', function(){
-    var id = $(this).attr('remove_deposit');
+        var id = $(this).attr('remove_deposit');
 
-    $.confirm({
-      title: 'Confirmation',
-      content: 'You really want to remove this data?',
-      type: 'red',
-      buttons: {
-          confirm: {
-              text: 'confirm',
-              btnClass: 'btn-blue',
-              keys: ['enter', 'shift'],
-              action: function(){
-                  return $.ajax({
-                      url:"/admin/deposits/"+ id,
-                      method:'DELETE',
-                      data: {_token: '{!! csrf_token() !!}'},
-                      dataType:"json",
-                      beforeSend:function(){
-                        
-                      },
-                      success:function(data){
-                          if(data.success){
-                                $('#success-order').addClass('bg-primary');
-                                $('#success-order').html('<strong>' + data.success + '</strong>' );
-                                $("#success-order").fadeTo(10000, 500).slideUp(500, function(){
-                                    $("#success-order").slideUp(500);
-                                });
-                                deposits();
-                          }
-                      }
-                  })
-              }
-          },
-          cancel:  {
-              text: 'cancel',
-              btnClass: 'btn-red',
-              keys: ['enter', 'shift'],
-          }
-      }
-  });
-});
+            $.confirm({
+            title: 'Confirmation',
+            content: 'You really want to remove this data?',
+            type: 'red',
+            buttons: {
+                confirm: {
+                    text: 'confirm',
+                    btnClass: 'btn-blue',
+                    keys: ['enter', 'shift'],
+                    action: function(){
+                        return $.ajax({
+                            url:"/admin/deposits/"+ id,
+                            method:'DELETE',
+                            data: {_token: '{!! csrf_token() !!}'},
+                            dataType:"json",
+                            beforeSend:function(){
+                                
+                            },
+                            success:function(data){
+                                if(data.success){
+                                        $('#success-order').addClass('bg-primary');
+                                        $('#success-order').html('<strong>' + data.success + '</strong>' );
+                                        $("#success-order").fadeTo(10000, 500).slideUp(500, function(){
+                                            $("#success-order").slideUp(500);
+                                        });
+                                        deposits();
+                                }
+                            }
+                        })
+                    }
+                },
+                cancel:  {
+                    text: 'cancel',
+                    btnClass: 'btn-red',
+                    keys: ['enter', 'shift'],
+                }
+            }
+        });
+    });
+
+    // OverPayment
+    $(document).on('click', '#btn_over_payment', function(){
+        $('#overPaymentModal').modal('show');
+
+        var title = 'OVER PAYMENT';
+        var header = 'OVER PAYMENT';
+        $('#table_over_payment').DataTable({
+            bDestroy: true,
+            buttons: [
+                { 
+                    extend: 'excel',
+                    className: 'd-none',
+                    title: title,
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                { 
+                    extend: 'print',
+                    title:  '<center>' + header + '</center>',
+                    className: 'd-none',
+                    
+                }
+            ],
+        });
+    });
+    $(document).on('click', '#btn_print_over_payment_report', function(){
+        $('#table_over_payment').DataTable().buttons(0,1).trigger()
+    });
+
+    $(document).on('click', '#btn_excel_over_payment_report', function(){
+        $('#table_over_payment').DataTable().buttons(0,0).trigger()
+    });
+
 
 </script>
 @endsection

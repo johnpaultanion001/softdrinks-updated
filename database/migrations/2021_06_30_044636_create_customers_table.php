@@ -19,6 +19,7 @@ class CreateCustomersTable extends Migration
             $table->string('customer_name');
             $table->longText('area')->nullable();
             $table->string('contact_number')->nullable();
+            $table->float('over_payment')->default(0);
             $table->float('current_balance')->default(0);
             $table->integer('isRemove')->default(0);
             $table->timestamps();

@@ -126,8 +126,9 @@
                 <h5 class="mb-0 text-uppercase">Sales for today</h5>
                 <h3 class="mb-0"><large class="text-success font-weight-bold mr-1">₱</large> 
                 @php 
-                  $sales1 = $sales->sum->total + $deposits->sum->amount;
-                  $total_sales = $sales1 - $returns->sum->amount - $sales_invioce_bal;
+                
+                  $sales1 = $sales->sum->total + $deposits->sum->amount + $plus_over_payments;
+                  $total_sales = $sales1 - $returns->sum->amount - $sales_invioce_bal - $minus_over_payments;
 
                 @endphp
                 {{ number_format($total_sales , 2, '.', ',') }}

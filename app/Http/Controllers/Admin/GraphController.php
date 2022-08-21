@@ -220,30 +220,33 @@ class GraphController extends Controller
         return view('admin.graph.loadgraph', compact('profit','sold','ucs'));
     }
 
-    public function sample_graph(){
-        //DAILY
+    public function graph_date(Request $request){
+
+        //CUSTOM DATE
         date_default_timezone_set('Asia/Manila');
+        $from = $request->get('from');
+        $to = $request->get('to');
+
         $sales_record = Sales::select(
+            'created_at',
             \DB::raw("SUM(profit) - SUM(discounted) as profit"),
             \DB::raw("SUM(total) as sales"),
-            \DB::raw("DAYNAME(created_at) as day_name"),
-            \DB::raw("DAY(created_at) as day"),
+            \DB::raw("DATE(created_at) as data"),
             \DB::raw("SUM(purchase_qty) as sold"))
-            ->where('created_at', '>', Carbon::today()->subDay(6))
+            ->whereBetween('created_at', [$from, $to])
             ->where('status' , 0)
-            ->groupBy('day_name','day')
-            ->orderBy('day')
+            ->groupBy('data')
+            ->orderBy('data')
             ->get();
         
         $ucs_record = UCS::select(
                 'created_at',
                 \DB::raw("SUM(ucs) as total_ucs"),
-                \DB::raw("DAYNAME(created_at) as day_name"),
-                \DB::raw("DAY(created_at) as day"))
-                ->where('created_at', '>', Carbon::today()->subDay(6))
+                \DB::raw("DATE(created_at) as data"))
+                ->whereBetween('created_at', [$from, $to])
                 ->where('isComplete' , true)
-                ->groupBy('day_name','day')
-                ->orderBy('day')
+                ->groupBy('data')
+                ->orderBy('data')
                 ->get();
        
 
@@ -256,10 +259,10 @@ class GraphController extends Controller
             $total = $row->profit / $row->sales;
             $persentage = $total * 100;
             
-            $profit_data['label'][] = $row->day_name;
+            $profit_data['label'][] = $row->data;
             $profit_data['data'][] =  number_format($persentage, 2, '.', ',');
 
-            $sold_data['label'][] = $row->day_name;
+            $sold_data['label'][] = $row->data;
             $sold_data['data'][] =  $row->sold;
         }
         
@@ -270,7 +273,7 @@ class GraphController extends Controller
                                             ->sum('total_cost');
             $p = $total_cost / $row->total_ucs;
 
-            $ucs_data['label'][] = $row->day_name;
+            $ucs_data['label'][] = $row->data;
             $ucs_data['data'][] =  number_format($p, 2, '.', ',');
         }
         

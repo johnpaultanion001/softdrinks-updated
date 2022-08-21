@@ -68,7 +68,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('graph-daily', 'GraphController@daily')->name('graph.daily');
     route::get('graph-monthly', 'GraphController@monthly')->name('graph.monthly');
     route::get('graph-yearly', 'GraphController@yearly')->name('graph.yearly');
-    route::get('sample_graph', 'GraphController@sample_graph')->name('sample_graph');
+    route::get('graph-date', 'GraphController@graph_date')->name('graph_date');
 
     //permission
     route::get('permissions', 'PermissionsController@index')->name('permissions');

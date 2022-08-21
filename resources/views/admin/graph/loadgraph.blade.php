@@ -153,8 +153,6 @@
                 titleFontSize: 14,
                 borderColor: '#dddfeb',
                 borderWidth: 1,
-                xPadding: 15,
-                yPadding: 15,
                 displayColors: false,
                 intersect: false,
                 mode: 'index',

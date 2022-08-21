@@ -29,7 +29,7 @@ class DashboardController extends Controller
       $allproducts = SalesInventory::latest()->where('isRemove', 0)->where('isComplete', 1)->get();
       $productsmonthly = SalesInventory::whereMonth('created_at', '=', date('m'))->where('isRemove', 0)->where('isComplete', 1)->get();
 
-      $allprofit = Sales::all();
+      
       $profitmonthly = Sales::whereMonth('created_at', '=', date('m'))->get(); 
     
       $sales = Sales::latest()->whereDate('created_at', Carbon::today())->latest()->get();
@@ -87,9 +87,29 @@ class DashboardController extends Controller
                               ->where('isVoid', false)
                               ->sum('over_payment');
                             
-    
-      
-      return view('admin.loaddashboard', compact('plus_over_payments','minus_over_payments','sales_invioce_bal','alltotal_sales','mtotal_sales','allproducts', 'productsmonthly' , 'allprofit','profitmonthly','sales','returns','deposits'));
+
+      $profit_today        =  $sales->sum->profit;
+      $discounted_today    =  $sales->sum->discounted;
+      $profit_today        =  $profit_today - $discounted_today;
+
+      $profit_monthly      =  $profitmonthly->sum->profit;
+      $discounted_monthly  =  $profitmonthly->sum->discounted;
+      $profit_monthly      =  $profit_monthly - $discounted_monthly;
+
+
+      return view('admin.loaddashboard', compact
+      ('plus_over_payments',
+      'minus_over_payments',
+      'sales_invioce_bal',
+      'alltotal_sales',
+      'mtotal_sales',
+      'allproducts', 
+      'productsmonthly' , 
+      'profit_today',
+      'profit_monthly',
+      'sales',
+      'returns',
+      'deposits'));
     }
 
 }

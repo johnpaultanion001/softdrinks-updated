@@ -24,14 +24,14 @@
     <table class="table align-items-center table-flush datatable-customers display" cellspacing="0" width="100%">
       <thead class="thead-white">
         <tr>
-          <th>Actions</th>
-          <th>Customer Code</th>
-          <th>Customer Name</th>
-          <th>Area</th>
-          <th>Contact Number</th>
-          <th>Current Balance</th>
-          <th>Over Payment</th>
-          <th>Created At</th>
+          <th scope="col">Actions</th>
+          <th scope="col">Customer Code</th>
+          <th scope="col">Customer Name</th>
+          <th scope="col">Area</th>
+          <th scope="col">Contact Number</th>
+          <th scope="col">Current Balance</th>
+          <th scope="col">Over Payment</th>
+          <th scope="col">Created At</th>
         </tr>
       </thead>
       <tbody class="text-uppercase font-weight-bold">
@@ -57,7 +57,7 @@
                       {{  number_format($customer->current_balance , 2, '.', ',') }}
                   </td>
                   <td>
-                    {{  number_format($customer->over_payment , 2, ',', ',') }}
+                    {{  number_format($customer->over_payment , 2, '.', ',') }}
                   </td>
                   <td>
                       {{ $customer->created_at->format('M j , Y h:i A') }}
@@ -66,6 +66,18 @@
               </tr>
           @endforeach
       </tbody>
+      <tfoot class="thead-white">
+        <tr>
+          <th scope="col">TOTAL: </th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col">Current Balance</th>
+          <th scope="col">Over Payment</th>
+          <th scope="col"></th>
+        </tr>
+      </tfoot>
     </table>
   </div>
 
@@ -166,23 +178,62 @@
     </div>
 </div>
 
-
-
 <script>
 $(function () {
  
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
  
   $.extend(true, $.fn.dataTable.defaults, {
-    pageLength: 50,
-    'columnDefs': [{ 'orderable': false, 'targets': 0 }],
+      pageLength: 100,
+      bDestroy: true,
+      responsive: true,
+      scrollY: 600,
+      scrollCollapse: true,
+      'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });
 
-  $('.datatable-customers:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
-    });
+    number_format = function (number, decimals, dec_point, thousands_sep) {
+        number = number.toFixed(decimals);
+
+        var nstr = number.toString();
+        nstr += '';
+        x = nstr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? dec_point + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+
+        while (rgx.test(x1))
+            x1 = x1.replace(rgx, '$1' + thousands_sep + '$2');
+
+        return x1 + x2;
+    }
+
+    $('.datatable-customers').DataTable({ 
+      footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var intVal = function (i) {
+                return typeof i === 'string' ? i.replace(/[^\d.-]/g, '') * 1 : typeof i === 'number' ? i : 0;
+            };
+            
+            bal = api
+                .column(5)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            over = api
+                .column(6)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            
+
+            // Update footer
+            $(api.column(5).footer()).html(number_format(bal, 2,'.', ','));
+            $(api.column(6).footer()).html(number_format(over, 2,'.', ','));
+        },
+   })
     
 });
 

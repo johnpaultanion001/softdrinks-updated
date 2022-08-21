@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmptyBottlesInventory extends Model
 {
+    
     use HasFactory;
 
     protected $fillable = [
@@ -63,4 +64,59 @@ class EmptyBottlesInventory extends Model
 
         return $total ?? '0';
     }
+
+    //FITER BY DATE
+    public function empties_date($date)
+    {
+        $sales = $this->hasMany(SalesReturn::class, 'product_id' , 'product_id')->where('type_of_return', 'EMPTY')
+                        ->whereBetween('created_at', ['2022-01-01', $date])
+                        ->where('isComplete', true)->where('status_id', 1)->sum('return_qty');
+        $receive = $this->hasMany(RecieveReturn::class, 'product_id' , 'product_id')
+                        ->whereBetween('created_at', ['2022-01-01', $date])
+                        ->where('isComplete', true)->where('status_id', 1)->sum('return_qty');
+        $deposit = $this->hasMany(Deposit::class, 'product_id' , 'product_id')
+                        ->whereBetween('created_at', ['2022-01-01', $date])
+                        ->where('isComplete', true)->where('status_id', 1)->sum('qty');
+        $total = $sales - $receive - $deposit;
+
+        return $total ?? '0';
+    }
+    public function shells_date($date)
+    {
+        $sales = $this->hasMany(SalesReturn::class, 'product_id' , 'product_id')
+                      ->whereBetween('created_at', ['2022-01-01', $date])
+                      ->where('type_of_return', 'EMPTY')->where('isComplete', true)
+                      ->where('status_id', 2)->sum('return_qty');
+        $receive = $this->hasMany(RecieveReturn::class, 'product_id' , 'product_id')
+                        ->whereBetween('created_at', ['2022-01-01', $date])
+                        ->where('isComplete', true)
+                        ->where('status_id', 2)->sum('return_qty');
+        $deposit = $this->hasMany(Deposit::class, 'product_id' , 'product_id')
+                        ->whereBetween('created_at', ['2022-01-01', $date])
+                        ->where('isComplete', true)
+                        ->where('status_id', 2)->sum('qty');
+        $total = $sales - $receive - $deposit;
+
+        return $total ?? '0';
+    }
+    
+    public function bottles_date($date)
+    {
+        $sales = $this->hasMany(SalesReturn::class, 'product_id' , 'product_id')
+                        ->whereBetween('created_at', ['2022-01-01', $date])
+                        ->where('type_of_return', 'EMPTY')->where('isComplete', true)
+                        ->where('status_id', 3)->sum('return_qty');
+        $receive = $this->hasMany(RecieveReturn::class, 'product_id' , 'product_id')
+                        ->whereBetween('created_at', ['2022-01-01', $date])
+                        ->where('isComplete', true)
+                        ->where('status_id', 3)->sum('return_qty');
+        $deposit = $this->hasMany(Deposit::class, 'product_id' , 'product_id')
+                        ->whereBetween('created_at', ['2022-01-01', $date])
+                        ->where('isComplete', true)
+                        ->where('status_id', 3)->sum('qty');
+        $total = $sales - $receive - $deposit;
+
+        return $total ?? '0';
+    }
+
 }

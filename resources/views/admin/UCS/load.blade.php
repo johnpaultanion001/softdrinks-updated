@@ -27,7 +27,7 @@
       
       <div class="col-md-12 mt-2">
           <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="col-sm-12">
                   <h4 class="text-dark">Total Softdrinks UCS:</h4>
                     <div class="input-group ">
@@ -41,7 +41,7 @@
                 
                 
               </div>
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="col-sm-12">
                   <h4 class="text-dark">Total Water/Juice UCS:</h4>
                     <div class="input-group ">
@@ -52,11 +52,20 @@
                     </div>
                     
                 </div>
-                
-                
               </div>
-        
-              <div class="col-md-4 text-right mt-2">
+              <div class="col-md-3">
+                <div class="col-sm-12">
+                  <h4 class="text-dark">Total Cost:</h4>
+                    <div class="input-group ">
+                    <div class="input-group-prepend ">
+                        <div class="input-group-text text-primary">₱</div>
+                    </div>
+                        <input type="text" id="total_cost" class="form-control" value="0.00" readonly>
+                    </div>
+                    
+                </div>
+              </div>
+              <div class="col-md-3 text-right mt-2">
                 <div class="col">
                   <button type="button" name="all_ucs_report" id="all_ucs_report" class="text-uppercase btn btn-sm btn-primary">ALL UCS REPORTS</button>
                 </div>
@@ -83,6 +92,7 @@
           <th>Product Size / UCS</th>
           <th>QTY</th>
           <th>UCS Total</th>
+          <th>Total Cost</th>
           <th>Created At</th>
         </tr>
       </thead>
@@ -112,11 +122,27 @@
                       {{ number_format( $ucs->ucs ?? '' , 2, '.', ',') }} 
                   </td>
                   <td>
+                      {{ number_format( $ucs->product->total_cost ?? '' , 2, '.', ',') }} 
+                  </td>
+                  <td>
                       {{ $ucs->created_at->format('M j , Y h:i A') }}
                   </td>
               </tr>
           @endforeach
       </tbody>
+      <tfoot class="thead-white">
+        <tr>
+          <th>TOTAL:</th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th>QTY</th>
+          <th>UCS Total</th>
+          <th>Total Cost</th>
+          <th></th>
+        </tr>
+      </tfoot>
     </table>
   </div>
 </div>
@@ -130,22 +156,71 @@
 <script>
 $(function () {
  
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
- 
-  $.extend(true, $.fn.dataTable.defaults, {
-    pageLength: 100,
-    bDestroy: true,
-    responsive: true,
-    scrollY: 500,
-    scrollCollapse: true,
-    'columnDefs': [{ 'orderable': false, 'targets': 0 }],
-  });
-
-  $('.datatable-ucs:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
+    let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+  
+    $.extend(true, $.fn.dataTable.defaults, {
+      pageLength: 100,
+      bDestroy: true,
+      responsive: true,
+      scrollY: 500,
+      scrollCollapse: true,
+      'columnDefs': [{ 'orderable': false, 'targets': 0 }],
     });
+
+    number_format = function (number, decimals, dec_point, thousands_sep) {
+        number = number.toFixed(decimals);
+
+        var nstr = number.toString();
+        nstr += '';
+        x = nstr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? dec_point + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+
+        while (rgx.test(x1))
+            x1 = x1.replace(rgx, '$1' + thousands_sep + '$2');
+
+        return x1 + x2;
+    }
+
+    $('.datatable-ucs').DataTable({
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var intVal = function (i) {
+                return typeof i === 'string' ? i.replace(/[^\d.-]/g, '') * 1 : typeof i === 'number' ? i : 0;
+            };
+            
+            qty = api
+                .column(5, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+           
+            total_ucs = api
+                .column(6, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+
+            total_cost = api
+                .column(7, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+
+            // Update footer
+            $(api.column(5).footer()).html(number_format(qty, 2,'.', ','));
+            $(api.column(6).footer()).html(number_format(total_ucs, 2,'.', ','));
+            $(api.column(7).footer()).html(number_format(total_cost, 2,'.', ','));
+            $('#total_cost').val(number_format(total_cost, 2,'.', ','));
+            
+        },
+    });
+
+
     $('#filter_loading').hide();
     if($('#ucs').val() == 'all'){
       $("#all_ucs_report").text('ALL UCS RECORDS');

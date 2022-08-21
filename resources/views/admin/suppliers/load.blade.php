@@ -34,8 +34,6 @@
           <th>Current Balance</th>
           <th>Remarks</th>
           <th>Created At</th>
-          
-          
         </tr>
       </thead>
       <tbody class="text-uppercase font-weight-bold">
@@ -58,7 +56,7 @@
                         {{ $supplier->contact_number ?? '' }}
                   </td>
                   <td>
-                        {{  number_format($supplier->current_balance , 2, ',', ',') }}
+                        {{  number_format($supplier->current_balance , 2, '.', ',') }}
                     </td>
                   <td>
                       {{  $supplier->remarks ?? '' }}
@@ -70,6 +68,18 @@
               </tr>
           @endforeach
       </tbody>
+      <tfoot class="thead-white">
+        <tr>
+          <th>TOTAL:</th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th>Current Balance</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </tfoot>
     </table>
   </div>
 
@@ -127,7 +137,7 @@
                                   </td>
                                 
                                   <td>
-                                    {{  number_format($supplier->current_balance , 2, ',', ',') }}
+                                    {{  number_format($supplier->current_balance , 2, '.', ',') }}
                                   </td>
                                   <td>
                                     {{ $supplier->updated_at->format('M j , Y h:i A') }}
@@ -178,11 +188,41 @@ $(function () {
     'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });
 
-  $('.datatable-suppliers:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
-    });
+    number_format = function (number, decimals, dec_point, thousands_sep) {
+        number = number.toFixed(decimals);
+
+        var nstr = number.toString();
+        nstr += '';
+        x = nstr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? dec_point + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+
+        while (rgx.test(x1))
+            x1 = x1.replace(rgx, '$1' + thousands_sep + '$2');
+
+        return x1 + x2;
+    }
+
+    $('.datatable-suppliers').DataTable({ 
+      footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var intVal = function (i) {
+                return typeof i === 'string' ? i.replace(/[^\d.-]/g, '') * 1 : typeof i === 'number' ? i : 0;
+            };
+            
+            bal = api
+                .column(5)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            
+
+            // Update footer
+            $(api.column(5).footer()).html(number_format(bal, 2,'.', ','));
+        },
+   })
     
 });
 

@@ -80,10 +80,10 @@
               <div class="card-body">
                   <div class="row">
                   <div class="col">
-                      <h5 class="card-title text-uppercase text-muted mb-0">Profit</h5>
+                      <h5 class="card-title text-uppercase text-muted mb-0">Profit for today</h5>
                       <span class="h2 font-weight-bold mb-0">
-                        @if($allprofit->sum->profit > 0 ) 
-                              {{ number_format($allprofit->sum->profit ?? '' , 2, '.', ',') }}
+                        @if($profit_today > 0 ) 
+                              {{ number_format($profit_today ?? '' , 2, '.', ',') }}
                         @else
                               0.00
                         @endif
@@ -97,8 +97,8 @@
                   </div>
                   <p class="mt-3 mb-0 text-sm">
                   <span class="text-success mr-2"><i class="fa fa-arrow-up"></i>
-                        @if($profitmonthly->sum->profit > 0 ) 
-                              {{ number_format($profitmonthly->sum->profit ?? '' , 2, '.', ',') }}
+                        @if($profit_monthly > 0 ) 
+                              {{ number_format($profit_monthly ?? '' , 2, '.', ',') }}
                         @else
                               0.00
                         @endif</span>
@@ -149,6 +149,7 @@
                 <th scope="col">Product Code/Desc</th>
                 <th scope="col">Customer</th>
                 <th scope="col">Sold</th>
+                <th scope="col">Disc</th>
                 <th scope="col">Sales</th>
                 @can('manager_dashboard_access')
                   <th scope="col">Profit</th>
@@ -167,6 +168,9 @@
                   </td>
                   <td>
                     {{  $sale->purchase_qty ?? '' }}
+                  </td>
+                  <td>
+                    <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->discounted ?? '' , 2, '.', ',') }}
                   </td>
                   <td>
                     <large class="text-success font-weight-bold mr-1">₱</large> {{ number_format($sale->total ?? '' , 2, '.', ',') }}

@@ -99,6 +99,17 @@
                     </tr>
                 @endforeach
             </tbody>
+            <tfoot class="thead-white">
+              <tr>
+                <th>TOTAL:</th>
+                <th></th>
+                <th></th>
+                <th>QTY EMPTIES</th>
+                <th>QTY SHELLS</th>
+                <th>QTY BOTTLES</th>
+                <th></th>
+              </tr>
+            </tfoot>
           </table>
         </div>
     
@@ -112,14 +123,62 @@
 @section('script')
 <script>
     $(function () {
+      number_format = function (number, decimals, dec_point, thousands_sep) {
+          number = number.toFixed(decimals);
+
+          var nstr = number.toString();
+          nstr += '';
+          x = nstr.split('.');
+          x1 = x[0];
+          x2 = x.length > 1 ? dec_point + x[1] : '';
+          var rgx = /(\d+)(\d{3})/;
+
+          while (rgx.test(x1))
+              x1 = x1.replace(rgx, '$1' + thousands_sep + '$2');
+
+          return x1 + x2;
+      }
+
       $('.datatable-emptybottles').DataTable({
           bDestroy: true,
           responsive: true,
-          scrollY: 500,
+          scrollY: 600,
           scrollCollapse: true,
           buttons: [
               
           ],
+          footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var intVal = function (i) {
+                return typeof i === 'string' ? i.replace(/[^\d.-]/g, '') * 1 : typeof i === 'number' ? i : 0;
+            };
+            
+            empties = api
+                .column(3, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+           
+            shells = api
+                .column(4, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+
+            bottles = api
+                .column(5, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+
+            // Update footer
+            $(api.column(3).footer()).html(number_format(empties, 2,'.', ','));
+            $(api.column(4).footer()).html(number_format(shells, 2,'.', ','));
+            $(api.column(5).footer()).html(number_format(bottles, 2,'.', ','));
+        },
       });
     
     });

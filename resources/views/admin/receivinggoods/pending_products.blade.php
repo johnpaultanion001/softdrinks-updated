@@ -87,6 +87,27 @@
                         </tr>
                 @endforeach
             </tbody>
+            <tfoot class="thead-white">
+                <tr>
+                    <th scope="col">TOTAL:</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+
+                    <th scope="col">QTY</th>
+                    <th scope="col">Unit Cost</th>
+                    <th scope="col">Regular Disc</th>
+                    <th scope="col">Hauling Disc</th>
+                    <th scope="col">Additional Disc</th>
+                    <th scope="col">Total Cost</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>
@@ -94,19 +115,86 @@
 <script>
 $(function () {
  
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+    let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
  
-  $.extend(true, $.fn.dataTable.defaults, {
-    pageLength: 100,
-    responsive: true,
-    scrollY: 500,
-    scrollCollapse: true,
-  });
+    $.extend(true, $.fn.dataTable.defaults, {
+        pageLength: 100,
+        responsive: true,
+        scrollY: 500,
+        scrollCollapse: true,
+    });
 
-    $('.datatable-products:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
+
+    number_format = function (number, decimals, dec_point, thousands_sep) {
+        number = number.toFixed(decimals);
+
+        var nstr = number.toString();
+        nstr += '';
+        x = nstr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? dec_point + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+
+        while (rgx.test(x1))
+            x1 = x1.replace(rgx, '$1' + thousands_sep + '$2');
+
+        return x1 + x2;
+    }
+
+    $('.datatable-products').DataTable({
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var intVal = function (i) {
+                return typeof i === 'string' ? i.replace(/[^\d.-]/g, '') * 1 : typeof i === 'number' ? i : 0;
+            };
+            
+            qty = api
+                .column(7, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            unit_cost = api
+                .column(8, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            regular_disc = api
+                .column(9, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            hauling_disc = api
+                .column(10, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            add_disc = api
+                .column(11, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            total_cost = api
+                .column(12, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            
+
+            // Update footer
+            $(api.column(7).footer()).html(number_format(qty, 2,'.', ','));
+            $(api.column(8).footer()).html(number_format(unit_cost, 2,'.', ','));
+            $(api.column(9).footer()).html(number_format(regular_disc, 2,'.', ','));
+            $(api.column(10).footer()).html(number_format(hauling_disc, 2,'.', ','));
+            $(api.column(11).footer()).html(number_format(add_disc, 2,'.', ','));
+            $(api.column(12).footer()).html(number_format(total_cost, 2,'.', ','));
+            
+        },
     });
 
     if($('#purchase_hidden_id').val() == ""){

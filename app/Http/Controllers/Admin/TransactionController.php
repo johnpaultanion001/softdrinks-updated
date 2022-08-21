@@ -14,6 +14,8 @@ use App\Models\ReceivingProduct;
 use App\Models\Deposit;
 use App\Models\EmptyBottlesInventory;
 use App\Models\Pallet;
+use App\Models\SalesPallet;
+use App\Models\ReceivingPallet;
 use App\Models\Customer;
 use Carbon\Carbon;
 use Gate;
@@ -321,10 +323,51 @@ class TransactionController extends Controller
 
         }
 
-        return response()->json(['data' => $sales ]);
+        return response()->json(['data' => $sales  , 'filter_date' => date('F d, Y')]);
     }
 
+    public function inventory_report_date(Request $request){
+        date_default_timezone_set('Asia/Manila');
+
+        $products    = SalesInventory::where('isComplete', true)->get();
+        $date = $request->get('date');
+        foreach($products as $product){
+          
+            //PREVIOS DATE
+            $sales_inventory_prev = Sales::where('product_id', $product->id)
+                ->whereBetween('created_at', ['2022-01-01', $date])->sum('purchase_qty');
+            $delivery_inventory_prev = ReceivingProduct::where('product_id', $product->id)
+                ->whereBetween('created_at', ['2022-01-01', $date])->sum('qty');
+
+            //CURRENT DATE
+            $beginning_inventory = $delivery_inventory_prev - $sales_inventory_prev;
+
+
+            $sales_inventory = Sales::where('product_id', $product->id)->whereDate('created_at', $date)->sum('purchase_qty');
+            $delivery_inventory = ReceivingProduct::where('product_id', $product->id)->whereDate('created_at', $date)->sum('qty');
+            
+            $ending_inventory = $beginning_inventory + $delivery_inventory - $sales_inventory;
+            
+            $sales[] = array(
+                'product'              => $product->product_code,
+                'description'          => $product->description,
+                'category'             => $product->category->name,
+                'beginning_inventory'  => $beginning_inventory,
+                'sales_inventory'      => $sales_inventory,
+                'delivery_inventory'   => $delivery_inventory,
+                'ending_inventory'     => $ending_inventory,    
+            );
+
+        
+
+        }
+
+        return response()->json(['data' => $sales , 'filter_date' => date('F d, Y', strtotime($date))]);
+    }
+    
+
     public function ending_inventory_report(Request $request){
+        date_default_timezone_set('Asia/Manila');
         $products_list    = SalesInventory::where('isComplete', true)->get();
         $pallets1          = Pallet::latest()->get();
 
@@ -360,19 +403,78 @@ class TransactionController extends Controller
         }
         
 
-        return response()->json(['data' => $products , 'pallets' => $pallets]);
+        return response()->json(['data' => $products , 'pallets' => $pallets, 'filter_date' => date('F d, Y')]);
       
     }
 
-    public function ending_inventory_update(Request $request, SalesInventory $product){
-        $product->update([
-            'shell'     => $request->get('shell'),
-            'bottles'     => $request->get('bottles'),
-            'big_palettes'     => $request->get('big_palettes'),
-            'small_palettes'     => $request->get('small_palettes'),
-        ]);
-        return response()->json(['success' => 'success']);
+    public function ending_inventory_report_date(Request $request){
+        date_default_timezone_set('Asia/Manila');
+        $products_list     = SalesInventory::where('isComplete', true)->get();
+        $pallets1          = Pallet::latest()->get();
+        $date              = $request->get('date');
+        
+
+        foreach($products_list as $product){
+            $empty_record = EmptyBottlesInventory::where('product_id', $product->id)->first();
+            $sales = Sales::where('product_id', $product->id)
+                ->whereBetween('created_at', ['2022-01-01', $date])->sum('purchase_qty');
+            $stock = ReceivingProduct::where('product_id', $product->id)
+                ->whereBetween('created_at', ['2022-01-01', $date])->sum('qty');
+            $full_goods = $stock - $sales;
+
+            if($empty_record == null){
+                $empties = '0';
+                $shells = '0';
+                $bottles = '0';
+            }else{
+                $empties = $empty_record->empties_date($date);
+                $shells = $empty_record->shells_date($date);
+                $bottles = $empty_record->bottles_date($date);
+            }
+            $products[] = array(
+                'product_id'           => $product->id,
+                'product'              => $product->product_code .'/'.$product->description,
+                'category'             => $product->category->name,
+                'full_goods'           => $full_goods,
+                'full_emptys'          => $empties,
+                'shell'                => $shells,
+                'bottles'              => $bottles,
+                'big_palettes'         => $product->big_palettes ?? '0',
+                'small_palettes'       => $product->small_palettes ?? '0',
+            );
+        }
+
+        foreach($pallets1 as $pallet){
+            $sales_buy    = SalesPallet::where('pallet_id', $pallet->id)
+                                        ->whereBetween('created_at', ['2022-01-01', $date])
+                                        ->where('type','BUY')->sum('qty');
+            $sales_return = SalesPallet::where('pallet_id', $pallet->id)
+                                        ->whereBetween('created_at', ['2022-01-01', $date])
+                                        ->where('type','RETURN')->sum('qty');
+            $sales = $sales_return - $sales_buy;
+
+            $recieve_buy    = ReceivingPallet::where('pallet_id', $pallet->id)
+                                        ->whereBetween('created_at', ['2022-01-01', $date])
+                                        ->where('type','BUY')->sum('qty');
+            $recieve_return = ReceivingPallet::where('pallet_id', $pallet->id)
+                                        ->whereBetween('created_at', ['2022-01-01', $date])
+                                        ->where('type','RETURN')->sum('qty');
+            $recieve = $recieve_buy - $recieve_return;
+
+            $stock = $sales + $recieve;
+            $pallets[] = array(
+                'title' => $pallet->title,
+                'stock'   => $stock,
+            );
+        }
+        
+
+        return response()->json(['data' => $products , 'pallets' => $pallets, 'filter_date' => date('F d, Y', strtotime($date))]);
+      
     }
+    
+
+  
     
     
 }

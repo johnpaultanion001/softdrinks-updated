@@ -84,6 +84,22 @@ $(function () {
     return load();
 });
 
+number_format = function (number, decimals, dec_point, thousands_sep) {
+    number = number.toFixed(decimals);
+
+    var nstr = number.toString();
+    nstr += '';
+    x = nstr.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? dec_point + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+
+    while (rgx.test(x1))
+        x1 = x1.replace(rgx, '$1' + thousands_sep + '$2');
+
+    return x1 + x2;
+}
+
 function load(){
     $.ajax({
         url: "transactions_load", 
@@ -157,7 +173,7 @@ $(document).on('click', '#btn_sales_for_today', function(){
     var table = $('#table_inventory_report').DataTable();
      $.fn.dataTable.ext.search.push(
          function (settings, data, dataIndex){
-            return (data[3] > 0) ? true : false;
+            return (data[4] > 0) ? true : false;
          }
       );
     table.draw();
@@ -235,7 +251,6 @@ $(document).on('change', '.dd_filter', function(){
 
 
 $(document).on('click', '#btn_inventory_report', function(){
-
     $.ajax({
         url: "/admin/transactions/inventory_report", 
         type: "get",
@@ -246,7 +261,6 @@ $(document).on('click', '#btn_inventory_report', function(){
         },
         success: function(data){
             $('#btn_inventory_report').attr('disabled', false);
-            
             var list = '';
             $.each(data.data, function(key,value){
                 list += '<tr>';
@@ -260,28 +274,28 @@ $(document).on('click', '#btn_inventory_report', function(){
                         list += value.category;
                     list += '</td>';
                     list += '<td>';
-                        list += value.beginning_inventory;
+                        list += number_format(value.beginning_inventory, 2,'.', ',');
                     list += '</td>';
                     list += '<td>';
-                        list += value.sales_inventory;
+                        list += number_format(value.sales_inventory, 2,'.', ',');
                     list += '</td>';
                     list += '<td>';
-                        list += value.delivery_inventory;
+                        list += number_format(value.delivery_inventory, 2,'.', ',');
                     list += '</td>';
                     list += '<td>';
-                        list += value.ending_inventory;
+                        list += number_format(value.ending_inventory, 2,'.', ',');;
                     list += '</td>';
                     
                 list += '</tr>';
             });
             
             $('#list_inventory_report').empty().append(list);
+            $("#date_inv").text(data.filter_date);
+            $("#filter_by_date_inv").val(null);
             $('#modal_inventory').modal('show');
-            table_inventory_report()
-
+            table_inventory_report();
         }	
     })
-    
 });
 
 function table_inventory_report(){
@@ -297,6 +311,7 @@ function table_inventory_report(){
                 extend: 'excel',
                 className: 'd-none',
                 title: title,
+                footer: true,
                 exportOptions: {
                     columns: ':visible'
                 }
@@ -304,10 +319,50 @@ function table_inventory_report(){
             { 
                 extend: 'print',
                 title:  '<center>' + header + '</center>',
+                footer: true,
                 className: 'd-none',
                 
             }
         ],
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var intVal = function (i) {
+                return typeof i === 'string' ? i.replace(/[^\d.-]/g, '') * 1 : typeof i === 'number' ? i : 0;
+            };
+            
+            beg_inv = api
+                .column(3)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            sales_inv = api
+                .column(4)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            del_inv = api
+                .column(5)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            end_inv = api
+                .column(6)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+           
+            // Update footer
+            $(api.column(3).footer()).html(number_format(beg_inv, 2,'.', ','));
+            $(api.column(4).footer()).html(number_format(sales_inv, 2,'.', ','));
+            $(api.column(5).footer()).html(number_format(del_inv, 2,'.', ','));
+            $(api.column(6).footer()).html(number_format(end_inv, 2,'.', ','));
+          
+            
+        },
     });
 }
 
@@ -347,10 +402,10 @@ function data_ending_inventory(){
                         list += value.full_emptys;
                     list += '</td>';
                     list += '<td>';
-                        list += '<input type="text" id="shell'+value.product_id+'" value="'+value.shell+'" class="input_ending" readonly onkeypress="return AddKeyPress(event);"/> <span style="display: none;">'+value.shell+'</span>';
+                        list += value.shell;
                     list += '</td>';
                     list += '<td>';
-                        list += '<input type="text" id="bottles'+value.product_id+'" value="'+value.bottles+'" class="input_ending" readonly onkeypress="return AddKeyPress(event);"/> <span style="display: none;">'+value.bottles+'</span>';   
+                        list += value.bottles;
                     list += '</td>';
                 list += '</tr>';
             });
@@ -403,6 +458,8 @@ function data_ending_inventory(){
                     list += '</tr>';
                 });
             $('#list_ending_inventory_report').empty().append(list);
+            $("#date_end_inv").text(data.filter_date);
+            $("#filter_by_date_end_inv").val(null);
             table_ending_inventory_report();
         }	
     })
@@ -423,6 +480,7 @@ function table_ending_inventory_report(){
                 extend: 'excel',
                 className: 'd-none',
                 title: title,
+                footer: true,
                 exportOptions: {
                     columns: ':visible'
                 }
@@ -430,12 +488,64 @@ function table_ending_inventory_report(){
             { 
                 extend: 'print',
                 title:  '<center>' + header + '</center>',
+                footer: true,
                 className: 'd-none',
                 exportOptions: {
                     columns: ':visible'
                 }
             },
         ],
+
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var intVal = function (i) {
+                return typeof i === 'string' ? i.replace(/[^\d.-]/g, '') * 1 : typeof i === 'number' ? i : 0;
+            };
+            
+            stock = api
+                .column(1)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            full_goods = api
+                .column(2)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            full_empties = api
+                .column(3)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            shell = api
+                .column(4)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            bottles = api
+                .column(5)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+           
+            
+           
+            // Update footer
+            $(api.column(1).footer()).html(number_format(stock, 2,'.', ','));
+            $(api.column(2).footer()).html(number_format(full_goods, 2,'.', ','));
+            $(api.column(3).footer()).html(number_format(full_empties, 2,'.', ','));
+            $(api.column(4).footer()).html(number_format(shell, 2,'.', ','));
+            $(api.column(5).footer()).html(number_format(bottles, 2,'.', ','));
+           
+            
+          
+            
+        },
     });
 }
 
@@ -447,6 +557,151 @@ $(document).on('click', '#btn_excel_ending_inventory_report', function(){
     $('#table_ending_inventory_report').DataTable().buttons(0,0).trigger()
 });
 
+$(document).on('change', '#filter_by_date_inv', function(){
+    var date = $(this).val();
+    $.ajax({
+        url: "/admin/transactions/inventory_report_date", 
+        type: "get",
+        data: {_token: '{!! csrf_token() !!}', date:date},
+        dataType: "json",
+        beforeSend: function() {
+            $(this).attr('disabled', true);
+        },
+        success: function(data){
+            $(this).attr('disabled', false);
+            $('#table_inventory_report').DataTable().destroy();
+            var list = '';
+            $.each(data.data, function(key,value){
+                list += '<tr>';
+                    list += '<td>';
+                        list += value.product;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.description;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.category;
+                    list += '</td>';
+                    list += '<td>';
+                        list += number_format(value.beginning_inventory, 2,'.', ',');
+                    list += '</td>';
+                    list += '<td>';
+                        list += number_format(value.sales_inventory, 2,'.', ',');
+                    list += '</td>';
+                    list += '<td>';
+                        list += number_format(value.delivery_inventory, 2,'.', ',');
+                    list += '</td>';
+                    list += '<td>';
+                        list += number_format(value.ending_inventory, 2,'.', ',');;
+                    list += '</td>';
+                    
+                list += '</tr>';
+            });
+            
+            $('#list_inventory_report').empty().append(list);
+            $("#date_inv").text(data.filter_date);
+            table_inventory_report();
+            
+
+        }	
+    })
+});
+
+$(document).on('change', '#filter_by_date_end_inv', function(){
+    var date = $(this).val();
+    $.ajax({
+        url: "/admin/transactions/ending_inventory_report_date", 
+        type: "get",
+        data: {_token: '{!! csrf_token() !!}', date:date},
+        dataType: "json",
+        beforeSend: function() {
+            $(this).attr('disabled', true);
+        },
+        success: function(data){
+            $(this).attr('disabled', false);
+            $('#table_ending_inventory_report').DataTable().destroy();
+          
+            var list = '';
+            $.each(data.data, function(key,value){
+                list += '<tr>';
+                    list += '<td>';
+                        list += value.product;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.category;
+                    list += '</td>';
+                    list += '<td>';
+                        list += number_format(value.full_goods, 2,'.', ',');
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.full_emptys;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.shell;
+                    list += '</td>';
+                    list += '<td>';
+                        list += value.bottles;
+                    list += '</td>';
+                list += '</tr>';
+            });
+                list += '<tr>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                list += '</tr>';
+                list += '<tr>';
+                    list += '<td>';
+                        list += 'PALLETS';
+                    list += '</td>';
+                    list += '<td>';
+                        list += 'STOCKS';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                    list += '<td>';
+                    list += '</td>';
+                list += '</tr>';
+                $.each(data.pallets, function(key,value){
+                    list += '<tr>';
+                        list += '<td>';
+                            list += value.title;
+                        list += '</td>';
+                        list += '<td>';
+                            list += value.stock;
+                        list += '</td>';
+                        list += '<td>';
+                        list += '</td>';
+                        list += '<td>';
+                        list += '</td>';
+                        list += '<td>';
+                        list += '</td>';
+                        list += '<td>';
+                        list += '</td>';
+                    list += '</tr>';
+                });
+            $('#list_ending_inventory_report').empty().append(list);
+            $("#date_end_inv").text(data.filter_date);
+            table_ending_inventory_report();
+
+
+            
+
+        }	
+    })
+});
 
 </script>
 @endsection

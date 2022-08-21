@@ -48,9 +48,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('transactions_load', 'TransactionController@load')->name('transactions.loadsales');
     route::get('transactions_filter', 'TransactionController@filter')->name('transactions.filter');
     Route::get('transactions/inventory_report', 'TransactionController@inventory_report')->name('transactions.inventory_report');
+    Route::get('transactions/inventory_report_date', 'TransactionController@inventory_report_date')->name('transactions.inventory_report_date');
+
     Route::get('transactions/assign_deliver_report', 'TransactionController@assign_deliver_report')->name('transactions.assign_deliver_report');
     Route::get('transactions/ending_inventory_report', 'TransactionController@ending_inventory_report')->name('transactions.ending_inventory_report');
-    Route::put('transactions/ending_inventory_report/{product}', 'TransactionController@ending_inventory_update')->name('transactions.ending_inventory_update');
+    Route::get('transactions/ending_inventory_report_date', 'TransactionController@ending_inventory_report_date')->name('transactions.ending_inventory_report_date');
 
     //sales remove
     Route::delete('transactions/{sales}', 'TransactionController@destroy_sales')->name('transactions.destroy_sales');
@@ -66,6 +68,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     route::get('graph-daily', 'GraphController@daily')->name('graph.daily');
     route::get('graph-monthly', 'GraphController@monthly')->name('graph.monthly');
     route::get('graph-yearly', 'GraphController@yearly')->name('graph.yearly');
+    route::get('sample_graph', 'GraphController@sample_graph')->name('sample_graph');
 
     //permission
     route::get('permissions', 'PermissionsController@index')->name('permissions');

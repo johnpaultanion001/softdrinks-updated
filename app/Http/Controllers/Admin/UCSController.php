@@ -26,6 +26,7 @@ class UCSController extends Controller
         $ucs_wj = UCS::where('isRemove', false)->where('isComplete', true)
                                 ->where('isHide', false)->where('status_size', 'WATER/JUICES')->sum('ucs');
         $title_filter  = 'UCS RECORDS';
+        
         return view('admin.UCS.load', compact('ucs_records','ucs_softdrinks','ucs_wj','title_filter'));
     }
 

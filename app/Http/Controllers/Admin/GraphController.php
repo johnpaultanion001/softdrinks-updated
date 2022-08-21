@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 use App\Models\Sales;
+use App\Models\UCS;
+use App\Models\ReceivingProduct;
 use Gate;
 use DB;
 use Carbon\Carbon;
@@ -16,215 +18,269 @@ class GraphController extends Controller
     public function index()
     {
         abort_if(Gate::denies('graph_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $settings1 = [
-            'chart_title'           => 'Sales by Date',
-            'chart_type'            => 'bar',
-            'report_type'           => 'group_by_date',
-            'model'                 => 'App\Models\Sales',
-            'conditions'            => [
-                ['name' => 'Profit', 'condition' => 'status = 0', 'color' => 'orange' , 'fill' => true],
-               
-            ],
-            'group_by_field'        => 'created_at',
-            'group_by_period'       => 'day',
-            'aggregate_function'    => 'sum',
-            'aggregate_field'       => 'profit',
-            'filter_field'          => 'created_at',
-            'group_by_field_format' => 'Y-m-d',
-            'entries_number'        => '5',
-        ];
 
-
-        $chart1 = new LaravelChart($settings1);
-        return view('admin.graph.graph', compact('chart1'));
+        return view('admin.graph.graph');
     }
 
     public function daily()
     {
-        $settings1 = [
-            'chart_title'           => 'Sales by Date',
-            'chart_type'            => 'line',
-            'report_type'           => 'group_by_date',
-            'model'                 => 'App\Models\Sales',
-            'conditions'            => [
-                ['name' => 'Profit', 'condition' => 'status = 0', 'color' => 'orange' , 'fill' => true],
-               
-            ],
-            'group_by_field'        => 'created_at',
-            'group_by_period'       => 'day',
-            'aggregate_function'    => 'sum',
-            'aggregate_field'       => 'profit',
-            'filter_field'          => 'created_at',
-            'group_by_field_format' => 'Y-m-d',
-            'entries_number'        => '5',
-        ];
+         //DAILY
+         date_default_timezone_set('Asia/Manila');
+         $sales_record = Sales::select(
+             \DB::raw("SUM(profit) - SUM(discounted) as profit"),
+             \DB::raw("SUM(total) as sales"),
+             \DB::raw("DAYNAME(created_at) as day_name"),
+             \DB::raw("DAY(created_at) as day"),
+             \DB::raw("SUM(purchase_qty) as sold"))
+             ->where('created_at', '>', Carbon::today()->subDay(6))
+             ->where('status' , 0)
+             ->groupBy('day_name','day')
+             ->orderBy('day')
+             ->get();
+         
+         $ucs_record = UCS::select(
+                 'created_at',
+                 \DB::raw("SUM(ucs) as total_ucs"),
+                 \DB::raw("DAYNAME(created_at) as day_name"),
+                 \DB::raw("DAY(created_at) as day"))
+                 ->where('created_at', '>', Carbon::today()->subDay(6))
+                 ->where('isComplete' , true)
+                 ->groupBy('day_name','day')
+                 ->orderBy('day')
+                 ->get();
+        
+ 
+ 
+          $profit_data = [];
+          $sold_data = [];
+          $ucs_data = [];
+      
+         foreach($sales_record as $row) {
+             $total = $row->profit / $row->sales;
+             $persentage = $total * 100;
+             
+             $profit_data['label'][] = $row->day_name;
+             $profit_data['data'][] =  number_format($persentage, 2, '.', ',');
+ 
+             $sold_data['label'][] = $row->day_name;
+             $sold_data['data'][] =  $row->sold;
+         }
+         
+         foreach($ucs_record as $row) {
+ 
+             $total_cost = ReceivingProduct::whereDate('created_at', $row->created_at)
+                                             ->whereIn('supplier_id', [1,2,3])
+                                             ->sum('total_cost');
+             $p = $total_cost / $row->total_ucs;
+ 
+             $ucs_data['label'][] = $row->day_name;
+             $ucs_data['data'][] =  number_format($p, 2, '.', ',');
+         }
+         
+         
+      
+         $profit = json_encode($profit_data);
+         $sold = json_encode($sold_data);
+         $ucs = json_encode($ucs_data);
+ 
+         return view('admin.graph.loadgraph', compact('profit','sold','ucs'));
 
-        $settings2 = [
-            'chart_title'           => 'Sold by Date',
-            'chart_type'            => 'line',
-            'report_type'           => 'group_by_date',
-            'model'                 => 'App\Models\Sales',
-            'conditions'            => [
-                ['name' => 'Sold', 'condition' => 'status = 0', 'color' => 'red' , 'fill' => true],
-               
-            ],
-            'group_by_field'        => 'created_at',
-            'group_by_period'       => 'day',
-            'aggregate_function'    => 'sum',
-            'aggregate_field'       => 'purchase_qty',
-            'filter_field'          => 'created_at',
-            'group_by_field_format' => 'Y-m-d',
-            'entries_number'        => '5',
-        ];
+       
 
-        $settings3 = [
-            'chart_title'           => 'UCS by Date',
-            'chart_type'            => 'line',
-            'report_type'           => 'group_by_date',
-            'model'                 => 'App\Models\UCS',
-            'conditions'            => [
-                ['name' => 'UCS', 'condition' => 'isComplete = true', 'color' => 'blue' , 'fill' => true],
-               
-            ],
-            'group_by_field'        => 'created_at',
-            'group_by_period'       => 'day',
-            'aggregate_function'    => 'sum',
-            'aggregate_field'       => 'ucs',
-            'filter_field'          => 'created_at',
-            'group_by_field_format' => 'Y-m-d',
-            'entries_number'        => '5',
-        ];
-
-
-        $chart1 = new LaravelChart($settings1);
-        $chart2 = new LaravelChart($settings2);
-        $chart3 = new LaravelChart($settings3);
-
-        return view('admin.graph.loadgraph', compact('chart1','chart2','chart3'));
+       
     }
 
     public function monthly()
     {
-        $settings1 = [
-            'chart_title'           => 'Sales by Date',
-            'chart_type'            => 'line',
-            'report_type'           => 'group_by_date',
-            'model'                 => 'App\Models\Sales',
-            'conditions'            => [
-                ['name' => 'Profit', 'condition' => 'status = 0', 'color' => 'orange' , 'fill' => true],
-               
-            ],
-            'group_by_field'        => 'created_at',
-            'group_by_period'       => 'month',
-            'aggregate_function'    => 'sum',
-            'aggregate_field'       => 'profit',
-            'filter_field'          => 'created_at',
-            'group_by_field_format' => 'Y-m-d',
-            'entries_number'        => '5',
-        ];
+        //MONTHLY
+        date_default_timezone_set('Asia/Manila');
+        $sales_record = Sales::select(
+            \DB::raw("SUM(profit) - SUM(discounted) as profit"),
+            \DB::raw("SUM(total) as sales"),
+            \DB::raw("SUM(purchase_qty) as sold"),
+            \DB::raw("DATE_FORMAT(created_at, '%m-%Y') new_date"),
+            \DB::raw('YEAR(created_at) year, MONTH(created_at) month'))
+            ->where('status' , 0)
+            ->groupby('year','month')
+            ->orderBy('year')
+            ->get();
+        
+        $ucs_record = UCS::select(
+                'created_at',
+                \DB::raw("SUM(ucs) as total_ucs"),
+                
+                \DB::raw("DATE_FORMAT(created_at, '%m-%Y') new_date"),
+                \DB::raw('YEAR(created_at) year, MONTH(created_at) month'))
 
-        $settings2 = [
-            'chart_title'           => 'Sold by Date',
-            'chart_type'            => 'line',
-            'report_type'           => 'group_by_date',
-            'model'                 => 'App\Models\Sales',
-            'conditions'            => [
-                ['name' => 'Sold', 'condition' => 'status = 0', 'color' => 'red' , 'fill' => true],
-               
-            ],
-            'group_by_field'        => 'created_at',
-            'group_by_period'       => 'month',
-            'aggregate_function'    => 'sum',
-            'aggregate_field'       => 'purchase_qty',
-            'filter_field'          => 'created_at',
-            'group_by_field_format' => 'Y-m-d',
-            'entries_number'        => '5',
-        ];
+                ->where('isComplete' , true)
+                ->groupby('year','month')
+                ->orderBy('year')
+                ->get();
+       
 
-        $settings3 = [
-            'chart_title'           => 'UCS by Date',
-            'chart_type'            => 'line',
-            'report_type'           => 'group_by_date',
-            'model'                 => 'App\Models\UCS',
-            'conditions'            => [
-                ['name' => 'UCS', 'condition' => 'isComplete = true', 'color' => 'blue' , 'fill' => true],
-               
-            ],
-            'group_by_field'        => 'created_at',
-            'group_by_period'       => 'month',
-            'aggregate_function'    => 'sum',
-            'aggregate_field'       => 'ucs',
-            'filter_field'          => 'created_at',
-            'group_by_field_format' => 'Y-m-d',
-            'entries_number'        => '5',
-        ];
 
-        $chart1 = new LaravelChart($settings1);
-        $chart2 = new LaravelChart($settings2);
-        $chart3 = new LaravelChart($settings3);
+         $profit_data = [];
+         $sold_data = [];
+         $ucs_data = [];
+     
+        foreach($sales_record as $row) {
+            $total = $row->profit / $row->sales;
+            $persentage = $total * 100;
+         
+            
+            $profit_data['label'][] = $row->new_date;
+            $profit_data['data'][] =  number_format($persentage, 2, '.', ',');
 
-        return view('admin.graph.loadgraph', compact('chart1','chart2','chart3'));
+            $sold_data['label'][] = $row->new_date;
+            $sold_data['data'][] =  $row->sold;
+        }
+        
+        foreach($ucs_record as $row) {
+
+            $total_cost = ReceivingProduct::whereMonth('created_at', $row->created_at)
+                                            ->whereIn('supplier_id', [1,2,3])
+                                            ->sum('total_cost');
+            $p = $total_cost / $row->total_ucs;
+
+            $ucs_data['label'][] = $row->new_date;
+            $ucs_data['data'][] =  number_format($p, 2, '.', ',');
+        }
+        
+        
+     
+        $profit = json_encode($profit_data);
+        $sold = json_encode($sold_data);
+        $ucs = json_encode($ucs_data);
+
+        return view('admin.graph.loadgraph', compact('profit','sold','ucs'));
     }
 
     public function yearly()
     {
-        $settings1 = [
-            'chart_title'           => 'Sales by Date',
-            'chart_type'            => 'line',
-            'report_type'           => 'group_by_date',
-            'model'                 => 'App\Models\Sales',
-            'conditions'            => [
-                ['name' => 'Profit', 'condition' => 'status = 0', 'color' => 'orange' , 'fill' => true],
-               
-            ],
-            'group_by_field'        => 'created_at',
-            'group_by_period'       => 'year',
-            'aggregate_function'    => 'sum',
-            'aggregate_field'       => 'profit',
-            'filter_field'          => 'created_at',
-            'group_by_field_format' => 'Y-m-d',
-            'entries_number'        => '5',
-        ];
-        $settings2 = [
-            'chart_title'           => 'Sold by Date',
-            'chart_type'            => 'line',
-            'report_type'           => 'group_by_date',
-            'model'                 => 'App\Models\Sales',
-            'conditions'            => [
-                ['name' => 'Sold', 'condition' => 'status = 0', 'color' => 'red' , 'fill' => true],
-               
-            ],
-            'group_by_field'        => 'created_at',
-            'group_by_period'       => 'year',
-            'aggregate_function'    => 'sum',
-            'aggregate_field'       => 'purchase_qty',
-            'filter_field'          => 'created_at',
-            'group_by_field_format' => 'Y-m-d',
-            'entries_number'        => '5',
-        ];
+        //YEARLY
+        date_default_timezone_set('Asia/Manila');
+        $sales_record = Sales::select(
+            \DB::raw("SUM(profit) - SUM(discounted) as profit"),
+            \DB::raw("SUM(total) as sales"),
+            \DB::raw("SUM(purchase_qty) as sold"),
+            \DB::raw("DATE_FORMAT(created_at, '%Y') new_date"),
+            \DB::raw('YEAR(created_at) year'))
+            ->where('status' , 0)
+            ->groupby('year')
+            ->orderBy('year')
+            ->get();
+        
+        $ucs_record = UCS::select(
+                'created_at',
+                \DB::raw("SUM(ucs) as total_ucs"),
+                
+                \DB::raw("DATE_FORMAT(created_at, '%Y') new_date"),
+                \DB::raw('YEAR(created_at) year'))
 
-        $settings3 = [
-            'chart_title'           => 'UCS by Date',
-            'chart_type'            => 'line',
-            'report_type'           => 'group_by_date',
-            'model'                 => 'App\Models\UCS',
-            'conditions'            => [
-                ['name' => 'UCS', 'condition' => 'isComplete = true', 'color' => 'blue' , 'fill' => true],
-               
-            ],
-            'group_by_field'        => 'created_at',
-            'group_by_period'       => 'year',
-            'aggregate_function'    => 'sum',
-            'aggregate_field'       => 'ucs',
-            'filter_field'          => 'created_at',
-            'group_by_field_format' => 'Y-m-d',
-            'entries_number'        => '5',
-        ];
+                ->where('isComplete' , true)
+                ->groupby('year')
+                ->orderBy('year')
+                ->get();
+       
 
-        $chart1 = new LaravelChart($settings1);
-        $chart2 = new LaravelChart($settings2);
-        $chart3 = new LaravelChart($settings3);
 
-        return view('admin.graph.loadgraph', compact('chart1','chart2','chart3'));
+         $profit_data = [];
+         $sold_data = [];
+         $ucs_data = [];
+     
+        foreach($sales_record as $row) {
+            $total = $row->profit / $row->sales;
+            $persentage = $total * 100;
+         
+            
+            $profit_data['label'][] = $row->new_date;
+            $profit_data['data'][] =  number_format($persentage, 2, '.', ',');
+
+            $sold_data['label'][] = $row->new_date;
+            $sold_data['data'][] =  $row->sold;
+        }
+        
+        foreach($ucs_record as $row) {
+
+            $total_cost = ReceivingProduct::whereYear('created_at', $row->created_at)
+                                            ->whereIn('supplier_id', [1,2,3])
+                                            ->sum('total_cost');
+            $p = $total_cost / $row->total_ucs;
+
+            $ucs_data['label'][] = $row->new_date;
+            $ucs_data['data'][] =  number_format($p, 2, '.', ',');
+        }
+        
+        
+     
+        $profit = json_encode($profit_data);
+        $sold = json_encode($sold_data);
+        $ucs = json_encode($ucs_data);
+
+        return view('admin.graph.loadgraph', compact('profit','sold','ucs'));
     }
+
+    public function sample_graph(){
+        //DAILY
+        date_default_timezone_set('Asia/Manila');
+        $sales_record = Sales::select(
+            \DB::raw("SUM(profit) - SUM(discounted) as profit"),
+            \DB::raw("SUM(total) as sales"),
+            \DB::raw("DAYNAME(created_at) as day_name"),
+            \DB::raw("DAY(created_at) as day"),
+            \DB::raw("SUM(purchase_qty) as sold"))
+            ->where('created_at', '>', Carbon::today()->subDay(6))
+            ->where('status' , 0)
+            ->groupBy('day_name','day')
+            ->orderBy('day')
+            ->get();
+        
+        $ucs_record = UCS::select(
+                'created_at',
+                \DB::raw("SUM(ucs) as total_ucs"),
+                \DB::raw("DAYNAME(created_at) as day_name"),
+                \DB::raw("DAY(created_at) as day"))
+                ->where('created_at', '>', Carbon::today()->subDay(6))
+                ->where('isComplete' , true)
+                ->groupBy('day_name','day')
+                ->orderBy('day')
+                ->get();
+       
+
+
+         $profit_data = [];
+         $sold_data = [];
+         $ucs_data = [];
+     
+        foreach($sales_record as $row) {
+            $total = $row->profit / $row->sales;
+            $persentage = $total * 100;
+            
+            $profit_data['label'][] = $row->day_name;
+            $profit_data['data'][] =  number_format($persentage, 2, '.', ',');
+
+            $sold_data['label'][] = $row->day_name;
+            $sold_data['data'][] =  $row->sold;
+        }
+        
+        foreach($ucs_record as $row) {
+
+            $total_cost = ReceivingProduct::whereDate('created_at', $row->created_at)
+                                            ->whereIn('supplier_id', [1,2,3])
+                                            ->sum('total_cost');
+            $p = $total_cost / $row->total_ucs;
+
+            $ucs_data['label'][] = $row->day_name;
+            $ucs_data['data'][] =  number_format($p, 2, '.', ',');
+        }
+        
+        
+     
+        $profit = json_encode($profit_data);
+        $sold = json_encode($sold_data);
+        $ucs = json_encode($ucs_data);
+
+        return view('admin.graph.loadgraph', compact('profit','sold','ucs'));
+    }
+       
 }

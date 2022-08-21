@@ -430,10 +430,11 @@ class SalesInvoiceController extends Controller
 
     public function allrecords(){
         date_default_timezone_set('Asia/Manila');
-        $customers = Customer::where('isRemove', 0)->orderBy('id', 'asc')->get();
+        $customers = Customer::where('isRemove', 0)->where('isRemove', 0)->orderBy('id', 'asc')->get();
         $deliveries = AssignDeliver::where('isRemove', 0)->orderBy('id', 'asc')->get();
-        $account_receivables = Customer::where('current_balance', '>' , 0)->orderBy('id', 'asc')->get();
-        $over_payments = Customer::where('over_payment', '>' , 0)->orderBy('id', 'asc')->get();
+        $account_receivables = Customer::where('isRemove', 0)->where('current_balance', '>' , 0)->orderBy('id', 'asc')->get();
+        $over_payments = Customer::where('isRemove', 0)->where('over_payment', '>' , 0)->orderBy('id', 'asc')->get();
+
         return view('admin.salesinvoice.allrecords.record_sales_invoice', compact('over_payments','customers', 'deliveries','account_receivables'));
     }
     public function records(){

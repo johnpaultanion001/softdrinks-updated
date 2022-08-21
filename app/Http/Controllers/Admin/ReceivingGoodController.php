@@ -55,8 +55,8 @@ class ReceivingGoodController extends Controller
  
     public function load()
     {
-        $orders = ReceivingGood::where('isVoid', false)->orderBy('id','desc')->get();
-        $title_filter  = 'All Receiving Goods';
+        $title_filter  = 'From: ' . date('F d, Y') . ' To: ' . date('F d, Y');
+        $orders = ReceivingGood::where('isVoid', false)->whereDate('created_at', Carbon::today())->orderBy('id','desc')->get();
 
         return view('admin.receivinggoods.loadreceivinggoods', compact('orders','title_filter'));
     }
@@ -492,23 +492,23 @@ class ReceivingGoodController extends Controller
         $filter = $request->get('filter');
         if($filter == 'daily'){
             $title_filter  = 'From: ' . date('F d, Y') . ' To: ' . date('F d, Y');
-            $orders = ReceivingGood::where('isVoid', false)->whereDate('created_at', Carbon::today())->latest()->get();
+            $orders = ReceivingGood::where('isVoid', false)->whereDate('created_at', Carbon::today())->orderBy('id','desc')->get();
         }
         if($filter == 'weekly'){
             $title_filter  = 'From: ' . Carbon::now()->startOfWeek()->format('F d, Y') . ' To: ' . Carbon::now()->endOfWeek()->format('F d, Y');
-            $orders = ReceivingGood::where('isVoid', false)->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->latest()->get();
+            $orders = ReceivingGood::where('isVoid', false)->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->orderBy('id','desc')->get();
         }
         if($filter == 'monthly'){
             $title_filter  = 'From: ' . date('F '. 1 .', Y') . ' To: ' . date('F '. 31 .', Y');
-            $orders = ReceivingGood::where('isVoid', false)->latest()->whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))->whereYear('created_at', '=', date('Y'))->get();
+            $orders = ReceivingGood::where('isVoid', false)->orderBy('id','desc')->whereMonth('created_at', '=', date('m'))->whereYear('created_at', '=', date('Y'))->whereYear('created_at', '=', date('Y'))->get();
         }
         if($filter == 'yearly'){
             $title_filter  = 'From: ' .'Jan 1'. date(', Y') . ' To: ' .'Dec 31'. date(', Y');
-            $orders = ReceivingGood::where('isVoid', false)->latest()->whereYear('created_at', '=', date('Y'))->get();
+            $orders = ReceivingGood::where('isVoid', false)->orderBy('id','desc')->whereYear('created_at', '=', date('Y'))->get();
         }
         if($filter == 'all'){
             $title_filter  = 'All Receiving Goods';
-            $orders = ReceivingGood::where('isVoid', false)->latest()->get();
+            $orders = ReceivingGood::where('isVoid', false)->orderBy('id','desc')->get();
         }
         if($filter == 'fbd'){
             $from = $request->get('from');
@@ -516,7 +516,7 @@ class ReceivingGoodController extends Controller
             $title_filter =  'From: '.date('F d, Y', strtotime($from)). ' To: ' .date('F d, Y', strtotime($to));
 
             
-            $orders = ReceivingGood::where('isVoid', false)->latest()->whereBetween('created_at', [$from, $to])->get();
+            $orders = ReceivingGood::where('isVoid', false)->orderBy('id','desc')->whereBetween('created_at', [$from, $to])->get();
                
 
         }

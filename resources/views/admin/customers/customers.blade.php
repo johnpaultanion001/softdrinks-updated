@@ -60,22 +60,30 @@
                                 </span>
                             </div>
                         </div>
-                        
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="control-label text-uppercase" >Contact Number: </label>
-                                <input type="number" name="contact_number" id="contact_number" class="form-control" />
-                                <span class="invalid-feedback" role="alert">
-                                    <strong id="error-contact_number"></strong>
-                                </span>
-                            </div>
-                        </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="control-label text-uppercase" >Current Balance: <span class="text-danger">*</span></label>
                                 <input type="number" name="current_balance" id="current_balance" class="form-control" />
                                 <span class="invalid-feedback" role="alert">
                                     <strong id="error-current_balance"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label text-uppercase" >Over Payment: <span class="text-danger">*</span></label>
+                                <input type="number" name="over_payment" id="over_payment" class="form-control" />
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-over_payment"></strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label text-uppercase" >Contact Number: </label>
+                                <input type="number" name="contact_number" id="contact_number" class="form-control" />
+                                <span class="invalid-feedback" role="alert">
+                                    <strong id="error-contact_number"></strong>
                                 </span>
                             </div>
                         </div>

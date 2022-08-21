@@ -22,7 +22,7 @@ class CustomerController extends Controller
     public function load()
     {
         $customers = Customer::where('isRemove', 0)->orderBy('id', 'asc')->get();
-        $account_receivables = Customer::where('current_balance', '>' , 0)->orderBy('id', 'asc')->get();
+        $account_receivables = Customer::where('isRemove', 0)->where('current_balance', '>' , 0)->orderBy('id', 'asc')->get();
         return view('admin.customers.load', compact('customers','account_receivables'));
     }
 
@@ -34,6 +34,7 @@ class CustomerController extends Controller
             'customer_code' => ['required', 'string', 'max:255' , 'unique:customers'],
             'customer_name' => ['required', 'string', 'max:255'],
             'current_balance' => ['required' ,'numeric','min:0'],
+            'over_payment' => ['required' ,'numeric','min:0'],
         ]);
 
         if ($validated->fails()) {
@@ -46,6 +47,7 @@ class CustomerController extends Controller
             'contact_number' => $request->input('contact_number'),
             'area' => $request->input('area'),
             'current_balance' => $request->input('current_balance'),
+            'over_payment' => $request->input('over_payment'),
         ]);
 
         return response()->json(['success' => 'Customer Added Successfully.']);
@@ -69,6 +71,7 @@ class CustomerController extends Controller
             'customer_code' => ['required', 'string', 'max:255' , 'unique:customers,customer_code,'.$customer->id ],
             'customer_name' => ['required', 'string', 'max:255'],
             'current_balance' => ['required' ,'numeric','min:0'],
+            'over_payment' => ['required' ,'numeric','min:0'],
            
         ]);
 
@@ -82,6 +85,7 @@ class CustomerController extends Controller
             'contact_number' => $request->input('contact_number'),
             'area' => $request->input('area'),
             'current_balance' => $request->input('current_balance'),
+            'over_payment' => $request->input('over_payment'),
         ]);
         return response()->json(['success' => 'Customer Updated Successfully.']);
     }

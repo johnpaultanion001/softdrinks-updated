@@ -22,13 +22,9 @@
               </tr>
             </thead>
             <tbody class="text-uppercase font-weight-bold">
-                @php
-                  $total_inv_amt = 0;
-                @endphp
                 @foreach($pallets as $pallet)
                     @php
                       $total_inv = $pallet->price * $pallet->stock;
-                      $total_inv_amt = $total_inv_amt + $total_inv;
                     @endphp
                     <tr>
                       <td>
@@ -53,24 +49,17 @@
                       </td>
                     </tr>
                 @endforeach
-                  <tr>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                        Total Inventory Amount:
-                      </td>
-                      <td>
-                        {{  number_format($total_inv_amt , 2, '.', ',') }}
-                      </td>
-                      <td>
-                      </td>
-                    </tr>
-                    
             </tbody>
+            <tfoot class="thead-white">
+              <tr>
+                <th scope="col">TOTAL:</th>
+                <th scope="col"></th>
+                <th scope="col">Unit Price</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Inventory Amount</th>
+                <th scope="col"></th>
+              </tr>
+            </tfoot>
           </table>
         </div>
         
@@ -108,13 +97,9 @@
               </tr>
             </thead>
             <tbody class="text-uppercase font-weight-bold">
-                @php
-                  $total_inv_amt_p = 0;
-                @endphp
                 @foreach($products as $key => $product)
                     @php
                       $total_inv_p = $product->price * $product->location_products->sum('stock');
-                      $total_inv_amt_p = $total_inv_amt_p + $total_inv_p;
                     @endphp
                     <tr data-entry-id="{{ $product->id ?? '' }}">
                     
@@ -175,41 +160,29 @@
                       </td>
                     </tr>
                 @endforeach
-                    <tr>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                        Total Inventory Amount:
-                      </td>
-                      <td>
-                        {{  number_format($total_inv_amt_p , 2, '.', ',') }}
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                    </tr>
             </tbody>
+            <tfoot class="thead-white">
+              <tr>
+                <th scope="col">TOTAL:</th>
+                <th scope="col"></th>
+
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+
+                <th scope="col">Overall Stock</th>
+                <th scope="col"></th>
+                <th scope="col">Sold</th>
+
+                <th scope="col">Unit Price</th>
+                <th scope="col">Inventory Amount</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+              </tr>
+            </tfoot>
           </table>
         </div>
         
@@ -232,31 +205,114 @@ $(function () {
     scrollCollapse: true,
     'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });
-  $('.datatable-pallets').DataTable();
 
-  var table = $('.datatable-inventries:not(.ajaxTable)').DataTable({ buttons: dtButtons });
-  $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-    $($.fn.dataTable.tables(true)).DataTable()
-        .columns.adjust();
-  });
+    number_format = function (number, decimals, dec_point, thousands_sep) {
+          number = number.toFixed(decimals);
 
- 
-  
-  $('select[name="filter_category"]').on("change", function(event){
-    table.columns(8).search( this.value ).draw();
-  });
+          var nstr = number.toString();
+          nstr += '';
+          x = nstr.split('.');
+          x1 = x[0];
+          x2 = x.length > 1 ? dec_point + x[1] : '';
+          var rgx = /(\d+)(\d{3})/;
 
-  $('select[name="filter_supplier"]').on('change', function () {
-    table.columns(9).search( this.value ).draw();
-  });
+          while (rgx.test(x1))
+              x1 = x1.replace(rgx, '$1' + thousands_sep + '$2');
 
-  $('select[name="filter_size"]').on('change', function () {
-    table.columns(7).search( this.value ).draw();
-  });
+          return x1 + x2;
+    }
 
-  $('select[name="filter_location"]').on('change', function () {
-    table.columns(5).search( this.value ).draw();
-  });
+    $('.datatable-pallets').DataTable({
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var intVal = function (i) {
+                return typeof i === 'string' ? i.replace(/[^\d.-]/g, '') * 1 : typeof i === 'number' ? i : 0;
+            };
+            
+            unit_price = api
+                .column(2, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+           
+            stock = api
+                .column(3, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+
+            inv_amt = api
+                .column(4, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+
+            // Update footer
+            $(api.column(2).footer()).html(number_format(unit_price, 2,'.', ','));
+            $(api.column(3).footer()).html(number_format(stock, 2,'.', ','));
+            $(api.column(4).footer()).html(number_format(inv_amt, 2,'.', ','));
+        },
+    });
+
+    var table = $('.datatable-inventries').DataTable({
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var intVal = function (i) {
+                return typeof i === 'string' ? i.replace(/[^\d.-]/g, '') * 1 : typeof i === 'number' ? i : 0;
+            };
+            
+            stock = api
+                .column(7, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            sold = api
+                .column(9, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            unit_price = api
+                .column(10, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            inv_amt = api
+                .column(11, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+
+            // Update footer
+            $(api.column(7).footer()).html(number_format(stock, 2,'.', ','));
+            $(api.column(9).footer()).html(number_format(sold, 2,'.', ','));
+            $(api.column(10).footer()).html(number_format(unit_price, 2,'.', ','));
+            $(api.column(11).footer()).html(number_format(inv_amt, 2,'.', ','));
+           
+        },
+    });
+
+    $('select[name="filter_category"]').on("change", function(event){
+      table.columns(5).search( this.value ).draw();
+    });
+
+    $('select[name="filter_supplier"]').on('change', function () {
+      table.columns(6).search( this.value ).draw();
+    });
+
+    $('select[name="filter_size"]').on('change', function () {
+      table.columns(4).search( this.value ).draw();
+    });
+
+    $('select[name="filter_location"]').on('change', function () {
+      table.columns(8).search( this.value ).draw();
+    });
 
     
 });

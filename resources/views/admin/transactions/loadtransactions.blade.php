@@ -79,7 +79,10 @@
                             <div class="input-group-prepend">
                                 <div class="input-group-text text-primary">₱</div>
                             </div>
-                                <input type="text" class="form-control" value="{{ number_format($sales->sum->profit , 2, '.', ',') }}" readonly>
+                                @php
+                                    $profit1 = $sales->sum->profit - $sales->sum->discounted;
+                                @endphp
+                                <input type="text" class="form-control" value="{{ number_format($profit1 , 2, '.', ',') }}" readonly>
                             </div>
                         </div>
                     </div>
@@ -90,7 +93,10 @@
                             <div class="input-group-prepend">
                                 <div class="input-group-text text-primary">₱</div>
                             </div>
-                                <input type="text" class="form-control" value="{{ number_format($sales->sum->total_cost , 2, '.', ',') }}" readonly>
+                                @php
+                                    $capital = $sales->sum->total_amount_receipt - $sales->sum->profit;
+                                @endphp
+                                <input type="text" class="form-control" value="{{ number_format($capital , 2, '.', ',') }}" readonly>
                             </div>
                         </div>
                     </div>
@@ -146,7 +152,7 @@
                                 {{  $sale->product->description ?? '' }}
                             </td>
                             <td>
-                                {{ number_format($sale->product_price ?? '' , 2, ',', ',') }}
+                                {{ number_format($sale->product_price ?? '' , 2, '.', ',') }}
                             </td>
                             <td>
                                 {{  $sale->product->size->title ?? '' }} {{  $sale->product->size->size ?? '' }}
@@ -160,16 +166,19 @@
                             <td>
                                 ({{ number_format($sale->discounted ?? '' , 2, '.', ',') }})
                             </td> 
-
                             <td>
                                 {{ number_format($sale->total ?? '' , 2, '.', ',') }}
                             </td>    
                             @can('manager_dashboard_access')
+                                @php
+                                    $capital1 = $sale->total_amount_receipt - $sale->profit;
+                                    $profit = $sale->profit - $sale->discounted;
+                                @endphp
                             <td>
-                                {{ number_format($sale->total_cost ?? '' , 2, '.', ',') }}
+                                {{ number_format($capital1 ?? '' , 2, '.', ',') }}
                             </td>
                             <td>
-                                {{ number_format($sale->profit ?? '' , 2, '.', ',') }}
+                                {{ number_format($profit ?? '' , 2, '.', ',') }}
                             </td>
                             @endcan
                             <td>
@@ -181,6 +190,27 @@
                         </tr>
                     @endforeach
                 </tbody>
+                <tfoot class="thead-white">
+                    <tr>
+                        <th scope="col">TOTAL:</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col">Unit Price</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col">Qty Sold</th>
+                        <th scope="col">Discounted</th>
+                        <th scope="col">Total Sales</th>
+                        @can('manager_dashboard_access')
+                            <th scope="col">Total Cost</th>
+                            <th scope="col">Profit</th>
+                        @endcan
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
@@ -268,6 +298,25 @@
                             </tr>
                         @endforeach
                     </tbody>
+                    <tfoot class="thead-white">
+                        <tr>
+                            <th scope="col">TOTAL:</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col">Return QTY</th>
+                            <th scope="col">Unit Price</th>
+                            <th scope="col">Total Amount</th>
+
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -343,6 +392,21 @@
                             </tr>
                         @endforeach
                     </tbody>
+                    <tfoot class="thead-white">
+                        <tr>
+                            <th scope="col">TOTAL:</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col">Qty</th>
+                            <th scope="col">Unit Price</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col"></th> 
+                            <th scope="col"></th> 
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -380,11 +444,11 @@
                           
                           <th>Product Code</th>
                           <th>Description</th>
-                          <th>Quantity Sold</th>
+                          <th>QTY Sold</th>
+                          <th>DISC</th>
+                          <th>Profit</th>
                           <th>Total Sales</th>
                           <th>Total Cost</th>
-                          <th>Profit</th>
-                        
                         </tr>
                       </thead>
                       <tbody class="text-uppercase font-weight-bold">
@@ -399,15 +463,23 @@
                                   <td>
                                       {{  $sale->purchase_qty ?? '' }}
                                   </td>
+                                  <td>
+                                      ({{ number_format($sale->discounted ?? '' , 2, '.', ',') }})
+                                  </td>
+                                    @php
+                                        $capital11 = $sale->total_amount_receipt - $sale->profit;
+                                        $profit1 = $sale->profit - $sale->discounted;
+                                    @endphp
+                                    <td>
+                                      {{ number_format($profit1 ?? '' , 2, '.', ',') }}
+                                    </td>
                                     <td>
                                       {{ number_format($sale->total ?? '' , 2, '.', ',') }}
                                     </td>    
                                     <td>
-                                      {{ number_format($sale->total_cost ?? '' , 2, '.', ',') }}
+                                      {{ number_format($capital11 ?? '' , 2, '.', ',') }}
                                     </td>
-                                    <td>
-                                      {{ number_format($sale->profit ?? '' , 2, '.', ',') }}
-                                    </td>
+                                    
                               </tr>
                           @endforeach
                                 <tr>
@@ -429,6 +501,9 @@
                                     <td>
                                 
                                     </td>
+                                    <td>
+                                
+                                    </td>
                                   
                                 </tr>
                                 <tr>
@@ -436,12 +511,16 @@
                                     <td>
                                     
                                     </td>
+                                    @php
+                                        $total_capital = $sales->sum->total_amount_receipt - $sales->sum->profit;
+                                        $total_profit = $sales->sum->profit - $sales->sum->discounted;
+                                    @endphp
                                     <td>{{$sales->sum->purchase_qty}}</td>
-                                    
-                                    
+                                    <td>{{$sales->sum->discounted}}</td>
+                                    <td>{{ number_format($total_profit , 2, '.', ',') }} </td>
                                     <td>{{ number_format($sales->sum->total , 2, '.', ',') }}</td>
-                                    <td>{{ number_format($sales->sum->total_cost , 2, '.', ',') }}</td>
-                                    <td>{{ number_format($sales->sum->profit , 2, '.', ',') }} </td>
+                                    <td>{{ number_format($total_capital , 2, '.', ',') }}</td>
+                                    
                                     
                                 </tr>
                       </tbody>
@@ -477,16 +556,21 @@
             <!-- Modal body -->
             <div class="modal-body">
               
-                <div id="modalbody" class="row print_inventory_report">
-                  <div class="col text-center" id="header_inventory">
+                <div id="modalbody" class="row">
+                  <div class="col-sm-12 text-center" id="header_inventory">
                      <h3 class="text-uppercase">{{ trans('panel.site_title') }}</h3>
                      <p>Binangonan, <br> Rizal <br> 652-48-36</p>
                      <h5 class="text-uppercase font-wiegth-bold">Inventory Report</h5>
-                     <h4>{{$title_filter_daily}}</h4> 
+                        <h4 id="date_inv"></h4> 
                      <br>
                   </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label" >FILTER BY DATE: </label>
+                            <input type="date"  id="filter_by_date_inv"  class="form-control" />
+                        </div>
+                    </div>
                   <div class="table-responsive">
-          
                     <table class="table align-items-center table-bordered display" id="table_inventory_report" cellspacing="0" width="100%">
                       <thead class="thead-white text-uppercase font-weight-bold">
                         <tr>
@@ -502,14 +586,21 @@
                         </tr>
                       </thead>
                       <tbody class="text-uppercase font-weight-bold" id="list_inventory_report">
-                           
-                        
                       </tbody>
-                     
+                      <tfoot class="thead-white text-uppercase font-weight-bold">
+                        <tr>
+                          <th>TOTAL:</th>
+                          <th></th>
+                          <th></th>
+                          <th>Beginning Inventory</th>
+                          <th>Sales Inventory</th>
+                          <th>Delivery for today</th>
+                          <th>Ending Inventory</th>
+                        </tr>
+                      </tfoot>
                     </table>
                  </div>
                 </div>
-           
                 <div class="bg-white m-2 text-right">
                     <button type="button" class="btn btn-white text-uppercase" data-dismiss="modal">Close</button>
                     <button type="button" id="btn_sales_for_today" class="text-uppercase btn btn-success">Sales for today</button>
@@ -539,13 +630,19 @@
             <div class="modal-body">
               
                 <div id="modalbody" class="row">
-                  <div class="col text-center" id="header_ending_inventory">
+                  <div class="col-sm-12 text-center" id="header_ending_inventory">
                      <h3 class="text-uppercase">{{ trans('panel.site_title') }}</h3>
                      <p>Binangonan, <br> Rizal <br> 652-48-36</p>
                      <h5 class="text-uppercase font-wiegth-bold">Ending Inventory Report</h5>
-                     <h4>{{$title_filter_daily}}</h4> 
+                     <h4 id="date_end_inv"></h4> 
                      <br>
                   </div>
+                  <div class="col-sm-3">
+                        <div class="form-group">
+                            <label class="control-label" >FILTER BY DATE: </label>
+                            <input type="date"  id="filter_by_date_end_inv"  class="form-control" />
+                        </div>
+                    </div>
                   <div class="table-responsive">
           
                     <table class="table align-items-center table-bordered display nowrap" id="table_ending_inventory_report" width="100%">
@@ -560,10 +657,17 @@
                         </tr>
                       </thead>
                       <tbody class="text-uppercase font-weight-bold" id="list_ending_inventory_report">
-                           
-                        
                       </tbody>
-                     
+                      <tfoot class="thead-white text-uppercase font-weight-bold">
+                        <tr>
+                          <th>TOTAL:</th>
+                          <th>Stock</th>
+                          <th>Full Goods</th>
+                          <th>Full Emptys</th>
+                          <th>Shell</th>
+                          <th>Bottles</th>
+                        </tr>
+                      </tfoot>
                     </table>
                  </div>
                 </div>
@@ -581,23 +685,163 @@
     </div>
 </div>
 
-
-
 <script>
+    
 $(function () {
  
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+    let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
  
-  $.extend(true, $.fn.dataTable.defaults, {
-    pageLength: 100,
-    responsive: true,
-    scrollY: 500,
-    scrollCollapse: true,
-  });
+    $.extend(true, $.fn.dataTable.defaults, {
+        pageLength: 100,
+        responsive: true,
+        scrollY: 500,
+        scrollCollapse: true,
+        
+    });
+    
+    number_format = function (number, decimals, dec_point, thousands_sep) {
+        number = number.toFixed(decimals);
 
-    var table_sales = $('.datatable-sales:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    var table_returns = $('.datatable-returns:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    var table_deposits = $('.datatable-deposits:not(.ajaxTable)').DataTable({ buttons: dtButtons })
+        var nstr = number.toString();
+        nstr += '';
+        x = nstr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? dec_point + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+
+        while (rgx.test(x1))
+            x1 = x1.replace(rgx, '$1' + thousands_sep + '$2');
+
+        return x1 + x2;
+    }
+
+    var table_sales = $('.datatable-sales').DataTable({
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var intVal = function (i) {
+                return typeof i === 'string' ? i.replace(/[^\d.-]/g, '') * 1 : typeof i === 'number' ? i : 0;
+            };
+            
+            unit_price = api
+                .column(5)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            qty_sold = api
+                .column(8)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            discounted = api
+                .column(9)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            total_sales = api
+                .column(10)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            total_capital = api
+                .column(11)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            total_profit = api
+                .column(12)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+
+            // Update footer
+            $(api.column(5).footer()).html(number_format(unit_price, 2,'.', ','));
+            $(api.column(8).footer()).html(number_format(qty_sold, 2,'.', ','));
+            $(api.column(9).footer()).html(number_format(discounted, 2,'.', ','));
+            $(api.column(10).footer()).html(number_format(total_sales, 2,'.', ','));
+            $(api.column(11).footer()).html(number_format(total_capital, 2,'.', ','));
+            $(api.column(12).footer()).html(number_format(total_profit, 2,'.', ','));
+            
+        },
+    });
+
+
+    var table_returns = $('.datatable-returns').DataTable({ 
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var intVal = function (i) {
+                return typeof i === 'string' ? i.replace(/[^\d.-]/g, '') * 1 : typeof i === 'number' ? i : 0;
+            };
+            
+            return_qty = api
+                .column(5)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            unit_price = api
+                .column(6)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            total_amt = api
+                .column(7)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+          
+
+            // Update footer
+            $(api.column(5).footer()).html(number_format(return_qty, 2,'.', ','));
+            $(api.column(6).footer()).html(number_format(unit_price, 2,'.', ','));
+            $(api.column(7).footer()).html(number_format(total_amt, 2,'.', ','));
+           
+            
+        },
+    });
+
+    var table_deposits = $('.datatable-deposits').DataTable({ 
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var intVal = function (i) {
+                return typeof i === 'string' ? i.replace(/[^\d.-]/g, '') * 1 : typeof i === 'number' ? i : 0;
+            };
+            
+            qty = api
+                .column(4)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            unit_price = api
+                .column(5)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            total_amt = api
+                .column(6)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+          
+
+            // Update footer
+            $(api.column(4).footer()).html(number_format(qty, 2,'.', ','));
+            $(api.column(5).footer()).html(number_format(unit_price, 2,'.', ','));
+            $(api.column(6).footer()).html(number_format(total_amt, 2,'.', ','));
+           
+            
+        },
+    });
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
         $($.fn.dataTable.tables(true)).DataTable()
@@ -608,11 +852,19 @@ $(function () {
     $('.select2').select2();
     
 
+    
     $('select[name="filter_deliver"]').on('change', function () {
         table_sales.columns(2).search( this.value ).draw();
         table_returns.columns(2).search( this.value ).draw();
         table_deposits.columns(2).search( this.value ).draw();
+        
     });
+
+    
+
+    
+
+
 });
 
 

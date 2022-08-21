@@ -109,7 +109,22 @@
                       </tr>
                   @endforeach
               </tbody>
-              
+              <tfoot class="thead-white">
+                <tr>
+                  <th scope="col">TOTAL:</th>
+                  <th scope="col"></th>
+                  <th scope="col"></th>
+                  <th scope="col"></th>
+                  <th scope="col">Cash</th>
+                  <th scope="col"></th>
+                  <th scope="col">Payment</th>
+                  <th scope="col">Total Product Cost</th>
+                  <th scope="col">Total Return Amount</th>
+                  <th scope="col"></th>
+                  <th scope="col"></th>
+                  <th scope="col"></th>
+                </tr>
+              </tfoot>
             </table>
           </div>
       <!-- Footer -->
@@ -122,22 +137,76 @@
 <script>
 $(function () {
  
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
- 
-  $.extend(true, $.fn.dataTable.defaults, {
-    pageLength: 100,
-    bDestroy: true,
-    responsive: true,
-    scrollY: 500,
-    scrollCollapse: true,
-    'columnDefs': [{ 'orderable': false, 'targets': 0 }],
-  });
-
-  $('.datatable-inventries:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
+    let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+  
+    $.extend(true, $.fn.dataTable.defaults, {
+      pageLength: 100,
+      bDestroy: true,
+      responsive: true,
+      scrollY: 500,
+      scrollCollapse: true,
+      'columnDefs': [{ 'orderable': false, 'targets': 0 }],
     });
+
+    number_format = function (number, decimals, dec_point, thousands_sep) {
+        number = number.toFixed(decimals);
+
+        var nstr = number.toString();
+        nstr += '';
+        x = nstr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? dec_point + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+
+        while (rgx.test(x1))
+            x1 = x1.replace(rgx, '$1' + thousands_sep + '$2');
+
+        return x1 + x2;
+    }
+
+    $('.datatable-inventries').DataTable({
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var intVal = function (i) {
+                return typeof i === 'string' ? i.replace(/[^\d.-]/g, '') * 1 : typeof i === 'number' ? i : 0;
+            };
+            
+            cash = api
+                .column(4)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            payment = api
+                .column(6)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            total_cost = api
+                .column(7)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            total_return = api
+                .column(8)
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            
+
+            // Update footer
+            $(api.column(4).footer()).html(number_format(cash, 2,'.', ','));
+            $(api.column(6).footer()).html(number_format(payment, 2,'.', ','));
+            $(api.column(7).footer()).html(number_format(total_cost, 2,'.', ','));
+            $(api.column(8).footer()).html(number_format(total_return, 2,'.', ','));
+            
+            
+        },
+    });
+
   $('#filter_loading').hide();
 });
 

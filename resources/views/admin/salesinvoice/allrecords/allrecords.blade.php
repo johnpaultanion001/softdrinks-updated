@@ -119,6 +119,23 @@
                     </tr>
                 @endforeach
             </tbody>
+            <tfoot class="thead-white">
+                <tr>
+                    <th>TOTAL:</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Cash</th>
+                    <th></th>
+                    <th>Payment</th>
+                    <th>Total Sales Amt</th>
+                    <th>Total Discount</th>
+                    <th>Total Return Amt</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>
@@ -139,11 +156,73 @@ $(function () {
     'columnDefs': [{ 'orderable': false, 'targets': 0 }],
   });
 
-  $('.datatable-allrecords:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
+ 
+    number_format = function (number, decimals, dec_point, thousands_sep) {
+          number = number.toFixed(decimals);
+
+          var nstr = number.toString();
+          nstr += '';
+          x = nstr.split('.');
+          x1 = x[0];
+          x2 = x.length > 1 ? dec_point + x[1] : '';
+          var rgx = /(\d+)(\d{3})/;
+
+          while (rgx.test(x1))
+              x1 = x1.replace(rgx, '$1' + thousands_sep + '$2');
+
+          return x1 + x2;
+    }
+      
+    $('.datatable-allrecords').DataTable({
+        footerCallback: function (row, data, start, end, display) {
+        var api = this.api();
+        var intVal = function (i) {
+            return typeof i === 'string' ? i.replace(/[^\d.-]/g, '') * 1 : typeof i === 'number' ? i : 0;
+        };
+        
+        cash = api
+            .column(4, { page: 'current' })
+            .data()
+            .reduce(function (a, b) {
+                return intVal(a) + intVal(b);
+        }, 0);
+        payment = api
+            .column(6, { page: 'current' })
+            .data()
+            .reduce(function (a, b) {
+                return intVal(a) + intVal(b);
+        }, 0);
+        total_sales_amt = api
+            .column(7, { page: 'current' })
+            .data()
+            .reduce(function (a, b) {
+                return intVal(a) + intVal(b);
+        }, 0);
+        disc = api
+            .column(8, { page: 'current' })
+            .data()
+            .reduce(function (a, b) {
+                return intVal(a) + intVal(b);
+        }, 0);
+        total_return = api
+            .column(9, { page: 'current' })
+            .data()
+            .reduce(function (a, b) {
+                return intVal(a) + intVal(b);
+        }, 0);
+
+
+
+        // Update footer
+        $(api.column(4).footer()).html(number_format(cash, 2,'.', ','));
+        $(api.column(6).footer()).html(number_format(payment, 2,'.', ','));
+        $(api.column(7).footer()).html(number_format(total_sales_amt, 2,'.', ','));
+        $(api.column(8).footer()).html(number_format(disc, 2,'.', ','));
+        $(api.column(9).footer()).html(number_format(total_return, 2,'.', ','));
+    },
     });
+
+
     $('#filter_loading').hide();
 });
 </script>

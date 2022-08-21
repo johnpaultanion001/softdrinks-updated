@@ -52,7 +52,17 @@
                         </tr>
                 @endforeach
         </tbody>
-    
+        <tfoot class="thead-white">
+            <tr>
+                    <th scope="col">TOTAL:</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col">Qty</th>
+                    <th scope="col">Unit Price</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col"></th>
+            </tr>
+        </tfoot>
         </table>
     </div>
 </div>
@@ -61,7 +71,23 @@
 <script>
 $(function () {
  
-    $('.datatable-pallets').DataTable({
+      number_format = function (number, decimals, dec_point, thousands_sep) {
+          number = number.toFixed(decimals);
+
+          var nstr = number.toString();
+          nstr += '';
+          x = nstr.split('.');
+          x1 = x[0];
+          x2 = x.length > 1 ? dec_point + x[1] : '';
+          var rgx = /(\d+)(\d{3})/;
+
+          while (rgx.test(x1))
+              x1 = x1.replace(rgx, '$1' + thousands_sep + '$2');
+
+          return x1 + x2;
+      }
+      
+      $('.datatable-pallets').DataTable({
           bDestroy: true,
           responsive: true,
           scrollY: 500,
@@ -69,8 +95,39 @@ $(function () {
           buttons: [
               
           ],
-      });
+          footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var intVal = function (i) {
+                return typeof i === 'string' ? i.replace(/[^\d.-]/g, '') * 1 : typeof i === 'number' ? i : 0;
+            };
+            
+            qty = api
+                .column(3, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+           
 
+            unit_price = api
+                .column(4, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            amt = api
+                .column(5, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+
+            // Update footer
+            $(api.column(3).footer()).html(number_format(qty, 2,'.', ','));
+            $(api.column(4).footer()).html(number_format(unit_price, 2,'.', ','));
+            $(api.column(5).footer()).html(number_format(amt, 2,'.', ','));
+        },
+      });
     
 });
 </script>

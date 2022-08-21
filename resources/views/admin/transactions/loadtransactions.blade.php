@@ -109,7 +109,7 @@
     <div class="mb-2">
         <h5 class="mb-0 text-uppercase bg-primary text-white mb-2" style="border-radius: 5px; padding: 5px; width: 50%;">Sales Records</h5>
         <div class="table-responsive">
-            <table class="table align-items-center table-bordered datatable-sales display" cellspacing="0" width="100%">
+            <table class="table align-items-center datatable-sales display" cellspacing="0" width="100%">
                 <thead class="thead-white">
                     <tr>
                         <th scope="col">ORDER #</th>
@@ -231,7 +231,7 @@
         <div class="mb-2">
             <h5 class="mb-0 text-uppercase bg-primary text-white mb-2" style="border-radius: 5px; padding: 5px;  width: 50%;">Returns Records</h5>
             <div class="table-responsive">
-                <table class="table align-items-center table-bordered datatable-returns display" cellspacing="0" width="100%">
+                <table class="table align-items-center datatable-returns display" cellspacing="0" width="100%">
                     <thead class="thead-white">
                         <tr>
                             <th scope="col">ORDER #</th>
@@ -337,7 +337,7 @@
         <div class="mb-2">
             <h5 class="mb-0 text-uppercase bg-primary text-white mb-2" style="border-radius: 5px; padding: 5px;  width: 50%;">Deposit Records</h5>
             <div class="table-responsive">
-                <table class="table align-items-center table-bordered datatable-deposits display" cellspacing="0" width="100%">
+                <table class="table align-items-center  datatable-deposits display" cellspacing="0" width="100%">
                     <thead class="thead-white">
                         <tr>
                             <th scope="col">ORDER #</th>
@@ -759,13 +759,52 @@ $(function () {
                     return intVal(a) + intVal(b);
             }, 0);
 
+            unit_price_page = api
+                .column(5, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            qty_sold_page = api
+                .column(8, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            discounted_page = api
+                .column(9, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            total_sales_page = api
+                .column(10, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            total_capital_page = api
+                .column(11, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            total_profit_page = api
+                .column(12, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+
+            
+
             // Update footer
-            $(api.column(5).footer()).html(number_format(unit_price, 2,'.', ','));
-            $(api.column(8).footer()).html(number_format(qty_sold, 2,'.', ','));
-            $(api.column(9).footer()).html(number_format(discounted, 2,'.', ','));
-            $(api.column(10).footer()).html(number_format(total_sales, 2,'.', ','));
-            $(api.column(11).footer()).html(number_format(total_capital, 2,'.', ','));
-            $(api.column(12).footer()).html(number_format(total_profit, 2,'.', ','));
+            $(api.column(5).footer()).html(number_format(unit_price_page, 2,'.', ',') +"("+number_format(unit_price, 2,'.', ',')+")");
+            $(api.column(8).footer()).html(number_format(qty_sold_page, 2,'.', ',') +"("+number_format(qty_sold, 2,'.', ',')+")");
+            $(api.column(9).footer()).html(number_format(discounted_page, 2,'.', ',') +"("+number_format(discounted, 2,'.', ',')+")");
+            $(api.column(10).footer()).html(number_format(total_sales_page, 2,'.', ',') +"("+number_format(total_sales, 2,'.', ',')+")");
+            $(api.column(11).footer()).html(number_format(total_capital_page, 2,'.', ',') +"("+number_format(total_capital, 2,'.', ',')+")");
+            $(api.column(12).footer()).html(number_format(total_profit_page, 2,'.', ',') +"("+number_format(total_profit, 2,'.', ','))+")";
             
         },
     });
@@ -796,12 +835,31 @@ $(function () {
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
             }, 0);
+
+            return_qty_page = api
+                .column(5, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            unit_price_page = api
+                .column(6, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            total_amt_page = api
+                .column(7, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
           
 
             // Update footer
-            $(api.column(5).footer()).html(number_format(return_qty, 2,'.', ','));
-            $(api.column(6).footer()).html(number_format(unit_price, 2,'.', ','));
-            $(api.column(7).footer()).html(number_format(total_amt, 2,'.', ','));
+            $(api.column(5).footer()).html(number_format(return_qty_page, 2,'.', ',') +"("+number_format(return_qty, 2,'.', ',')+")");
+            $(api.column(6).footer()).html(number_format(unit_price_page, 2,'.', ',') +"("+number_format(unit_price, 2,'.', ',')+")");
+            $(api.column(7).footer()).html(number_format(total_amt_page, 2,'.', ',') +"("+number_format(total_amt, 2,'.', ',')+")");
            
             
         },
@@ -832,12 +890,31 @@ $(function () {
                 .reduce(function (a, b) {
                     return intVal(a) + intVal(b);
             }, 0);
+
+            qty_page = api
+                .column(4, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            unit_price_page = api
+                .column(5, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
+            total_amt_page = api
+                .column(6, { page: 'current' })
+                .data()
+                .reduce(function (a, b) {
+                    return intVal(a) + intVal(b);
+            }, 0);
           
 
             // Update footer
-            $(api.column(4).footer()).html(number_format(qty, 2,'.', ','));
-            $(api.column(5).footer()).html(number_format(unit_price, 2,'.', ','));
-            $(api.column(6).footer()).html(number_format(total_amt, 2,'.', ','));
+            $(api.column(4).footer()).html(number_format(qty_page, 2,'.', ',') +"("+number_format(qty, 2,'.', ',')+")");
+            $(api.column(5).footer()).html(number_format(unit_price_page, 2,'.', ',') +"("+number_format(unit_price, 2,'.', ',')+")");
+            $(api.column(6).footer()).html(number_format(total_amt_page, 2,'.', ',') +"("+number_format(total_amt, 2,'.', ',')+")");
            
             
         },
